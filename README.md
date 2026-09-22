@@ -25,7 +25,7 @@ npm install
 npm run dev      # http://localhost:3000
 npm run build    # static build into ./site
 npm run start    # serve the built site
-npm run catalog  # regenerate the component catalog (see below)
+npm run catalog  # regenerate the catalog + example registry (see below)
 ```
 
 ## How the wiring works
@@ -79,17 +79,56 @@ Global SLDS utility classes cannot cross a shadow boundary, so any component of
 ours that uses `slds-*` classes must be light DOM. The base components are
 unaffected — they bundle their own styles.
 
+## The kitchen sink
+
+`lightning-base-components` ships 255 official example bundles in `__examples__`
+folders — the same ones behind Salesforce's hosted Component Library. The
+**Kitchen sink** page is a Storybook-style browser over them: pick a component,
+pick an example, see it run, read its real source. 239 of the 255 are usable
+here; the rest belong to components this site does not expose.
+
+Nothing about the examples is re-authored. Each one is registered as an LWC
+module pointing straight at the file in `node_modules`, loaded lazily and mounted
+with `lwc:is`:
+
+```html
+<lwc:component lwc:is={ctor}></lwc:component>
+```
+
+The UI wrapper is deliberately thin — two components, no story files to write,
+nothing to update when the package changes:
+
+| File | Lines | Job |
+| --- | --- | --- |
+| `ui/kitchenSink` | ~190 | component list, filter, example picker, hash deep-links |
+| `ui/exampleStage` | ~120 | lazy-mounts one example, shows its source |
+
+Deep links work: `#datatable/withRowActions` opens that example directly.
+
+Adding examples is not a code change. Upgrade the package, run `npm run catalog`,
+and any new examples appear.
+
 ## The catalog
 
-`npm run catalog` regenerates `src/modules/data/catalog/catalog.js` by reading the
-installed package. A module is treated as a usable component when it is marked
-`isExposed` in its `*.js-meta.xml`, exports a default class, and ships a template.
-That filter separates the 84 real components from internal primitives, service
-modules (`navigation`, `messageDispatcher`) and CSS-only style modules
-(`sldsUtils*`). Re-run it after upgrading `lightning-base-components`.
+`npm run catalog` reads the installed package and writes four things:
 
-The **Full catalog** page in the site renders this data with a live filter over
-tag, module name and public properties.
+| Output | Contents |
+| --- | --- |
+| `src/modules/data/catalog/catalog.js` | 84 components: tag, module, API version, properties, slots, examples |
+| `src/modules/data/exampleRegistry/exampleRegistry.js` | a lazy `() => import(...)` per example |
+| `src/assets/example-sources.json` | example source, fetched on demand (~475KB) |
+| `lwr.config.json` | the `examples/*` module records and bundle exclusions |
+
+It only rewrites the parts it owns in `lwr.config.json`, so routes and assets
+there are safe to edit by hand.
+
+A module counts as a usable component when it is marked `isExposed` in its
+`*.js-meta.xml`, exports a default class, and ships a template. That filter
+separates the 84 real components from internal primitives, service modules
+(`navigation`, `messageDispatcher`) and CSS-only style modules (`sldsUtils*`).
+
+The **Full catalog** page renders this data with a live filter over tag, module
+name and public properties.
 
 ## Layout of the source
 
@@ -98,6 +137,8 @@ src/
   layouts/main.njk              custom HTML layout (loads SLDS)
   modules/
     example/app/                app shell: global header, sidebar, routing
+    ui/kitchenSink/             Storybook-style example browser
+    ui/exampleStage/            lazy-mounts one example + its source
     ui/demoCard/                demo frame with toggleable markup snippet
     ui/catalogTable/            searchable catalog
     gallery/overview/           landing section
@@ -107,7 +148,8 @@ src/
     gallery/feedback/           alert/confirm/prompt/toast, spinner, progress
     gallery/layout/             grid, cards, tabs, accordion, breadcrumbs, nav
     data/catalog/               GENERATED component catalog
-scripts/build-catalog.mjs       catalog generator
+    data/exampleRegistry/       GENERATED lazy example loaders
+scripts/build-catalog.mjs       catalog + registry generator
 ```
 
 Add a section by creating a `gallery/<name>` component and adding an entry to
@@ -124,6 +166,17 @@ upgrade `lwr`, check `npm ls @lwc/compiler` and realign `lwc`.
 `LightningPrompt.open()` and `Toast.show()` create their own overlay container, so
 they need no Lightning Experience host. `ShowToastEvent` on its own does *not*
 work outside the platform — use `Toast.show(config, this)`.
+
+**Why the build uses compat mode.** `npm run build` runs `--mode prod-compat`
+(AMD) rather than the default ESM build. LWR's bundler throttles work through a
+`TaskPool` whose size is hardcoded to 15 in `@lwrjs/shared-utils`, with no config
+to raise it. Each dynamic `import()` reachable from a bundled module spawns a
+nested bundle task that holds a pool slot while awaiting its own children, so
+more than ~15 lazily imported modules deadlock the pool: the ESM build dies with
+*"Unexpected early exit ... Promises returned by plugins cannot resolve"* and
+emits a stub `index.html`. The AMD build handles the same 239 examples fine.
+`npm run build:esm` is kept for reference and works only if the kitchen sink is
+unreachable.
 
 **Build warnings.** The SLDS 2 CSS references two Einstein SVGs that the published
 package does not ship. The warnings are harmless unless you use the Einstein

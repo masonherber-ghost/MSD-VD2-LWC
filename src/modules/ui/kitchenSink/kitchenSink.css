@@ -1,0 +1,106 @@
+.sink {
+    align-items: stretch;
+    border: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+    border-radius: 0.25rem;
+    background: var(--slds-g-color-surface-1, #fff);
+    overflow: hidden;
+}
+
+.sink__rail {
+    flex: 0 0 15rem;
+    border-right: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+    display: flex;
+    flex-direction: column;
+    max-height: 75vh;
+}
+
+.sink__list {
+    overflow-y: auto;
+    flex: 1 1 auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sink__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    padding: 0.4rem 0.75rem;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    border-left: 3px solid transparent;
+}
+
+.sink__item:hover {
+    background: var(--slds-g-color-surface-container-1, #f3f3f3);
+}
+
+.sink__item_active {
+    background: var(--slds-g-color-surface-container-1, #f3f3f3);
+    border-left-color: var(--slds-g-color-accent-container-1, #0176d3);
+    font-weight: 600;
+}
+
+.sink__tag {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sink__count {
+    flex: 0 0 auto;
+    color: var(--slds-g-color-on-surface-3, #747474);
+    font-size: 0.6875rem;
+}
+
+.sink__detail {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-height: 75vh;
+    overflow-y: auto;
+}
+
+.sink__meta {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    gap: 0.15rem 0.75rem;
+    margin: 0.5rem 0 0;
+}
+
+.sink__meta dt {
+    color: var(--slds-g-color-on-surface-3, #747474);
+}
+
+.sink__meta dd {
+    margin: 0;
+    word-break: break-word;
+}
+
+.sink__examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.sink__example {
+    border: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+    background: transparent;
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.sink__example_active {
+    background: var(--slds-g-color-accent-container-1, #0176d3);
+    border-color: var(--slds-g-color-accent-container-1, #0176d3);
+    color: #fff;
+}

@@ -45,6 +45,12 @@ const SECTIONS: Section[] = [
         summary: 'Grid layout, cards, tabs, accordions, breadcrumbs and vertical navigation.'
     },
     {
+        id: 'kitchensink',
+        label: 'Kitchen sink',
+        title: 'Kitchen sink',
+        summary: 'Every example that ships with lightning-base-components, rendered live.'
+    },
+    {
         id: 'catalog',
         label: 'Full catalog',
         title: 'Full catalog',
@@ -79,6 +85,9 @@ export default class App extends LightningElement {
     }
     get isLayout(): boolean {
         return this.activeSection === 'layout';
+    }
+    get isKitchenSink(): boolean {
+        return this.activeSection === 'kitchensink';
     }
     get isCatalog(): boolean {
         return this.activeSection === 'catalog';

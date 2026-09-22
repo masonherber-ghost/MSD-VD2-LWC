@@ -1,0 +1,45 @@
+.stage__toolbar {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+}
+
+.stage__canvas {
+    background: var(--slds-g-color-surface-1, #fff);
+    min-height: 6rem;
+}
+
+.stage__tabs {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0.5rem 0.75rem 0;
+    background: #1b1b1f;
+}
+
+.stage__tab {
+    border: 0;
+    background: transparent;
+    color: #9a9aa2;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.25rem 0.25rem 0 0;
+    cursor: pointer;
+}
+
+.stage__tab_active {
+    background: #2b2b33;
+    color: #fff;
+}
+
+.stage__code {
+    margin: 0;
+    padding: 0.75rem;
+    background: #1b1b1f;
+    color: #e6e6e6;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    white-space: pre;
+    max-height: 26rem;
+    overflow: auto;
+}

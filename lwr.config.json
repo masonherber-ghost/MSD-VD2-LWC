@@ -1,8 +1,968 @@
 {
     "lwc": {
         "modules": [
-            { "dir": "$rootDir/src/modules" },
-            { "npm": "lightning-base-components" }
+            {
+                "dir": "$rootDir/src/modules"
+            },
+            {
+                "npm": "lightning-base-components"
+            },
+            {
+                "name": "examples/accordionBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/accordion/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/accordionConditional",
+                "path": "node_modules/lightning-base-components/src/lightning/accordion/__examples__/conditional/conditional.js"
+            },
+            {
+                "name": "examples/accordionMultiple",
+                "path": "node_modules/lightning-base-components/src/lightning/accordion/__examples__/multiple/multiple.js"
+            },
+            {
+                "name": "examples/accordionSectionBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/accordionSection/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/avatarBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/avatar/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/avatarIcons",
+                "path": "node_modules/lightning-base-components/src/lightning/avatar/__examples__/icons/icons.js"
+            },
+            {
+                "name": "examples/avatarInitials",
+                "path": "node_modules/lightning-base-components/src/lightning/avatar/__examples__/initials/initials.js"
+            },
+            {
+                "name": "examples/avatarSizes",
+                "path": "node_modules/lightning-base-components/src/lightning/avatar/__examples__/sizes/sizes.js"
+            },
+            {
+                "name": "examples/avatarVariant",
+                "path": "node_modules/lightning-base-components/src/lightning/avatar/__examples__/variant/variant.js"
+            },
+            {
+                "name": "examples/badgeBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/badge/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/badgeIcon",
+                "path": "node_modules/lightning-base-components/src/lightning/badge/__examples__/icon/icon.js"
+            },
+            {
+                "name": "examples/breadcrumbsBase",
+                "path": "node_modules/lightning-base-components/src/lightning/breadcrumbs/__examples__/base/base.js"
+            },
+            {
+                "name": "examples/breadcrumbsWithIteration",
+                "path": "node_modules/lightning-base-components/src/lightning/breadcrumbs/__examples__/withIteration/withIteration.js"
+            },
+            {
+                "name": "examples/breadcrumbsWithOnclick",
+                "path": "node_modules/lightning-base-components/src/lightning/breadcrumbs/__examples__/withOnclick/withOnclick.js"
+            },
+            {
+                "name": "examples/buttonAccesskey",
+                "path": "node_modules/lightning-base-components/src/lightning/button/__examples__/accesskey/accesskey.js"
+            },
+            {
+                "name": "examples/buttonBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/button/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/buttonDisabled",
+                "path": "node_modules/lightning-base-components/src/lightning/button/__examples__/disabled/disabled.js"
+            },
+            {
+                "name": "examples/buttonInverse",
+                "path": "node_modules/lightning-base-components/src/lightning/button/__examples__/inverse/inverse.js"
+            },
+            {
+                "name": "examples/buttonOnclick",
+                "path": "node_modules/lightning-base-components/src/lightning/button/__examples__/onclick/onclick.js"
+            },
+            {
+                "name": "examples/buttonWithIcon",
+                "path": "node_modules/lightning-base-components/src/lightning/button/__examples__/withIcon/withIcon.js"
+            },
+            {
+                "name": "examples/buttonGroupBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonGroup/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/buttonGroupDisabled",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonGroup/__examples__/disabled/disabled.js"
+            },
+            {
+                "name": "examples/buttonGroupInverse",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonGroup/__examples__/inverse/inverse.js"
+            },
+            {
+                "name": "examples/buttonGroupWithMenu",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonGroup/__examples__/withMenu/withMenu.js"
+            },
+            {
+                "name": "examples/buttonGroupWithMenuDisabled",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonGroup/__examples__/withMenuDisabled/withMenuDisabled.js"
+            },
+            {
+                "name": "examples/buttonIconBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonIcon/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/buttonIconInverse",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonIcon/__examples__/inverse/inverse.js"
+            },
+            {
+                "name": "examples/buttonIconSizes",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonIcon/__examples__/sizes/sizes.js"
+            },
+            {
+                "name": "examples/buttonIconStatefulBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonIconStateful/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/buttonIconStatefulVariants",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonIconStateful/__examples__/variants/variants.js"
+            },
+            {
+                "name": "examples/buttonMenuBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonMenu/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/buttonMenuOnselect",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonMenu/__examples__/onselect/onselect.js"
+            },
+            {
+                "name": "examples/buttonMenuVariants",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonMenu/__examples__/variants/variants.js"
+            },
+            {
+                "name": "examples/buttonMenuWithIcon",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonMenu/__examples__/withIcon/withIcon.js"
+            },
+            {
+                "name": "examples/buttonStatefulBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonStateful/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/buttonStatefulInverseVariant",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonStateful/__examples__/inverseVariant/inverseVariant.js"
+            },
+            {
+                "name": "examples/buttonStatefulNoIcon",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonStateful/__examples__/noIcon/noIcon.js"
+            },
+            {
+                "name": "examples/buttonStatefulTextVariant",
+                "path": "node_modules/lightning-base-components/src/lightning/buttonStateful/__examples__/textVariant/textVariant.js"
+            },
+            {
+                "name": "examples/cardBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/card/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/cardCustom",
+                "path": "node_modules/lightning-base-components/src/lightning/card/__examples__/custom/custom.js"
+            },
+            {
+                "name": "examples/cardNarrow",
+                "path": "node_modules/lightning-base-components/src/lightning/card/__examples__/narrow/narrow.js"
+            },
+            {
+                "name": "examples/carouselAutoScroll",
+                "path": "node_modules/lightning-base-components/src/lightning/carousel/__examples__/autoScroll/autoScroll.js"
+            },
+            {
+                "name": "examples/carouselBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/carousel/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/carouselImageBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/carouselImage/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/checkboxGroupBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/checkboxGroup/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/checkboxGroupDisabled",
+                "path": "node_modules/lightning-base-components/src/lightning/checkboxGroup/__examples__/disabled/disabled.js"
+            },
+            {
+                "name": "examples/checkboxGroupRequired",
+                "path": "node_modules/lightning-base-components/src/lightning/checkboxGroup/__examples__/required/required.js"
+            },
+            {
+                "name": "examples/comboboxBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/combobox/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/comboboxDisabled",
+                "path": "node_modules/lightning-base-components/src/lightning/combobox/__examples__/disabled/disabled.js"
+            },
+            {
+                "name": "examples/comboboxRequired",
+                "path": "node_modules/lightning-base-components/src/lightning/combobox/__examples__/required/required.js"
+            },
+            {
+                "name": "examples/datatableBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/datatable/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/datatableSorting",
+                "path": "node_modules/lightning-base-components/src/lightning/datatable/__examples__/sorting/sorting.js"
+            },
+            {
+                "name": "examples/datatableWithAllColumnTypes",
+                "path": "node_modules/lightning-base-components/src/lightning/datatable/__examples__/withAllColumnTypes/withAllColumnTypes.js"
+            },
+            {
+                "name": "examples/datatableWithColResizing",
+                "path": "node_modules/lightning-base-components/src/lightning/datatable/__examples__/withColResizing/withColResizing.js"
+            },
+            {
+                "name": "examples/datatableWithErrors",
+                "path": "node_modules/lightning-base-components/src/lightning/datatable/__examples__/withErrors/withErrors.js"
+            },
+            {
+                "name": "examples/datatableWithInfiniteLoading",
+                "path": "node_modules/lightning-base-components/src/lightning/datatable/__examples__/withInfiniteLoading/withInfiniteLoading.js"
+            },
+            {
+                "name": "examples/datatableWithInlineEdit",
+                "path": "node_modules/lightning-base-components/src/lightning/datatable/__examples__/withInlineEdit/withInlineEdit.js"
+            },
+            {
+                "name": "examples/datatableWithRowActions",
+                "path": "node_modules/lightning-base-components/src/lightning/datatable/__examples__/withRowActions/withRowActions.js"
+            },
+            {
+                "name": "examples/datatableWithRowNumbers",
+                "path": "node_modules/lightning-base-components/src/lightning/datatable/__examples__/withRowNumbers/withRowNumbers.js"
+            },
+            {
+                "name": "examples/datatableWithRowSelection",
+                "path": "node_modules/lightning-base-components/src/lightning/datatable/__examples__/withRowSelection/withRowSelection.js"
+            },
+            {
+                "name": "examples/datatableWithSingleRowSelectionMode",
+                "path": "node_modules/lightning-base-components/src/lightning/datatable/__examples__/withSingleRowSelectionMode/withSingleRowSelectionMode.js"
+            },
+            {
+                "name": "examples/datatableWithTextWrapping",
+                "path": "node_modules/lightning-base-components/src/lightning/datatable/__examples__/withTextWrapping/withTextWrapping.js"
+            },
+            {
+                "name": "examples/datatableWithVirtualization",
+                "path": "node_modules/lightning-base-components/src/lightning/datatable/__examples__/withVirtualization/withVirtualization.js"
+            },
+            {
+                "name": "examples/datatableWithoutTableHeader",
+                "path": "node_modules/lightning-base-components/src/lightning/datatable/__examples__/withoutTableHeader/withoutTableHeader.js"
+            },
+            {
+                "name": "examples/dialogBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/dialog/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/dualListboxMinmax",
+                "path": "node_modules/lightning-base-components/src/lightning/dualListbox/__examples__/minmax/minmax.js"
+            },
+            {
+                "name": "examples/dualListboxRequired",
+                "path": "node_modules/lightning-base-components/src/lightning/dualListbox/__examples__/required/required.js"
+            },
+            {
+                "name": "examples/dualListboxSelected",
+                "path": "node_modules/lightning-base-components/src/lightning/dualListbox/__examples__/selected/selected.js"
+            },
+            {
+                "name": "examples/dualListboxSimple",
+                "path": "node_modules/lightning-base-components/src/lightning/dualListbox/__examples__/simple/simple.js"
+            },
+            {
+                "name": "examples/dynamicIconEllie",
+                "path": "node_modules/lightning-base-components/src/lightning/dynamicIcon/__examples__/ellie/ellie.js"
+            },
+            {
+                "name": "examples/dynamicIconEq",
+                "path": "node_modules/lightning-base-components/src/lightning/dynamicIcon/__examples__/eq/eq.js"
+            },
+            {
+                "name": "examples/dynamicIconScore",
+                "path": "node_modules/lightning-base-components/src/lightning/dynamicIcon/__examples__/score/score.js"
+            },
+            {
+                "name": "examples/dynamicIconStrength",
+                "path": "node_modules/lightning-base-components/src/lightning/dynamicIcon/__examples__/strength/strength.js"
+            },
+            {
+                "name": "examples/dynamicIconTrend",
+                "path": "node_modules/lightning-base-components/src/lightning/dynamicIcon/__examples__/trend/trend.js"
+            },
+            {
+                "name": "examples/dynamicIconWaffle",
+                "path": "node_modules/lightning-base-components/src/lightning/dynamicIcon/__examples__/waffle/waffle.js"
+            },
+            {
+                "name": "examples/formattedAddressBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedAddress/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/formattedAddressCustomLocale",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedAddress/__examples__/customLocale/customLocale.js"
+            },
+            {
+                "name": "examples/formattedAddressLatitude",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedAddress/__examples__/latitude/latitude.js"
+            },
+            {
+                "name": "examples/formattedDateTimeDate",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedDateTime/__examples__/date/date.js"
+            },
+            {
+                "name": "examples/formattedDateTimeDatetime",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedDateTime/__examples__/datetime/datetime.js"
+            },
+            {
+                "name": "examples/formattedDateTimeTime",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedDateTime/__examples__/time/time.js"
+            },
+            {
+                "name": "examples/formattedEmailBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedEmail/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/formattedEmailOnclick",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedEmail/__examples__/onclick/onclick.js"
+            },
+            {
+                "name": "examples/formattedLocationBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedLocation/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/formattedNameLong",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedName/__examples__/long/long.js"
+            },
+            {
+                "name": "examples/formattedNameMedium",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedName/__examples__/medium/medium.js"
+            },
+            {
+                "name": "examples/formattedNameShort",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedName/__examples__/short/short.js"
+            },
+            {
+                "name": "examples/formattedNumberCurrency",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedNumber/__examples__/currency/currency.js"
+            },
+            {
+                "name": "examples/formattedNumberDecimal",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedNumber/__examples__/decimal/decimal.js"
+            },
+            {
+                "name": "examples/formattedNumberPercent",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedNumber/__examples__/percent/percent.js"
+            },
+            {
+                "name": "examples/formattedPhoneBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedPhone/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/formattedTextBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedText/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/formattedTimeBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedTime/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/formattedUrlBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/formattedUrl/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/groupedComboboxBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/groupedCombobox/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/helptextBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/helptext/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/iconBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/icon/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/iconVariants",
+                "path": "node_modules/lightning-base-components/src/lightning/icon/__examples__/variants/variants.js"
+            },
+            {
+                "name": "examples/inputCheckboxbasic",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/checkboxbasic/checkboxbasic.js"
+            },
+            {
+                "name": "examples/inputCheckboxbutton",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/checkboxbutton/checkboxbutton.js"
+            },
+            {
+                "name": "examples/inputColor",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/color/color.js"
+            },
+            {
+                "name": "examples/inputDate",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/date/date.js"
+            },
+            {
+                "name": "examples/inputDatetime",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/datetime/datetime.js"
+            },
+            {
+                "name": "examples/inputEmail",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/email/email.js"
+            },
+            {
+                "name": "examples/inputFile",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/file/file.js"
+            },
+            {
+                "name": "examples/inputFileOnchange",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/fileOnchange/fileOnchange.js"
+            },
+            {
+                "name": "examples/inputNumber",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/number/number.js"
+            },
+            {
+                "name": "examples/inputPassword",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/password/password.js"
+            },
+            {
+                "name": "examples/inputSearch",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/search/search.js"
+            },
+            {
+                "name": "examples/inputTel",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/tel/tel.js"
+            },
+            {
+                "name": "examples/inputText",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/text/text.js"
+            },
+            {
+                "name": "examples/inputTextAdvanced",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/textAdvanced/textAdvanced.js"
+            },
+            {
+                "name": "examples/inputTimeadvanced",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/timeadvanced/timeadvanced.js"
+            },
+            {
+                "name": "examples/inputTimebasic",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/timebasic/timebasic.js"
+            },
+            {
+                "name": "examples/inputToggle",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/toggle/toggle.js"
+            },
+            {
+                "name": "examples/inputUrl",
+                "path": "node_modules/lightning-base-components/src/lightning/input/__examples__/url/url.js"
+            },
+            {
+                "name": "examples/inputAddressBase",
+                "path": "node_modules/lightning-base-components/src/lightning/inputAddress/__examples__/base/base.js"
+            },
+            {
+                "name": "examples/inputAddressCustomLocale",
+                "path": "node_modules/lightning-base-components/src/lightning/inputAddress/__examples__/customLocale/customLocale.js"
+            },
+            {
+                "name": "examples/inputAddressStateAndCountryPicklists",
+                "path": "node_modules/lightning-base-components/src/lightning/inputAddress/__examples__/stateAndCountryPicklists/stateAndCountryPicklists.js"
+            },
+            {
+                "name": "examples/inputLocationBase",
+                "path": "node_modules/lightning-base-components/src/lightning/inputLocation/__examples__/base/base.js"
+            },
+            {
+                "name": "examples/inputLocationDefaultValues",
+                "path": "node_modules/lightning-base-components/src/lightning/inputLocation/__examples__/defaultValues/defaultValues.js"
+            },
+            {
+                "name": "examples/inputLocationDisabled",
+                "path": "node_modules/lightning-base-components/src/lightning/inputLocation/__examples__/disabled/disabled.js"
+            },
+            {
+                "name": "examples/inputLocationFieldLevelHelp",
+                "path": "node_modules/lightning-base-components/src/lightning/inputLocation/__examples__/fieldLevelHelp/fieldLevelHelp.js"
+            },
+            {
+                "name": "examples/inputLocationReadOnly",
+                "path": "node_modules/lightning-base-components/src/lightning/inputLocation/__examples__/readOnly/readOnly.js"
+            },
+            {
+                "name": "examples/inputLocationRequired",
+                "path": "node_modules/lightning-base-components/src/lightning/inputLocation/__examples__/required/required.js"
+            },
+            {
+                "name": "examples/inputNameBase",
+                "path": "node_modules/lightning-base-components/src/lightning/inputName/__examples__/base/base.js"
+            },
+            {
+                "name": "examples/inputNameDisabled",
+                "path": "node_modules/lightning-base-components/src/lightning/inputName/__examples__/disabled/disabled.js"
+            },
+            {
+                "name": "examples/inputNameFieldLevelHelp",
+                "path": "node_modules/lightning-base-components/src/lightning/inputName/__examples__/fieldLevelHelp/fieldLevelHelp.js"
+            },
+            {
+                "name": "examples/inputNameReadOnly",
+                "path": "node_modules/lightning-base-components/src/lightning/inputName/__examples__/readOnly/readOnly.js"
+            },
+            {
+                "name": "examples/inputNameRequired",
+                "path": "node_modules/lightning-base-components/src/lightning/inputName/__examples__/required/required.js"
+            },
+            {
+                "name": "examples/layoutHorizontalAlignSpace",
+                "path": "node_modules/lightning-base-components/src/lightning/layout/__examples__/horizontalAlignSpace/horizontalAlignSpace.js"
+            },
+            {
+                "name": "examples/layoutHorizontalAlignSpread",
+                "path": "node_modules/lightning-base-components/src/lightning/layout/__examples__/horizontalAlignSpread/horizontalAlignSpread.js"
+            },
+            {
+                "name": "examples/layoutNested",
+                "path": "node_modules/lightning-base-components/src/lightning/layout/__examples__/nested/nested.js"
+            },
+            {
+                "name": "examples/layoutPullToBoundary",
+                "path": "node_modules/lightning-base-components/src/lightning/layout/__examples__/pullToBoundary/pullToBoundary.js"
+            },
+            {
+                "name": "examples/layoutSimple",
+                "path": "node_modules/lightning-base-components/src/lightning/layout/__examples__/simple/simple.js"
+            },
+            {
+                "name": "examples/layoutVerticalAlignCenter",
+                "path": "node_modules/lightning-base-components/src/lightning/layout/__examples__/verticalAlignCenter/verticalAlignCenter.js"
+            },
+            {
+                "name": "examples/layoutVerticalAlignStretch",
+                "path": "node_modules/lightning-base-components/src/lightning/layout/__examples__/verticalAlignStretch/verticalAlignStretch.js"
+            },
+            {
+                "name": "examples/layoutItemAlignmentBump",
+                "path": "node_modules/lightning-base-components/src/lightning/layoutItem/__examples__/alignmentBump/alignmentBump.js"
+            },
+            {
+                "name": "examples/layoutItemDefault",
+                "path": "node_modules/lightning-base-components/src/lightning/layoutItem/__examples__/default/default.js"
+            },
+            {
+                "name": "examples/layoutItemFlexibility",
+                "path": "node_modules/lightning-base-components/src/lightning/layoutItem/__examples__/flexibility/flexibility.js"
+            },
+            {
+                "name": "examples/layoutItemFlexibilityValues",
+                "path": "node_modules/lightning-base-components/src/lightning/layoutItem/__examples__/flexibilityValues/flexibilityValues.js"
+            },
+            {
+                "name": "examples/layoutItemPadding",
+                "path": "node_modules/lightning-base-components/src/lightning/layoutItem/__examples__/padding/padding.js"
+            },
+            {
+                "name": "examples/layoutItemSize",
+                "path": "node_modules/lightning-base-components/src/lightning/layoutItem/__examples__/size/size.js"
+            },
+            {
+                "name": "examples/layoutItemSizeOverriddenForTablets",
+                "path": "node_modules/lightning-base-components/src/lightning/layoutItem/__examples__/sizeOverriddenForTablets/sizeOverriddenForTablets.js"
+            },
+            {
+                "name": "examples/layoutItemSizePerDevice",
+                "path": "node_modules/lightning-base-components/src/lightning/layoutItem/__examples__/sizePerDevice/sizePerDevice.js"
+            },
+            {
+                "name": "examples/menuDividerDivider",
+                "path": "node_modules/lightning-base-components/src/lightning/menuDivider/__examples__/divider/divider.js"
+            },
+            {
+                "name": "examples/menuDividerWithSubhead",
+                "path": "node_modules/lightning-base-components/src/lightning/menuDivider/__examples__/withSubhead/withSubhead.js"
+            },
+            {
+                "name": "examples/menuItemIteration",
+                "path": "node_modules/lightning-base-components/src/lightning/menuItem/__examples__/iteration/iteration.js"
+            },
+            {
+                "name": "examples/menuItemMenuItems",
+                "path": "node_modules/lightning-base-components/src/lightning/menuItem/__examples__/menuItems/menuItems.js"
+            },
+            {
+                "name": "examples/menuItemMenuItemsColor",
+                "path": "node_modules/lightning-base-components/src/lightning/menuItem/__examples__/menuItemsColor/menuItemsColor.js"
+            },
+            {
+                "name": "examples/menuSubheaderSubheader",
+                "path": "node_modules/lightning-base-components/src/lightning/menuSubheader/__examples__/subheader/subheader.js"
+            },
+            {
+                "name": "examples/menuSubheaderWithDividers",
+                "path": "node_modules/lightning-base-components/src/lightning/menuSubheader/__examples__/withDividers/withDividers.js"
+            },
+            {
+                "name": "examples/overlayEdit",
+                "path": "node_modules/lightning-base-components/src/lightning/overlay/__examples__/edit/edit.js"
+            },
+            {
+                "name": "examples/overlayInfo",
+                "path": "node_modules/lightning-base-components/src/lightning/overlay/__examples__/info/info.js"
+            },
+            {
+                "name": "examples/overlayMenu",
+                "path": "node_modules/lightning-base-components/src/lightning/overlay/__examples__/menu/menu.js"
+            },
+            {
+                "name": "examples/pillAvatarPill",
+                "path": "node_modules/lightning-base-components/src/lightning/pill/__examples__/avatarPill/avatarPill.js"
+            },
+            {
+                "name": "examples/pillBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/pill/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/pillErrorPill",
+                "path": "node_modules/lightning-base-components/src/lightning/pill/__examples__/errorPill/errorPill.js"
+            },
+            {
+                "name": "examples/pillIconPill",
+                "path": "node_modules/lightning-base-components/src/lightning/pill/__examples__/iconPill/iconPill.js"
+            },
+            {
+                "name": "examples/pillPlainLink",
+                "path": "node_modules/lightning-base-components/src/lightning/pill/__examples__/plainLink/plainLink.js"
+            },
+            {
+                "name": "examples/pillContainerBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/pillContainer/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/popupBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/popup/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/popupWalkthrough",
+                "path": "node_modules/lightning-base-components/src/lightning/popup/__examples__/walkthrough/walkthrough.js"
+            },
+            {
+                "name": "examples/progressBarBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/progressBar/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/progressBarInAction",
+                "path": "node_modules/lightning-base-components/src/lightning/progressBar/__examples__/inAction/inAction.js"
+            },
+            {
+                "name": "examples/progressBarVariants",
+                "path": "node_modules/lightning-base-components/src/lightning/progressBar/__examples__/variants/variants.js"
+            },
+            {
+                "name": "examples/progressIndicatorBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/progressIndicator/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/progressIndicatorPathType",
+                "path": "node_modules/lightning-base-components/src/lightning/progressIndicator/__examples__/pathType/pathType.js"
+            },
+            {
+                "name": "examples/progressIndicatorPathTypeWithIfCondition",
+                "path": "node_modules/lightning-base-components/src/lightning/progressIndicator/__examples__/pathTypeWithIfCondition/pathTypeWithIfCondition.js"
+            },
+            {
+                "name": "examples/progressIndicatorPathTypeWithIteration",
+                "path": "node_modules/lightning-base-components/src/lightning/progressIndicator/__examples__/pathTypeWithIteration/pathTypeWithIteration.js"
+            },
+            {
+                "name": "examples/progressRingBase",
+                "path": "node_modules/lightning-base-components/src/lightning/progressRing/__examples__/base/base.js"
+            },
+            {
+                "name": "examples/progressRingDrain",
+                "path": "node_modules/lightning-base-components/src/lightning/progressRing/__examples__/drain/drain.js"
+            },
+            {
+                "name": "examples/progressRingInteractive",
+                "path": "node_modules/lightning-base-components/src/lightning/progressRing/__examples__/interactive/interactive.js"
+            },
+            {
+                "name": "examples/progressRingLarge",
+                "path": "node_modules/lightning-base-components/src/lightning/progressRing/__examples__/large/large.js"
+            },
+            {
+                "name": "examples/progressRingVariantActiveStep",
+                "path": "node_modules/lightning-base-components/src/lightning/progressRing/__examples__/variantActiveStep/variantActiveStep.js"
+            },
+            {
+                "name": "examples/progressRingVariantBaseAutocomplete",
+                "path": "node_modules/lightning-base-components/src/lightning/progressRing/__examples__/variantBaseAutocomplete/variantBaseAutocomplete.js"
+            },
+            {
+                "name": "examples/progressRingVariantExpired",
+                "path": "node_modules/lightning-base-components/src/lightning/progressRing/__examples__/variantExpired/variantExpired.js"
+            },
+            {
+                "name": "examples/progressRingVariantWarning",
+                "path": "node_modules/lightning-base-components/src/lightning/progressRing/__examples__/variantWarning/variantWarning.js"
+            },
+            {
+                "name": "examples/progressStepBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/progressStep/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/progressStepShaded",
+                "path": "node_modules/lightning-base-components/src/lightning/progressStep/__examples__/shaded/shaded.js"
+            },
+            {
+                "name": "examples/radioGroupBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/radioGroup/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/radioGroupButton",
+                "path": "node_modules/lightning-base-components/src/lightning/radioGroup/__examples__/button/button.js"
+            },
+            {
+                "name": "examples/radioGroupButtondisabled",
+                "path": "node_modules/lightning-base-components/src/lightning/radioGroup/__examples__/buttondisabled/buttondisabled.js"
+            },
+            {
+                "name": "examples/radioGroupButtonrequired",
+                "path": "node_modules/lightning-base-components/src/lightning/radioGroup/__examples__/buttonrequired/buttonrequired.js"
+            },
+            {
+                "name": "examples/radioGroupDisabled",
+                "path": "node_modules/lightning-base-components/src/lightning/radioGroup/__examples__/disabled/disabled.js"
+            },
+            {
+                "name": "examples/radioGroupRequired",
+                "path": "node_modules/lightning-base-components/src/lightning/radioGroup/__examples__/required/required.js"
+            },
+            {
+                "name": "examples/relativeDateTimeFormatDatesRelativeToNow",
+                "path": "node_modules/lightning-base-components/src/lightning/relativeDateTime/__examples__/formatDatesRelativeToNow/formatDatesRelativeToNow.js"
+            },
+            {
+                "name": "examples/selectBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/select/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/selectDisabled",
+                "path": "node_modules/lightning-base-components/src/lightning/select/__examples__/disabled/disabled.js"
+            },
+            {
+                "name": "examples/selectHidden",
+                "path": "node_modules/lightning-base-components/src/lightning/select/__examples__/hidden/hidden.js"
+            },
+            {
+                "name": "examples/selectInline",
+                "path": "node_modules/lightning-base-components/src/lightning/select/__examples__/inline/inline.js"
+            },
+            {
+                "name": "examples/selectMultiple",
+                "path": "node_modules/lightning-base-components/src/lightning/select/__examples__/multiple/multiple.js"
+            },
+            {
+                "name": "examples/sliderBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/slider/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/sliderSizes",
+                "path": "node_modules/lightning-base-components/src/lightning/slider/__examples__/sizes/sizes.js"
+            },
+            {
+                "name": "examples/sliderType",
+                "path": "node_modules/lightning-base-components/src/lightning/slider/__examples__/type/type.js"
+            },
+            {
+                "name": "examples/sliderVariant",
+                "path": "node_modules/lightning-base-components/src/lightning/slider/__examples__/variant/variant.js"
+            },
+            {
+                "name": "examples/spinnerIf",
+                "path": "node_modules/lightning-base-components/src/lightning/spinner/__examples__/if/if.js"
+            },
+            {
+                "name": "examples/spinnerInverse",
+                "path": "node_modules/lightning-base-components/src/lightning/spinner/__examples__/inverse/inverse.js"
+            },
+            {
+                "name": "examples/spinnerSizes",
+                "path": "node_modules/lightning-base-components/src/lightning/spinner/__examples__/sizes/sizes.js"
+            },
+            {
+                "name": "examples/stackedTabsetConditional",
+                "path": "node_modules/lightning-base-components/src/lightning/stackedTabset/__examples__/conditional/conditional.js"
+            },
+            {
+                "name": "examples/stackedTabsetEvents",
+                "path": "node_modules/lightning-base-components/src/lightning/stackedTabset/__examples__/events/events.js"
+            },
+            {
+                "name": "examples/stackedTabsetSimple",
+                "path": "node_modules/lightning-base-components/src/lightning/stackedTabset/__examples__/simple/simple.js"
+            },
+            {
+                "name": "examples/tabsetActiveTab",
+                "path": "node_modules/lightning-base-components/src/lightning/tabset/__examples__/activeTab/activeTab.js"
+            },
+            {
+                "name": "examples/tabsetBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/tabset/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/tabsetConditionalTab",
+                "path": "node_modules/lightning-base-components/src/lightning/tabset/__examples__/conditionalTab/conditionalTab.js"
+            },
+            {
+                "name": "examples/tabsetOnactive",
+                "path": "node_modules/lightning-base-components/src/lightning/tabset/__examples__/onactive/onactive.js"
+            },
+            {
+                "name": "examples/tabsetOverflow",
+                "path": "node_modules/lightning-base-components/src/lightning/tabset/__examples__/overflow/overflow.js"
+            },
+            {
+                "name": "examples/tabsetScoped",
+                "path": "node_modules/lightning-base-components/src/lightning/tabset/__examples__/scoped/scoped.js"
+            },
+            {
+                "name": "examples/tabsetVertical",
+                "path": "node_modules/lightning-base-components/src/lightning/tabset/__examples__/vertical/vertical.js"
+            },
+            {
+                "name": "examples/textareaVarious",
+                "path": "node_modules/lightning-base-components/src/lightning/textarea/__examples__/various/various.js"
+            },
+            {
+                "name": "examples/tileBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/tile/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/tileList",
+                "path": "node_modules/lightning-base-components/src/lightning/tile/__examples__/list/list.js"
+            },
+            {
+                "name": "examples/tileWithAvatar",
+                "path": "node_modules/lightning-base-components/src/lightning/tile/__examples__/withAvatar/withAvatar.js"
+            },
+            {
+                "name": "examples/tileWithIcon",
+                "path": "node_modules/lightning-base-components/src/lightning/tile/__examples__/withIcon/withIcon.js"
+            },
+            {
+                "name": "examples/treeBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/tree/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/treeDeeplyNested",
+                "path": "node_modules/lightning-base-components/src/lightning/tree/__examples__/deeplyNested/deeplyNested.js"
+            },
+            {
+                "name": "examples/treeLinks",
+                "path": "node_modules/lightning-base-components/src/lightning/tree/__examples__/links/links.js"
+            },
+            {
+                "name": "examples/treeMetatext",
+                "path": "node_modules/lightning-base-components/src/lightning/tree/__examples__/metatext/metatext.js"
+            },
+            {
+                "name": "examples/treeOnselect",
+                "path": "node_modules/lightning-base-components/src/lightning/tree/__examples__/onselect/onselect.js"
+            },
+            {
+                "name": "examples/treeGridBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/treeGrid/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/treeGridExpanded",
+                "path": "node_modules/lightning-base-components/src/lightning/treeGrid/__examples__/expanded/expanded.js"
+            },
+            {
+                "name": "examples/treeGridLazyLoading",
+                "path": "node_modules/lightning-base-components/src/lightning/treeGrid/__examples__/lazyLoading/lazyLoading.js"
+            },
+            {
+                "name": "examples/treeGridSorting",
+                "path": "node_modules/lightning-base-components/src/lightning/treeGrid/__examples__/sorting/sorting.js"
+            },
+            {
+                "name": "examples/verticalNavigationAdvanced",
+                "path": "node_modules/lightning-base-components/src/lightning/verticalNavigation/__examples__/advanced/advanced.js"
+            },
+            {
+                "name": "examples/verticalNavigationBadge",
+                "path": "node_modules/lightning-base-components/src/lightning/verticalNavigation/__examples__/badge/badge.js"
+            },
+            {
+                "name": "examples/verticalNavigationBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/verticalNavigation/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/verticalNavigationCompact",
+                "path": "node_modules/lightning-base-components/src/lightning/verticalNavigation/__examples__/compact/compact.js"
+            },
+            {
+                "name": "examples/verticalNavigationHref",
+                "path": "node_modules/lightning-base-components/src/lightning/verticalNavigation/__examples__/href/href.js"
+            },
+            {
+                "name": "examples/verticalNavigationIcon",
+                "path": "node_modules/lightning-base-components/src/lightning/verticalNavigation/__examples__/icon/icon.js"
+            },
+            {
+                "name": "examples/verticalNavigationIteration",
+                "path": "node_modules/lightning-base-components/src/lightning/verticalNavigation/__examples__/iteration/iteration.js"
+            },
+            {
+                "name": "examples/verticalNavigationOverflow",
+                "path": "node_modules/lightning-base-components/src/lightning/verticalNavigation/__examples__/overflow/overflow.js"
+            },
+            {
+                "name": "examples/verticalNavigationSelected",
+                "path": "node_modules/lightning-base-components/src/lightning/verticalNavigation/__examples__/selected/selected.js"
+            },
+            {
+                "name": "examples/verticalNavigationShaded",
+                "path": "node_modules/lightning-base-components/src/lightning/verticalNavigation/__examples__/shaded/shaded.js"
+            },
+            {
+                "name": "examples/verticalNavigationValidation",
+                "path": "node_modules/lightning-base-components/src/lightning/verticalNavigation/__examples__/validation/validation.js"
+            },
+            {
+                "name": "examples/verticalNavigationItemBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/verticalNavigationItem/__examples__/basic/basic.js"
+            },
+            {
+                "name": "examples/verticalNavigationItemBadgeBadges",
+                "path": "node_modules/lightning-base-components/src/lightning/verticalNavigationItemBadge/__examples__/badges/badges.js"
+            },
+            {
+                "name": "examples/verticalNavigationItemIconIcons",
+                "path": "node_modules/lightning-base-components/src/lightning/verticalNavigationItemIcon/__examples__/icons/icons.js"
+            },
+            {
+                "name": "examples/verticalNavigationOverflowOverflowSection",
+                "path": "node_modules/lightning-base-components/src/lightning/verticalNavigationOverflow/__examples__/overflowSection/overflowSection.js"
+            },
+            {
+                "name": "examples/verticalNavigationSectionBasic",
+                "path": "node_modules/lightning-base-components/src/lightning/verticalNavigationSection/__examples__/basic/basic.js"
+            }
         ]
     },
     "routes": [
@@ -29,5 +989,250 @@
             "file": "$rootDir/src/assets/favicon.ico",
             "urlPath": "/favicon.ico"
         }
-    ]
+    ],
+    "bundleConfig": {
+        "exclude": [
+            "data/exampleRegistry",
+            "ui/exampleStage",
+            "examples/accordionBasic",
+            "examples/accordionConditional",
+            "examples/accordionMultiple",
+            "examples/accordionSectionBasic",
+            "examples/avatarBasic",
+            "examples/avatarIcons",
+            "examples/avatarInitials",
+            "examples/avatarSizes",
+            "examples/avatarVariant",
+            "examples/badgeBasic",
+            "examples/badgeIcon",
+            "examples/breadcrumbsBase",
+            "examples/breadcrumbsWithIteration",
+            "examples/breadcrumbsWithOnclick",
+            "examples/buttonAccesskey",
+            "examples/buttonBasic",
+            "examples/buttonDisabled",
+            "examples/buttonInverse",
+            "examples/buttonOnclick",
+            "examples/buttonWithIcon",
+            "examples/buttonGroupBasic",
+            "examples/buttonGroupDisabled",
+            "examples/buttonGroupInverse",
+            "examples/buttonGroupWithMenu",
+            "examples/buttonGroupWithMenuDisabled",
+            "examples/buttonIconBasic",
+            "examples/buttonIconInverse",
+            "examples/buttonIconSizes",
+            "examples/buttonIconStatefulBasic",
+            "examples/buttonIconStatefulVariants",
+            "examples/buttonMenuBasic",
+            "examples/buttonMenuOnselect",
+            "examples/buttonMenuVariants",
+            "examples/buttonMenuWithIcon",
+            "examples/buttonStatefulBasic",
+            "examples/buttonStatefulInverseVariant",
+            "examples/buttonStatefulNoIcon",
+            "examples/buttonStatefulTextVariant",
+            "examples/cardBasic",
+            "examples/cardCustom",
+            "examples/cardNarrow",
+            "examples/carouselAutoScroll",
+            "examples/carouselBasic",
+            "examples/carouselImageBasic",
+            "examples/checkboxGroupBasic",
+            "examples/checkboxGroupDisabled",
+            "examples/checkboxGroupRequired",
+            "examples/comboboxBasic",
+            "examples/comboboxDisabled",
+            "examples/comboboxRequired",
+            "examples/datatableBasic",
+            "examples/datatableSorting",
+            "examples/datatableWithAllColumnTypes",
+            "examples/datatableWithColResizing",
+            "examples/datatableWithErrors",
+            "examples/datatableWithInfiniteLoading",
+            "examples/datatableWithInlineEdit",
+            "examples/datatableWithRowActions",
+            "examples/datatableWithRowNumbers",
+            "examples/datatableWithRowSelection",
+            "examples/datatableWithSingleRowSelectionMode",
+            "examples/datatableWithTextWrapping",
+            "examples/datatableWithVirtualization",
+            "examples/datatableWithoutTableHeader",
+            "examples/dialogBasic",
+            "examples/dualListboxMinmax",
+            "examples/dualListboxRequired",
+            "examples/dualListboxSelected",
+            "examples/dualListboxSimple",
+            "examples/dynamicIconEllie",
+            "examples/dynamicIconEq",
+            "examples/dynamicIconScore",
+            "examples/dynamicIconStrength",
+            "examples/dynamicIconTrend",
+            "examples/dynamicIconWaffle",
+            "examples/formattedAddressBasic",
+            "examples/formattedAddressCustomLocale",
+            "examples/formattedAddressLatitude",
+            "examples/formattedDateTimeDate",
+            "examples/formattedDateTimeDatetime",
+            "examples/formattedDateTimeTime",
+            "examples/formattedEmailBasic",
+            "examples/formattedEmailOnclick",
+            "examples/formattedLocationBasic",
+            "examples/formattedNameLong",
+            "examples/formattedNameMedium",
+            "examples/formattedNameShort",
+            "examples/formattedNumberCurrency",
+            "examples/formattedNumberDecimal",
+            "examples/formattedNumberPercent",
+            "examples/formattedPhoneBasic",
+            "examples/formattedTextBasic",
+            "examples/formattedTimeBasic",
+            "examples/formattedUrlBasic",
+            "examples/groupedComboboxBasic",
+            "examples/helptextBasic",
+            "examples/iconBasic",
+            "examples/iconVariants",
+            "examples/inputCheckboxbasic",
+            "examples/inputCheckboxbutton",
+            "examples/inputColor",
+            "examples/inputDate",
+            "examples/inputDatetime",
+            "examples/inputEmail",
+            "examples/inputFile",
+            "examples/inputFileOnchange",
+            "examples/inputNumber",
+            "examples/inputPassword",
+            "examples/inputSearch",
+            "examples/inputTel",
+            "examples/inputText",
+            "examples/inputTextAdvanced",
+            "examples/inputTimeadvanced",
+            "examples/inputTimebasic",
+            "examples/inputToggle",
+            "examples/inputUrl",
+            "examples/inputAddressBase",
+            "examples/inputAddressCustomLocale",
+            "examples/inputAddressStateAndCountryPicklists",
+            "examples/inputLocationBase",
+            "examples/inputLocationDefaultValues",
+            "examples/inputLocationDisabled",
+            "examples/inputLocationFieldLevelHelp",
+            "examples/inputLocationReadOnly",
+            "examples/inputLocationRequired",
+            "examples/inputNameBase",
+            "examples/inputNameDisabled",
+            "examples/inputNameFieldLevelHelp",
+            "examples/inputNameReadOnly",
+            "examples/inputNameRequired",
+            "examples/layoutHorizontalAlignSpace",
+            "examples/layoutHorizontalAlignSpread",
+            "examples/layoutNested",
+            "examples/layoutPullToBoundary",
+            "examples/layoutSimple",
+            "examples/layoutVerticalAlignCenter",
+            "examples/layoutVerticalAlignStretch",
+            "examples/layoutItemAlignmentBump",
+            "examples/layoutItemDefault",
+            "examples/layoutItemFlexibility",
+            "examples/layoutItemFlexibilityValues",
+            "examples/layoutItemPadding",
+            "examples/layoutItemSize",
+            "examples/layoutItemSizeOverriddenForTablets",
+            "examples/layoutItemSizePerDevice",
+            "examples/menuDividerDivider",
+            "examples/menuDividerWithSubhead",
+            "examples/menuItemIteration",
+            "examples/menuItemMenuItems",
+            "examples/menuItemMenuItemsColor",
+            "examples/menuSubheaderSubheader",
+            "examples/menuSubheaderWithDividers",
+            "examples/overlayEdit",
+            "examples/overlayInfo",
+            "examples/overlayMenu",
+            "examples/pillAvatarPill",
+            "examples/pillBasic",
+            "examples/pillErrorPill",
+            "examples/pillIconPill",
+            "examples/pillPlainLink",
+            "examples/pillContainerBasic",
+            "examples/popupBasic",
+            "examples/popupWalkthrough",
+            "examples/progressBarBasic",
+            "examples/progressBarInAction",
+            "examples/progressBarVariants",
+            "examples/progressIndicatorBasic",
+            "examples/progressIndicatorPathType",
+            "examples/progressIndicatorPathTypeWithIfCondition",
+            "examples/progressIndicatorPathTypeWithIteration",
+            "examples/progressRingBase",
+            "examples/progressRingDrain",
+            "examples/progressRingInteractive",
+            "examples/progressRingLarge",
+            "examples/progressRingVariantActiveStep",
+            "examples/progressRingVariantBaseAutocomplete",
+            "examples/progressRingVariantExpired",
+            "examples/progressRingVariantWarning",
+            "examples/progressStepBasic",
+            "examples/progressStepShaded",
+            "examples/radioGroupBasic",
+            "examples/radioGroupButton",
+            "examples/radioGroupButtondisabled",
+            "examples/radioGroupButtonrequired",
+            "examples/radioGroupDisabled",
+            "examples/radioGroupRequired",
+            "examples/relativeDateTimeFormatDatesRelativeToNow",
+            "examples/selectBasic",
+            "examples/selectDisabled",
+            "examples/selectHidden",
+            "examples/selectInline",
+            "examples/selectMultiple",
+            "examples/sliderBasic",
+            "examples/sliderSizes",
+            "examples/sliderType",
+            "examples/sliderVariant",
+            "examples/spinnerIf",
+            "examples/spinnerInverse",
+            "examples/spinnerSizes",
+            "examples/stackedTabsetConditional",
+            "examples/stackedTabsetEvents",
+            "examples/stackedTabsetSimple",
+            "examples/tabsetActiveTab",
+            "examples/tabsetBasic",
+            "examples/tabsetConditionalTab",
+            "examples/tabsetOnactive",
+            "examples/tabsetOverflow",
+            "examples/tabsetScoped",
+            "examples/tabsetVertical",
+            "examples/textareaVarious",
+            "examples/tileBasic",
+            "examples/tileList",
+            "examples/tileWithAvatar",
+            "examples/tileWithIcon",
+            "examples/treeBasic",
+            "examples/treeDeeplyNested",
+            "examples/treeLinks",
+            "examples/treeMetatext",
+            "examples/treeOnselect",
+            "examples/treeGridBasic",
+            "examples/treeGridExpanded",
+            "examples/treeGridLazyLoading",
+            "examples/treeGridSorting",
+            "examples/verticalNavigationAdvanced",
+            "examples/verticalNavigationBadge",
+            "examples/verticalNavigationBasic",
+            "examples/verticalNavigationCompact",
+            "examples/verticalNavigationHref",
+            "examples/verticalNavigationIcon",
+            "examples/verticalNavigationIteration",
+            "examples/verticalNavigationOverflow",
+            "examples/verticalNavigationSelected",
+            "examples/verticalNavigationShaded",
+            "examples/verticalNavigationValidation",
+            "examples/verticalNavigationItemBasic",
+            "examples/verticalNavigationItemBadgeBadges",
+            "examples/verticalNavigationItemIconIcons",
+            "examples/verticalNavigationOverflowOverflowSection",
+            "examples/verticalNavigationSectionBasic"
+        ]
+    }
 }

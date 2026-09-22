@@ -1,0 +1,38 @@
+<template lwc:render-mode="light">
+    <div class="stage">
+        <div class="stage__toolbar slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+            <span class="slds-text-body_small slds-text-color_weak">{exampleId}</span>
+            <button class="slds-button slds-button_neutral" onclick={handleToggleSource}>
+                {toggleLabel}
+            </button>
+        </div>
+
+        <div lwc:if={hasError} class="slds-box slds-theme_error slds-m-bottom_small">
+            Could not load this example: {error}
+        </div>
+
+        <!-- The official example, mounted as-is -->
+        <div class="stage__canvas slds-p-around_medium slds-is-relative">
+            <lightning-spinner
+                lwc:if={loading}
+                alternative-text="Loading example"
+                size="small"
+            ></lightning-spinner>
+            <lwc:component lwc:is={ctor}></lwc:component>
+        </div>
+
+        <div lwc:if={showSource} class="stage__source">
+            <div class="stage__tabs">
+                <template for:each={fileTabs} for:item="tab">
+                    <button
+                        key={tab.file}
+                        class={tab.className}
+                        data-file={tab.file}
+                        onclick={handleSelectFile}
+                    >{tab.file}</button>
+                </template>
+            </div>
+            <pre class="stage__code slds-scrollable_x">{activeCode}</pre>
+        </div>
+    </div>
+</template>
