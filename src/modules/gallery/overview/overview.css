@@ -1,0 +1,12 @@
+.overview__tile {
+    display: block;
+    cursor: pointer;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    background: var(--slds-g-color-surface-1, #fff);
+    border: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+}
+
+.overview__tile:hover {
+    border-color: var(--slds-g-color-accent-container-1, #0176d3);
+}

@@ -1,0 +1,41 @@
+<template lwc:render-mode="light">
+    <div class="slds-box slds-box_x-small slds-m-bottom_medium slds-theme_default">
+        <lightning-input
+            type="search"
+            label="Filter components"
+            placeholder="Search by tag, module or property..."
+            value={query}
+            onchange={handleSearch}
+        ></lightning-input>
+        <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
+            Showing {shown} of {total} exposed components.
+        </p>
+    </div>
+
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+        <thead>
+            <tr class="slds-line-height_reset">
+                <th scope="col" class="catalog__col-tag"><div class="slds-truncate">Tag</div></th>
+                <th scope="col" class="catalog__col-module"><div class="slds-truncate">Module</div></th>
+                <th scope="col" class="catalog__col-api"><div class="slds-truncate">API</div></th>
+                <th scope="col"><div class="slds-truncate">Public properties</div></th>
+                <th scope="col" class="catalog__col-slots"><div class="slds-truncate">Slots</div></th>
+            </tr>
+        </thead>
+        <tbody>
+            <template for:each={rows} for:item="row">
+                <tr key={row.name} class="slds-hint-parent">
+                    <th scope="row">
+                        <div class="slds-truncate" title={row.tag}>
+                            <code>{row.tag}</code>
+                        </div>
+                    </th>
+                    <td><div class="slds-truncate" title={row.module}>{row.module}</div></td>
+                    <td><div class="slds-truncate">{row.minVersion}</div></td>
+                    <td><div class="catalog__props" title={row.propertyList}>{row.propertyList}</div></td>
+                    <td><div class="slds-truncate" title={row.slotList}>{row.slotList}</div></td>
+                </tr>
+            </template>
+        </tbody>
+    </table>
+</template>

@@ -1,0 +1,17 @@
+<template lwc:render-mode="light">
+    <article class="demo-card slds-box slds-box_x-small slds-m-bottom_medium slds-theme_default">
+        <header class="demo-card__header slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-p-bottom_x-small slds-border_bottom">
+            <div>
+                <h3 class="slds-text-heading_small">{label}</h3>
+                <p lwc:if={hasNote} class="slds-text-body_small slds-text-color_weak">{note}</p>
+            </div>
+            <button class="slds-button slds-button_neutral" onclick={handleToggleCode}>{toggleLabel}</button>
+        </header>
+
+        <div class="demo-card__stage slds-p-vertical_medium">
+            <slot></slot>
+        </div>
+
+        <pre lwc:if={showCode} class="demo-card__code slds-scrollable_x">{code}</pre>
+    </article>
+</template>

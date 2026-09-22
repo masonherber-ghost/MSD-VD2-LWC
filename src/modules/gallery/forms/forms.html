@@ -1,0 +1,106 @@
+<template lwc:render-mode="light">
+    <ui-demo-card
+        label="Text & typed inputs"
+        note="lightning-input covers text, email, number, date, time, search, checkbox and toggle."
+        code={inputCode}
+    >
+        <lightning-layout multiple-rows="true" horizontal-align="spread">
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-input label="Company name" required placeholder="Acme Pty Ltd"></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-input type="email" label="Email" placeholder="name@example.com"></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-input type="number" label="Headcount" value="120"></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-input type="date" label="Start date"></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-input type="toggle" label="Active account" checked></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-input type="checkbox" label="Send me updates"></lightning-input>
+            </lightning-layout-item>
+        </lightning-layout>
+    </ui-demo-card>
+
+    <ui-demo-card
+        label="Selection controls"
+        note="lightning-combobox, lightning-radio-group, lightning-checkbox-group, lightning-select."
+        code={selectionCode}
+    >
+        <lightning-layout multiple-rows="true">
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-combobox
+                    label="Industry"
+                    placeholder="Choose an industry"
+                    options={industryOptions}
+                ></lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-radio-group
+                    label="Preferred contact"
+                    options={contactOptions}
+                    value="email"
+                    type="radio"
+                ></lightning-radio-group>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-checkbox-group
+                    label="Subscriptions"
+                    options={contactOptions}
+                    value={selectedContact}
+                ></lightning-checkbox-group>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-dual-listbox
+                    label="Assigned regions"
+                    source-label="Available"
+                    selected-label="Selected"
+                    options={industryOptions}
+                ></lightning-dual-listbox>
+            </lightning-layout-item>
+        </lightning-layout>
+    </ui-demo-card>
+
+    <ui-demo-card label="Long form & range" note="lightning-textarea and lightning-slider.">
+        <lightning-textarea
+            label="Notes"
+            placeholder="Describe the opportunity..."
+            max-length="255"
+        ></lightning-textarea>
+        <div class="slds-m-top_medium">
+            <lightning-slider
+                label="Confidence"
+                value={sliderValue}
+                onchange={handleSliderChange}
+            ></lightning-slider>
+            <p class="slds-text-body_small slds-text-color_weak">Value: {sliderValue}</p>
+        </div>
+    </ui-demo-card>
+
+    <ui-demo-card label="Compound inputs" note="lightning-input-name and lightning-input-address.">
+        <lightning-input-name label="Full name" first-name="Jane" last-name="Doe"></lightning-input-name>
+        <div class="slds-m-top_medium">
+            <lightning-input-address
+                address-label="Address"
+                street-label="Street"
+                city-label="City"
+                country-label="Country"
+                province-label="State"
+                postal-code-label="Postcode"
+                street="123 Collins St"
+                city="Melbourne"
+                province="VIC"
+                postal-code="3000"
+                country="Australia"
+            ></lightning-input-address>
+        </div>
+    </ui-demo-card>
+
+    <ui-demo-card label="Validation" note="Calls reportValidity() on every field in this section.">
+        <lightning-button variant="brand" label="Validate fields" onclick={handleValidate}></lightning-button>
+    </ui-demo-card>
+</template>

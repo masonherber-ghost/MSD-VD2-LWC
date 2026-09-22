@@ -1,0 +1,91 @@
+<template lwc:render-mode="light">
+    <ui-demo-card
+        label="Datatable"
+        note="lightning-datatable with typed columns, sorting and row selection."
+        code={datatableCode}
+    >
+        <lightning-datatable
+            key-field="id"
+            columns={columns}
+            data={rows}
+        ></lightning-datatable>
+    </ui-demo-card>
+
+    <ui-demo-card label="Tree" note="lightning-tree renders nested, expandable items.">
+        <lightning-tree header="Regions" items={treeItems}></lightning-tree>
+    </ui-demo-card>
+
+    <ui-demo-card label="Tiles, avatars & badges" note="lightning-tile, lightning-avatar, lightning-badge, lightning-pill.">
+        <lightning-layout multiple-rows="true">
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-tile label="Acme Corporation" href="#">
+                    <lightning-avatar
+                        slot="media"
+                        fallback-icon-name="standard:account"
+                        alternative-text="Account"
+                    ></lightning-avatar>
+                    <p class="slds-truncate">Manufacturing &middot; Melbourne</p>
+                </lightning-tile>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" padding="around-small">
+                <div class="demo-grid">
+                    <lightning-badge label="Active"></lightning-badge>
+                    <lightning-badge label="Inverse" class="slds-theme_inverse"></lightning-badge>
+                    <lightning-pill label="Melbourne"></lightning-pill>
+                    <lightning-avatar fallback-icon-name="standard:user" alternative-text="User"></lightning-avatar>
+                    <lightning-icon icon-name="utility:success" variant="success" size="small"></lightning-icon>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </ui-demo-card>
+
+    <ui-demo-card label="Formatted output" note="The lightning-formatted-* family localises values for display.">
+        <dl class="slds-dl_horizontal">
+            <dt class="slds-dl_horizontal__label">Number</dt>
+            <dd class="slds-dl_horizontal__detail">
+                <lightning-formatted-number value="1234567.891" format-style="decimal"></lightning-formatted-number>
+            </dd>
+            <dt class="slds-dl_horizontal__label">Currency</dt>
+            <dd class="slds-dl_horizontal__detail">
+                <lightning-formatted-number
+                    value="4200000"
+                    format-style="currency"
+                    currency-code="AUD"
+                ></lightning-formatted-number>
+            </dd>
+            <dt class="slds-dl_horizontal__label">Percent</dt>
+            <dd class="slds-dl_horizontal__detail">
+                <lightning-formatted-number value="0.734" format-style="percent"></lightning-formatted-number>
+            </dd>
+            <dt class="slds-dl_horizontal__label">Date &amp; time</dt>
+            <dd class="slds-dl_horizontal__detail">
+                <lightning-formatted-date-time
+                    value={today}
+                    year="numeric"
+                    month="long"
+                    day="2-digit"
+                ></lightning-formatted-date-time>
+            </dd>
+            <dt class="slds-dl_horizontal__label">Relative</dt>
+            <dd class="slds-dl_horizontal__detail">
+                <lightning-relative-date-time value={nowTimestamp}></lightning-relative-date-time>
+            </dd>
+            <dt class="slds-dl_horizontal__label">Email</dt>
+            <dd class="slds-dl_horizontal__detail">
+                <lightning-formatted-email value="jane@example.com"></lightning-formatted-email>
+            </dd>
+            <dt class="slds-dl_horizontal__label">Phone</dt>
+            <dd class="slds-dl_horizontal__detail">
+                <lightning-formatted-phone value="0400000000"></lightning-formatted-phone>
+            </dd>
+            <dt class="slds-dl_horizontal__label">URL</dt>
+            <dd class="slds-dl_horizontal__detail">
+                <lightning-formatted-url value="https://example.com" label="example.com"></lightning-formatted-url>
+            </dd>
+            <dt class="slds-dl_horizontal__label">Rich text</dt>
+            <dd class="slds-dl_horizontal__detail">
+                <lightning-formatted-rich-text value="<b>Bold</b> and <i>italic</i> output."></lightning-formatted-rich-text>
+            </dd>
+        </dl>
+    </ui-demo-card>
+</template>

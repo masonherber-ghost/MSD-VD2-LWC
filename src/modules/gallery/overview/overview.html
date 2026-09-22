@@ -1,0 +1,76 @@
+<template lwc:render-mode="light">
+    <lightning-card title="What this prototype is" icon-name="utility:info">
+        <div class="slds-var-p-horizontal_medium slds-var-p-bottom_small">
+            <p class="slds-m-bottom_small">
+                A standalone LWR site — no Salesforce org, no deploy — wired to the open-source
+                Lightning base components and styled with SLDS 2. Every one of the
+                {componentCount} exposed components is resolvable in any template here; the
+                sections below demo the ones you will reach for most.
+            </p>
+            <ul class="slds-list_dotted slds-text-body_small">
+                <li><code>lightning-*</code> components come from <code>lightning-base-components</code></li>
+                <li>Styling comes from <code>@salesforce-ux/design-system-2</code> (SLDS 2, Lightning Blue theme)</li>
+                <li>Site chrome uses light DOM so global SLDS classes apply</li>
+            </ul>
+        </div>
+    </lightning-card>
+
+    <div class="slds-m-top_medium">
+        <ui-demo-card
+            label="Using a component"
+            note="No imports needed in the template — the lightning namespace is resolved by LWR."
+            code={usageCode}
+        >
+            <lightning-card title="Account" icon-name="standard:account">
+                <div class="slds-var-p-horizontal_small">
+                    <lightning-input label="Name" value="Acme Corporation"></lightning-input>
+                    <div class="slds-m-top_small demo-grid">
+                        <lightning-button variant="brand" label="Save"></lightning-button>
+                        <lightning-button label="Cancel"></lightning-button>
+                    </div>
+                </div>
+            </lightning-card>
+        </ui-demo-card>
+    </div>
+
+    <div class="slds-m-top_medium">
+        <lightning-layout multiple-rows="true">
+            <lightning-layout-item size="4" padding="around-small">
+                <lightning-tile label="Buttons & menus" data-section="buttons" onclick={handleJump} class="overview__tile">
+                    <lightning-icon slot="media" icon-name="utility:button_choice" size="small"></lightning-icon>
+                    <p class="slds-truncate">Actions and menus</p>
+                </lightning-tile>
+            </lightning-layout-item>
+            <lightning-layout-item size="4" padding="around-small">
+                <lightning-tile label="Forms & inputs" data-section="forms" onclick={handleJump} class="overview__tile">
+                    <lightning-icon slot="media" icon-name="utility:edit_form" size="small"></lightning-icon>
+                    <p class="slds-truncate">Data entry and validation</p>
+                </lightning-tile>
+            </lightning-layout-item>
+            <lightning-layout-item size="4" padding="around-small">
+                <lightning-tile label="Data display" data-section="data" onclick={handleJump} class="overview__tile">
+                    <lightning-icon slot="media" icon-name="utility:table" size="small"></lightning-icon>
+                    <p class="slds-truncate">Tables, trees and formatted output</p>
+                </lightning-tile>
+            </lightning-layout-item>
+            <lightning-layout-item size="4" padding="around-small">
+                <lightning-tile label="Feedback & overlays" data-section="feedback" onclick={handleJump} class="overview__tile">
+                    <lightning-icon slot="media" icon-name="utility:announcement" size="small"></lightning-icon>
+                    <p class="slds-truncate">Toasts, modals and progress</p>
+                </lightning-tile>
+            </lightning-layout-item>
+            <lightning-layout-item size="4" padding="around-small">
+                <lightning-tile label="Layout & navigation" data-section="layout" onclick={handleJump} class="overview__tile">
+                    <lightning-icon slot="media" icon-name="utility:layout" size="small"></lightning-icon>
+                    <p class="slds-truncate">Grid, cards, tabs and nav</p>
+                </lightning-tile>
+            </lightning-layout-item>
+            <lightning-layout-item size="4" padding="around-small">
+                <lightning-tile label="Full catalog" data-section="catalog" onclick={handleJump} class="overview__tile">
+                    <lightning-icon slot="media" icon-name="utility:list" size="small"></lightning-icon>
+                    <p class="slds-truncate">All {componentCount} components</p>
+                </lightning-tile>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

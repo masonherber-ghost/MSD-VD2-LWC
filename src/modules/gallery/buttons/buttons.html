@@ -1,0 +1,72 @@
+<template lwc:render-mode="light">
+    <ui-demo-card
+        label="Button variants"
+        note="lightning-button — the standard action control."
+        code={variantsCode}
+    >
+        <div class="demo-grid">
+            <lightning-button label="Neutral" onclick={handleAction}></lightning-button>
+            <lightning-button variant="brand" label="Brand" onclick={handleAction}></lightning-button>
+            <lightning-button variant="brand-outline" label="Brand outline" onclick={handleAction}></lightning-button>
+            <lightning-button variant="destructive" label="Destructive" onclick={handleAction}></lightning-button>
+            <lightning-button variant="destructive-text" label="Destructive text" onclick={handleAction}></lightning-button>
+            <lightning-button variant="success" label="Success" onclick={handleAction}></lightning-button>
+            <lightning-button label="Disabled" disabled></lightning-button>
+        </div>
+        <p class="slds-text-body_small slds-text-color_weak slds-m-top_small">
+            Last action: {lastAction}
+        </p>
+    </ui-demo-card>
+
+    <ui-demo-card
+        label="Icon buttons"
+        note="lightning-button-icon and lightning-button-icon-stateful."
+        code={iconCode}
+    >
+        <div class="demo-grid">
+            <lightning-button-icon icon-name="utility:settings" alternative-text="Settings"></lightning-button-icon>
+            <lightning-button-icon icon-name="utility:down" variant="border-filled" alternative-text="Down"></lightning-button-icon>
+            <lightning-button-icon icon-name="utility:delete" variant="destructive" alternative-text="Delete"></lightning-button-icon>
+            <lightning-button-icon-stateful
+                icon-name="utility:like"
+                selected={liked}
+                alternative-text={likeLabel}
+                onclick={handleToggleLike}
+            ></lightning-button-icon-stateful>
+        </div>
+    </ui-demo-card>
+
+    <ui-demo-card
+        label="Button groups & menus"
+        note="lightning-button-group, lightning-button-menu, lightning-menu-item."
+        code={groupCode}
+    >
+        <lightning-button-group>
+            <lightning-button label="Refresh" onclick={handleAction}></lightning-button>
+            <lightning-button label="Edit" onclick={handleAction}></lightning-button>
+            <lightning-button-menu alternative-text="More actions" onselect={handleMenuSelect}>
+                <template for:each={menuItems} for:item="item">
+                    <lightning-menu-item
+                        key={item.value}
+                        value={item.value}
+                        label={item.label}
+                        icon-name={item.iconName}
+                    ></lightning-menu-item>
+                </template>
+            </lightning-button-menu>
+        </lightning-button-group>
+    </ui-demo-card>
+
+    <ui-demo-card label="Stateful button" note="lightning-button-stateful toggles between three labels.">
+        <lightning-button-stateful
+            label-when-off="Follow"
+            label-when-on="Following"
+            label-when-hover="Unfollow"
+            icon-name-when-off="utility:add"
+            icon-name-when-on="utility:check"
+            icon-name-when-hover="utility:close"
+            selected={liked}
+            onclick={handleToggleLike}
+        ></lightning-button-stateful>
+    </ui-demo-card>
+</template>

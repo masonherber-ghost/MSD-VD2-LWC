@@ -1,0 +1,33 @@
+{
+    "lwc": {
+        "modules": [
+            { "dir": "$rootDir/src/modules" },
+            { "npm": "lightning-base-components" }
+        ]
+    },
+    "routes": [
+        {
+            "id": "gallery",
+            "path": "/",
+            "rootComponent": "example/app",
+            "layoutTemplate": "$layoutsDir/main.njk"
+        }
+    ],
+    "assets": [
+        {
+            "alias": "assetsDir",
+            "dir": "$rootDir/src/assets",
+            "urlPath": "/public/assets"
+        },
+        {
+            "alias": "sldsCss",
+            "dir": "$rootDir/node_modules/@salesforce-ux/design-system-2/dist/css/bundled",
+            "urlPath": "/public/slds"
+        },
+        {
+            "alias": "favicon",
+            "file": "$rootDir/src/assets/favicon.ico",
+            "urlPath": "/favicon.ico"
+        }
+    ]
+}
