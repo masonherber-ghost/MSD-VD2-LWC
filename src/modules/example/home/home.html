@@ -1,0 +1,37 @@
+<template lwc:render-mode="light">
+    <ui-site-header current="home"></ui-site-header>
+
+    <div class="site__body">
+        <main class="site__main home">
+            <div class="home__hero slds-box slds-theme_default">
+                <h1 class="slds-text-heading_large">MSD prototype</h1>
+                <p class="slds-text-body_regular slds-m-top_x-small slds-text-color_weak">
+                    Homepage stub. Page content goes here.
+                </p>
+                <div class="slds-m-top_medium">
+                    <a href="/design-system">
+                        <lightning-button
+                            variant="brand"
+                            label="Open the design system"
+                        ></lightning-button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="home__stats slds-m-top_medium">
+                <article class="slds-box slds-theme_default">
+                    <p class="home__stat">{componentCount}</p>
+                    <p class="slds-text-body_small slds-text-color_weak">
+                        Lightning base components available
+                    </p>
+                </article>
+                <article class="slds-box slds-theme_default">
+                    <p class="home__stat">{exampleCount}</p>
+                    <p class="slds-text-body_small slds-text-color_weak">
+                        Official examples to browse
+                    </p>
+                </article>
+            </div>
+        </main>
+    </div>
+</template>

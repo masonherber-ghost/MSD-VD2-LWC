@@ -967,9 +967,15 @@
     },
     "routes": [
         {
-            "id": "gallery",
+            "id": "home",
             "path": "/",
-            "rootComponent": "example/app",
+            "rootComponent": "example/home",
+            "layoutTemplate": "$layoutsDir/main.njk"
+        },
+        {
+            "id": "designSystem",
+            "path": "/design-system",
+            "rootComponent": "example/designSystem",
             "layoutTemplate": "$layoutsDir/main.njk"
         }
     ],

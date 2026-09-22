@@ -1,0 +1,34 @@
+<template lwc:render-mode="light">
+    <header class="slds-global-header_container">
+        <div class="slds-global-header slds-grid slds-grid_align-spread">
+            <div class="slds-global-header__item site-header__brand">
+                <div class="slds-global-header__logo site-header__logo">
+                    <lightning-icon icon-name="utility:apps" size="small"></lightning-icon>
+                    <a href="/" class="site-header__wordmark">MSD</a>
+                </div>
+                <nav class="site-header__nav">
+                    <a href="/" class={homeClass}>Home</a>
+                    <a href="/design-system" class={designSystemClass}>Design system</a>
+                </nav>
+            </div>
+            <div class="slds-global-header__item">
+                <ul class="slds-global-actions slds-grid slds-grid_vertical-align-center">
+                    <li class="slds-global-actions__item">
+                        <lightning-button-icon
+                            icon-name="utility:settings"
+                            variant="bare"
+                            alternative-text="Settings"
+                        ></lightning-button-icon>
+                    </li>
+                    <li class="slds-global-actions__item slds-p-left_x-small">
+                        <lightning-avatar
+                            fallback-icon-name="standard:user"
+                            alternative-text="User"
+                            size="small"
+                        ></lightning-avatar>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+</template>

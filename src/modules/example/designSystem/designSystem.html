@@ -1,0 +1,27 @@
+<template lwc:render-mode="light">
+    <ui-site-header current="design-system"></ui-site-header>
+
+    <div class="site__body">
+        <main class="site__main">
+            <div class="slds-page-header slds-m-bottom_medium">
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <lightning-icon icon-name="standard:apps" size="medium"></lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <h1 class="slds-page-header__title slds-truncate">Design system</h1>
+                                <p class="slds-page-header__name-meta">
+                                    Every example that ships with lightning-base-components, rendered live.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ui-kitchen-sink></ui-kitchen-sink>
+        </main>
+    </div>
+</template>

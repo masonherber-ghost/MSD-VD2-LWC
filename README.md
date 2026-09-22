@@ -18,6 +18,17 @@ open-source Lightning base components installed as an npm dependency.
 > components. The base components live in `lightning-base-components`, which is
 > what this project installs.
 
+## Routes
+
+| Path | Component | What it is |
+| --- | --- | --- |
+| `/` | `example/home` | Homepage stub — replace with real content |
+| `/design-system` | `example/designSystem` | The kitchen sink: every shipped example, live |
+
+Both routes share `ui/siteHeader` and the layout in `src/layouts/main.njk`. Add a
+route by adding an entry to `routes` in `lwr.config.json` and a matching
+component; `npm run catalog` never touches that part of the config.
+
 ## Running it
 
 ```bash
@@ -79,7 +90,7 @@ Global SLDS utility classes cannot cross a shadow boundary, so any component of
 ours that uses `slds-*` classes must be light DOM. The base components are
 unaffected — they bundle their own styles.
 
-## The kitchen sink
+## The kitchen sink (`/design-system`)
 
 `lightning-base-components` ships 255 official example bundles in `__examples__`
 folders — the same ones behind Salesforce's hosted Component Library. The
@@ -103,7 +114,8 @@ nothing to update when the package changes:
 | `ui/kitchenSink` | ~190 | component list, filter, example picker, hash deep-links |
 | `ui/exampleStage` | ~120 | lazy-mounts one example, shows its source |
 
-Deep links work: `#datatable/withRowActions` opens that example directly.
+Deep links work: `/design-system#datatable/withRowActions` opens that example
+directly.
 
 Adding examples is not a code change. Upgrade the package, run `npm run catalog`,
 and any new examples appear.
@@ -134,26 +146,18 @@ name and public properties.
 
 ```
 src/
-  layouts/main.njk              custom HTML layout (loads SLDS)
+  assets/css/site.css           shared page chrome styles
+  layouts/main.njk              custom HTML layout (loads SLDS + site.css)
   modules/
-    example/app/                app shell: global header, sidebar, routing
+    example/home/               "/" homepage stub
+    example/designSystem/       "/design-system" route shell
+    ui/siteHeader/              global header shared by both routes
     ui/kitchenSink/             Storybook-style example browser
     ui/exampleStage/            lazy-mounts one example + its source
-    ui/demoCard/                demo frame with toggleable markup snippet
-    ui/catalogTable/            searchable catalog
-    gallery/overview/           landing section
-    gallery/buttons/            buttons, icon buttons, groups, menus
-    gallery/forms/              inputs, selection, compound fields, validation
-    gallery/data/               datatable, tree, tiles, formatted-* output
-    gallery/feedback/           alert/confirm/prompt/toast, spinner, progress
-    gallery/layout/             grid, cards, tabs, accordion, breadcrumbs, nav
     data/catalog/               GENERATED component catalog
     data/exampleRegistry/       GENERATED lazy example loaders
 scripts/build-catalog.mjs       catalog + registry generator
 ```
-
-Add a section by creating a `gallery/<name>` component and adding an entry to
-`SECTIONS` in `src/modules/example/app/app.ts` plus a matching tag in `app.html`.
 
 ## Things worth knowing
 

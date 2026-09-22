@@ -1,0 +1,64 @@
+/* Page chrome shared by every route. Component styles live with their components. */
+
+body {
+    margin: 0;
+    background: var(--slds-g-color-surface-container-1, #f3f3f3);
+}
+
+/* slds-global-header_container is position:fixed at 50px tall, so page content
+   has to be pushed clear of it. */
+.site__body {
+    padding-top: 50px;
+    min-height: calc(100vh - 50px);
+}
+
+.site__main {
+    padding: 1.5rem;
+}
+
+/* Keep the wordmark and nav on one row inside the 50px header. */
+.site-header__brand {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.site-header__logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--slds-g-color-on-surface-1, #181818);
+}
+
+.site-header__wordmark {
+    font-weight: 700;
+    text-decoration: none;
+    color: inherit;
+    white-space: nowrap;
+}
+
+.site-header__nav {
+    display: flex;
+    gap: 1rem;
+    margin-left: 1.5rem;
+}
+
+.site-header__link {
+    color: var(--slds-g-color-on-surface-2, #444);
+    text-decoration: none;
+    font-size: 0.8125rem;
+    line-height: 1;
+    padding: 0.35rem 0;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+}
+
+.site-header__link:hover {
+    color: var(--slds-g-color-accent-container-1, #0176d3);
+}
+
+.site-header__link_active {
+    color: var(--slds-g-color-accent-container-1, #0176d3);
+    border-bottom-color: var(--slds-g-color-accent-container-1, #0176d3);
+    font-weight: 600;
+}
