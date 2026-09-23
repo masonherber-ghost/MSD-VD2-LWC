@@ -212,7 +212,7 @@
                     </lightning-tab>
 
                     <!-- Tab 2: Manage team -------------------------------->
-                    <lightning-tab label={teamTabLabel}>
+                    <lightning-tab lwc:if={showTeamTab} label={teamTabLabel}>
                         <div lwc:if={hasTeamMessage} class="slds-m-bottom_small">
                             <div class="slds-notify slds-notify_alert slds-theme_success" role="status">
                                 <span>{teamMessage}</span>
@@ -270,4 +270,6 @@
             </div>
         </main>
     </div>
+
+    <ui-site-footer></ui-site-footer>
 </template>

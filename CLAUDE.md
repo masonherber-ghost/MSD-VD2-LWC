@@ -72,6 +72,10 @@ Never let a screen reach the database directly.
 **Stop and ask first.** This is a hard gate — see `rules-lwc-components.md` § *The custom
 component gate*.
 
+### Gate something behind a release
+`rules-app-logic.md` § *Release preview*. Register the flag, hold the release in a field, pass it
+to `isEnabled`, and gate the whole widget.
+
 ### Browse what the component library can do
 `npm run dev` → `/design-system` renders every shipped example live. The catalog behind it is
 generated: `npm run catalog`.

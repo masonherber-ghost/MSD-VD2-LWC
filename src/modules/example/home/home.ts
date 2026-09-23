@@ -1,6 +1,12 @@
 import { LightningElement } from 'lwc';
 import api, { ApiError } from 'data/api';
 import { currentUser, displayName, onChange, type SessionUser } from 'data/session';
+import {
+    currentRelease,
+    isEnabled,
+    onChange as onReleaseChange,
+    type Release
+} from 'data/release';
 
 /**
  * Homepage, in two forms.
@@ -16,12 +22,23 @@ export default class Home extends LightningElement {
     applicantCount = 0;
     activeCount = 0;
     loaded = false;
+
+    /**
+     * Held as a field, not read straight from the module, because only a field
+     * change tells LWC to re-render — and every getter re-runs when it does.
+     */
+    release: Release = currentRelease();
+
     private unsubscribe: (() => void) | null = null;
+    private unsubRelease: (() => void) | null = null;
 
     async connectedCallback(): Promise<void> {
         this.user = currentUser();
         this.unsubscribe = onChange(() => {
             this.user = currentUser();
+        });
+        this.unsubRelease = onReleaseChange(() => {
+            this.release = currentRelease();
         });
 
         const accountId = this.user?.account_id;
@@ -46,6 +63,8 @@ export default class Home extends LightningElement {
     disconnectedCallback(): void {
         this.unsubscribe?.();
         this.unsubscribe = null;
+        this.unsubRelease?.();
+        this.unsubRelease = null;
     }
 
     get isSignedIn(): boolean {
@@ -60,7 +79,8 @@ export default class Home extends LightningElement {
         return this.user?.company_name ?? '';
     }
 
+    /** The at-a-glance cards arrived after the first release. */
     get hasSummary(): boolean {
-        return this.loaded;
+        return this.loaded && isEnabled('home.dashboardStats', this.release);
     }
 }

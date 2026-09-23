@@ -1,6 +1,12 @@
 import { LightningElement } from 'lwc';
 import api, { ApiError, type Row } from 'data/api';
 import { currentUser, type SessionUser } from 'data/session';
+import {
+    currentRelease,
+    isEnabled,
+    onChange as onReleaseChange,
+    type Release
+} from 'data/release';
 
 /** Free text in the data, so these are suggestions rather than a closed set. */
 const COMPANY_TYPES = [
@@ -99,7 +105,14 @@ export default class ManageOrg extends LightningElement {
     pendingRemoval: Row | null = null;
     teamMessage = '';
 
+    /** A field, so a release change re-renders and the getters re-run. */
+    release: Release = currentRelease();
+    private unsubRelease: (() => void) | null = null;
+
     async connectedCallback(): Promise<void> {
+        this.unsubRelease = onReleaseChange(() => {
+            this.release = currentRelease();
+        });
         this.user = currentUser();
         const accountId = this.user?.account_id;
         if (!accountId) {
@@ -114,6 +127,11 @@ export default class ManageOrg extends LightningElement {
         } finally {
             this.loading = false;
         }
+    }
+
+    disconnectedCallback(): void {
+        this.unsubRelease?.();
+        this.unsubRelease = null;
     }
 
     private async load(accountId: number): Promise<void> {
@@ -290,6 +308,11 @@ export default class ManageOrg extends LightningElement {
 
     get teamTabLabel(): string {
         return `Manage team (${this.members.length})`;
+    }
+
+    /** Team management arrived after the org details form. */
+    get showTeamTab(): boolean {
+        return isEnabled('manageOrg.team', this.release);
     }
 
     async handleRowAction(event: CustomEvent): Promise<void> {

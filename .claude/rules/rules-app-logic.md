@@ -128,6 +128,76 @@ Candidate statuses, in pipeline order: `applied`, `screening`, `shortlisted`, `i
 `interview_options` uses the slugs the `jobs` table already uses — `in-person`, `phone`, `online` —
 so job and account stay consistent. `pre_employment_checks` is free text, edited one per line.
 
+## Release preview — the feature flag
+
+`src/modules/data/release` gates screens and widgets by release, so variants can be compared
+without branching the code. The toggle lives in `ui/siteFooter`, docked on every route.
+
+| Piece | Where |
+|---|---|
+| Releases, registry, `isEnabled` | `src/modules/data/release/release.ts` |
+| The toggle | `src/modules/ui/siteFooter/` |
+
+Releases are `1.1`, `1.2`, `1.3`, `1.4`, `2+`. The default is **`2+`** — the newest — so the site
+shows its full current state and stepping *back* is what reveals how it was built up.
+
+It is stored under its own key (`msd.release`), not inside the session: the session is who you are
+and is cleared on sign-out; the release is which build you are previewing and must outlive it.
+
+### Flags are cumulative
+
+`FEATURES` maps each feature to **the release it lands in**. `isEnabled` asks *has the selected
+release reached that one*, never *does it equal it*. A feature at `1.2` is on for 1.2, 1.3, 1.4 and
+2+.
+
+Two variants of the same widget are therefore two flags landing in different releases — not an
+equality check. Reach for `isRelease` only when something genuinely exists in one release alone.
+
+An **unregistered** flag is treated as ON with a console warning, so a typo is loud rather than
+silently blanking a screen.
+
+### Consuming a flag — the reactivity rule
+
+This is the part that bites. **LWC re-renders only when a field it read during the last render
+changes.** A getter that calls `isEnabled('x')` reads the *module*, not a field, so LWC records no
+dependency and the screen does not update when the toggle moves — it only looks right after a
+reload.
+
+So a component holds the release in a field and passes it in:
+
+```ts
+release: Release = currentRelease();
+private unsubRelease: (() => void) | null = null;
+
+connectedCallback(): void {
+    this.unsubRelease = onReleaseChange(() => {
+        this.release = currentRelease();
+    });
+}
+
+disconnectedCallback(): void {
+    this.unsubRelease?.();
+    this.unsubRelease = null;
+}
+
+get showActivity(): boolean {
+    return isEnabled('jobDetail.activityTimeline', this.release);
+}
+```
+
+Passing `this.release` is not decoration — it is what makes the field a render dependency.
+
+### Gate the whole widget
+
+A flag must hide the **entire** widget, not just its contents. Gating the inside of a
+`lightning-card` leaves an empty card with its "nothing here yet" state showing, which reads as a
+bug rather than as a feature that does not exist yet.
+
+### The registry is placeholder
+
+The release assignments in `FEATURES` are **not a real roadmap** — they were set to demonstrate the
+mechanism. Correct them against the actual plan before using them to make decisions.
+
 ## Never invent data
 
 Every number, date and name on a screen comes from the database. The activity timeline on the

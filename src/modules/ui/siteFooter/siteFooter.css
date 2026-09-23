@@ -1,0 +1,19 @@
+/* Docked to the viewport so the toggle is reachable from anywhere on a page.
+   `.site__body` reserves the matching space — see site.css. */
+.site-footer {
+    position: fixed;
+    inset-block-end: 0;
+    inset-inline: 0;
+    z-index: 5;
+    background: var(--slds-g-color-surface-1, #fff);
+    border-block-start: 1px solid var(--slds-g-color-border-1, #e5e5e5);
+}
+
+.site-footer__inner {
+    padding: var(--slds-g-spacing-2, 0.5rem) var(--slds-g-spacing-4, 1rem);
+}
+
+/* The segmented control sits inline in the bar rather than stacking. */
+.site-footer__toggle lightning-radio-group {
+    display: inline-block;
+}

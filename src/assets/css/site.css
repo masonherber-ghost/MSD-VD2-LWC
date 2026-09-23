@@ -9,6 +9,9 @@ body {
    has to be pushed clear of it. */
 .site__body {
     padding-top: 50px;
+    /* The release toggle is docked at the bottom; reserve its height so page
+       content can always scroll clear of it. */
+    padding-bottom: 3.25rem;
     min-height: calc(100vh - 50px);
 }
 

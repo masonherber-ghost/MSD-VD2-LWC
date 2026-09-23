@@ -1,6 +1,12 @@
 import { LightningElement } from 'lwc';
 import api, { ApiError, DEV_ACCOUNT_ID, type Row } from 'data/api';
 import { currentAccountId } from 'data/session';
+import {
+    currentRelease,
+    isEnabled,
+    onChange as onReleaseChange,
+    type Release
+} from 'data/release';
 
 /** The vacancy lifecycle, rendered as the Path chevron above the record body. */
 const PATH_STEPS = [
@@ -86,7 +92,14 @@ export default class JobDetail extends LightningElement {
     error = '';
     loading = true;
 
+    /** A field, so a release change re-renders and the getters re-run. */
+    release: Release = currentRelease();
+    private unsubRelease: (() => void) | null = null;
+
     async connectedCallback(): Promise<void> {
+        this.unsubRelease = onReleaseChange(() => {
+            this.release = currentRelease();
+        });
         try {
             this.jobs = await api.jobs(currentAccountId() ?? DEV_ACCOUNT_ID);
             if (this.jobs.length) {
@@ -100,6 +113,11 @@ export default class JobDetail extends LightningElement {
         } finally {
             this.loading = false;
         }
+    }
+
+    disconnectedCallback(): void {
+        this.unsubRelease?.();
+        this.unsubRelease = null;
     }
 
     private async loadJob(id: number): Promise<void> {
@@ -306,6 +324,14 @@ export default class JobDetail extends LightningElement {
         return this.timeline.length > 0;
     }
 
+    /**
+     * The activity timeline arrived after the first release. This gates the
+     * whole card — `hasTimeline` still governs its empty state.
+     */
+    get showActivity(): boolean {
+        return isEnabled('jobDetail.activityTimeline', this.release);
+    }
+
     get vacancyContact(): Row | null {
         return (this.job?.vacancy_contact as Row) ?? null;
     }
@@ -315,7 +341,8 @@ export default class JobDetail extends LightningElement {
         return c ? `${c.first_name ?? ''} ${c.last_name ?? ''}`.trim() : '';
     }
 
+    /** The vacancy contact card arrived after the timeline. */
     get hasContact(): boolean {
-        return this.vacancyContact !== null;
+        return this.vacancyContact !== null && isEnabled('jobDetail.vacancyContact', this.release);
     }
 }

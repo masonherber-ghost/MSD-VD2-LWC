@@ -1,0 +1,28 @@
+<template lwc:render-mode="light">
+    <footer class="site-footer">
+        <div class="site-footer__inner slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+            <div class="slds-grid slds-grid_vertical-align-center">
+                <lightning-icon
+                    icon-name="utility:settings"
+                    size="xx-small"
+                    alternative-text="Prototype controls"
+                ></lightning-icon>
+                <span class="slds-text-body_small slds-text-color_weak slds-m-left_x-small">
+                    Prototype &mdash; release preview
+                </span>
+            </div>
+
+            <div class="site-footer__toggle slds-grid slds-grid_vertical-align-center">
+                <span class="slds-text-body_small slds-m-right_x-small">Viewing release</span>
+                <lightning-radio-group
+                    label="Release"
+                    variant="label-hidden"
+                    type="button"
+                    value={release}
+                    options={options}
+                    onchange={handleReleaseChange}
+                ></lightning-radio-group>
+            </div>
+        </div>
+    </footer>
+</template>
