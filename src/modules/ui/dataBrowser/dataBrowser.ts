@@ -4,6 +4,12 @@ import type { DeleteResult, Row, TableSchema } from 'data/api';
 
 const PAGE_SIZE = 25;
 
+/**
+ * Tables that get edited often enough to be worth a fixed spot at the top of
+ * the rail. Everything else follows alphabetically.
+ */
+const PINNED = ['accounts', 'candidates', 'ciam', 'contacts', 'jobs'];
+
 const humanize = (name: string): string =>
     name.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
 
@@ -44,8 +50,11 @@ export default class DataBrowser extends LightningElement {
     async connectedCallback(): Promise<void> {
         try {
             this.tables = await api.admin.schema();
-            if (this.tables.length) {
-                await this.select(this.tables[0].name);
+            // Open whatever sits at the top of the rail, not whatever the
+            // server happened to list first.
+            const [first] = this.orderedTables;
+            if (first) {
+                await this.select(first.name);
             }
         } catch (e) {
             this.error = e instanceof ApiError ? e.message : 'Could not load the schema.';
@@ -97,19 +106,37 @@ export default class DataBrowser extends LightningElement {
         return this.tables.find((t) => t.name === this.selected);
     }
 
+    /** Pinned tables first in the order above, then the rest alphabetically. */
+    get orderedTables(): TableSchema[] {
+        const rank = (name: string): number => {
+            const pinned = PINNED.indexOf(name);
+            return pinned === -1 ? PINNED.length : pinned;
+        };
+        return [...this.tables].sort(
+            (a, b) => rank(a.name) - rank(b.name) || a.name.localeCompare(b.name)
+        );
+    }
+
     get tableList() {
         const q = this.tableFilter.trim().toLowerCase();
-        return this.tables
-            .filter((t) => !q || t.name.toLowerCase().includes(q))
-            .map((t) => ({
+        const matches = this.orderedTables.filter(
+            (t) => !q || t.name.toLowerCase().includes(q)
+        );
+        // Rule off the pinned group, but only while it is actually at the top —
+        // a filter that hides pinned tables should not leave a stray divider.
+        const firstUnpinned = matches.findIndex((t) => !PINNED.includes(t.name));
+
+        return matches.map((t, index) => {
+            const classes = ['browser__item'];
+            if (t.name === this.selected) classes.push('browser__item_active');
+            if (index === firstUnpinned && index > 0) classes.push('browser__item_divided');
+            return {
                 name: t.name,
                 label: t.label,
                 rowCount: t.rowCount,
-                className:
-                    t.name === this.selected
-                        ? 'browser__item browser__item_active'
-                        : 'browser__item'
-            }));
+                className: classes.join(' ')
+            };
+        });
     }
 
     /** Datatable columns from the registry, plus row actions when allowed. */

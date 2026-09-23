@@ -79,3 +79,10 @@
 .browser__grid {
     overflow-x: auto;
 }
+
+/* Separates the pinned tables from the alphabetical remainder. */
+.browser__item_divided {
+    border-top: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+    margin-top: 0.25rem;
+    padding-top: 0.6rem;
+}
