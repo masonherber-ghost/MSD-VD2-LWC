@@ -1,5 +1,8 @@
 import { LightningElement, api } from 'lwc';
 
+const LINK = 'site-header__link';
+const LINK_ACTIVE = 'site-header__link site-header__link_active';
+
 /** Lightning Experience style global header, shared by every route. */
 export default class SiteHeader extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
@@ -7,27 +10,34 @@ export default class SiteHeader extends LightningElement {
     /** Marks the current page so the header can highlight it. */
     @api current = '';
 
-    get designSystemClass(): string {
-        return this.current === 'design-system'
-            ? 'site-header__link site-header__link_active'
-            : 'site-header__link';
+    get listAJobClass(): string {
+        return this.current === 'list-a-job' ? LINK_ACTIVE : LINK;
     }
 
-    get vacanciesClass(): string {
-        return this.current === 'vacancies'
-            ? 'site-header__link site-header__link_active'
-            : 'site-header__link';
+    get myJobsClass(): string {
+        return this.current === 'my-jobs' ? LINK_ACTIVE : LINK;
     }
 
-    get dataClass(): string {
-        return this.current === 'data'
-            ? 'site-header__link site-header__link_active'
-            : 'site-header__link';
+    get helpCentreClass(): string {
+        return this.current === 'help-centre' ? LINK_ACTIVE : LINK;
     }
 
-    get homeClass(): string {
-        return this.current === 'home'
-            ? 'site-header__link site-header__link_active'
-            : 'site-header__link';
+    /**
+     * The menus are navigation, not commands: lightning-button-menu has no href,
+     * so the item's value carries the path and selection becomes a page load.
+     */
+    handleAppSelect(event: CustomEvent): void {
+        this.navigate(event);
+    }
+
+    handleProfileSelect(event: CustomEvent): void {
+        this.navigate(event);
+    }
+
+    private navigate(event: CustomEvent): void {
+        const path = (event.detail as { value?: string })?.value;
+        if (path) {
+            window.location.assign(path);
+        }
     }
 }

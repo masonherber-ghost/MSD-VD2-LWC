@@ -1,0 +1,29 @@
+<template lwc:render-mode="light">
+    <ui-site-header current={current}></ui-site-header>
+
+    <div class="site__body">
+        <main class="site__main">
+            <div class="slds-page-header slds-m-bottom_medium">
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <lightning-icon icon-name={iconName} size="medium"></lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <h1 class="slds-page-header__title slds-truncate">{heading}</h1>
+                                <p class="slds-page-header__name-meta">{message}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <lightning-card>
+                <p class="slds-p-around_medium slds-text-color_weak">
+                    This screen has not been built yet.
+                </p>
+            </lightning-card>
+        </main>
+    </div>
+</template>

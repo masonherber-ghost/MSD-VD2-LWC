@@ -24,13 +24,40 @@ open-source Lightning base components installed as an npm dependency.
 | Path | Component | What it is |
 | --- | --- | --- |
 | `/` | `example/home` | Homepage stub — replace with real content |
+| `/my-jobs` | `example/myJobs` | Lightning **record page** for a vacancy — live from SQLite |
+| `/list-a-job` | `example/listAJob` | Nav destination, not built yet |
+| `/help-centre` | `example/helpCentre` | Nav destination, not built yet |
+| `/employer-profile` | `example/employerProfile` | Nav destination, not built yet |
+| `/manage-org` | `example/manageOrg` | Nav destination, not built yet |
 | `/vacancies` | `example/vacancies` | First data-backed screen — live from SQLite |
 | `/data` | `example/data` | Every table in the database, with create/edit/delete |
 | `/design-system` | `example/designSystem` | The kitchen sink: every shipped example, live |
 
-Both routes share `ui/siteHeader` and the layout in `src/layouts/main.njk`. Add a
+Every route shares `ui/siteHeader` and the layout in `src/layouts/main.njk`. Add a
 route by adding an entry to `routes` in `lwr.config.json` and a matching
 component; `npm run catalog` never touches that part of the config.
+
+The global header carries the three main nav links (List a job, My jobs, Help
+centre) and a profile menu (Employer profile, Manage org). `/vacancies`, `/data`
+and `/design-system` are development screens, reached from the App Launcher
+waffle rather than the main nav.
+
+### The record page layout
+
+`example/myJobs` is the reference for Lightning Experience page anatomy, composed
+entirely from SLDS 2 blueprints and shipped base components — nothing custom:
+
+| Region | Built from |
+| --- | --- |
+| Highlights panel | `slds-page-header` + `__row` / `__col-title` / `__col-actions` / `__detail-block` |
+| Record switcher | `slds-page-header__name-switcher` + `lightning-button-menu` |
+| Path chevron | `lightning-progress-indicator type="path"` + `lightning-progress-step` |
+| 2:1 split body | `lightning-layout` + `lightning-layout-item` (`size="12" large-device-size="8"` / `"4"`) |
+| Main region | `lightning-tabset variant="scoped"` — Details form, Applicants datatable |
+| Sidebar region | `lightning-card` — pipeline, activity, vacancy contact |
+
+> SLDS 2 dropped the `slds-page-header_record-home` modifier. Use the base
+> `slds-page-header` with the row/column classes above instead.
 
 ## Running it
 

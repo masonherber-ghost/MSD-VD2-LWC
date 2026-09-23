@@ -3,31 +3,72 @@
         <div class="slds-global-header slds-grid slds-grid_align-spread">
             <div class="slds-global-header__item site-header__brand">
                 <div class="slds-global-header__logo site-header__logo">
-                    <lightning-icon icon-name="utility:apps" size="small"></lightning-icon>
+                    <lightning-button-menu
+                        icon-name="utility:apps"
+                        icon-size="small"
+                        variant="bare"
+                        alternative-text="App Launcher"
+                        menu-alignment="left"
+                        onselect={handleAppSelect}
+                    >
+                        <lightning-menu-item
+                            value="/design-system"
+                            label="Design system"
+                            prefix-icon-name="utility:palette"
+                        ></lightning-menu-item>
+                        <lightning-menu-item
+                            value="/data"
+                            label="Data browser"
+                            prefix-icon-name="utility:database"
+                        ></lightning-menu-item>
+                        <lightning-menu-item
+                            value="/vacancies"
+                            label="Vacancies"
+                            prefix-icon-name="utility:list"
+                        ></lightning-menu-item>
+                    </lightning-button-menu>
                     <a href="/" class="site-header__wordmark">MSD</a>
                 </div>
                 <nav class="site-header__nav">
-                    <a href="/" class={homeClass}>Home</a>
-                    <a href="/vacancies" class={vacanciesClass}>Vacancies</a>
-                    <a href="/data" class={dataClass}>Data</a>
-                    <a href="/design-system" class={designSystemClass}>Design system</a>
+                    <a href="/list-a-job" class={listAJobClass}>List a job</a>
+                    <a href="/my-jobs" class={myJobsClass}>My jobs</a>
+                    <a href="/help-centre" class={helpCentreClass}>Help centre</a>
                 </nav>
             </div>
             <div class="slds-global-header__item">
                 <ul class="slds-global-actions slds-grid slds-grid_vertical-align-center">
                     <li class="slds-global-actions__item">
                         <lightning-button-icon
-                            icon-name="utility:settings"
+                            icon-name="utility:notification"
                             variant="bare"
-                            alternative-text="Settings"
+                            alternative-text="Notifications"
                         ></lightning-button-icon>
                     </li>
-                    <li class="slds-global-actions__item slds-p-left_x-small">
+                    <li class="slds-global-actions__item slds-p-left_x-small site-header__profile">
                         <lightning-avatar
                             fallback-icon-name="standard:user"
-                            alternative-text="User"
+                            alternative-text="Profile"
                             size="small"
                         ></lightning-avatar>
+                        <lightning-button-menu
+                            icon-name="utility:down"
+                            icon-size="x-small"
+                            variant="bare"
+                            alternative-text="Profile menu"
+                            menu-alignment="right"
+                            onselect={handleProfileSelect}
+                        >
+                            <lightning-menu-item
+                                value="/employer-profile"
+                                label="Employer profile"
+                                prefix-icon-name="utility:company"
+                            ></lightning-menu-item>
+                            <lightning-menu-item
+                                value="/manage-org"
+                                label="Manage org"
+                                prefix-icon-name="utility:settings"
+                            ></lightning-menu-item>
+                        </lightning-button-menu>
                     </li>
                 </ul>
             </div>

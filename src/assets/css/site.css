@@ -62,3 +62,10 @@ body {
     border-bottom-color: var(--slds-g-color-accent-container-1, #0176d3);
     font-weight: 600;
 }
+
+/* Avatar and its menu read as one control in the global actions row. */
+.site-header__profile {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+}
