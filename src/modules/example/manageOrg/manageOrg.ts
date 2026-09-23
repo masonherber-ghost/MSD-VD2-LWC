@@ -32,6 +32,21 @@ const TEXT_FIELDS = [
     'nzbn'
 ] as const;
 
+/**
+ * Columns MSD holds the authoritative record for, so an employer may not edit
+ * them once they hold a value — but may fill one in while it is still empty,
+ * since a blank means nothing has been recorded yet.
+ */
+const LOCKED_WHEN_SET = [
+    'company_name',
+    'industry',
+    'company_type',
+    'ird_number',
+    'nzbn'
+] as const;
+
+const LOCKED_NOTE = 'Held by MSD. Contact us to change it.';
+
 type Draft = Record<string, string | null>;
 
 /**
@@ -148,13 +163,78 @@ export default class ManageOrg extends LightningElement {
         }
     }
 
-    /** A cleared field goes back as null, not '', so the column reads as empty. */
+    /**
+     * A cleared field goes back as null, not '', so the column reads as empty.
+     * Locked fields are left out entirely rather than merely disabled in the
+     * form, so a tampered DOM still cannot overwrite them.
+     */
     private toPayload(): Row {
         const payload: Row = {};
         for (const f of TEXT_FIELDS) {
+            if (this.isLocked(f)) {
+                continue;
+            }
             payload[f] = this.draft[f] === '' ? null : this.draft[f];
         }
         return payload;
+    }
+
+    /** Locked once the saved account holds a value — the draft is not consulted. */
+    private isLocked(field: string): boolean {
+        if (!LOCKED_WHEN_SET.includes(field as (typeof LOCKED_WHEN_SET)[number])) {
+            return false;
+        }
+        const value = this.account?.[field];
+        return value !== null && value !== undefined && String(value).trim() !== '';
+    }
+
+    /**
+     * Lock state per field. A locked field renders as a read-only output
+     * rather than a disabled input, which is how Lightning shows a value the
+     * user cannot change, and keeps every locked field looking the same.
+     */
+    lockedNote = LOCKED_NOTE;
+
+    get lockCompanyName(): boolean {
+        return this.isLocked('company_name');
+    }
+
+    get companyNameDisplay(): string {
+        return String(this.account?.company_name ?? '');
+    }
+
+    get lockIndustry(): boolean {
+        return this.isLocked('industry');
+    }
+
+    get industryDisplay(): string {
+        return String(this.account?.industry ?? '');
+    }
+
+    get lockOrgType(): boolean {
+        return this.isLocked('company_type');
+    }
+
+    /** The stored value is a slug, so show the option's label. */
+    get orgTypeDisplay(): string {
+        const value = String(this.account?.company_type ?? '');
+        return COMPANY_TYPES.find((t) => t.value === value)?.label ?? value;
+    }
+
+    get lockIrdNumber(): boolean {
+        return this.isLocked('ird_number');
+    }
+
+    get irdNumberDisplay(): string {
+        return String(this.account?.ird_number ?? '');
+    }
+
+    get lockNzbn(): boolean {
+        return this.isLocked('nzbn');
+    }
+
+    get nzbnDisplay(): string {
+        return String(this.account?.nzbn ?? '');
     }
 
     handleCancelDetails(): void {
@@ -173,13 +253,24 @@ export default class ManageOrg extends LightningElement {
             const isAdmin = m.employer_role === 'admin';
             const isPending = m.invitation_status === 'pending';
 
-            const actions: { label: string; name: string }[] = isAdmin
-                ? [{ label: 'Change to Member', name: 'make_member' }]
-                : [{ label: 'Change to Admin', name: 'make_admin' }];
-            if (!isPrimary) {
-                actions.push({ label: 'Make primary contact', name: 'make_primary' });
-                actions.push({ label: 'Remove from team', name: 'remove' });
-            }
+            // A primary contact carries the account's authority, so they must
+            // stay an Admin and cannot be removed. That leaves them no action,
+            // and an empty menu reads as broken — so say why instead.
+            const actions: { label: string; name: string; disabled?: boolean }[] = isPrimary
+                ? [
+                      {
+                          label: 'Primary contact must stay an Admin',
+                          name: 'locked',
+                          disabled: true
+                      }
+                  ]
+                : [
+                      isAdmin
+                          ? { label: 'Change to Member', name: 'make_member' }
+                          : { label: 'Change to Admin', name: 'make_admin' },
+                      { label: 'Make primary contact', name: 'make_primary' },
+                      { label: 'Remove from team', name: 'remove' }
+                  ];
 
             const status = isPending ? 'Invite pending' : 'Active';
             return {
@@ -211,6 +302,10 @@ export default class ManageOrg extends LightningElement {
             return;
         }
 
+        if (action.name === 'locked') {
+            return;
+        }
+
         if (action.name === 'remove') {
             // Destructive, so it takes a second, explicit confirmation.
             this.pendingRemoval = row;
@@ -224,6 +319,12 @@ export default class ManageOrg extends LightningElement {
                 await api.changeMemberRole(accountId, Number(row.id), role);
                 this.teamMessage = `${row.name} is now ${role === 'admin' ? 'an Admin' : 'a Member'}.`;
             } else if (action.name === 'make_primary') {
+                // A primary contact must be an Admin, so a Member is promoted
+                // on the way in rather than being left in a forbidden state.
+                const promoted = row.employer_role !== 'admin';
+                if (promoted) {
+                    await api.changeMemberRole(accountId, Number(row.id), 'admin');
+                }
                 // The outgoing primary becomes secondary — see setAuthorisedContact.
                 const outgoing = this.members.find((m) => m.is_primary_contact);
                 await api.setAuthorisedContact(
@@ -231,7 +332,9 @@ export default class ManageOrg extends LightningElement {
                     Number(row.id),
                     outgoing ? Number(outgoing.id) : null
                 );
-                this.teamMessage = `${row.name} is now the primary contact.`;
+                this.teamMessage = promoted
+                    ? `${row.name} is now the primary contact, and was made an Admin.`
+                    : `${row.name} is now the primary contact.`;
             }
             this.members = await api.members(accountId);
         } catch (e) {

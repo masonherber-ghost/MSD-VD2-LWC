@@ -78,10 +78,22 @@ accountsRouter.patch('/:id/members/:contactId/role', (req, res, next) => {
       next(new HttpError(400, "employer_role must be 'admin' or 'member'."))
       return
     }
-    const contact = accountRepository.changeMemberRole(
-      parseId(req.params.contactId, 'contactId'),
-      role,
-    )
+    const accountId = parseId(req.params.id)
+    const contactId = parseId(req.params.contactId, 'contactId')
+
+    // The primary contact is the account's authority, so they must stay an
+    // Admin. Enforced here as well as in the UI, which only hides the action.
+    if (role === 'member' && accountRepository.findAccountById(accountId)?.contact_id === contactId) {
+      next(
+        new HttpError(
+          400,
+          'The primary contact must be an Admin. Assign a new primary contact first.',
+        ),
+      )
+      return
+    }
+
+    const contact = accountRepository.changeMemberRole(contactId, role)
     if (!contact) {
       next(new HttpError(404, 'Member not found.'))
       return

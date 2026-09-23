@@ -109,14 +109,37 @@ contacts.
 
 | Tab | What it does |
 | --- | --- |
-| Org details | Company (name, trading name, industry, type, website, addresses) and Registration (IRD, NZBN) |
+| Org details | Company (name, trading name, industry, org type, website, addresses) and Registration (IRD, NZBN) |
 | Manage team | `lightning-datatable` of the account's contacts, with a per-row action menu |
 
+### Fields MSD holds
+
+`company_name`, `industry`, `company_type` (labelled **Org type**),
+`ird_number` and `nzbn` are MSD's record, so an employer cannot edit them — but
+**a blank one can be filled in once**, since empty means nothing has been
+recorded yet. The moment it holds a value it locks.
+
+A locked field renders as a read-only output with the note *"Held by MSD.
+Contact us to change it."*, not as a disabled input — that is how Lightning
+shows a value you cannot change, and it keeps every locked field looking the
+same (a read-only `lightning-combobox` otherwise renders as a grey box while a
+read-only `lightning-input` renders as plain text). `toPayload` also **omits**
+locked fields, so a tampered DOM cannot overwrite one; the lock is read from the
+saved account, never the draft, so typing into an empty field does not lock it
+mid-edit.
+
 Row actions are built per row, so they stay honest: an Admin is offered "Change
-to Member" and vice versa, and the **primary contact is offered neither "Make
-primary contact" nor "Remove from team"**. Removing someone takes a second,
-explicit confirmation. The server refuses to remove the primary contact even if
-the UI is bypassed (`removeMember` throws a `DomainError`).
+to Member" and vice versa, and **the primary contact gets no actions at all** —
+they carry the account's authority, so they must stay an Admin and cannot be
+removed. That would leave an empty menu, which reads as broken, so the menu
+instead holds one disabled line saying why. Making a Member the primary contact
+**promotes them to Admin on the way in**, rather than leaving them in a state
+the rule forbids.
+
+Both rules are enforced server-side as well as in the UI, which only hides the
+action: `PATCH /accounts/:id/members/:contactId/role` refuses to demote the
+primary contact, and `removeMember` throws a `DomainError` when asked to remove
+them. Removing anyone else takes a second, explicit confirmation.
 
 The form edits nine columns. Everything else on the row — the company profile
 (`company_description`, `logo_url`, the selling points, `show_company_profile`),
