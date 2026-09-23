@@ -977,6 +977,18 @@
             "path": "/design-system",
             "rootComponent": "example/designSystem",
             "layoutTemplate": "$layoutsDir/main.njk"
+        },
+        {
+            "id": "data",
+            "path": "/data",
+            "rootComponent": "example/data",
+            "layoutTemplate": "$layoutsDir/main.njk"
+        },
+        {
+            "id": "vacancies",
+            "path": "/vacancies",
+            "rootComponent": "example/vacancies",
+            "layoutTemplate": "$layoutsDir/main.njk"
         }
     ],
     "assets": [

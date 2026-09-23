@@ -1,0 +1,81 @@
+.browser {
+    align-items: stretch;
+    border: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+    border-radius: 0.25rem;
+    background: var(--slds-g-color-surface-1, #fff);
+    overflow: hidden;
+}
+
+.browser__rail {
+    flex: 0 0 15rem;
+    border-right: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+    display: flex;
+    flex-direction: column;
+    max-height: 78vh;
+}
+
+.browser__list {
+    overflow-y: auto;
+    flex: 1 1 auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.browser__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    padding: 0.35rem 0.75rem;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    border-left: 3px solid transparent;
+}
+
+.browser__item:hover {
+    background: var(--slds-g-color-surface-container-1, #f3f3f3);
+}
+
+.browser__item_active {
+    background: var(--slds-g-color-surface-container-1, #f3f3f3);
+    border-left-color: var(--slds-g-color-accent-container-1, #0176d3);
+    font-weight: 600;
+}
+
+.browser__name {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.browser__count {
+    flex: 0 0 auto;
+    color: var(--slds-g-color-on-surface-3, #747474);
+    font-size: 0.6875rem;
+}
+
+.browser__main {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-height: 78vh;
+    overflow-y: auto;
+}
+
+.browser__tools {
+    gap: 0.5rem;
+}
+
+.browser__loading {
+    min-height: 8rem;
+}
+
+/* Wide tables scroll sideways rather than crushing every column. */
+.browser__grid {
+    overflow-x: auto;
+}

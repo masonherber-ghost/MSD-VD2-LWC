@@ -13,6 +13,18 @@ export default class SiteHeader extends LightningElement {
             : 'site-header__link';
     }
 
+    get vacanciesClass(): string {
+        return this.current === 'vacancies'
+            ? 'site-header__link site-header__link_active'
+            : 'site-header__link';
+    }
+
+    get dataClass(): string {
+        return this.current === 'data'
+            ? 'site-header__link site-header__link_active'
+            : 'site-header__link';
+    }
+
     get homeClass(): string {
         return this.current === 'home'
             ? 'site-header__link site-header__link_active'

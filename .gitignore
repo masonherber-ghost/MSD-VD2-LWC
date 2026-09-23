@@ -8,3 +8,11 @@ build/
 npm-debug.log*
 .env
 .env.local
+
+# Abandoned React prototype kept on disk for reference only.
+# It is its own git repo (522MB) — tracking it would foul this one.
+_reference/
+
+# SQLite sidecars; the .db itself is committed.
+data/*.db-wal
+data/*.db-shm

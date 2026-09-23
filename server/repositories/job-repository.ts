@@ -1,0 +1,285 @@
+import type { Statement } from 'better-sqlite3'
+import { db } from '../database.ts'
+import { applyUpdate, groupBy, parseJsonArray, placeholders } from '../lib/sql.ts'
+import type {
+  Job, JobDetail, JobDriverLicence, JobLanguage, JobListItem, JobSchedule, JobStatus,
+} from '../types.ts'
+
+const UPDATABLE = [
+  'title', 'subtitle', 'company_name', 'description', 'about_us', 'location', 'pay',
+  'contract_type', 'start_date', 'hours_description', 'posted_date', 'closing_date',
+  'external_job_id', 'experience_level', 'education_required', 'job_type',
+  'driver_licence_label', 'max_shortlist', 'positions_available',
+  'application_management', 'interview_options', 'campaign_length_weeks',
+  'vacancy_contact_id', 'status', 'views',
+] as const
+
+/** Simple `job_id -> content` child tables, all replaced the same way. */
+const CONTENT_CHILDREN = {
+  responsibilities: { table: 'job_responsibilities', column: 'content' },
+  selling_points: { table: 'job_selling_points', column: 'content' },
+  pre_employment_checks: { table: 'job_pre_employment_checks', column: 'content' },
+  employer_values: { table: 'job_employer_values', column: 'content' },
+  skills: { table: 'job_skills', column: 'skill_name' },
+  certificates: { table: 'job_certificates', column: 'certificate_name' },
+  licence_endorsements: { table: 'job_licence_endorsements', column: 'endorsement' },
+} as const
+
+type ContentChildKey = keyof typeof CONTENT_CHILDREN
+
+let selectById: Statement | undefined
+let insertJob: Statement | undefined
+
+function toJob(row: Record<string, unknown>): Job {
+  return {
+    ...(row as unknown as Job),
+    application_management: parseJsonArray(row.application_management),
+    interview_options: parseJsonArray(row.interview_options),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Reads
+// ---------------------------------------------------------------------------
+
+/**
+ * Jobs for an account, with candidate counts.
+ *
+ * Scoped by account_id, not by the individual. The previous build filtered to
+ * `user_id IN (SELECT id FROM contacts WHERE ciam_id = ?)`, so a colleague on
+ * the same employer account could not see these rows at all.
+ */
+export function findByAccount(
+  accountId: number,
+  filters: { status?: JobStatus; contact_id?: number } = {},
+): JobListItem[] {
+  const where = ['j.account_id = ?']
+  const params: unknown[] = [accountId]
+
+  if (filters.status) {
+    where.push('j.status = ?')
+    params.push(filters.status)
+  }
+  if (filters.contact_id) {
+    where.push('j.contact_id = ?')
+    params.push(filters.contact_id)
+  }
+
+  const rows = db
+    .prepare(`
+      SELECT
+        j.*,
+        COUNT(c.id) AS candidate_count,
+        COALESCE(SUM(CASE WHEN c.status = 'applied' THEN 1 ELSE 0 END), 0) AS new_candidate_count,
+        NULLIF(TRIM(COALESCE(ct.first_name, '') || ' ' || COALESCE(ct.last_name, '')), '') AS creator_name
+      FROM jobs j
+      LEFT JOIN candidates c ON c.job_id = j.id
+      LEFT JOIN contacts  ct ON ct.id = j.contact_id
+      WHERE ${where.join(' AND ')}
+      GROUP BY j.id
+      ORDER BY j.created_at DESC
+    `)
+    .all(...params) as Record<string, unknown>[]
+
+  return rows.map((r) => ({ ...toJob(r), ...{
+    candidate_count: r.candidate_count as number,
+    new_candidate_count: r.new_candidate_count as number,
+    creator_name: r.creator_name as string | null,
+  } }))
+}
+
+/**
+ * One job with every child collection.
+ *
+ * Children are fetched one query per child table rather than the previous
+ * build's ~12 sequential lookups plus a nested query per language.
+ */
+export function findById(id: number): JobDetail | null {
+  selectById ??= db.prepare('SELECT * FROM jobs WHERE id = ?')
+  const row = selectById.get(id) as Record<string, unknown> | undefined
+  if (!row) return null
+
+  const job = toJob(row)
+  const detail = { ...job } as JobDetail
+
+  for (const [key, { table, column }] of Object.entries(CONTENT_CHILDREN)) {
+    const rows = db
+      .prepare(`SELECT ${column} AS value FROM ${table} WHERE job_id = ? ORDER BY id`)
+      .all(id) as { value: string }[]
+    detail[key as ContentChildKey] = rows.map((r) => r.value)
+  }
+
+  // Languages and their abilities: two queries, joined in JS.
+  const languages = db
+    .prepare('SELECT id, language_name FROM job_languages WHERE job_id = ? ORDER BY id')
+    .all(id) as { id: number; language_name: string }[]
+
+  const langPlaceholders = placeholders(languages.length)
+  const abilityRows = langPlaceholders
+    ? (db
+        .prepare(
+          `SELECT language_id, ability FROM job_language_abilities
+            WHERE language_id IN (${langPlaceholders}) ORDER BY id`,
+        )
+        .all(...languages.map((l) => l.id)) as { language_id: number; ability: string }[])
+    : []
+  const abilitiesByLang = groupBy(abilityRows, 'language_id')
+
+  detail.languages = languages.map<JobLanguage>((l) => ({
+    id: l.id,
+    language_name: l.language_name,
+    abilities: (abilitiesByLang.get(l.id) ?? []).map((a) => a.ability),
+  }))
+
+  detail.driver_licences = db
+    .prepare(
+      'SELECT class_value, class_label, stage FROM job_driver_licences WHERE job_id = ? ORDER BY id',
+    )
+    .all(id) as JobDriverLicence[]
+
+  const schedule = db
+    .prepare('SELECT schedule_type, hours, additional_info FROM job_schedule WHERE job_id = ?')
+    .get(id) as Omit<JobSchedule, 'days'> | undefined
+
+  detail.schedule = schedule
+    ? {
+        ...schedule,
+        days: (
+          db
+            .prepare('SELECT day_name FROM job_schedule_days WHERE job_id = ? ORDER BY id')
+            .all(id) as { day_name: string }[]
+        ).map((d) => d.day_name),
+      }
+    : null
+
+  detail.vacancy_contact = job.vacancy_contact_id
+    ? ((db
+        .prepare(
+          'SELECT id, first_name, last_name, job_title, phone FROM contacts WHERE id = ?',
+        )
+        .get(job.vacancy_contact_id) as JobDetail['vacancy_contact']) ?? null)
+    : null
+
+  return detail
+}
+
+// ---------------------------------------------------------------------------
+// Writes
+// ---------------------------------------------------------------------------
+
+type ChildInput = Partial<Record<ContentChildKey, string[]>> & {
+  languages?: { language_name: string; abilities?: string[] }[]
+  driver_licences?: JobDriverLicence[]
+  schedule?: Partial<JobSchedule> | null
+}
+
+/** Replaces every child collection present on `input`. Caller supplies the transaction. */
+function writeChildren(jobId: number, input: ChildInput): void {
+  for (const [key, { table, column }] of Object.entries(CONTENT_CHILDREN)) {
+    const values = input[key as ContentChildKey]
+    if (!values) continue
+    db.prepare(`DELETE FROM ${table} WHERE job_id = ?`).run(jobId)
+    const insert = db.prepare(`INSERT INTO ${table} (job_id, ${column}) VALUES (?, ?)`)
+    for (const v of values) insert.run(jobId, v)
+  }
+
+  if (input.languages) {
+    // Abilities cascade from job_languages, so deleting the parents is enough.
+    db.prepare('DELETE FROM job_languages WHERE job_id = ?').run(jobId)
+    const insertLang = db.prepare(
+      'INSERT INTO job_languages (job_id, language_name) VALUES (?, ?) RETURNING id',
+    )
+    const insertAbility = db.prepare(
+      'INSERT INTO job_language_abilities (language_id, ability) VALUES (?, ?)',
+    )
+    for (const lang of input.languages) {
+      const { id } = insertLang.get(jobId, lang.language_name) as { id: number }
+      for (const ability of lang.abilities ?? []) insertAbility.run(id, ability)
+    }
+  }
+
+  if (input.driver_licences) {
+    db.prepare('DELETE FROM job_driver_licences WHERE job_id = ?').run(jobId)
+    const insert = db.prepare(
+      'INSERT INTO job_driver_licences (job_id, class_value, class_label, stage) VALUES (?, ?, ?, ?)',
+    )
+    for (const l of input.driver_licences) {
+      insert.run(jobId, l.class_value, l.class_label, l.stage ?? null)
+    }
+  }
+
+  if (input.schedule !== undefined) {
+    db.prepare('DELETE FROM job_schedule WHERE job_id = ?').run(jobId)
+    db.prepare('DELETE FROM job_schedule_days WHERE job_id = ?').run(jobId)
+    if (input.schedule) {
+      db.prepare(
+        'INSERT INTO job_schedule (job_id, schedule_type, hours, additional_info) VALUES (?, ?, ?, ?)',
+      ).run(
+        jobId,
+        input.schedule.schedule_type ?? null,
+        input.schedule.hours ?? null,
+        input.schedule.additional_info ?? null,
+      )
+      const insertDay = db.prepare(
+        'INSERT INTO job_schedule_days (job_id, day_name) VALUES (?, ?)',
+      )
+      for (const day of input.schedule.days ?? []) insertDay.run(jobId, day)
+    }
+  }
+}
+
+export function create(
+  input: Record<string, unknown> & { account_id: number; title: string },
+): JobDetail {
+  insertJob ??= db.prepare(`
+    INSERT INTO jobs (account_id, contact_id, vacancy_contact_id, title, status)
+    VALUES (?, ?, ?, ?, ?)
+    RETURNING id
+  `)
+  const insert = insertJob
+
+  const run = db.transaction((): number => {
+    const { id } = insert.get(
+      input.account_id,
+      (input.contact_id as number | null) ?? null,
+      (input.vacancy_contact_id as number | null) ?? null,
+      input.title,
+      (input.status as string) ?? 'draft',
+    ) as { id: number }
+
+    const patch = { ...input }
+    for (const k of ['application_management', 'interview_options'] as const) {
+      if (k in patch) patch[k] = JSON.stringify(patch[k] ?? [])
+    }
+    applyUpdate('jobs', id, patch, UPDATABLE)
+    writeChildren(id, input as ChildInput)
+    return id
+  })
+
+  return findById(run())!
+}
+
+export function update(id: number, input: Record<string, unknown>): JobDetail | null {
+  const run = db.transaction((): boolean => {
+    if (!selectById) selectById = db.prepare('SELECT * FROM jobs WHERE id = ?')
+    if (!selectById.get(id)) return false
+
+    const patch = { ...input }
+    for (const k of ['application_management', 'interview_options'] as const) {
+      if (k in patch) patch[k] = JSON.stringify(patch[k] ?? [])
+    }
+    applyUpdate('jobs', id, patch, UPDATABLE)
+    writeChildren(id, input as ChildInput)
+    return true
+  })
+
+  return run() ? findById(id) : null
+}
+
+export function remove(id: number): boolean {
+  return db.prepare('DELETE FROM jobs WHERE id = ?').run(id).changes > 0
+}
+
+export function incrementViews(id: number): void {
+  db.prepare('UPDATE jobs SET views = views + 1 WHERE id = ?').run(id)
+}

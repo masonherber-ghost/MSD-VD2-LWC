@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "catalog": "node scripts/build-catalog.mjs",
-    "dev": "lwr dev",
-    "dev:compat": "lwr dev --mode compat",
+    "dev": "tsx scripts/dev-server.ts",
+    "dev:lwr": "lwr dev",
+    "db:reset": "rm -f data/msd-vd2.db data/msd-vd2.db-wal data/msd-vd2.db-shm && cp data/msd-vd2.seed.db data/msd-vd2.db && echo \"database restored from data/msd-vd2.seed.db\"",
     "build": "lwr build --clean --mode prod-compat",
     "start": "lwr start",
     "stage": "npm run build && npm run start",
@@ -16,6 +17,7 @@
   },
   "dependencies": {
     "@salesforce-ux/design-system-2": "^2.264.2",
+    "better-sqlite3": "^13.0.3",
     "lightning-base-components": "^1.28.19-alpha",
     "lwc": "^9.4.3",
     "lwr": "0.24.1"
@@ -25,5 +27,8 @@
   },
   "volta": {
     "node": "24.13.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.15"
   }
 }

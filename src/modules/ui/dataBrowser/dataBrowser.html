@@ -1,0 +1,148 @@
+<template lwc:render-mode="light">
+    <div class="browser slds-grid">
+        <!-- Every table in the database -->
+        <nav class="browser__rail">
+            <div class="slds-p-around_small">
+                <lightning-input
+                    type="search"
+                    label="Filter tables"
+                    variant="label-hidden"
+                    placeholder="Filter tables..."
+                    value={tableFilter}
+                    onchange={handleTableFilter}
+                ></lightning-input>
+            </div>
+            <ul class="browser__list">
+                <template for:each={tableList} for:item="table">
+                    <li key={table.name}>
+                        <button class={table.className} data-name={table.name} onclick={handleSelectTable}>
+                            <span class="browser__name">{table.name}</span>
+                            <span class="browser__count">{table.rowCount}</span>
+                        </button>
+                    </li>
+                </template>
+            </ul>
+        </nav>
+
+        <section class="browser__main slds-p-around_medium">
+            <template lwc:if={current}>
+                <header class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                    <div>
+                        <h2 class="slds-text-heading_medium">{current.label}</h2>
+                        <p class="slds-text-body_small slds-text-color_weak">
+                            <code>{current.name}</code> &middot; {rangeLabel}
+                        </p>
+                    </div>
+                    <div class="slds-grid slds-grid_vertical-align-center browser__tools">
+                        <lightning-input
+                            type="search"
+                            label="Search rows"
+                            variant="label-hidden"
+                            placeholder="Search..."
+                            onchange={handleSearch}
+                        ></lightning-input>
+                        <lightning-button
+                            lwc:if={canCreate}
+                            variant="brand"
+                            label="New row"
+                            onclick={handleNew}
+                        ></lightning-button>
+                    </div>
+                </header>
+
+                <div lwc:if={isReadOnly} class="slds-box slds-box_x-small slds-theme_shade slds-m-bottom_small">
+                    <p class="slds-text-body_small">This table is read-only.</p>
+                </div>
+
+                <div lwc:if={hasNotice} class="slds-box slds-box_x-small slds-theme_success slds-m-bottom_small">
+                    {notice}
+                </div>
+
+                <div lwc:if={hasError} class="slds-box slds-theme_error slds-m-bottom_small">
+                    {error}
+                </div>
+
+                <div lwc:if={loading} class="slds-is-relative browser__loading slds-box slds-theme_default">
+                    <lightning-spinner alternative-text="Loading rows" size="small"></lightning-spinner>
+                </div>
+
+                <template lwc:elseif={hasRows}>
+                    <div class="browser__grid slds-box slds-box_x-small slds-theme_default">
+                        <lightning-datatable
+                            key-field={keyField}
+                            columns={columns}
+                            data={rows}
+                            sorted-by={sortedBy}
+                            sorted-direction={sortDirection}
+                            onsort={handleSort}
+                            onrowaction={handleRowAction}
+                            hide-checkbox-column
+                            column-widths-mode="auto"
+                        ></lightning-datatable>
+                    </div>
+
+                    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-top_small">
+                        <span class="slds-text-body_small slds-text-color_weak">{rangeLabel}</span>
+                        <lightning-button-group>
+                            <lightning-button
+                                label="Previous"
+                                disabled={disablePrevious}
+                                onclick={handlePrevious}
+                            ></lightning-button>
+                            <lightning-button
+                                label="Next"
+                                disabled={disableNext}
+                                onclick={handleNext}
+                            ></lightning-button>
+                        </lightning-button-group>
+                    </div>
+                </template>
+
+                <div lwc:else class="slds-box slds-theme_default">
+                    <p>No rows.</p>
+                </div>
+            </template>
+
+            <div lwc:else class="slds-box slds-theme_default">
+                <p lwc:if={hasError}>{error}</p>
+                <p lwc:else>Loading schema...</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Create / edit -->
+    <ui-data-form
+        lwc:if={showForm}
+        schema={current}
+        row={editingRow}
+        saving={saving}
+        error={formError}
+        onsave={handleFormSave}
+        oncancel={handleFormCancel}
+    ></ui-data-form>
+
+    <!-- Delete confirmation, with what the cascade will take -->
+    <template lwc:if={pendingDelete}>
+        <section role="alertdialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="slds-modal__title">{confirmMessage}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <p lwc:if={hasCascadeWarning} class="slds-text-color_error">{cascadeWarning}</p>
+                    <p lwc:else>This cannot be undone.</p>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button label="Cancel" onclick={handleCancelDelete}></lightning-button>
+                    <lightning-button
+                        class="slds-m-left_x-small"
+                        variant="destructive"
+                        label="Delete"
+                        onclick={handleConfirmDelete}
+                    ></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>
