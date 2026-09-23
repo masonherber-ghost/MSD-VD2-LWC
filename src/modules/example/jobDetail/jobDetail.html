@@ -1,9 +1,9 @@
 <template lwc:render-mode="light">
-    <ui-site-header current="my-jobs"></ui-site-header>
+    <ui-site-header current="jobs"></ui-site-header>
 
     <div class="site__body">
         <main class="site__main">
-            <div lwc:if={loading} class="slds-is-relative my-jobs__loading slds-box slds-theme_default">
+            <div lwc:if={loading} class="slds-is-relative job-detail__loading slds-box slds-theme_default">
                 <lightning-spinner alternative-text="Loading vacancies" size="small"></lightning-spinner>
             </div>
 
@@ -16,6 +16,14 @@
             </div>
 
             <template lwc:elseif={hasJob}>
+                <lightning-breadcrumbs class="slds-m-bottom_x-small">
+                    <lightning-breadcrumb label="My jobs" href="/jobs"></lightning-breadcrumb>
+                    <lightning-breadcrumb
+                        label={recordTitle}
+                        href={recordHref}
+                    ></lightning-breadcrumb>
+                </lightning-breadcrumbs>
+
                 <!-- Highlights panel ---------------------------------------->
                 <div class="slds-page-header">
                     <div class="slds-page-header__row">

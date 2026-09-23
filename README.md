@@ -24,7 +24,8 @@ open-source Lightning base components installed as an npm dependency.
 | Path | Component | What it is |
 | --- | --- | --- |
 | `/` | `example/home` | Homepage stub — replace with real content |
-| `/my-jobs` | `example/myJobs` | Lightning **record page** for a vacancy — live from SQLite |
+| `/jobs` | `example/jobs` | Vacancy listing — a card grid, live from SQLite |
+| `/jobs/job-detail?id=N` | `example/jobDetail` | Lightning **record page** for one vacancy |
 | `/list-a-job` | `example/listAJob` | Nav destination, not built yet |
 | `/help-centre` | `example/helpCentre` | Nav destination, not built yet |
 | `/employer-profile` | `example/employerProfile` | Nav destination, not built yet |
@@ -44,7 +45,7 @@ waffle rather than the main nav.
 
 ### The record page layout
 
-`example/myJobs` is the reference for Lightning Experience page anatomy, composed
+`example/jobDetail` is the reference for Lightning Experience page anatomy, composed
 entirely from SLDS 2 blueprints and shipped base components — nothing custom:
 
 | Region | Built from |
@@ -58,6 +59,18 @@ entirely from SLDS 2 blueprints and shipped base components — nothing custom:
 
 > SLDS 2 dropped the `slds-page-header_record-home` modifier. Use the base
 > `slds-page-header` with the row/column classes above instead.
+
+The record shown is taken from `?id=`, falling back to the account's first
+vacancy when it is missing or unknown. The record switcher rewrites the URL with
+`history.pushState`, so any vacancy reached by switching stays linkable.
+
+### The listing layout
+
+`example/jobs` is the object home for vacancies: an
+`slds-page-header_object-home` header over a responsive `lightning-card` grid
+(`lightning-layout-item size="12" medium-device-size="6" large-device-size="4"`).
+Each card links through to the record page. `/vacancies` renders the same data as
+a `lightning-datatable` instead, so the two list patterns can be compared.
 
 ## Running it
 

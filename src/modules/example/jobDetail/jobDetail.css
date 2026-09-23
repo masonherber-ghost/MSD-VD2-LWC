@@ -1,4 +1,4 @@
 /* Spinners need a sized, positioned parent to centre against. */
-.my-jobs__loading {
+.job-detail__loading {
     min-height: 8rem;
 }

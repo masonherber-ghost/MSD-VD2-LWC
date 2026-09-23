@@ -15,7 +15,7 @@ export default class SiteHeader extends LightningElement {
     }
 
     get myJobsClass(): string {
-        return this.current === 'my-jobs' ? LINK_ACTIVE : LINK;
+        return this.current === 'jobs' ? LINK_ACTIVE : LINK;
     }
 
     get helpCentreClass(): string {

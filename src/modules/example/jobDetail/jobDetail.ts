@@ -56,12 +56,22 @@ function displayName(candidate: Row): string {
     return name || String(candidate.initials ?? 'Applicant');
 }
 
+/** Reads ?id= without assuming a browser, so static generation stays safe. */
+function requestedId(): number | null {
+    if (typeof window === 'undefined') {
+        return null;
+    }
+    const raw = new URLSearchParams(window.location.search).get('id');
+    const id = Number(raw);
+    return Number.isInteger(id) && id > 0 ? id : null;
+}
+
 /**
- * "My jobs" as a Lightning record page: highlights panel, path, and a 2:1 split
- * of a tabset over sidebar cards. The record switcher in the header picks which
- * vacancy is in view, which is how a list of records reaches a record layout.
+ * One vacancy as a Lightning record page: highlights panel, path, and a 2:1
+ * split of a tabset over sidebar cards. The record reached is `?id=`, falling
+ * back to the first vacancy on the account when that is missing or unknown.
  */
-export default class MyJobs extends LightningElement {
+export default class JobDetail extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
 
     pathSteps = PATH_STEPS;
@@ -79,7 +89,9 @@ export default class MyJobs extends LightningElement {
         try {
             this.jobs = await api.jobs(DEV_ACCOUNT_ID);
             if (this.jobs.length) {
-                await this.loadJob(Number(this.jobs[0].id));
+                const wanted = requestedId();
+                const known = this.jobs.some((j) => Number(j.id) === wanted);
+                await this.loadJob(known && wanted ? wanted : Number(this.jobs[0].id));
             }
         } catch (e) {
             // The static build has no /api, so this is an expected state there.
@@ -108,6 +120,8 @@ export default class MyJobs extends LightningElement {
         this.loading = true;
         try {
             await this.loadJob(id);
+            // Keep the URL addressable so a switched-to record can be linked.
+            window.history.pushState({}, '', `/jobs/job-detail?id=${id}`);
         } catch (e) {
             this.error = e instanceof ApiError ? e.message : 'Could not load that vacancy.';
         } finally {
@@ -151,6 +165,10 @@ export default class MyJobs extends LightningElement {
     /** The switcher label is the record name, as it is on a Lightning record page. */
     get recordTitle(): string {
         return String(this.job?.title ?? '');
+    }
+
+    get recordHref(): string {
+        return `/jobs/job-detail?id=${this.job?.id ?? ''}`;
     }
 
     // -- details tab -------------------------------------------------------

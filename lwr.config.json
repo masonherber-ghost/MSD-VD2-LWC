@@ -991,9 +991,15 @@
             "layoutTemplate": "$layoutsDir/main.njk"
         },
         {
-            "id": "myJobs",
-            "path": "/my-jobs",
-            "rootComponent": "example/myJobs",
+            "id": "jobs",
+            "path": "/jobs",
+            "rootComponent": "example/jobs",
+            "layoutTemplate": "$layoutsDir/main.njk"
+        },
+        {
+            "id": "jobDetail",
+            "path": "/jobs/job-detail",
+            "rootComponent": "example/jobDetail",
             "layoutTemplate": "$layoutsDir/main.njk"
         },
         {
