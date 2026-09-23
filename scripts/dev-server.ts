@@ -19,8 +19,10 @@ import express from 'express';
 import { createServer } from 'lwr';
 
 import { accountsRouter } from '../server/routes/accounts.ts';
+import { authRouter } from '../server/routes/auth.ts';
 import { adminRouter } from '../server/routes/admin.ts';
 import { candidatesRouter } from '../server/routes/candidates.ts';
+import { contactsRouter } from '../server/routes/contacts.ts';
 import { jobsRouter } from '../server/routes/jobs.ts';
 import { errorHandler, notFoundHandler } from '../server/middleware/error-handler.ts';
 import { DB_PATH } from '../server/database.ts';
@@ -35,8 +37,10 @@ api.get('/health', (_req, res) => {
 // Generic table CRUD for the /data screen. Read-write, unlike everything else.
 api.use('/admin', adminRouter);
 
+api.use('/auth', authRouter);
 api.use('/accounts', accountsRouter);
 api.use('/candidates', candidatesRouter);
+api.use('/contacts', contactsRouter);
 api.use('/jobs', jobsRouter);
 
 // A miss under /api is a JSON 404, never the LWC shell.

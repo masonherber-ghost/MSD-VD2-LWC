@@ -1,5 +1,6 @@
 import { LightningElement } from 'lwc';
 import api, { ApiError, DEV_ACCOUNT_ID, type Row } from 'data/api';
+import { currentAccountId } from 'data/session';
 
 /** The vacancy lifecycle, rendered as the Path chevron above the record body. */
 const PATH_STEPS = [
@@ -87,7 +88,7 @@ export default class JobDetail extends LightningElement {
 
     async connectedCallback(): Promise<void> {
         try {
-            this.jobs = await api.jobs(DEV_ACCOUNT_ID);
+            this.jobs = await api.jobs(currentAccountId() ?? DEV_ACCOUNT_ID);
             if (this.jobs.length) {
                 const wanted = requestedId();
                 const known = this.jobs.some((j) => Number(j.id) === wanted);

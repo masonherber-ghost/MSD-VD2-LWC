@@ -1,0 +1,101 @@
+<template lwc:render-mode="light">
+    <ui-site-header current="register"></ui-site-header>
+
+    <div class="site__body">
+        <main class="site__main auth">
+            <lightning-card>
+                <div class="slds-p-around_large">
+                    <h1 class="slds-text-heading_medium slds-align_absolute-center slds-m-bottom_medium">
+                        Create an employer account
+                    </h1>
+
+                    <div lwc:if={hasError} class="slds-m-bottom_small">
+                        <div class="slds-notify slds-notify_alert slds-theme_error" role="alert">
+                            <span class="slds-assistive-text">Error</span>
+                            <span>{error}</span>
+                        </div>
+                    </div>
+
+                    <lightning-input
+                        data-field="first_name"
+                        label="First name"
+                        onchange={handleChange}
+                    ></lightning-input>
+                    <lightning-input
+                        class="slds-m-top_x-small"
+                        data-field="last_name"
+                        label="Last name"
+                        onchange={handleChange}
+                    ></lightning-input>
+                    <lightning-input
+                        class="slds-m-top_x-small"
+                        data-field="company_name"
+                        label="Company name"
+                        field-level-help="Creates the employer account you will be the primary contact for."
+                        onchange={handleChange}
+                    ></lightning-input>
+                    <lightning-input
+                        class="slds-m-top_x-small"
+                        data-field="job_title"
+                        label="Job title"
+                        onchange={handleChange}
+                    ></lightning-input>
+                    <lightning-input
+                        class="slds-m-top_x-small"
+                        data-field="phone"
+                        type="tel"
+                        label="Phone"
+                        onchange={handleChange}
+                    ></lightning-input>
+
+                    <hr class="slds-m-vertical_medium" />
+
+                    <lightning-input
+                        data-field="email"
+                        type="email"
+                        label="Email"
+                        autocomplete="username"
+                        onchange={handleChange}
+                        required
+                    ></lightning-input>
+                    <lightning-input
+                        class="slds-m-top_x-small"
+                        data-field="password"
+                        type="password"
+                        label="Password"
+                        message-when-value-missing="Enter a password"
+                        autocomplete="new-password"
+                        onchange={handleChange}
+                        required
+                    ></lightning-input>
+                    <lightning-input
+                        class="slds-m-top_x-small"
+                        data-field="confirm"
+                        type="password"
+                        label="Confirm password"
+                        autocomplete="new-password"
+                        onchange={handleChange}
+                        required
+                    ></lightning-input>
+                    <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                        At least 8 characters.
+                    </p>
+
+                    <div class="slds-m-top_medium">
+                        <lightning-button
+                            variant="brand"
+                            label="Create account"
+                            onclick={handleSubmit}
+                            disabled={submitting}
+                            class="auth__submit"
+                        ></lightning-button>
+                    </div>
+
+                    <p class="slds-text-body_small slds-m-top_medium slds-text-align_center">
+                        Already have an account? <a href="/login">Log in</a>
+                    </p>
+                </div>
+            </lightning-card>
+        </main>
+    </div>
+</template>

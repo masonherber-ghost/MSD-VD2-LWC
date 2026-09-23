@@ -1,4 +1,6 @@
-.home {
+/* The signed-in dashboard runs full width, like every other app screen. The
+   signed-out pitch reads better in a narrow column. */
+.home__marketing {
     max-width: 60rem;
     margin: 0 auto;
 }

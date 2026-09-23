@@ -1015,9 +1015,21 @@
             "layoutTemplate": "$layoutsDir/main.njk"
         },
         {
-            "id": "employerProfile",
-            "path": "/employer-profile",
-            "rootComponent": "example/employerProfile",
+            "id": "profile",
+            "path": "/profile",
+            "rootComponent": "example/profile",
+            "layoutTemplate": "$layoutsDir/main.njk"
+        },
+        {
+            "id": "login",
+            "path": "/login",
+            "rootComponent": "example/login",
+            "layoutTemplate": "$layoutsDir/main.njk"
+        },
+        {
+            "id": "register",
+            "path": "/register",
+            "rootComponent": "example/register",
             "layoutTemplate": "$layoutsDir/main.njk"
         },
         {

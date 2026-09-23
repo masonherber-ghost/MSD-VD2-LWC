@@ -1,0 +1,9 @@
+/* Sign-in is a single narrow column, centred in the canvas. */
+.auth {
+    max-width: 26rem;
+    margin: 3rem auto 0;
+}
+
+.auth__submit {
+    display: block;
+}

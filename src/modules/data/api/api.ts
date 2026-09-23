@@ -67,8 +67,47 @@ function query(params: Record<string, string | number | undefined>): string {
     return out ? `?${out}` : '';
 }
 
+export interface AuthUser {
+    contact_id: number;
+    ciam_id: number;
+    email: string;
+    first_name: string | null;
+    last_name: string | null;
+    job_title: string | null;
+    phone: string | null;
+    account_id: number | null;
+    employer_role: string | null;
+    company_name: string | null;
+}
+
+export interface RegisterInput {
+    email: string;
+    password: string;
+    first_name?: string;
+    last_name?: string;
+    job_title?: string;
+    phone?: string;
+    company_name?: string;
+}
+
 export const api = {
     health: () => request<{ status: string }>('/health'),
+
+    /**
+     * Prototype auth: these verify a password and return the user. No token is
+     * issued and no route is protected — see data/session.
+     */
+    auth: {
+        login: (email: string, password: string) =>
+            request<AuthUser>('/auth/login', { method: 'POST', body: { email, password } }),
+        register: (input: RegisterInput) =>
+            request<AuthUser>('/auth/register', { method: 'POST', body: input }),
+        me: (contactId: number) => request<AuthUser>(`/auth/me/${contactId}`)
+    },
+
+    contact: (id: number) => request<Row>(`/contacts/${id}`),
+    updateContact: (id: number, body: Row) =>
+        request<Row>(`/contacts/${id}`, { method: 'PATCH', body }),
 
     account: (id: number) => request<Record<string, unknown>>(`/accounts/${id}`),
     members: (id: number) => request<Record<string, unknown>[]>(`/accounts/${id}/members`),

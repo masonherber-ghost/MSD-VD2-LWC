@@ -1,5 +1,6 @@
 import { LightningElement } from 'lwc';
 import api, { ApiError, DEV_ACCOUNT_ID, type Row } from 'data/api';
+import { currentAccountId } from 'data/session';
 
 const JOB_STATUS_LABELS: Record<string, string> = {
     draft: 'Draft',
@@ -33,7 +34,7 @@ export default class Jobs extends LightningElement {
 
     async connectedCallback(): Promise<void> {
         try {
-            this.jobs = await api.jobs(DEV_ACCOUNT_ID);
+            this.jobs = await api.jobs(currentAccountId() ?? DEV_ACCOUNT_ID);
         } catch (e) {
             // The static build has no /api, so this is an expected state there.
             this.error = e instanceof ApiError ? e.message : 'Could not load vacancies.';

@@ -1,14 +1,54 @@
 import { LightningElement, api } from 'lwc';
+import {
+    currentUser,
+    displayName,
+    onChange,
+    signOut,
+    type SessionUser
+} from 'data/session';
 
 const LINK = 'site-header__link';
 const LINK_ACTIVE = 'site-header__link site-header__link_active';
 
-/** Lightning Experience style global header, shared by every route. */
+/**
+ * Lightning Experience style global header, shared by every route.
+ *
+ * Has an authenticated and an unauthenticated form: signed in, the main nav and
+ * the profile menu show; signed out, only a Login link does. It re-renders on
+ * session changes so signing in or out updates the header without a reload.
+ */
 export default class SiteHeader extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
 
     /** Marks the current page so the header can highlight it. */
     @api current = '';
+
+    user: SessionUser | null = null;
+    private unsubscribe: (() => void) | null = null;
+
+    connectedCallback(): void {
+        this.user = currentUser();
+        this.unsubscribe = onChange(() => {
+            this.user = currentUser();
+        });
+    }
+
+    disconnectedCallback(): void {
+        this.unsubscribe?.();
+        this.unsubscribe = null;
+    }
+
+    get isSignedIn(): boolean {
+        return this.user !== null;
+    }
+
+    get userName(): string {
+        return displayName(this.user);
+    }
+
+    get companyName(): string {
+        return this.user?.company_name ?? '';
+    }
 
     get listAJobClass(): string {
         return this.current === 'list-a-job' ? LINK_ACTIVE : LINK;
@@ -22,15 +62,26 @@ export default class SiteHeader extends LightningElement {
         return this.current === 'help-centre' ? LINK_ACTIVE : LINK;
     }
 
+    get loginClass(): string {
+        return this.current === 'login' ? LINK_ACTIVE : LINK;
+    }
+
     /**
      * The menus are navigation, not commands: lightning-button-menu has no href,
      * so the item's value carries the path and selection becomes a page load.
+     * 'sign-out' is the one value that acts instead of navigating.
      */
     handleAppSelect(event: CustomEvent): void {
         this.navigate(event);
     }
 
     handleProfileSelect(event: CustomEvent): void {
+        const value = (event.detail as { value?: string })?.value;
+        if (value === 'sign-out') {
+            signOut();
+            window.location.assign('/');
+            return;
+        }
         this.navigate(event);
     }
 

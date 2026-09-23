@@ -29,46 +29,61 @@
                     </lightning-button-menu>
                     <a href="/" class="site-header__wordmark">MSD</a>
                 </div>
-                <nav class="site-header__nav">
+
+                <!-- Main nav is for signed-in employers only. -->
+                <nav lwc:if={isSignedIn} class="site-header__nav">
                     <a href="/list-a-job" class={listAJobClass}>List a job</a>
                     <a href="/jobs" class={myJobsClass}>My jobs</a>
                     <a href="/help-centre" class={helpCentreClass}>Help centre</a>
                 </nav>
             </div>
+
             <div class="slds-global-header__item">
                 <ul class="slds-global-actions slds-grid slds-grid_vertical-align-center">
-                    <li class="slds-global-actions__item">
-                        <lightning-button-icon
-                            icon-name="utility:notification"
-                            variant="bare"
-                            alternative-text="Notifications"
-                        ></lightning-button-icon>
-                    </li>
-                    <li class="slds-global-actions__item slds-p-left_x-small site-header__profile">
-                        <lightning-avatar
-                            fallback-icon-name="standard:user"
-                            alternative-text="Profile"
-                            size="small"
-                        ></lightning-avatar>
-                        <lightning-button-menu
-                            icon-name="utility:down"
-                            icon-size="x-small"
-                            variant="bare"
-                            alternative-text="Profile menu"
-                            menu-alignment="right"
-                            onselect={handleProfileSelect}
-                        >
-                            <lightning-menu-item
-                                value="/employer-profile"
-                                label="Employer profile"
-                                prefix-icon-name="utility:company"
-                            ></lightning-menu-item>
-                            <lightning-menu-item
-                                value="/manage-org"
-                                label="Manage org"
-                                prefix-icon-name="utility:settings"
-                            ></lightning-menu-item>
-                        </lightning-button-menu>
+                    <template lwc:if={isSignedIn}>
+                        <li class="slds-global-actions__item">
+                            <lightning-button-icon
+                                icon-name="utility:notification"
+                                variant="bare"
+                                alternative-text="Notifications"
+                            ></lightning-button-icon>
+                        </li>
+                        <li class="slds-global-actions__item slds-p-left_x-small site-header__profile">
+                            <lightning-avatar
+                                fallback-icon-name="standard:user"
+                                alternative-text={userName}
+                                size="small"
+                            ></lightning-avatar>
+                            <lightning-button-menu
+                                icon-name="utility:down"
+                                icon-size="x-small"
+                                variant="bare"
+                                alternative-text="Account menu"
+                                menu-alignment="right"
+                                onselect={handleProfileSelect}
+                            >
+                                <lightning-menu-item
+                                    value="/profile"
+                                    label="My profile"
+                                    prefix-icon-name="utility:user"
+                                ></lightning-menu-item>
+                                <lightning-menu-item
+                                    value="/manage-org"
+                                    label="Manage org"
+                                    prefix-icon-name="utility:settings"
+                                ></lightning-menu-item>
+                                <lightning-menu-item
+                                    value="sign-out"
+                                    label="Log out"
+                                    prefix-icon-name="utility:logout"
+                                ></lightning-menu-item>
+                            </lightning-button-menu>
+                        </li>
+                    </template>
+
+                    <!-- Signed out: one way in. -->
+                    <li lwc:else class="slds-global-actions__item">
+                        <a href="/login" class={loginClass}>Login</a>
                     </li>
                 </ul>
             </div>

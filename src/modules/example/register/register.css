@@ -1,0 +1,9 @@
+/* Registration is a single narrow column, centred in the canvas. */
+.auth {
+    max-width: 30rem;
+    margin: 2rem auto 0;
+}
+
+.auth__submit {
+    display: block;
+}

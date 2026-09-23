@@ -28,7 +28,9 @@ open-source Lightning base components installed as an npm dependency.
 | `/jobs/job-detail?id=N` | `example/jobDetail` | Lightning **record page** for one vacancy |
 | `/list-a-job` | `example/listAJob` | Nav destination, not built yet |
 | `/help-centre` | `example/helpCentre` | Nav destination, not built yet |
-| `/employer-profile` | `example/employerProfile` | Nav destination, not built yet |
+| `/profile` | `example/profile` | My profile — the signed-in user's contact record, editable |
+| `/login` | `example/login` | Sign in |
+| `/register` | `example/register` | Create an employer account |
 | `/manage-org` | `example/manageOrg` | Nav destination, not built yet |
 | `/vacancies` | `example/vacancies` | First data-backed screen — live from SQLite |
 | `/data` | `example/data` | Every table in the database, with create/edit/delete |
@@ -38,10 +40,46 @@ Every route shares `ui/siteHeader` and the layout in `src/layouts/main.njk`. Add
 route by adding an entry to `routes` in `lwr.config.json` and a matching
 component; `npm run catalog` never touches that part of the config.
 
-The global header carries the three main nav links (List a job, My jobs, Help
-centre) and a profile menu (Employer profile, Manage org). `/vacancies`, `/data`
-and `/design-system` are development screens, reached from the App Launcher
-waffle rather than the main nav.
+The global header has two forms. Signed in it carries the three main nav links
+(List a job, My jobs, Help centre) and an account menu (My profile, Manage org,
+Log out); signed out it carries neither — only a Login link. The homepage has
+the same split: a pitch with the ways in, or the employer's landing pad.
+`/vacancies`, `/data` and `/design-system` are development screens, reached from
+the App Launcher waffle rather than the main nav.
+
+## Auth (prototype only)
+
+**This is not production auth.** Passwords are hashed and verified properly
+(scrypt + `timingSafeEqual`, the scheme `ciam` was designed for), but there is
+**no session cookie, no token and no protected route**. `POST /api/auth/login`
+hands the caller the user record and the client keeps it in `localStorage`
+(`data/session`); anyone can forge that, and every `/api` route stays open. It
+exists to prototype the *flow*, not to secure anything.
+
+| Piece | Where |
+| --- | --- |
+| Hashing | `server/lib/password.ts` |
+| Login / register / me | `server/routes/auth.ts`, `server/repositories/auth-repository.ts` |
+| Profile read + write | `server/routes/contacts.ts` (allow-list: `CONTACT_UPDATABLE`) |
+| Client session | `src/modules/data/session` |
+
+### Signing in
+
+The seed database shipped with scrypt hashes whose source password is not
+recorded anywhere, so the demo logins could not be used. `npm run
+auth:dev-passwords` rewrites both seeded `ciam` rows with a known password, in
+**both** `data/msd-vd2.db` and `data/msd-vd2.seed.db` so `npm run db:reset` does
+not undo it. It has already been run:
+
+| Email | Password |
+| --- | --- |
+| `employer@test.com` | `password123` |
+| `employer6@test.com` | `password123` |
+
+Registering creates a `ciam` row, the `contacts` row behind it, and — when a
+company name is given — the `accounts` row they become primary contact for.
+`/jobs` and the record page read `account_id` from the session, so a new
+employer sees their own (empty) account rather than the seeded one.
 
 ### The record page layout
 
@@ -79,6 +117,7 @@ npm install
 npm run dev      # http://localhost:3000 — site + /api
 npm run dev:lwr  # site only, no database (plain `lwr dev`)
 npm run db:reset # restore the database from data/msd-vd2.seed.db
+npm run auth:dev-passwords # give the seeded logins a known password
 npm run build    # static build into ./site (no /api)
 npm run start    # serve the built site
 npm run catalog  # regenerate the catalog + example registry (see below)

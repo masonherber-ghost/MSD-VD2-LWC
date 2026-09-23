@@ -3,35 +3,125 @@
 
     <div class="site__body">
         <main class="site__main home">
-            <div class="home__hero slds-box slds-theme_default">
-                <h1 class="slds-text-heading_large">MSD prototype</h1>
-                <p class="slds-text-body_regular slds-m-top_x-small slds-text-color_weak">
-                    Homepage stub. Page content goes here.
-                </p>
-                <div class="slds-m-top_medium">
-                    <a href="/design-system">
-                        <lightning-button
-                            variant="brand"
-                            label="Open the design system"
-                        ></lightning-button>
-                    </a>
+            <!-- Signed in: the employer's landing pad ---------------------->
+            <template lwc:if={isSignedIn}>
+                <div class="slds-page-header slds-m-bottom_medium">
+                    <div class="slds-page-header__row">
+                        <div class="slds-page-header__col-title">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <lightning-icon
+                                        icon-name="standard:home"
+                                        size="medium"
+                                    ></lightning-icon>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h1 class="slds-page-header__title slds-truncate">
+                                        Kia ora, {firstName}
+                                    </h1>
+                                    <p class="slds-page-header__name-meta">{companyName}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-page-header__col-actions">
+                            <div class="slds-page-header__controls">
+                                <div class="slds-page-header__control">
+                                    <a href="/list-a-job">
+                                        <lightning-button
+                                            variant="brand"
+                                            label="List a job"
+                                        ></lightning-button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="home__stats slds-m-top_medium">
-                <article class="slds-box slds-theme_default">
-                    <p class="home__stat">{componentCount}</p>
-                    <p class="slds-text-body_small slds-text-color_weak">
-                        Lightning base components available
+                <lightning-layout multiple-rows class="slds-gutters">
+                    <lightning-layout-item lwc:if={hasSummary} size="12" padding="around-small">
+                        <lightning-layout multiple-rows class="slds-gutters">
+                            <lightning-layout-item size="12" medium-device-size="4">
+                                <lightning-card title="Vacancies" icon-name="standard:job_profile">
+                                    <p class="home__stat slds-p-horizontal_medium">{jobCount}</p>
+                                    <p class="slds-text-body_small slds-text-color_weak slds-p-horizontal_medium slds-p-bottom_medium">
+                                        {activeCount} currently active
+                                    </p>
+                                </lightning-card>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" medium-device-size="4">
+                                <lightning-card title="Applicants" icon-name="standard:groups">
+                                    <p class="home__stat slds-p-horizontal_medium">{applicantCount}</p>
+                                    <p class="slds-text-body_small slds-text-color_weak slds-p-horizontal_medium slds-p-bottom_medium">
+                                        Across all vacancies
+                                    </p>
+                                </lightning-card>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" medium-device-size="4">
+                                <lightning-card title="Next steps" icon-name="standard:task">
+                                    <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+                                        <p><a href="/jobs">Review your vacancies</a></p>
+                                        <p class="slds-m-top_xx-small">
+                                            <a href="/profile">Update your profile</a>
+                                        </p>
+                                        <p class="slds-m-top_xx-small">
+                                            <a href="/help-centre">Visit the help centre</a>
+                                        </p>
+                                    </div>
+                                </lightning-card>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+
+            <!-- Signed out: the pitch ------------------------------------->
+            <template lwc:else>
+                <div class="home__marketing">
+                <div class="home__hero slds-box slds-theme_default">
+                    <h1 class="slds-text-heading_large">Hire with MSD</h1>
+                    <p class="slds-text-body_regular slds-m-top_x-small slds-text-color_weak">
+                        List a vacancy, reach job seekers across Aotearoa, and manage your
+                        applicants in one place.
                     </p>
-                </article>
-                <article class="slds-box slds-theme_default">
-                    <p class="home__stat">{exampleCount}</p>
-                    <p class="slds-text-body_small slds-text-color_weak">
-                        Official examples to browse
-                    </p>
-                </article>
-            </div>
+                    <div class="slds-m-top_medium slds-grid slds-grid_vertical-align-center">
+                        <a href="/login">
+                            <lightning-button
+                                variant="brand"
+                                label="Log in"
+                            ></lightning-button>
+                        </a>
+                        <a href="/register" class="slds-m-left_x-small">
+                            <lightning-button label="Create an account"></lightning-button>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="home__stats slds-m-top_medium">
+                    <article class="slds-box slds-theme_default">
+                        <lightning-icon icon-name="utility:list" size="small"></lightning-icon>
+                        <h2 class="slds-text-heading_small slds-m-top_x-small">List a vacancy</h2>
+                        <p class="slds-text-body_small slds-text-color_weak">
+                            Publish a job and start receiving applications.
+                        </p>
+                    </article>
+                    <article class="slds-box slds-theme_default">
+                        <lightning-icon icon-name="utility:groups" size="small"></lightning-icon>
+                        <h2 class="slds-text-heading_small slds-m-top_x-small">Manage applicants</h2>
+                        <p class="slds-text-body_small slds-text-color_weak">
+                            Shortlist, track and respond from one screen.
+                        </p>
+                    </article>
+                    <article class="slds-box slds-theme_default">
+                        <lightning-icon icon-name="utility:company" size="small"></lightning-icon>
+                        <h2 class="slds-text-heading_small slds-m-top_x-small">Build your profile</h2>
+                        <p class="slds-text-body_small slds-text-color_weak">
+                            Show job seekers who you are and what you stand for.
+                        </p>
+                    </article>
+                </div>
+                </div>
+            </template>
         </main>
     </div>
 </template>
