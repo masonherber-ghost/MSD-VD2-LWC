@@ -1,5 +1,9 @@
 # MSD Component Library (LWR + Lightning base components + SLDS 2)
 
+> **Working on this repo with Claude Code?** Start at [`CLAUDE.md`](CLAUDE.md) — it routes
+> each kind of task to the rules file that governs it (`.claude/rules/`). This README is the
+> reference for *how the project works*; the rules files are the standards for *how to change it*.
+
 A standalone prototype site for designing against the Salesforce Lightning look and
 feel — no Salesforce org, no deploy, no authentication. It runs as a plain
 [LWR](https://developer.salesforce.com/docs/platform/lwr/overview) site with the

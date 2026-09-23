@@ -1,15 +1,4 @@
-#page /manage-org
-Rules:
-Some fields cannot be edited directly by employers:
-(so are readonly)
-company name
-industry
-Org type (change the label of that field)
-IRD and NZBN numbers 
-If they are empty they can have data entered
 
-Tab team:
-Primary contact users cannot be members and when an admin is a primary contact they cannot be changed to a member
 
 Document the app logic rules in a specific rules file in .claude
 
