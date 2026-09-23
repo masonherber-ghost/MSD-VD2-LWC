@@ -72,15 +72,22 @@ Three things make that work, and all three matter:
 
 1. **Lock state is read from the saved account, never the draft.** Typing into an empty field must
    not lock it mid-edit.
-2. **A locked field renders as read-only output** (`slds-form-element__static`) with the note
-   *"Held by MSD. Contact us to change it."* — not as a disabled input. That is how Lightning shows
-   a value you cannot change, and it keeps every locked field looking the same. A read-only
-   `lightning-combobox` renders as a grey box while a read-only `lightning-input` renders as plain
-   text, so mixing the two looks broken.
+2. **A locked field renders as read-only output** (`slds-form-element__static`), not as a disabled
+   input. That is how Lightning shows a value you cannot change, and it keeps every locked field
+   looking the same. A read-only `lightning-combobox` renders as a grey box while a read-only
+   `lightning-input` renders as plain text, so mixing the two looks broken. An empty read-only
+   value shows an em dash rather than blank space.
 3. **`toPayload` omits locked fields entirely**, so a tampered DOM cannot overwrite one.
 
 A locked field showing a slug must display its **label** — `registered_company` → "Registered
 company".
+
+### Editing arrived in 1.2
+
+Before 1.2 the whole org form was read-only — `manageOrg.editDetails` gates it, and `isLocked`
+returns true for every field when it is off, so the same read-only rendering covers both rules.
+The Save/Cancel footer goes with it. **Manage team** is gated separately by `manageOrg.team`, also
+at 1.2.
 
 ### Verification
 

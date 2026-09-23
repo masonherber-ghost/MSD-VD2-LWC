@@ -45,9 +45,12 @@ const FEATURES: Record<string, Release> = {
     'jobs.detail': '1.1',
     'auth.login': '1.1',
     'auth.register': '1.1',
-    'profile.edit': '1.1',
 
     // Later additions, used to demonstrate the toggle.
+    // Before 1.2 a profile was a read-only view of the contact record, and the
+    // org record could be viewed but not edited.
+    'profile.edit': '1.2',
+    'manageOrg.editDetails': '1.2',
     'home.dashboardStats': '1.2',
     'jobDetail.activityTimeline': '1.2',
     'manageOrg.team': '1.2',

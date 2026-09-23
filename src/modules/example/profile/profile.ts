@@ -1,6 +1,12 @@
 import { LightningElement } from 'lwc';
 import api, { ApiError, type Row } from 'data/api';
 import { currentUser, signIn, displayName, type SessionUser } from 'data/session';
+import {
+    currentRelease,
+    isEnabled,
+    onChange as onReleaseChange,
+    type Release
+} from 'data/release';
 
 /** The fields a person may change about themselves. Role and account are not among them. */
 const EDITABLE = ['first_name', 'last_name', 'job_title', 'phone'] as const;
@@ -24,7 +30,14 @@ export default class Profile extends LightningElement {
     error = '';
     saved = false;
 
+    /** A field, so a release change re-renders and the getters re-run. */
+    release: Release = currentRelease();
+    private unsubRelease: (() => void) | null = null;
+
     async connectedCallback(): Promise<void> {
+        this.unsubRelease = onReleaseChange(() => {
+            this.release = currentRelease();
+        });
         this.user = currentUser();
         if (!this.user) {
             this.loading = false;
@@ -45,6 +58,11 @@ export default class Profile extends LightningElement {
         } finally {
             this.loading = false;
         }
+    }
+
+    disconnectedCallback(): void {
+        this.unsubRelease?.();
+        this.unsubRelease = null;
     }
 
     handleChange(event: Event): void {
@@ -107,6 +125,35 @@ export default class Profile extends LightningElement {
 
     get ready(): boolean {
         return !this.loading && this.user !== null && this.contact !== null && !this.error;
+    }
+
+    /**
+     * Editing arrived in 1.2. Before that the profile was a read-only view of
+     * the contact record, so the fields render as output and the footer goes.
+     */
+    get canEdit(): boolean {
+        return isEnabled('profile.edit', this.release);
+    }
+
+    get firstNameDisplay(): string {
+        return this.displayOr(this.draft.first_name);
+    }
+
+    get lastNameDisplay(): string {
+        return this.displayOr(this.draft.last_name);
+    }
+
+    get jobTitleDisplay(): string {
+        return this.displayOr(this.draft.job_title);
+    }
+
+    get phoneDisplay(): string {
+        return this.displayOr(this.draft.phone);
+    }
+
+    /** An empty read-only field reads as a dash, not as blank space. */
+    private displayOr(value: string): string {
+        return value?.trim() ? value : '—';
     }
 
     get fullName(): string {

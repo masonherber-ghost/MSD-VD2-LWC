@@ -92,41 +92,69 @@
                                 <lightning-layout multiple-rows class="slds-gutters">
                                     <lightning-layout-item size="12" medium-device-size="6">
                                         <lightning-input
+                                            lwc:if={canEdit}
                                             data-field="first_name"
                                             label="First name"
                                             value={draft.first_name}
                                             onchange={handleChange}
                                         ></lightning-input>
+                                        <div lwc:else class="slds-form-element slds-form-element_readonly">
+                                            <span class="slds-form-element__label">First name</span>
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-form-element__static">{firstNameDisplay}</div>
+                                            </div>
+                                        </div>
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12" medium-device-size="6">
                                         <lightning-input
+                                            lwc:if={canEdit}
                                             data-field="last_name"
                                             label="Last name"
                                             value={draft.last_name}
                                             onchange={handleChange}
                                         ></lightning-input>
+                                        <div lwc:else class="slds-form-element slds-form-element_readonly">
+                                            <span class="slds-form-element__label">Last name</span>
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-form-element__static">{lastNameDisplay}</div>
+                                            </div>
+                                        </div>
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12" medium-device-size="6">
                                         <lightning-input
+                                            lwc:if={canEdit}
                                             data-field="job_title"
                                             label="Job title"
                                             value={draft.job_title}
                                             onchange={handleChange}
                                         ></lightning-input>
+                                        <div lwc:else class="slds-form-element slds-form-element_readonly">
+                                            <span class="slds-form-element__label">Job title</span>
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-form-element__static">{jobTitleDisplay}</div>
+                                            </div>
+                                        </div>
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12" medium-device-size="6">
                                         <lightning-input
+                                            lwc:if={canEdit}
                                             data-field="phone"
                                             type="tel"
                                             label="Phone"
                                             value={draft.phone}
                                             onchange={handleChange}
                                         ></lightning-input>
+                                        <div lwc:else class="slds-form-element slds-form-element_readonly">
+                                            <span class="slds-form-element__label">Phone</span>
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-form-element__static">{phoneDisplay}</div>
+                                            </div>
+                                        </div>
                                     </lightning-layout-item>
                                 </lightning-layout>
                             </div>
 
-                            <div slot="footer" class="slds-text-align_right">
+                            <div lwc:if={canEdit} slot="footer" class="slds-text-align_right">
                                 <lightning-button
                                     label="Cancel"
                                     onclick={handleCancel}

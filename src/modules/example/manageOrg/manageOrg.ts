@@ -51,8 +51,6 @@ const LOCKED_WHEN_SET = [
     'nzbn'
 ] as const;
 
-const LOCKED_NOTE = 'Held by MSD. Contact us to change it.';
-
 type Draft = Record<string, string | null>;
 
 /**
@@ -197,8 +195,19 @@ export default class ManageOrg extends LightningElement {
         return payload;
     }
 
-    /** Locked once the saved account holds a value — the draft is not consulted. */
+    /**
+     * A field is locked when either rule says so:
+     *
+     * - before 1.2 the whole form was read-only, so nothing is editable; or
+     * - it is a column MSD holds and the saved account already has a value.
+     *
+     * The saved account is consulted, never the draft, so typing into an empty
+     * field does not lock it mid-edit.
+     */
     private isLocked(field: string): boolean {
+        if (!this.canEditDetails) {
+            return true;
+        }
         if (!LOCKED_WHEN_SET.includes(field as (typeof LOCKED_WHEN_SET)[number])) {
             return false;
         }
@@ -206,19 +215,22 @@ export default class ManageOrg extends LightningElement {
         return value !== null && value !== undefined && String(value).trim() !== '';
     }
 
+    /** Editing the org record arrived in 1.2. */
+    get canEditDetails(): boolean {
+        return isEnabled('manageOrg.editDetails', this.release);
+    }
+
     /**
      * Lock state per field. A locked field renders as a read-only output
      * rather than a disabled input, which is how Lightning shows a value the
      * user cannot change, and keeps every locked field looking the same.
      */
-    lockedNote = LOCKED_NOTE;
-
     get lockCompanyName(): boolean {
         return this.isLocked('company_name');
     }
 
     get companyNameDisplay(): string {
-        return String(this.account?.company_name ?? '');
+        return this.displayOr(this.account?.company_name);
     }
 
     get lockIndustry(): boolean {
@@ -226,7 +238,7 @@ export default class ManageOrg extends LightningElement {
     }
 
     get industryDisplay(): string {
-        return String(this.account?.industry ?? '');
+        return this.displayOr(this.account?.industry);
     }
 
     get lockOrgType(): boolean {
@@ -236,7 +248,7 @@ export default class ManageOrg extends LightningElement {
     /** The stored value is a slug, so show the option's label. */
     get orgTypeDisplay(): string {
         const value = String(this.account?.company_type ?? '');
-        return COMPANY_TYPES.find((t) => t.value === value)?.label ?? value;
+        return COMPANY_TYPES.find((t) => t.value === value)?.label ?? this.displayOr(value);
     }
 
     get lockIrdNumber(): boolean {
@@ -244,15 +256,53 @@ export default class ManageOrg extends LightningElement {
     }
 
     get irdNumberDisplay(): string {
-        return String(this.account?.ird_number ?? '');
+        return this.displayOr(this.account?.ird_number);
     }
 
     get lockNzbn(): boolean {
         return this.isLocked('nzbn');
     }
 
+    get lockTradingName(): boolean {
+        return this.isLocked('trading_name');
+    }
+
+    get tradingNameDisplay(): string {
+        return this.displayOr(this.account?.trading_name);
+    }
+
+    get lockWebAddress(): boolean {
+        return this.isLocked('web_address');
+    }
+
+    get webAddressDisplay(): string {
+        return this.displayOr(this.account?.web_address);
+    }
+
+    get lockCompanyAddress(): boolean {
+        return this.isLocked('company_address');
+    }
+
+    get companyAddressDisplay(): string {
+        return this.displayOr(this.account?.company_address);
+    }
+
+    get lockWorkplaceAddress(): boolean {
+        return this.isLocked('workplace_address');
+    }
+
+    get workplaceAddressDisplay(): string {
+        return this.displayOr(this.account?.workplace_address);
+    }
+
+    /** An empty read-only field reads as a dash, not as blank space. */
+    private displayOr(value: unknown): string {
+        const text = value === null || value === undefined ? '' : String(value);
+        return text.trim() ? text : '—';
+    }
+
     get nzbnDisplay(): string {
-        return String(this.account?.nzbn ?? '');
+        return this.displayOr(this.account?.nzbn);
     }
 
     handleCancelDetails(): void {

@@ -77,7 +77,6 @@
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{companyNameDisplay}</div>
                                             </div>
-                                            <p class="manage-org__locked">{lockedNote}</p>
                                         </div>
                                         <lightning-input
                                             lwc:else
@@ -88,7 +87,14 @@
                                         ></lightning-input>
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12" medium-device-size="6">
+                                        <div lwc:if={lockTradingName} class="slds-form-element slds-form-element_readonly">
+                                            <span class="slds-form-element__label">Trading name</span>
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-form-element__static">{tradingNameDisplay}</div>
+                                            </div>
+                                        </div>
                                         <lightning-input
+                                            lwc:else
                                             data-field="trading_name"
                                             label="Trading name"
                                             value={draft.trading_name}
@@ -101,7 +107,6 @@
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{industryDisplay}</div>
                                             </div>
-                                            <p class="manage-org__locked">{lockedNote}</p>
                                         </div>
                                         <lightning-input
                                             lwc:else
@@ -117,7 +122,6 @@
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{orgTypeDisplay}</div>
                                             </div>
-                                            <p class="manage-org__locked">{lockedNote}</p>
                                         </div>
                                         <lightning-combobox
                                             lwc:else
@@ -129,7 +133,14 @@
                                         ></lightning-combobox>
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12" medium-device-size="6">
+                                        <div lwc:if={lockWebAddress} class="slds-form-element slds-form-element_readonly">
+                                            <span class="slds-form-element__label">Website</span>
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-form-element__static">{webAddressDisplay}</div>
+                                            </div>
+                                        </div>
                                         <lightning-input
+                                            lwc:else
                                             data-field="web_address"
                                             label="Website"
                                             value={draft.web_address}
@@ -137,7 +148,14 @@
                                         ></lightning-input>
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12" medium-device-size="6">
+                                        <div lwc:if={lockCompanyAddress} class="slds-form-element slds-form-element_readonly">
+                                            <span class="slds-form-element__label">Company address</span>
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-form-element__static">{companyAddressDisplay}</div>
+                                            </div>
+                                        </div>
                                         <lightning-input
+                                            lwc:else
                                             data-field="company_address"
                                             label="Company address"
                                             value={draft.company_address}
@@ -145,7 +163,14 @@
                                         ></lightning-input>
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12" medium-device-size="6">
+                                        <div lwc:if={lockWorkplaceAddress} class="slds-form-element slds-form-element_readonly">
+                                            <span class="slds-form-element__label">Workplace address</span>
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-form-element__static">{workplaceAddressDisplay}</div>
+                                            </div>
+                                        </div>
                                         <lightning-input
+                                            lwc:else
                                             data-field="workplace_address"
                                             label="Workplace address"
                                             value={draft.workplace_address}
@@ -165,7 +190,6 @@
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{irdNumberDisplay}</div>
                                             </div>
-                                            <p class="manage-org__locked">{lockedNote}</p>
                                         </div>
                                         <lightning-input
                                             lwc:else
@@ -181,7 +205,6 @@
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{nzbnDisplay}</div>
                                             </div>
-                                            <p class="manage-org__locked">{lockedNote}</p>
                                         </div>
                                         <lightning-input
                                             lwc:else
@@ -194,7 +217,7 @@
                                 </lightning-layout>
                             </div>
 
-                            <div slot="footer" class="slds-text-align_right">
+                            <div lwc:if={canEditDetails} slot="footer" class="slds-text-align_right">
                                 <lightning-button
                                     label="Cancel"
                                     onclick={handleCancelDetails}
