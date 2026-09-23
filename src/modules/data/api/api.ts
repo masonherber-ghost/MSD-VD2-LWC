@@ -109,8 +109,31 @@ export const api = {
     updateContact: (id: number, body: Row) =>
         request<Row>(`/contacts/${id}`, { method: 'PATCH', body }),
 
-    account: (id: number) => request<Record<string, unknown>>(`/accounts/${id}`),
-    members: (id: number) => request<Record<string, unknown>[]>(`/accounts/${id}/members`),
+    account: (id: number) => request<Row>(`/accounts/${id}`),
+    updateAccount: (id: number, body: Row) =>
+        request<Row>(`/accounts/${id}`, { method: 'PATCH', body }),
+
+    members: (id: number) => request<Row[]>(`/accounts/${id}/members`),
+    addMember: (accountId: number, body: Row) =>
+        request<Row>(`/accounts/${accountId}/members`, { method: 'POST', body }),
+    changeMemberRole: (accountId: number, contactId: number, employerRole: string) =>
+        request<Row>(`/accounts/${accountId}/members/${contactId}/role`, {
+            method: 'PATCH',
+            body: { employer_role: employerRole }
+        }),
+    setAuthorisedContact: (
+        accountId: number,
+        primaryContactId: number,
+        secondaryContactId: number | null = null
+    ) =>
+        request<Row>(`/accounts/${accountId}/authorised-contact`, {
+            method: 'PATCH',
+            body: { primary_contact_id: primaryContactId, secondary_contact_id: secondaryContactId }
+        }),
+    removeMember: (accountId: number, contactId: number) =>
+        request<{ removed: number }>(`/accounts/${accountId}/members/${contactId}`, {
+            method: 'DELETE'
+        }),
 
     jobs: (accountId: number, filters: { status?: string; contact_id?: number } = {}) =>
         request<Record<string, unknown>[]>(`/jobs${query({ account_id: accountId, ...filters })}`),

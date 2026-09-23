@@ -1,0 +1,4 @@
+/* Spinners need a sized, positioned parent to centre against. */
+.manage-org__loading {
+    min-height: 8rem;
+}

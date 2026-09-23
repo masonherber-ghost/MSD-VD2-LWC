@@ -14,7 +14,8 @@
         "stage": "npm run build && npm run start",
         "clean": "rimraf node_modules __lwr_cache__ site",
         "build:esm": "lwr build --clean",
-        "auth:dev-passwords": "tsx scripts/set-dev-passwords.ts"
+        "auth:dev-passwords": "tsx scripts/set-dev-passwords.ts",
+        "seed:team": "tsx scripts/seed-team.ts"
     },
     "dependencies": {
         "@salesforce-ux/design-system-2": "^2.264.2",

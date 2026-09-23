@@ -31,7 +31,7 @@ open-source Lightning base components installed as an npm dependency.
 | `/profile` | `example/profile` | My profile — the signed-in user's contact record, editable |
 | `/login` | `example/login` | Sign in |
 | `/register` | `example/register` | Create an employer account |
-| `/manage-org` | `example/manageOrg` | Nav destination, not built yet |
+| `/manage-org` | `example/manageOrg` | Org details + Manage team, two tabs |
 | `/vacancies` | `example/vacancies` | First data-backed screen — live from SQLite |
 | `/data` | `example/data` | Every table in the database, with create/edit/delete |
 | `/design-system` | `example/designSystem` | The kitchen sink: every shipped example, live |
@@ -78,8 +78,65 @@ not undo it. It has already been run:
 
 Registering creates a `ciam` row, the `contacts` row behind it, and — when a
 company name is given — the `accounts` row they become primary contact for.
-`/jobs` and the record page read `account_id` from the session, so a new
-employer sees their own (empty) account rather than the seeded one.
+`/jobs`, the record page and `/manage-org` read `account_id` from the session,
+so a new employer sees their own (empty) account rather than the seeded one.
+
+### The seeded team
+
+`npm run seed:team` puts people on account 1 so Manage team has something to
+manage. It is idempotent and writes to **both** databases. It has already been
+run:
+
+| Email | Name | Role | Status |
+| --- | --- | --- | --- |
+| `employer@test.com` | Bob Thebuilder | Admin | Active, primary contact |
+| `employer6@test.com` | Ana Ngata | Admin | Active |
+| `employer1@test.com` | Hana Reweti | Member | Active |
+| `employer2@test.com` | Tomasi Fifita | Member | Active |
+| `employer3@test.com` | Ruby Clarke | Admin | Active |
+| `employer4@test.com` | Wiremu Tane | Member | Active |
+| `employer5@test.com` | Mere Solomon | Member | Invite pending |
+
+Everyone active signs in with `password123`. Mere is `invitation_status =
+'pending'`, which in this schema means invited but not yet accepted — so she has
+**no `ciam` row and cannot sign in**, which is what makes her useful for testing
+the pending state.
+
+## Manage org
+
+`example/manageOrg` is a two-tab record page over the `accounts` row and its
+contacts.
+
+| Tab | What it does |
+| --- | --- |
+| Org details | Company (name, trading name, industry, type, website, addresses) and Registration (IRD, NZBN) |
+| Manage team | `lightning-datatable` of the account's contacts, with a per-row action menu |
+
+Row actions are built per row, so they stay honest: an Admin is offered "Change
+to Member" and vice versa, and the **primary contact is offered neither "Make
+primary contact" nor "Remove from team"**. Removing someone takes a second,
+explicit confirmation. The server refuses to remove the primary contact even if
+the UI is bypassed (`removeMember` throws a `DomainError`).
+
+The form edits nine columns. Everything else on the row — the company profile
+(`company_description`, `logo_url`, the selling points, `show_company_profile`),
+hiring preferences (`campaign_length_weeks`, `max_shortlist`,
+`interview_options`, `pre_employment_checks`), plus `gst_registered`,
+`preferred_language` and `verified` — is **not shown and not written**.
+`applyUpdate` only writes the keys it is handed, so those columns keep their
+stored values; saving the form does not blank them. `verified` appears as a
+badge in the page header only, since an employer verifying themselves would
+defeat its purpose.
+
+`POST /api/accounts/:id/members` (invite a new member) is wired and tested, but
+no invite form is built yet — Manage team currently manages the people already
+on the account.
+
+> **Known gap:** `removeMember` deletes the contact but leaves that person's
+> `ciam` row behind, so the login survives with no profile attached. Signing in
+> with it fails safe — `login()` returns *"This login has no profile attached"* —
+> but the orphan row stays until something cleans it up. `npm run seed:team`
+> reuses such a row rather than colliding with its unique email.
 
 ### The record page layout
 
@@ -118,6 +175,7 @@ npm run dev      # http://localhost:3000 — site + /api
 npm run dev:lwr  # site only, no database (plain `lwr dev`)
 npm run db:reset # restore the database from data/msd-vd2.seed.db
 npm run auth:dev-passwords # give the seeded logins a known password
+npm run seed:team # add the extra team members to account 1
 npm run build    # static build into ./site (no /api)
 npm run start    # serve the built site
 npm run catalog  # regenerate the catalog + example registry (see below)
