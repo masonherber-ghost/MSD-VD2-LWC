@@ -15,8 +15,63 @@ body {
     min-height: calc(100vh - 50px);
 }
 
+/* Content width.
+ *
+ * Lightning Experience itself is fluid — a record page fills the browser at any
+ * width. An Experience Cloud site is not: the Theme panel's maximum content
+ * width compiles to --dxp-s-section-columns-max-width (plus the matching header
+ * and footer hooks), and its -mobile variants are set to `none`. Production LWR
+ * sites run 1440px or 1800px.
+ *
+ * This follows that model: fluid on phones and tablets, capped from the large
+ * breakpoint up, and the header and footer bars capped to the same edge so the
+ * wordmark, the page and the release toggle share one content column. Change
+ * the cap in one place — these two custom properties.
+ */
+:root {
+    --site-content-max-width: none;
+    --site-content-gutter: var(--slds-g-spacing-4, 1rem);
+}
+
+/* 48em / 768px — the SLDS medium breakpoint. Still fluid, wider gutter. */
+@media (min-width: 48em) {
+    :root {
+        --site-content-gutter: var(--slds-g-spacing-5, 1.5rem);
+    }
+}
+
+/* 64em / 1024px — the SLDS large breakpoint. 80rem is slds-container_x-large,
+   the widest cap SLDS ships. */
+@media (min-width: 64em) {
+    :root {
+        --site-content-max-width: 80rem;
+    }
+}
+
+/* 100em / 1600px — 90rem (1440px) is the cap the production LWR sites use, and
+   at this viewport it still leaves a real margin either side. */
+@media (min-width: 100em) {
+    :root {
+        --site-content-max-width: 90rem;
+    }
+}
+
 .site__main {
-    padding: 1.5rem;
+    max-width: var(--site-content-max-width);
+    margin-inline: auto;
+    padding: var(--slds-g-spacing-5, 1.5rem) var(--site-content-gutter);
+}
+
+/* A flex child of the header bar, so the bar keeps its own full-bleed
+   background and shadow while its contents sit in the content column.
+   slds-global-header__item already carries 1rem of horizontal padding, so the
+   row makes up only the difference. */
+.site-header__inner {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: var(--site-content-max-width);
+    margin-inline: auto;
+    padding-inline: calc(var(--site-content-gutter) - var(--slds-g-spacing-4, 1rem));
 }
 
 /* Keep the wordmark and nav on one row inside the 50px header. */
@@ -64,6 +119,14 @@ body {
     color: var(--slds-g-color-accent-container-1, #0176d3);
     border-bottom-color: var(--slds-g-color-accent-container-1, #0176d3);
     font-weight: 600;
+}
+
+/* A custom element is display:inline by default and lightning-card sets no
+   :host display, so vertical margins on a card are computed but never applied —
+   stacked cards end up flush against each other. Making the host a block is
+   what lets slds-m-bottom_* do its job. */
+lightning-card {
+    display: block;
 }
 
 /* Avatar and its menu read as one control in the global actions row. */

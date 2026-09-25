@@ -75,7 +75,10 @@
                                 <div class="slds-page-header__control">
                                     <lightning-button-group>
                                         <lightning-button label="Edit"></lightning-button>
-                                        <lightning-button label="View applicants"></lightning-button>
+                                        <lightning-button
+                                            lwc:if={showApplicants}
+                                            label="View applicants"
+                                        ></lightning-button>
                                         <lightning-button-menu
                                             icon-name="utility:down"
                                             alternative-text="More actions"
@@ -117,7 +120,7 @@
                                     <div class="slds-text-title slds-truncate">Pay</div>
                                     <div class="slds-truncate" title={job.pay}>{job.pay}</div>
                                 </li>
-                                <li class="slds-page-header__detail-block">
+                                <li lwc:if={showApplicants} class="slds-page-header__detail-block">
                                     <div class="slds-text-title slds-truncate">Applicants</div>
                                     <div class="slds-truncate">{candidateCount}</div>
                                 </li>
@@ -148,12 +151,16 @@
                 </div>
 
                 <!-- Split content body: 2:1 ---------------------------------->
-                <lightning-layout multiple-rows class="slds-gutters">
-                    <lightning-layout-item size="12" large-device-size="8" padding="around-small">
+                <lightning-layout multiple-rows pull-to-boundary="small">
+                    <lightning-layout-item
+                        size="12"
+                        large-device-size={mainColumnSize}
+                        padding="around-small"
+                    >
                         <lightning-tabset variant="scoped">
                             <lightning-tab label="Details">
-                                <lightning-layout multiple-rows class="slds-gutters">
-                                    <lightning-layout-item size="12" medium-device-size="6">
+                                <lightning-layout multiple-rows pull-to-boundary="small">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
                                         <template for:each={detailColumnOne} for:item="field">
                                             <div key={field.key} class="slds-form-element slds-form-element_readonly slds-m-bottom_small">
                                                 <span class="slds-form-element__label">{field.label}</span>
@@ -163,7 +170,7 @@
                                             </div>
                                         </template>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
                                         <template for:each={detailColumnTwo} for:item="field">
                                             <div key={field.key} class="slds-form-element slds-form-element_readonly slds-m-bottom_small">
                                                 <span class="slds-form-element__label">{field.label}</span>
@@ -174,7 +181,7 @@
                                         </template>
                                     </lightning-layout-item>
 
-                                    <lightning-layout-item size="12" class="slds-m-top_medium">
+                                    <lightning-layout-item size="12" class="slds-m-top_medium" padding="horizontal-small">
                                         <div class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Description</span>
                                             <div class="slds-form-element__control">
@@ -187,7 +194,7 @@
                                         </div>
                                     </lightning-layout-item>
 
-                                    <lightning-layout-item lwc:if={hasResponsibilities} size="12" class="slds-m-top_medium">
+                                    <lightning-layout-item lwc:if={hasResponsibilities} size="12" class="slds-m-top_medium" padding="horizontal-small">
                                         <div class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Responsibilities</span>
                                             <ul class="slds-list_dotted slds-m-top_xx-small">
@@ -198,7 +205,7 @@
                                         </div>
                                     </lightning-layout-item>
 
-                                    <lightning-layout-item lwc:if={hasSkills} size="12" class="slds-m-top_medium">
+                                    <lightning-layout-item lwc:if={hasSkills} size="12" class="slds-m-top_medium" padding="horizontal-small">
                                         <div class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Skills</span>
                                             <div class="slds-m-top_xx-small">
@@ -215,7 +222,7 @@
                                 </lightning-layout>
                             </lightning-tab>
 
-                            <lightning-tab label={relatedLabel}>
+                            <lightning-tab lwc:if={showApplicants} label={relatedLabel}>
                                 <template lwc:if={hasCandidates}>
                                     <lightning-datatable
                                         key-field="id"
@@ -232,8 +239,18 @@
                     </lightning-layout-item>
 
                     <!-- Sidebar region ------------------------------------->
-                    <lightning-layout-item size="12" large-device-size="4" padding="around-small">
-                        <lightning-card title="Applicant pipeline" icon-name="standard:groups">
+                    <lightning-layout-item
+                        lwc:if={hasSidebar}
+                        size="12"
+                        large-device-size="4"
+                        padding="around-small"
+                    >
+                        <lightning-card
+                            lwc:if={showApplicants}
+                            title="Applicant pipeline"
+                            icon-name="standard:groups"
+                            class="slds-m-bottom_medium"
+                        >
                             <div class="slds-p-horizontal_medium">
                                 <template lwc:if={hasPipeline}>
                                     <ul class="slds-has-dividers_bottom-space">
@@ -262,7 +279,7 @@
                             lwc:if={showActivity}
                             title="Activity"
                             icon-name="standard:task"
-                            class="slds-m-top_medium"
+                            class="slds-m-bottom_medium"
                         >
                             <div class="slds-p-horizontal_medium">
                                 <template lwc:if={hasTimeline}>
@@ -296,7 +313,7 @@
                             </div>
                         </lightning-card>
 
-                        <lightning-card lwc:if={hasContact} title="Vacancy contact" icon-name="standard:user" class="slds-m-top_medium">
+                        <lightning-card lwc:if={hasContact} title="Vacancy contact" icon-name="standard:user">
                             <div class="slds-p-horizontal_medium">
                                 <div class="slds-media">
                                     <div class="slds-media__figure">

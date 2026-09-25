@@ -41,4 +41,15 @@ export default class SiteFooter extends LightningElement {
             setRelease(value);
         }
     }
+
+    /**
+     * The App Launcher is navigation: lightning-button-menu has no href, so the
+     * item's value carries the path and selection becomes a page load.
+     */
+    handleAppSelect(event: CustomEvent): void {
+        const path = (event.detail as { value?: string })?.value;
+        if (path) {
+            window.location.assign(path);
+        }
+    }
 }

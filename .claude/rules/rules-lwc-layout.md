@@ -56,17 +56,77 @@ dense scanning and sorting.
 `size="12"` with a `medium-device-size` or `large-device-size` override is what gives the authentic
 behaviour: one stacked column on a phone, 2:1 from the breakpoint up.
 
-**`pull-to-boundary` is not optional.** When layout items carry `padding`, that padding pushes the
-outer edges inward and the grid stops aligning with the page header above it. `pull-to-boundary`
-applies the compensating negative margin. Match it to the padding: `padding="around-small"` →
-`pull-to-boundary="small"`.
+**Gutters come from the item's `padding` attribute, never from `slds-gutters`.**
 
-Do **not** also add `slds-gutters` to a layout whose items already carry `padding` — that is the
-same spacing applied twice.
+`class="slds-gutters"` does **nothing** on a `lightning-layout`. Its rule is
+`.slds-gutters .slds-col { padding-inline: … }`, and `lightning-layout-item` only puts `slds-col`
+on its host when `flexibility="auto"` is set — by default the host carries size classes alone. So
+the selector never matches: no gutter is produced, while the class's own
+`margin-inline: -0.75rem` still drags the grid 12px outside its container and out of alignment with
+the page header. It is worse than doing nothing.
 
-`lightning-layout` and `lightning-layout-item` set their `slds-grid` / `slds-col slds-size_*`
-classes on their own **host** element, which is in the parent's light DOM. That is why the global
-SLDS stylesheet reaches them.
+Spacing comes from `padding` on each item, and **`pull-to-boundary` on the parent is not
+optional** — that padding would otherwise push the outer edges inward and break the same alignment.
+Match it to the padding: `padding="around-small"` → `pull-to-boundary="small"` (both resolve to
+0.75rem, one positive, one negative).
+
+| Layout | Item padding | Gives |
+|---|---|---|
+| Page region split, card grid | `padding="around-small"` | 24px between columns, vertical space when they stack |
+| Field form inside a card | `padding="horizontal-small"` | 24px between columns, no extra vertical gap — the inputs already carry their own |
+
+Both components set their classes on their own **host** element, which is in the parent's light
+DOM — that is why the global SLDS stylesheet reaches them. The layout host gets `slds-grid`
+(plus `slds-wrap`, the alignment and pull-padded classes); the item host gets its
+`slds-size_*` classes and its padding class, and `slds-col` **only** when `flexibility="auto"` is
+set. That last detail is what makes `slds-gutters` inert here.
+
+---
+
+## Content width
+
+**Lightning Experience has no max width.** A record page is fluid — it fills the browser at any
+size, and App Builder regions are proportional, not pixel-bound. The cap comes from Experience
+Cloud: the Theme panel's maximum content width, which compiles to
+`--dxp-s-section-columns-max-width` and its header and footer siblings, with the `-mobile` variants
+set to `none`. Production LWR sites run 1440px or 1800px.
+
+This project follows the Experience Cloud model — fluid on small screens, capped from the large
+breakpoint up. Two custom properties in `site.css` are the only authority:
+
+| Property | Holds |
+|---|---|
+| `--site-content-max-width` | The cap. `none` below the large breakpoint |
+| `--site-content-gutter` | The horizontal page gutter |
+
+Redefined at the SLDS breakpoints, and nowhere else:
+
+| From | Cap | Gutter | Why |
+|---|---|---|---|
+| 0 | `none` | `--slds-g-spacing-4` (1rem) | Phones run fluid, as Experience Cloud's `-mobile: none` does |
+| 48em / 768px | `none` | `--slds-g-spacing-5` (1.5rem) | Tablets still fluid, wider gutter |
+| 64em / 1024px | `80rem` (1280px) | 1.5rem | `slds-container_x-large`, the widest cap SLDS ships |
+| 100em / 1600px | `90rem` (1440px) | 1.5rem | The production LWR cap, with a real margin either side |
+
+**Never hard-code a page width.** A screen needing a narrower measure uses an SLDS container class
+(`slds-container_medium` and friends, 30/48/64/80rem) inside the content column — it does not
+redefine these properties.
+
+### Three bars, one column
+
+`.site__main`, `.site-header__inner` and `.site-footer__inner` all take the same
+`max-width` + `margin-inline: auto`, so the wordmark, the page and the release toggle share one
+left edge at every width. Adding another docked or full-bleed bar means giving it the same pair.
+
+Two details that are easy to get wrong:
+
+- **Cap an inner row, never the bar itself.** `.slds-global-header` carries the header's background
+  and shadow; capping it shrinks those too and the bar stops reaching the viewport edge. That is
+  why `ui/siteHeader` has a `site-header__inner` wrapper inside it — the bar stays full-bleed, its
+  contents do not.
+- **`slds-global-header__item` already has 1rem of horizontal padding.** The header row makes up
+  only the difference (`calc(var(--site-content-gutter) - var(--slds-g-spacing-4))`), or the
+  wordmark sits 16px further in than the page below it.
 
 ---
 
@@ -77,8 +137,8 @@ the styling hook.
 
 | Need | Use |
 |---|---|
-| Space between stacked cards | `slds-m-bottom_small` or `slds-m-bottom_medium` |
-| Page canvas margin | Wrap the view in `slds-p-around_small` or `slds-p-around_medium` |
+| Space between stacked cards | `slds-m-bottom_small` or `slds-m-bottom_medium` — see *Stacked cards* |
+| Page canvas margin | Nothing — `.site__main` already carries it, see *Content width* |
 | Space inside a layout grid | `padding="around-small"` on the item + `pull-to-boundary="small"` on the parent |
 | Spacing in custom CSS | `var(--slds-g-spacing-N)` |
 
@@ -95,6 +155,24 @@ The scale, as shipped:
 
 Utilities ship as `slds-{p,m}-{around,top,bottom,left,right,horizontal,vertical}_{size}`. Verify any
 you are unsure of against the stylesheet — see `rules-lwc-components.md`.
+
+## Stacked cards
+
+Cards stacked in a column carry `slds-m-bottom_small` (12px) or `slds-m-bottom_medium` (16px) on
+each card **except the last**. Put the margin on the *preceding* card, not `slds-m-top_*` on the
+one after — the rule reads as "a card leaves space beneath it", and it keeps the first card of a
+conditionally-rendered stack from opening with a stray gap.
+
+**The margin only works because `site.css` makes the host a block:**
+
+```css
+lightning-card { display: block; }
+```
+
+A custom element is `display:inline` unless told otherwise, and `lightning-card` sets no `:host`
+display of its own. On an inline host a vertical margin is computed and then ignored, so stacked
+cards sit flush against one another and the markup looks correct while the page does not. If a
+future `lightning-*` component needs vertical margins, it needs the same treatment.
 
 ## Styling hooks, not hex
 
@@ -157,7 +235,5 @@ bring it into line rather than matching the existing shape:
 | `example/jobDetail` (324 lines) | Monolithic — highlights, path, tabs and three sidebar cards in one template |
 | `example/manageOrg` (273 lines) | Monolithic — two full tabs in one template |
 | `example/profile` (192 lines) | Monolithic |
-| All grid pages | Use `class="slds-gutters"` instead of `pull-to-boundary` on the parent layout |
-| `src/assets/css/site.css` | `.site__main { padding: 1.5rem }` is a raw value; should be `var(--slds-g-spacing-5)` or an `slds-p-around_large` wrapper |
 
 This table is the backlog — keep it honest. Delete a row when it is fixed.

@@ -38,10 +38,10 @@
                     </div>
                 </div>
 
-                <lightning-layout multiple-rows class="slds-gutters">
+                <lightning-layout multiple-rows pull-to-boundary="small">
                     <lightning-layout-item lwc:if={hasSummary} size="12" padding="around-small">
-                        <lightning-layout multiple-rows class="slds-gutters">
-                            <lightning-layout-item size="12" medium-device-size="4">
+                        <lightning-layout multiple-rows pull-to-boundary="small">
+                            <lightning-layout-item size="12" medium-device-size="4" padding="around-small">
                                 <lightning-card title="Vacancies" icon-name="standard:job_profile">
                                     <p class="home__stat slds-p-horizontal_medium">{jobCount}</p>
                                     <p class="slds-text-body_small slds-text-color_weak slds-p-horizontal_medium slds-p-bottom_medium">
@@ -49,7 +49,7 @@
                                     </p>
                                 </lightning-card>
                             </lightning-layout-item>
-                            <lightning-layout-item size="12" medium-device-size="4">
+                            <lightning-layout-item size="12" medium-device-size="4" padding="around-small">
                                 <lightning-card title="Applicants" icon-name="standard:groups">
                                     <p class="home__stat slds-p-horizontal_medium">{applicantCount}</p>
                                     <p class="slds-text-body_small slds-text-color_weak slds-p-horizontal_medium slds-p-bottom_medium">
@@ -57,7 +57,7 @@
                                     </p>
                                 </lightning-card>
                             </lightning-layout-item>
-                            <lightning-layout-item size="12" medium-device-size="4">
+                            <lightning-layout-item size="12" medium-device-size="4" padding="around-small">
                                 <lightning-card title="Next steps" icon-name="standard:task">
                                     <div class="slds-p-horizontal_medium slds-p-bottom_medium">
                                         <p><a href="/jobs">Review your vacancies</a></p>

@@ -57,7 +57,7 @@
             </div>
 
             <!-- Card grid ---------------------------------------------------->
-            <lightning-layout lwc:elseif={hasJobs} multiple-rows class="slds-gutters">
+            <lightning-layout lwc:elseif={hasJobs} multiple-rows pull-to-boundary="small">
                 <template for:each={cards} for:item="card">
                     <lightning-layout-item
                         key={card.id}
@@ -96,8 +96,8 @@
                                 </dl>
                             </div>
 
-                            <div slot="footer" class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
-                                <span class="slds-text-body_small">
+                            <div slot="footer" class={cardFooterClass}>
+                                <span lwc:if={showApplicants} class="slds-text-body_small">
                                     {card.applicants}
                                     <template lwc:if={card.hasNew}>
                                         <span class="slds-badge slds-badge_inverse slds-m-left_xx-small">

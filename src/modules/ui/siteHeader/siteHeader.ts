@@ -6,6 +6,12 @@ import {
     signOut,
     type SessionUser
 } from 'data/session';
+import {
+    currentRelease,
+    isEnabled,
+    onChange as onReleaseChange,
+    type Release
+} from 'data/release';
 
 const LINK = 'site-header__link';
 const LINK_ACTIVE = 'site-header__link site-header__link_active';
@@ -26,20 +32,34 @@ export default class SiteHeader extends LightningElement {
     user: SessionUser | null = null;
     private unsubscribe: (() => void) | null = null;
 
+    /** A field, so a release change re-renders and the getters re-run. */
+    release: Release = currentRelease();
+    private unsubRelease: (() => void) | null = null;
+
     connectedCallback(): void {
         this.user = currentUser();
         this.unsubscribe = onChange(() => {
             this.user = currentUser();
+        });
+        this.unsubRelease = onReleaseChange(() => {
+            this.release = currentRelease();
         });
     }
 
     disconnectedCallback(): void {
         this.unsubscribe?.();
         this.unsubscribe = null;
+        this.unsubRelease?.();
+        this.unsubRelease = null;
     }
 
     get isSignedIn(): boolean {
         return this.user !== null;
+    }
+
+    /** The bell has nothing behind it yet, so it only appears at 2+. */
+    get showNotifications(): boolean {
+        return isEnabled('siteHeader.notifications', this.release);
     }
 
     get userName(): string {
@@ -67,14 +87,10 @@ export default class SiteHeader extends LightningElement {
     }
 
     /**
-     * The menus are navigation, not commands: lightning-button-menu has no href,
+     * The menu is navigation, not commands: lightning-button-menu has no href,
      * so the item's value carries the path and selection becomes a page load.
      * 'sign-out' is the one value that acts instead of navigating.
      */
-    handleAppSelect(event: CustomEvent): void {
-        this.navigate(event);
-    }
-
     handleProfileSelect(event: CustomEvent): void {
         const value = (event.detail as { value?: string })?.value;
         if (value === 'sign-out') {

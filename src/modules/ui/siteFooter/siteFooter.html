@@ -2,11 +2,30 @@
     <footer class="site-footer">
         <div class="site-footer__inner slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
             <div class="slds-grid slds-grid_vertical-align-center">
-                <lightning-icon
-                    icon-name="utility:settings"
-                    size="xx-small"
-                    alternative-text="Prototype controls"
-                ></lightning-icon>
+                <lightning-button-menu
+                    icon-name="utility:apps"
+                    icon-size="small"
+                    variant="bare"
+                    alternative-text="App Launcher"
+                    menu-alignment="bottom-left"
+                    onselect={handleAppSelect}
+                >
+                    <lightning-menu-item
+                        value="/"
+                        label="Employer portal"
+                        prefix-icon-name="utility:company"
+                    ></lightning-menu-item>
+                    <lightning-menu-item
+                        value="/design-system"
+                        label="Design system"
+                        prefix-icon-name="utility:palette"
+                    ></lightning-menu-item>
+                    <lightning-menu-item
+                        value="/data"
+                        label="Data browser"
+                        prefix-icon-name="utility:database"
+                    ></lightning-menu-item>
+                </lightning-button-menu>
                 <span class="slds-text-body_small slds-text-color_weak slds-m-left_x-small">
                     Prototype &mdash; release preview
                 </span>

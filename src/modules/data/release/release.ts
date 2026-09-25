@@ -53,8 +53,13 @@ const FEATURES: Record<string, Release> = {
     'manageOrg.editDetails': '1.2',
     'home.dashboardStats': '1.2',
     'jobDetail.activityTimeline': '1.2',
+    'jobDetail.applicants': '1.2',
     'manageOrg.team': '1.2',
-    'jobDetail.vacancyContact': '1.3'
+    'jobs.applicantCount': '1.2',
+    'jobDetail.vacancyContact': '1.3',
+
+    // Not shipped yet — the bell is dressing until there is something behind it.
+    'siteHeader.notifications': '2+'
 };
 
 function indexOf(release: Release): number {

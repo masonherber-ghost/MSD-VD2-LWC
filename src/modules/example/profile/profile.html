@@ -72,7 +72,7 @@
                     </div>
                 </div>
 
-                <lightning-layout multiple-rows class="slds-gutters">
+                <lightning-layout multiple-rows pull-to-boundary="small">
                     <lightning-layout-item size="12" large-device-size="8" padding="around-small">
                         <lightning-card title="Your details" icon-name="standard:contact">
                             <div class="slds-p-horizontal_medium slds-p-bottom_medium">
@@ -89,8 +89,8 @@
                                     </div>
                                 </div>
 
-                                <lightning-layout multiple-rows class="slds-gutters">
-                                    <lightning-layout-item size="12" medium-device-size="6">
+                                <lightning-layout multiple-rows pull-to-boundary="small">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
                                         <lightning-input
                                             lwc:if={canEdit}
                                             data-field="first_name"
@@ -105,7 +105,7 @@
                                             </div>
                                         </div>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
                                         <lightning-input
                                             lwc:if={canEdit}
                                             data-field="last_name"
@@ -120,7 +120,7 @@
                                             </div>
                                         </div>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
                                         <lightning-input
                                             lwc:if={canEdit}
                                             data-field="job_title"
@@ -135,7 +135,7 @@
                                             </div>
                                         </div>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
                                         <lightning-input
                                             lwc:if={canEdit}
                                             data-field="phone"
@@ -171,7 +171,7 @@
                     </lightning-layout-item>
 
                     <lightning-layout-item size="12" large-device-size="4" padding="around-small">
-                        <lightning-card title="Sign-in" icon-name="standard:user">
+                        <lightning-card title="Sign-in" icon-name="standard:user" class="slds-m-bottom_medium">
                             <div class="slds-p-horizontal_medium slds-p-bottom_medium">
                                 <div class="slds-form-element slds-form-element_readonly">
                                     <span class="slds-form-element__label">Email</span>
@@ -185,7 +185,7 @@
                             </div>
                         </lightning-card>
 
-                        <lightning-card title="Organisation" icon-name="standard:account" class="slds-m-top_medium">
+                        <lightning-card title="Organisation" icon-name="standard:account">
                             <div class="slds-p-horizontal_medium slds-p-bottom_medium">
                                 <div class="slds-form-element slds-form-element_readonly">
                                     <span class="slds-form-element__label">Company</span>

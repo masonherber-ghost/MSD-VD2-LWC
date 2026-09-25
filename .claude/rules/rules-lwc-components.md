@@ -61,6 +61,7 @@ cat node_modules/lightning-base-components/src/lightning/<name>/<name>.html
 | A `change` event fires as the user types | **No.** It fires on blur. Enter-to-submit needs its own `onkeyup` |
 | A getter re-runs when the module state it reads changes | **No.** LWC re-renders only when a *field* read during the last render changes. A getter reaching into a module records no dependency — see `rules-app-logic.md` § *The reactivity rule* |
 | A `lightning-combobox` flips its dropdown up near the viewport bottom | **No.** It opens downward off-screen. In a docked bar use `lightning-radio-group type="button"` or a `bottom-*` `menu-alignment` |
+| A margin utility on a `lightning-*` tag spaces it out | **Only if the host is a block.** A custom element is `display:inline` by default and `lightning-card` sets no `:host` display, so a vertical margin computes but never applies. `site.css` makes `lightning-card` a block — see `rules-lwc-layout.md` § *Stacked cards* |
 
 ---
 

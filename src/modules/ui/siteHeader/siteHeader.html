@@ -1,91 +1,71 @@
 <template lwc:render-mode="light">
     <header class="slds-global-header_container">
-        <div class="slds-global-header slds-grid slds-grid_align-spread">
-            <div class="slds-global-header__item site-header__brand">
-                <div class="slds-global-header__logo site-header__logo">
-                    <lightning-button-menu
-                        icon-name="utility:apps"
-                        icon-size="small"
-                        variant="bare"
-                        alternative-text="App Launcher"
-                        menu-alignment="left"
-                        onselect={handleAppSelect}
-                    >
-                        <lightning-menu-item
-                            value="/design-system"
-                            label="Design system"
-                            prefix-icon-name="utility:palette"
-                        ></lightning-menu-item>
-                        <lightning-menu-item
-                            value="/data"
-                            label="Data browser"
-                            prefix-icon-name="utility:database"
-                        ></lightning-menu-item>
-                        <lightning-menu-item
-                            value="/vacancies"
-                            label="Vacancies"
-                            prefix-icon-name="utility:list"
-                        ></lightning-menu-item>
-                    </lightning-button-menu>
-                    <a href="/" class="site-header__wordmark">MSD</a>
+        <div class="slds-global-header slds-grid">
+            <!-- The bar stays full-bleed; this inner row carries the content cap
+                 so the wordmark lines up with the page below. See site.css. -->
+            <div class="site-header__inner slds-grid slds-grid_align-spread">
+                <div class="slds-global-header__item site-header__brand">
+                    <div class="slds-global-header__logo site-header__logo">
+                        <a href="/" class="site-header__wordmark">MSD</a>
+                    </div>
+
+                    <!-- Main nav is for signed-in employers only. -->
+                    <nav lwc:if={isSignedIn} class="site-header__nav">
+                        <a href="/list-a-job" class={listAJobClass}>List a job</a>
+                        <a href="/jobs" class={myJobsClass}>My jobs</a>
+                        <a href="/help-centre" class={helpCentreClass}>Help centre</a>
+                    </nav>
                 </div>
 
-                <!-- Main nav is for signed-in employers only. -->
-                <nav lwc:if={isSignedIn} class="site-header__nav">
-                    <a href="/list-a-job" class={listAJobClass}>List a job</a>
-                    <a href="/jobs" class={myJobsClass}>My jobs</a>
-                    <a href="/help-centre" class={helpCentreClass}>Help centre</a>
-                </nav>
-            </div>
+                <div class="slds-global-header__item">
+                    <ul class="slds-global-actions slds-grid slds-grid_vertical-align-center">
+                        <template lwc:if={isSignedIn}>
+                            <li lwc:if={showNotifications} class="slds-global-actions__item">
+                                <lightning-button-icon
+                                    icon-name="utility:notification"
+                                    variant="bare"
+                                    alternative-text="Notifications"
+                                ></lightning-button-icon>
+                            </li>
+                            <li class="slds-global-actions__item slds-p-left_x-small site-header__profile">
+                                <lightning-avatar
+                                    fallback-icon-name="standard:user"
+                                    alternative-text={userName}
+                                    size="small"
+                                ></lightning-avatar>
+                                <lightning-button-menu
+                                    icon-name="utility:down"
+                                    icon-size="x-small"
+                                    variant="bare"
+                                    alternative-text="Account menu"
+                                    menu-alignment="right"
+                                    onselect={handleProfileSelect}
+                                >
+                                    <lightning-menu-item
+                                        value="/profile"
+                                        label="My profile"
+                                        prefix-icon-name="utility:user"
+                                    ></lightning-menu-item>
+                                    <lightning-menu-item
+                                        value="/manage-org"
+                                        label="Manage org"
+                                        prefix-icon-name="utility:settings"
+                                    ></lightning-menu-item>
+                                    <lightning-menu-item
+                                        value="sign-out"
+                                        label="Log out"
+                                        prefix-icon-name="utility:logout"
+                                    ></lightning-menu-item>
+                                </lightning-button-menu>
+                            </li>
+                        </template>
 
-            <div class="slds-global-header__item">
-                <ul class="slds-global-actions slds-grid slds-grid_vertical-align-center">
-                    <template lwc:if={isSignedIn}>
-                        <li class="slds-global-actions__item">
-                            <lightning-button-icon
-                                icon-name="utility:notification"
-                                variant="bare"
-                                alternative-text="Notifications"
-                            ></lightning-button-icon>
+                        <!-- Signed out: one way in. -->
+                        <li lwc:else class="slds-global-actions__item">
+                            <a href="/login" class={loginClass}>Login</a>
                         </li>
-                        <li class="slds-global-actions__item slds-p-left_x-small site-header__profile">
-                            <lightning-avatar
-                                fallback-icon-name="standard:user"
-                                alternative-text={userName}
-                                size="small"
-                            ></lightning-avatar>
-                            <lightning-button-menu
-                                icon-name="utility:down"
-                                icon-size="x-small"
-                                variant="bare"
-                                alternative-text="Account menu"
-                                menu-alignment="right"
-                                onselect={handleProfileSelect}
-                            >
-                                <lightning-menu-item
-                                    value="/profile"
-                                    label="My profile"
-                                    prefix-icon-name="utility:user"
-                                ></lightning-menu-item>
-                                <lightning-menu-item
-                                    value="/manage-org"
-                                    label="Manage org"
-                                    prefix-icon-name="utility:settings"
-                                ></lightning-menu-item>
-                                <lightning-menu-item
-                                    value="sign-out"
-                                    label="Log out"
-                                    prefix-icon-name="utility:logout"
-                                ></lightning-menu-item>
-                            </lightning-button-menu>
-                        </li>
-                    </template>
-
-                    <!-- Signed out: one way in. -->
-                    <li lwc:else class="slds-global-actions__item">
-                        <a href="/login" class={loginClass}>Login</a>
-                    </li>
-                </ul>
+                    </ul>
+                </div>
             </div>
         </div>
     </header>

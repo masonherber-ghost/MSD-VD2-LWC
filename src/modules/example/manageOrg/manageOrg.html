@@ -68,10 +68,10 @@
                             </div>
                         </div>
 
-                        <lightning-card title="Company" icon-name="standard:account">
+                        <lightning-card title="Company" icon-name="standard:account" class="slds-m-bottom_medium">
                             <div class="slds-p-horizontal_medium slds-p-bottom_medium">
-                                <lightning-layout multiple-rows class="slds-gutters">
-                                    <lightning-layout-item size="12" medium-device-size="6">
+                                <lightning-layout multiple-rows pull-to-boundary="small">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
                                         <div lwc:if={lockCompanyName} class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Company name</span>
                                             <div class="slds-form-element__control">
@@ -86,7 +86,7 @@
                                             onchange={handleFieldChange}
                                         ></lightning-input>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
                                         <div lwc:if={lockTradingName} class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Trading name</span>
                                             <div class="slds-form-element__control">
@@ -101,7 +101,7 @@
                                             onchange={handleFieldChange}
                                         ></lightning-input>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
                                         <div lwc:if={lockIndustry} class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Industry</span>
                                             <div class="slds-form-element__control">
@@ -116,7 +116,7 @@
                                             onchange={handleFieldChange}
                                         ></lightning-input>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
                                         <div lwc:if={lockOrgType} class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Org type</span>
                                             <div class="slds-form-element__control">
@@ -132,7 +132,7 @@
                                             onchange={handleFieldChange}
                                         ></lightning-combobox>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
                                         <div lwc:if={lockWebAddress} class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Website</span>
                                             <div class="slds-form-element__control">
@@ -147,7 +147,7 @@
                                             onchange={handleFieldChange}
                                         ></lightning-input>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
                                         <div lwc:if={lockCompanyAddress} class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Company address</span>
                                             <div class="slds-form-element__control">
@@ -162,7 +162,7 @@
                                             onchange={handleFieldChange}
                                         ></lightning-input>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
                                         <div lwc:if={lockWorkplaceAddress} class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Workplace address</span>
                                             <div class="slds-form-element__control">
@@ -181,10 +181,10 @@
                             </div>
                         </lightning-card>
 
-                        <lightning-card title="Registration" icon-name="standard:record" class="slds-m-top_medium">
+                        <lightning-card title="Registration" icon-name="standard:record">
                             <div class="slds-p-horizontal_medium slds-p-bottom_medium">
-                                <lightning-layout multiple-rows class="slds-gutters">
-                                    <lightning-layout-item size="12" medium-device-size="6">
+                                <lightning-layout multiple-rows pull-to-boundary="small">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
                                         <div lwc:if={lockIrdNumber} class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">IRD number</span>
                                             <div class="slds-form-element__control">
@@ -199,7 +199,7 @@
                                             onchange={handleFieldChange}
                                         ></lightning-input>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
                                         <div lwc:if={lockNzbn} class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">NZBN</span>
                                             <div class="slds-form-element__control">

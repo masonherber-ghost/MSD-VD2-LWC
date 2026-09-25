@@ -1,6 +1,12 @@
 import { LightningElement } from 'lwc';
 import api, { ApiError, DEV_ACCOUNT_ID, type Row } from 'data/api';
 import { currentAccountId } from 'data/session';
+import {
+    currentRelease,
+    isEnabled,
+    onChange as onReleaseChange,
+    type Release
+} from 'data/release';
 
 const JOB_STATUS_LABELS: Record<string, string> = {
     draft: 'Draft',
@@ -32,7 +38,14 @@ export default class Jobs extends LightningElement {
     error = '';
     loading = true;
 
+    /** A field, so a release change re-renders and the getters re-run. */
+    release: Release = currentRelease();
+    private unsubRelease: (() => void) | null = null;
+
     async connectedCallback(): Promise<void> {
+        this.unsubRelease = onReleaseChange(() => {
+            this.release = currentRelease();
+        });
         try {
             this.jobs = await api.jobs(currentAccountId() ?? DEV_ACCOUNT_ID);
         } catch (e) {
@@ -41,6 +54,25 @@ export default class Jobs extends LightningElement {
         } finally {
             this.loading = false;
         }
+    }
+
+    disconnectedCallback(): void {
+        this.unsubRelease?.();
+        this.unsubRelease = null;
+    }
+
+    /** Applicant counts arrived with the applicant views, at 1.2. */
+    get showApplicants(): boolean {
+        return isEnabled('jobs.applicantCount', this.release);
+    }
+
+    /**
+     * With the count gone the footer holds only the action, and spreading one
+     * child pushes it left. Ending the row keeps the button where it was.
+     */
+    get cardFooterClass(): string {
+        const align = this.showApplicants ? 'slds-grid_align-spread' : 'slds-grid_align-end';
+        return `slds-grid ${align} slds-grid_vertical-align-center`;
     }
 
     get cards(): JobCard[] {

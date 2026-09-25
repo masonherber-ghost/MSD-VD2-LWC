@@ -9,8 +9,12 @@
     border-block-start: 1px solid var(--slds-g-color-border-1, #e5e5e5);
 }
 
+/* The bar is full-bleed; its contents sit in the same content column as the
+   page and the header. Both custom properties are defined in site.css. */
 .site-footer__inner {
-    padding: var(--slds-g-spacing-2, 0.5rem) var(--slds-g-spacing-4, 1rem);
+    max-width: var(--site-content-max-width);
+    margin-inline: auto;
+    padding: var(--slds-g-spacing-2, 0.5rem) var(--site-content-gutter, 1rem);
 }
 
 /* The segmented control sits inline in the bar rather than stacking. */

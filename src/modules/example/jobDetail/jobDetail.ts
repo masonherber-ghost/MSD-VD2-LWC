@@ -273,6 +273,16 @@ export default class JobDetail extends LightningElement {
         return `Applicants (${this.candidateCount})`;
     }
 
+    /**
+     * Applicants arrived after the first release: before 1.2 a vacancy was a
+     * record you posted and read back, with no view of who had applied. This
+     * gates every part of that — the header count, the View applicants action,
+     * the Applicants tab and the pipeline card — so 1.1 shows no trace of them.
+     */
+    get showApplicants(): boolean {
+        return isEnabled('jobDetail.applicants', this.release);
+    }
+
     // -- sidebar -----------------------------------------------------------
 
     /** Only the statuses actually present, so the widget stays readable. */
@@ -330,6 +340,19 @@ export default class JobDetail extends LightningElement {
      */
     get showActivity(): boolean {
         return isEnabled('jobDetail.activityTimeline', this.release);
+    }
+
+    /**
+     * With applicants, activity and the vacancy contact all gated, 1.1 has no
+     * sidebar at all — so the main region takes the full width rather than the
+     * page leaving a blank right-hand third.
+     */
+    get hasSidebar(): boolean {
+        return this.showApplicants || this.showActivity || this.hasContact;
+    }
+
+    get mainColumnSize(): string {
+        return this.hasSidebar ? '8' : '12';
     }
 
     get vacancyContact(): Row | null {
