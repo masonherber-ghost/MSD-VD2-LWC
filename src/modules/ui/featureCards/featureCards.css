@@ -1,0 +1,22 @@
+.feature-cards__intro {
+    max-width: var(--slds-g-sizing-content-3, 60ch);
+    color: var(--slds-g-color-on-surface-2, #444);
+}
+
+.feature-cards__body {
+    color: var(--slds-g-color-on-surface-2, #444);
+}
+
+/* Cards in a row should end level whatever their copy length, so the cell is a
+   flex column and the card grows to fill it. */
+.feature-cards__cell {
+    display: flex;
+}
+
+.feature-cards__card {
+    flex: 1 1 auto;
+}
+
+.feature-cards__link {
+    text-decoration: none;
+}

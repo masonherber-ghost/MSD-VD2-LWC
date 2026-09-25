@@ -1,0 +1,5 @@
+/* Prose stops at a readable measure rather than filling the content column. */
+.content-section__prose {
+    max-width: var(--slds-g-sizing-content-3, 60ch);
+    color: var(--slds-g-color-on-surface-2, #444);
+}

@@ -1,0 +1,15 @@
+/* The measure token keeps the headline and lead from running the full width of
+   a 1440px content column, where a long line becomes hard to track. */
+.page-hero__heading {
+    max-width: var(--slds-g-sizing-heading-3, 35ch);
+}
+
+.page-hero__body {
+    max-width: var(--slds-g-sizing-content-2, 45ch);
+    color: var(--slds-g-color-on-surface-2, #444);
+}
+
+/* The anchor wraps the button, so it must not add an underline of its own. */
+.page-hero__cta {
+    text-decoration: none;
+}

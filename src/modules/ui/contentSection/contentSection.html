@@ -1,0 +1,10 @@
+<template lwc:render-mode="light">
+    <section class="slds-m-bottom_large">
+        <h2 class="slds-text-heading_medium slds-m-bottom_small">{heading}</h2>
+        <div class="slds-text-longform content-section__prose">
+            <template for:each={paragraphs} for:item="paragraph">
+                <p key={paragraph.key}>{paragraph.text}</p>
+            </template>
+        </div>
+    </section>
+</template>

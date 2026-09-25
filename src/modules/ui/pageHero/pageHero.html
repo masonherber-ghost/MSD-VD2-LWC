@@ -1,0 +1,33 @@
+<template lwc:render-mode="light">
+    <section class="page-hero slds-box slds-box_x-small slds-theme_default slds-m-bottom_large">
+        <lightning-layout multiple-rows pull-to-boundary="small" vertical-align="center">
+            <lightning-layout-item
+                size="12"
+                medium-device-size="7"
+                padding="around-small"
+            >
+                <h1 class="slds-text-heading_large page-hero__heading">{heading}</h1>
+                <p class="slds-text-body_regular slds-m-top_small page-hero__body">{body}</p>
+                <div class="slds-m-top_medium">
+                    <a href={ctaHref} class="page-hero__cta">
+                        <lightning-button
+                            variant="brand"
+                            label={ctaLabel}
+                        ></lightning-button>
+                    </a>
+                </div>
+            </lightning-layout-item>
+
+            <lightning-layout-item
+                size="12"
+                medium-device-size="5"
+                padding="around-small"
+            >
+                <ui-illustration-panel
+                    icon-name={iconName}
+                    alternative-text={heading}
+                ></ui-illustration-panel>
+            </lightning-layout-item>
+        </lightning-layout>
+    </section>
+</template>

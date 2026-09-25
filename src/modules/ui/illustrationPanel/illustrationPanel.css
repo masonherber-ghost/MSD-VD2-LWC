@@ -1,0 +1,13 @@
+/* A surface token rather than a flat grey, so the panel follows the theme. */
+.illustration-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Wide and capped: at a 1440px content column a half-width 4:3 panel is over
+       500px tall and swamps the copy beside it. */
+    aspect-ratio: 16 / 9;
+    max-height: var(--slds-g-sizing-14, 15rem);
+    background: var(--slds-g-color-surface-container-2, #f3f3f3);
+    border: 1px solid var(--slds-g-color-border-1, #e5e5e5);
+    border-radius: var(--slds-g-radius-border-2, 0.25rem);
+}

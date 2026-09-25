@@ -1,8 +1,50 @@
 <template lwc:render-mode="light">
-    <ui-page-placeholder
-        current="help-centre"
-        heading="Help centre"
-        icon-name="standard:question_feed"
-        message="Guides and support for employers."
-    ></ui-page-placeholder>
+    <ui-site-header current="help-centre"></ui-site-header>
+
+    <div class="site__body">
+        <main class="site__main">
+            <ui-page-hero
+                heading={hero.heading}
+                body={hero.body}
+                cta-label={hero.ctaLabel}
+                cta-href={hero.ctaHref}
+                icon-name={hero.iconName}
+            ></ui-page-hero>
+
+            <ui-content-section
+                heading={intro.heading}
+                paragraphs={intro.paragraphs}
+            ></ui-content-section>
+
+            <ui-feature-cards
+                heading={howItWorks.heading}
+                intro={howItWorks.intro}
+                cards={howItWorks.cards}
+                link-label={howItWorks.linkLabel}
+                link-href={howItWorks.linkHref}
+            ></ui-feature-cards>
+
+            <ui-feature-split
+                heading={partner.heading}
+                intro={partner.intro}
+                items={partner.items}
+                link-label={partner.linkLabel}
+                link-href={partner.linkHref}
+                icon-name={partner.iconName}
+                media-side="right"
+            ></ui-feature-split>
+
+            <ui-feature-split
+                heading={thriving.heading}
+                intro={thriving.intro}
+                items={thriving.items}
+                link-label={thriving.linkLabel}
+                link-href={thriving.linkHref}
+                icon-name={thriving.iconName}
+                media-side="left"
+            ></ui-feature-split>
+        </main>
+    </div>
+
+    <ui-site-footer></ui-site-footer>
 </template>
