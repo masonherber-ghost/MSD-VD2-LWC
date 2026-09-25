@@ -44,6 +44,14 @@
                 </div>
             </div>
 
+            <ui-job-filter-bar
+                options={filterOptions}
+                value={filter}
+                search-term={search}
+                onfilterchange={handleFilterChange}
+                onsearchchange={handleSearchChange}
+            ></ui-job-filter-bar>
+
             <div lwc:if={loading} class="slds-is-relative jobs__loading slds-box slds-theme_default">
                 <lightning-spinner alternative-text="Loading vacancies" size="small"></lightning-spinner>
             </div>
@@ -113,6 +121,19 @@
                     </lightning-layout-item>
                 </template>
             </lightning-layout>
+
+            <!-- "Nothing matches" is a different state from "nothing exists",
+                 and only the first one is worth offering a way out of. -->
+            <div lwc:elseif={hasNoMatches} class="slds-box slds-theme_default">
+                <p>No vacancies match these filters.</p>
+                <div class="slds-m-top_x-small">
+                    <lightning-button
+                        variant="base"
+                        label="Clear filters"
+                        onclick={handleClearFilters}
+                    ></lightning-button>
+                </div>
+            </div>
 
             <div lwc:else class="slds-box slds-theme_default">
                 <p>No vacancies for this account.</p>

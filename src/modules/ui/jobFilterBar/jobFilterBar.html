@@ -1,0 +1,48 @@
+<template lwc:render-mode="light">
+    <div class="job-filter-bar slds-m-bottom_medium">
+        <lightning-layout multiple-rows pull-to-boundary="small" vertical-align="center">
+            <lightning-layout-item padding="around-small">
+                <!-- Separate buttons in a wrapping row, not a joined button
+                     group: a segmented group is one non-wrapping strip, so on a
+                     phone it squeezes the longest label onto two lines and the
+                     segments go ragged. These reflow onto as many rows as they
+                     need. role="group" ties them together for a screen reader,
+                     which the radiogroup used to do on its own. -->
+                <div
+                    class="job-filter-bar__filters slds-grid slds-wrap"
+                    role="group"
+                    aria-label="Filter vacancies"
+                >
+                    <template for:each={filterButtons} for:item="option">
+                        <lightning-button
+                            key={option.value}
+                            data-value={option.value}
+                            variant={option.variant}
+                            label={option.label}
+                            onclick={handleFilterClick}
+                            class="job-filter-bar__filter slds-m-right_x-small slds-m-bottom_x-small"
+                        ></lightning-button>
+                    </template>
+                </div>
+            </lightning-layout-item>
+
+            <lightning-layout-item
+                flexibility="grow"
+                padding="around-small"
+                class="job-filter-bar__search"
+            >
+                <!-- type="search" fires `change` on every keystroke, unlike
+                     type="text" which waits for blur, so the list filters as
+                     you type without a keyup handler of its own. -->
+                <lightning-input
+                    type="search"
+                    label="Search vacancies by title"
+                    variant="label-hidden"
+                    placeholder={searchPlaceholder}
+                    value={searchTerm}
+                    onchange={handleSearchChange}
+                ></lightning-input>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

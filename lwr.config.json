@@ -1015,6 +1015,30 @@
             "layoutTemplate": "$layoutsDir/main.njk"
         },
         {
+            "id": "aboutThisSite",
+            "path": "/about-this-site",
+            "rootComponent": "example/aboutThisSite",
+            "layoutTemplate": "$layoutsDir/main.njk"
+        },
+        {
+            "id": "howItWorks",
+            "path": "/how-it-works",
+            "rootComponent": "example/howItWorks",
+            "layoutTemplate": "$layoutsDir/main.njk"
+        },
+        {
+            "id": "contactUs",
+            "path": "/contact-us",
+            "rootComponent": "example/contactUs",
+            "layoutTemplate": "$layoutsDir/main.njk"
+        },
+        {
+            "id": "requestSupport",
+            "path": "/request-support",
+            "rootComponent": "example/requestSupport",
+            "layoutTemplate": "$layoutsDir/main.njk"
+        },
+        {
             "id": "profile",
             "path": "/profile",
             "rootComponent": "example/profile",

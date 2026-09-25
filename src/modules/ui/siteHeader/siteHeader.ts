@@ -78,8 +78,14 @@ export default class SiteHeader extends LightningElement {
         return this.current === 'jobs' ? LINK_ACTIVE : LINK;
     }
 
-    get helpCentreClass(): string {
-        return this.current === 'help-centre' ? LINK_ACTIVE : LINK;
+    /**
+     * The Help centre entry is a `lightning-button-menu`, not an `<a>`, so it
+     * takes its own classes — the link classes style an anchor and there is no
+     * anchor here. `site.css` talks the button down to match its neighbours.
+     */
+    get helpCentreMenuClass(): string {
+        const base = 'site-header__menu';
+        return this.current === 'help-centre' ? `${base} site-header__menu_active` : base;
     }
 
     get loginClass(): string {

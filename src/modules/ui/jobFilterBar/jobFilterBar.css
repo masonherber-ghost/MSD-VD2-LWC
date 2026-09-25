@@ -1,0 +1,15 @@
+/* A custom element is display:inline unless told otherwise. Inside the
+   wrapping flex row the host is blockified anyway, but stating it keeps the
+   margin utilities on the tag working if the row is ever changed to something
+   that is not a grid. */
+.job-filter-bar__filter {
+    display: inline-block;
+}
+
+/* The search takes the rest of the row but should not collapse to nothing when
+   the filter set is wide, so it keeps a floor and wraps to its own line below
+   it. `--slds-g-sizing-15` is 20rem. */
+.job-filter-bar__search {
+    min-width: var(--slds-g-sizing-15, 20rem);
+}
+

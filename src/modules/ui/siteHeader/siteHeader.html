@@ -5,15 +5,99 @@
                  so the wordmark lines up with the page below. See site.css. -->
             <div class="site-header__inner slds-grid slds-grid_align-spread">
                 <div class="slds-global-header__item site-header__brand">
+                    <!-- The same three destinations twice, swapped by the SLDS
+                         responsive utilities at 768px: the menu below that
+                         width, the inline row above it. `slds-hide_medium` and
+                         `slds-show_medium` each set `display:none !important`
+                         on the other side of the breakpoint, so only one is
+                         ever in the layout. -->
+                    <lightning-button-menu
+                        lwc:if={isSignedIn}
+                        class="site-header__menu-trigger slds-hide_medium slds-m-right_xx-small"
+                        icon-name="utility:rows"
+                        icon-size="small"
+                        variant="bare"
+                        alternative-text="Open navigation"
+                        menu-alignment="left"
+                    >
+                        <lightning-menu-item
+                            href="/list-a-job"
+                            label="List a job"
+                            prefix-icon-name="utility:new"
+                        ></lightning-menu-item>
+                        <lightning-menu-item
+                            href="/jobs"
+                            label="My jobs"
+                            prefix-icon-name="utility:list"
+                        ></lightning-menu-item>
+                        <lightning-menu-item
+                            href="/help-centre"
+                            label="Help centre"
+                            prefix-icon-name="utility:question"
+                        ></lightning-menu-item>
+                        <!-- The desktop dropdown's items, flattened under a
+                             subheader: a menu inside a menu has nowhere to
+                             open on a phone. -->
+                        <lightning-menu-subheader label="Help centre"></lightning-menu-subheader>
+                        <lightning-menu-item
+                            href="/about-this-site"
+                            label="About this site"
+                        ></lightning-menu-item>
+                        <lightning-menu-item
+                            href="/how-it-works"
+                            label="How it works"
+                        ></lightning-menu-item>
+                        <lightning-menu-item
+                            href="/contact-us"
+                            label="Contact us"
+                        ></lightning-menu-item>
+                        <lightning-menu-item
+                            href="/request-support"
+                            label="Request support"
+                        ></lightning-menu-item>
+                    </lightning-button-menu>
+
                     <div class="slds-global-header__logo site-header__logo">
                         <a href="/" class="site-header__wordmark">MSD</a>
                     </div>
 
                     <!-- Main nav is for signed-in employers only. -->
-                    <nav lwc:if={isSignedIn} class="site-header__nav">
+                    <nav lwc:if={isSignedIn} class="site-header__nav slds-show_medium">
                         <a href="/list-a-job" class={listAJobClass}>List a job</a>
                         <a href="/jobs" class={myJobsClass}>My jobs</a>
-                        <a href="/help-centre" class={helpCentreClass}>Help centre</a>
+                        <!-- icon-name="utility:chevrondown" is deliberate: the
+                             menu appends its own utility:down unless the icon is
+                             already a down chevron, so any other name renders
+                             two carets. -->
+                        <lightning-button-menu
+                            class={helpCentreMenuClass}
+                            label="Help centre"
+                            icon-name="utility:chevrondown"
+                            variant="bare"
+                            menu-alignment="left"
+                        >
+                            <lightning-menu-item
+                                href="/help-centre"
+                                label="Help centre"
+                            ></lightning-menu-item>
+                            <lightning-menu-divider></lightning-menu-divider>
+                            <lightning-menu-item
+                                href="/about-this-site"
+                                label="About this site"
+                            ></lightning-menu-item>
+                            <lightning-menu-item
+                                href="/how-it-works"
+                                label="How it works"
+                            ></lightning-menu-item>
+                            <lightning-menu-item
+                                href="/contact-us"
+                                label="Contact us"
+                            ></lightning-menu-item>
+                            <lightning-menu-item
+                                href="/request-support"
+                                label="Request support"
+                            ></lightning-menu-item>
+                        </lightning-button-menu>
                     </nav>
                 </div>
 
