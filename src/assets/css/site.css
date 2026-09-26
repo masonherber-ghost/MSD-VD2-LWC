@@ -75,7 +75,7 @@ body {
 .site-header__link {
     color: var(--slds-g-color-on-surface-2, #444);
     text-decoration: none;
-    font-size: 0.8125rem;
+    font-size: var(--site-font-body);
     line-height: 1;
     padding: 0.35rem 0;
     white-space: nowrap;

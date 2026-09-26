@@ -3094,6 +3094,11 @@ export const PROJECT_TOKENS = [
         "steps": []
     },
     {
+        "name": "--site-radius-mid",
+        "value": "0.5rem",
+        "steps": []
+    },
+    {
         "name": "--site-color-page-background",
         "value": "var(--site-bg-secondary)",
         "steps": []

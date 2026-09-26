@@ -1,17 +1,14 @@
 
+What is a blue =rpint vs custom compionents that a made up of a few things (like the vacancy card)
+
+What is a hook?
+
 #Header 
 Header and navigation logged in
 Header and nav unauth
 basic skinning explore for header
 Mobile header skinning explore
 
-
-
-----
-
-#Colors
-Review the colors and tokens in the SEP design system:
-Map these to the color tokens in this site using variables in the design-tokens file
 
 ----
 

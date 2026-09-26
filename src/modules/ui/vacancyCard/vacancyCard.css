@@ -33,6 +33,72 @@
     text-decoration: underline;
 }
 
+/* The card header, rebuilt as a media object.
+ *
+ * `lightning-card` renders its icon inside a shadow-root figure with no slot,
+ * so showing the vacancy's own artwork means dropping `icon-name` and composing
+ * the figure here, in the title slot. Nothing shipped is restyled — this is our
+ * markup in a public slot, which is the difference between composing and
+ * reaching in.
+ *
+ * Two properties are pinned rather than left to the blueprint, because SLDS 2
+ * does not settle them the way SLDS 1 did:
+ *
+ *   align-items   `slds-media_center` is the class that used to centre a figure
+ *       against a multi-line body, and it has NO bare rule at all in the SLDS 2
+ *       bundle — 0 hits as a standalone selector. `.slds-media` then declares
+ *       `align-items` five times across layers, centre twice and flex-start
+ *       once, so which one lands is not worth depending on.
+ *
+ *   gap           `.slds-media__figure` declares `margin-inline-end` in twelve
+ *       separate rules, from spacing-1 to spacing-5. One value stated here
+ *       beats guessing which of them wins, so the figure's own margin is
+ *       zeroed below and the gap owns the spacing. */
+.vacancy-card__heading {
+    align-items: center;
+    gap: var(--slds-g-spacing-3);
+}
+
+/* The title is the flexible half; the icon never shrinks to make room. */
+.vacancy-card__figure {
+    flex: none;
+    margin-inline-end: 0;
+}
+
+/* The stretched link's ::after must not be trapped in a new stacking context.
+ *
+ * `.slds-media__body` sets `z-index: 1` (SLDS 2, @layer component). On a flex
+ * item that is enough to establish a stacking context, and the link's ::after
+ * lives inside this span — so the card's own body, which paints later in the
+ * tree, would come out on top of it and swallow clicks on the lower half of the
+ * card.
+ *
+ * Before the header became a media object the anchor sat one level higher and
+ * the question did not arise. `z-index: auto` puts it back: the blueprint class
+ * keeps its flex sizing, and the ::after goes on participating in the same
+ * context it always did.
+ *
+ * This wins without !important because our stylesheet is unlayered and SLDS
+ * declares that rule inside @layer component — unlayered always beats layered. */
+.vacancy-card__body {
+    z-index: auto;
+}
+
+/* The category icon.
+ *
+ * A size is not spacing, so this is a literal rather than a spacing token — and
+ * a value used by one component is a value, not a token, per
+ * `rules-lwc-layout.md`. 2.75rem is the 44px the artwork is drawn at on the
+ * live site; the file's own 56x56 viewBox scales into it.
+ *
+ * `display: block` removes the inline baseline gap, which would otherwise sit
+ * the icon a few pixels low against the title. */
+.vacancy-card__icon {
+    display: block;
+    width: 2.75rem;
+    height: 2.75rem;
+}
+
 /* The subtitle sits under the title rather than inline with it. */
 .vacancy-card__subtitle {
     display: block;

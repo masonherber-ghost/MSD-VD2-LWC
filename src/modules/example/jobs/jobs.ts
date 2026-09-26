@@ -56,6 +56,24 @@ function statusClass(status: string): string {
     return `vacancy-card__status vacancy-card__status_${mod}`;
 }
 
+/**
+ * The vacancy's category icon, as a URL the template can put in `src`.
+ *
+ * `jobs.icon` stores a SLUG, not a path (see `server/lib/job-icons.ts`). The
+ * file it names is served by the `assetsDir` mapping, so the URL is written
+ * absolute: the build gives every asset its own hashed directory, and a
+ * relative path would resolve against whichever one it was written in.
+ *
+ * The slug is narrowed to [a-z0-9-] before it reaches an href. The server's own
+ * map is the only thing that writes it today, but the /data screen can edit the
+ * column raw, and a value carrying a slash would point somewhere else entirely.
+ * An unusable value returns '' so the card falls back to its shipped icon.
+ */
+function iconUrl(slug: unknown): string {
+    const name = String(slug ?? '');
+    return /^[a-z0-9-]+$/.test(name) ? `/public/assets/icons/${name}.svg` : '';
+}
+
 interface MetaItem {
     key: string;
     icon: string;
@@ -70,6 +88,7 @@ interface JobCard {
     href: string;
     statusLabel: string;
     statusClass: string;
+    iconUrl: string;
     isInReview: boolean;
     reviewNotice: string;
     meta: MetaItem[];
@@ -196,6 +215,7 @@ export default class Jobs extends LightningElement {
                 href: `/jobs/job-detail?id=${j.id}`,
                 statusLabel: JOB_STATUS_LABELS[status] ?? status,
                 statusClass: statusClass(status),
+                iconUrl: iconUrl(j.icon),
                 isInReview: status === 'in_review',
                 reviewNotice: IN_REVIEW_NOTICE,
                 meta,

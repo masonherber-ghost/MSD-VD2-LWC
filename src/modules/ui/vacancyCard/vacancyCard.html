@@ -2,19 +2,50 @@
     <!-- The positioning context for the stretched link below. It has to be our
          own element: `lightning-card`'s <article> is in its shadow root. -->
     <div class="vacancy-card">
-        <lightning-card icon-name="standard:job_profile">
-            <h2 slot="title" class="slds-truncate">
-                <!-- The ONLY anchor in the card. Its ::after covers the whole
-                     card, which is what makes the card clickable without
-                     nesting one interactive element inside another. -->
-                <a href={card.href} class="vacancy-card__link" title={card.title}>
-                    {card.title}
-                </a>
-                <span
-                    lwc:if={card.subtitle}
-                    class="slds-text-body_small slds-text-color_weak vacancy-card__subtitle"
-                >
-                    {card.subtitle}
+        <!-- No `icon-name`.
+             `lightning-card` renders its icon as a <lightning-icon> inside its
+             own shadow root, in a figure with no slot, so custom artwork cannot
+             be put there. Omitting the attribute makes the card's `hasIcon`
+             false and suppresses that figure entirely; the media object below
+             rebuilds it in the title slot, which IS ours. -->
+        <lightning-card>
+            <h2 slot="title" class="slds-media vacancy-card__heading">
+                <span class="slds-media__figure vacancy-card__figure">
+                    <!-- The vacancy's category icon, chosen from its job type.
+                         Decorative: alt is empty so the heading still reads as
+                         the vacancy's title, exactly as it did when the shipped
+                         icon sat here. The category is not otherwise on the
+                         card — if it should be announced, give it an alt rather
+                         than a second line. -->
+                    <img
+                        lwc:if={card.iconUrl}
+                        src={card.iconUrl}
+                        alt=""
+                        class="vacancy-card__icon"
+                    />
+                    <!-- No icon for this job type yet, so the card keeps the
+                         icon it always had. See `server/lib/job-icons.ts`. -->
+                    <lightning-icon
+                        lwc:else
+                        icon-name="standard:job_profile"
+                        size="small"
+                    ></lightning-icon>
+                </span>
+
+                <span class="slds-media__body slds-truncate vacancy-card__body">
+                    <!-- The ONLY anchor in the card. Its ::after covers the
+                         whole card, which is what makes the card clickable
+                         without nesting one interactive element inside
+                         another. -->
+                    <a href={card.href} class="vacancy-card__link" title={card.title}>
+                        {card.title}
+                    </a>
+                    <span
+                        lwc:if={card.subtitle}
+                        class="slds-text-body_small slds-text-color_weak vacancy-card__subtitle"
+                    >
+                        {card.subtitle}
+                    </span>
                 </span>
             </h2>
 

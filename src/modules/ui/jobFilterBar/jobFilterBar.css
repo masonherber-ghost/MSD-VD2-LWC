@@ -9,7 +9,7 @@
  *
  * SLDS 2 ships no gap utility, so this is the token in custom CSS. */
 .job-filter-bar__filters {
-    gap: var(--slds-g-spacing-2, 0.5rem);
+    gap: var(--slds-g-spacing-3, 0.5rem);
 }
 
 /* A custom element is display:inline unless told otherwise. */
@@ -30,9 +30,9 @@
      *
      * 16px inline matches the SEP filter pill (Spacing 200/300 in that file);
      * the rest steps down the SLDS scale rather than inventing values. */
-    --slds-s-button-font-size: var(--slds-g-font-scale-1);
-    --slds-s-button-spacing-block: var(--slds-g-spacing-2);
-    --slds-s-button-spacing-inline: var(--slds-g-spacing-4);
+    --slds-s-button-font-size: var(--slds-g-font-scale-2);
+    --slds-s-button-spacing-block: var(--slds-g-spacing-3);
+    --slds-s-button-spacing-inline: var(--slds-g-spacing-5);
 }
 
 /* The search takes the rest of the row but should not collapse to nothing when

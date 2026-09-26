@@ -144,6 +144,9 @@
     /* A pill. The SLDS radius scale stops at --slds-g-radius-border-4 (1rem). */
     --site-radius-pill: 999px;
 
+    /* SEP's Corner radius/Mid — inputs and other boxed controls. */
+    --site-radius-mid: 0.5rem;
+
     /* The page canvas. Kept as its own name because `body` reads it directly;
        the value now comes from the semantic layer below. */
     --site-color-page-background: var(--site-bg-secondary);
@@ -214,7 +217,7 @@
     --slds-s-button-radius-border: var(--site-radius-pill);
     --slds-s-button-spacing-block: var(--slds-g-spacing-3);
     --slds-s-button-spacing-inline: 1.25rem;
-    --slds-s-button-font-size: 1.0625rem;
+    --slds-s-button-font-size: var(--site-font-body);
     --slds-s-button-font-lineheight: 1.33;
     --slds-s-button-font-weight: var(--slds-g-font-weight-5);
 
@@ -569,4 +572,73 @@
     --slds-g-color-on-disabled-2: var(--site-text-disabled);       /* 23 */
     --slds-g-color-disabled-container-1: var(--site-bg-primary);   /* 14 */
     --slds-g-color-disabled-container-2: var(--site-bg-disabled);  /* 18 */
+}
+
+/* -----------------------------------------------------------------------------
+ * Form inputs
+ *
+ * `--slds-s-input-*` covers every state the design names, and there are NO
+ * private input hooks at all — so the colours, radius and backgrounds are all
+ * reachable. Labels and hint text have their own shared hooks.
+ *
+ * WHERE THE BORDER LIVES. Not on the <input>. `lightning-input` renders
+ * `<div class="slds-form-element__control">` inside a nested shadow root and
+ * puts the border, radius and background there; the <input> itself is
+ * borderless and transparent and only carries the text. Reading the <input>'s
+ * computed border to check this work will show `0px` and look broken — measure
+ * the control div instead.
+ *
+ * That also means the `.slds-input` rule in the BUNDLED SLDS stylesheet is a
+ * red herring: it cannot reach into the shadow root, so its hardcoded
+ * `border: 1px` and its missing font-size say nothing about what renders here.
+ *
+ * WHICH FAMILY TO USE — isolated by neutralising each and re-measuring:
+ *
+ *   Colours    --slds-s-input-*   (shared)
+ *   Geometry   --slds-c-input-*   (component) — radius, border width, height
+ *
+ * They do NOT overlap. `--slds-c-input-radius-border` sets the radius and
+ * `--slds-s-input-radius-border` does nothing; `--slds-s-input-color-border`
+ * sets the colour. `--slds-c-inputtext-*` drives nothing from here at all — the
+ * compat layer that would map onto it is `:host([data-render-mode="shadow"])`
+ * scoped, and `lightning-input` never sets that attribute.
+ *
+ * Verify a change by measuring the control div, not the <input>.
+ * -------------------------------------------------------------------------- */
+
+:root {
+    /* Field */
+    --slds-s-input-radius-border: var(--site-radius-mid);
+    --slds-s-input-color-background: var(--site-bg-primary);
+    --slds-s-input-color-background-disabled: var(--site-bg-tertiary);
+    --slds-s-input-color: var(--site-text-primary);
+    --slds-s-input-color-disabled: var(--site-text-secondary);
+    --slds-s-input-color-invalid: var(--site-text-primary);
+
+    /* Borders, one per state */
+    --slds-s-input-color-border: var(--site-stroke-primary);
+    --slds-s-input-color-border-hover: var(--site-stroke-accent-primary);
+    --slds-s-input-color-border-focus: var(--site-stroke-accent-primary);
+    --slds-s-input-color-border-invalid: var(--site-stroke-error);
+    --slds-s-input-color-border-disabled: var(--site-stroke-tertiary);
+
+    /* Label — 20px Medium, in the primary text colour. */
+    --slds-s-label-font-size: var(--site-font-body-lg);
+    --slds-s-label-font-weight: var(--slds-g-font-weight-5);
+    --slds-s-label-color: var(--site-text-primary);
+
+    /* Hint text below the label — 17px, secondary. */
+    --slds-s-helptext-font-size: var(--site-font-body);
+    --slds-s-helptext-color: var(--site-text-secondary);
+
+    /* Geometry — the component family only. */
+    --slds-c-input-radius-border: var(--site-radius-mid);
+    --slds-c-input-sizing-border: 2px;
+    --slds-c-input-font-size: var(--site-font-body-lg);
+
+    /* Field height. The default is --slds-g-sizing-9 (2rem / 32px), Lightning's
+       dense data-app size. 3rem gives the field the same presence as the SEP
+       controls beside it — and is within a pixel of the 48.6px button, so a
+       field and a button on one row line up. */
+    --slds-c-input-sizing-height: 3rem;
 }
