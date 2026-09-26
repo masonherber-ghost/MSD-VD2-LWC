@@ -3057,6 +3057,41 @@ export const PROJECT_TOKENS = [
         "steps": [
             "var(--slds-g-spacing-5, 1.5rem)"
         ]
+    },
+    {
+        "name": "--site-color-brand-blue",
+        "value": "#017ac9",
+        "steps": []
+    },
+    {
+        "name": "--site-color-brand-navy",
+        "value": "#134276",
+        "steps": []
+    },
+    {
+        "name": "--site-color-brand-disabled",
+        "value": "#a1b3c8",
+        "steps": []
+    },
+    {
+        "name": "--site-color-on-brand-disabled",
+        "value": "#e6f2fa",
+        "steps": []
+    },
+    {
+        "name": "--site-shadow-raised",
+        "value": "0 4px 8px 0 #162c4533",
+        "steps": []
+    },
+    {
+        "name": "--site-shadow-overlay",
+        "value": "0 8px 16px 0 #162c4533",
+        "steps": []
+    },
+    {
+        "name": "--site-radius-pill",
+        "value": "999px",
+        "steps": []
     }
 ];
 

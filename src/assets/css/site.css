@@ -127,3 +127,81 @@ lightning-card {
     align-items: center;
     gap: 0.125rem;
 }
+
+/* The SEP button — only what no hook can express.
+ *
+ * Everything with a hook is in design-tokens.css. Three things have none.
+ *
+ * `part="button"` is on the real <button>, so this styles the part itself, not
+ * something past it. Reach: hooks cross the shadow boundary and land on every
+ * button; `::part` matches only components that expose one. `lightning-button`
+ * and `lightning-button-icon` do. `lightning-button-menu` exposes only
+ * "overlay dropdown" and `lightning-input` only "help-text", so their inner
+ * controls cannot be reached from here at all. */
+
+/* 1. The typeface.
+ *
+ * A <button> does not inherit font-family — the UA stylesheet sets it
+ * explicitly. SLDS normalises that away with
+ * `button, input, optgroup, select, textarea { font: inherit }`, but that rule
+ * lives in the document stylesheet and CANNOT reach inside a shadow root, and
+ * the component's own sheet never declares font-family. So without this, every
+ * lightning-button label renders in the UA default (Arial) while the page
+ * around it is Atkinson.
+ *
+ * Non-form elements in a shadow root are fine — font-family does inherit across
+ * the boundary. It is specifically form controls that opt out. */
+lightning-button::part(button),
+lightning-button-icon::part(button) {
+    font-family: inherit;
+}
+
+/* 1b. The primary button's resting shadow.
+ *
+ * SEP gives the primary button an elevation at rest, but --slds-s-button-shadow
+ * is shared by every button on the page, so setting it there put a drop shadow
+ * on the header menu trigger and the datatable header buttons. Scoped to brand
+ * instead. */
+lightning-button[variant='brand']::part(button) {
+    box-shadow: var(--site-shadow-raised);
+}
+
+/* 2. The hover gradient.
+ *
+ * Every background hook feeds `background` or `background-color`, neither of
+ * which can carry a gradient. `background-image` is a separate property and
+ * paints over the flat colour the hook sets beneath it.
+ * `variant` is reflected to an attribute by the component, which is what makes
+ * this selector possible. */
+lightning-button[variant='brand']::part(button):hover {
+    background-image: linear-gradient(
+        to bottom,
+        var(--site-color-brand-blue),
+        var(--site-color-brand-navy)
+    );
+}
+
+/* Active: stand the gradient down, or it paints over the navy fill — and drop
+   the shadow.
+ *
+ * --slds-s-button-shadow-active is set to `none` in design-tokens.css, but it
+ * cannot win here: a `::part` rule in the outer tree always beats the shadow
+ * tree's own rules, so the resting box-shadow above would otherwise persist
+ * through :active. The override has to sit at the same level. */
+lightning-button[variant='brand']::part(button):active {
+    background-image: none;
+    box-shadow: none;
+}
+
+/* 3. Disabled.
+ *
+ * The component's brand-disabled rule reads --slds-g-color-disabled-container-2
+ * / -border-disabled-1 / -on-disabled-2. Those are global tokens: setting them
+ * would repaint every disabled control on the site, and SEP specifies this
+ * treatment for the primary button only. Scoped here instead. */
+lightning-button[variant='brand']::part(button):disabled {
+    background-color: var(--site-color-brand-disabled);
+    background-image: none;
+    border-color: var(--site-color-brand-disabled);
+    color: var(--site-color-on-brand-disabled);
+}

@@ -114,3 +114,119 @@
         --site-content-max-width: 90rem;
     }
 }
+
+/* -----------------------------------------------------------------------------
+ * MSD brand palette
+ *
+ * Defined here only because SLDS has no equivalent. Each one was checked
+ * against the shipped stylesheet first — see the notes.
+ * -------------------------------------------------------------------------- */
+
+:root {
+    /* MSD Blue. --slds-g-color-accent-container-1 resolves to #0176d3, two
+       points away, but the brand value is the brand value. */
+    --site-color-brand-blue: #017ac9;
+
+    /* MSD Navy. Genuinely different from --slds-g-color-accent-container-2
+       (#0b5cab) — that is a mid blue, this is a navy. */
+    --site-color-brand-navy: #134276;
+
+    /* Disabled brand surface and the text on it. SLDS disabled is a neutral
+       grey (#c9c9c9) with no blue in it. */
+    --site-color-brand-disabled: #a1b3c8;
+    --site-color-on-brand-disabled: #e6f2fa;
+
+    /* SEP elevation 2 and 3. The SLDS shadow scale is far tighter — its
+       widest, --slds-g-shadow-4, is 0 2px 5px. */
+    --site-shadow-raised: 0 4px 8px 0 #162c4533;
+    --site-shadow-overlay: 0 8px 16px 0 #162c4533;
+
+    /* A pill. The SLDS radius scale stops at --slds-g-radius-border-4 (1rem). */
+    --site-radius-pill: 999px;
+}
+
+/* -----------------------------------------------------------------------------
+ * Buttons — the SEP primary button, applied site-wide
+ *
+ * READ THIS BEFORE CHANGING A BUTTON HOOK. `lightning-button` does NOT take its
+ * styling from the global SLDS stylesheet. It sets `data-render-mode="shadow"`
+ * on itself and imports its own copy of the button styles into its shadow root
+ * (`button.lbc.native.css` -> `button.slds.css`). Custom properties inherit
+ * across that boundary, so hooks still work — but it is that sheet, not
+ * `.slds-button` in the global stylesheet, that decides WHICH hook is read.
+ *
+ * The two differ, and picking from the global sheet gets you a no-op:
+ *
+ *   font-weight   global reads --slds-c-button-font-weight
+ *                 SHADOW reads --slds-s-button-font-weight     <- the real one
+ *   font-size     global declares none at all
+ *                 SHADOW reads --slds-s-button-font-size
+ *   line-height   global hardcodes 1.875rem
+ *                 SHADOW reads --slds-s-button-font-lineheight
+ *
+ * Brand colour is the other way round: the shadow sheet reads the
+ * `--slds-c-button-brand-*` hooks, and the shared --slds-s-button-color-*
+ * family is for the base variant only.
+ *
+ * And one decoy: --slds-c-button-brand-spacing-inline-start/-end exist and look
+ * right, but nothing in either path reads them — they belong to
+ * `.slds-button_dual-stateful.slds-is-pressed`.
+ *
+ * Verified by reading the computed style off the rendered button, not by
+ * reading the stylesheet. If you change one of these, do the same.
+ *
+ * These win because this file is unlayered and SLDS declares its defaults in
+ * `@layer shared`.
+ * -------------------------------------------------------------------------- */
+
+:root {
+    /* Geometry, type and elevation — shared, so every button moves together. */
+    --slds-s-button-radius-border: var(--site-radius-pill);
+    --slds-s-button-spacing-block: var(--slds-g-spacing-3);
+    --slds-s-button-spacing-inline: 1.25rem;
+    --slds-s-button-font-size: 1.0625rem;
+    --slds-s-button-font-lineheight: 1.33;
+    --slds-s-button-font-weight: var(--slds-g-font-weight-5);
+
+    /* SLDS ships no block padding for buttons at all — the 32px default height
+       is line-height plus the 1px border. The 12px added top and bottom is what
+       takes it to the SEP size. */
+
+    /* Elevation — deliberately NOT set across the board.
+     *
+     * --slds-s-button-shadow and --slds-s-button-shadow-hover are shared by
+     * every button, including the bare menu trigger in the global header and
+     * the sort buttons inside a datatable header. Giving those a drop shadow
+     * makes them read as floating white boxes on a bar that has no boxes.
+     * The primary button's own shadow is in site.css, scoped to brand.
+     *
+     * -shadow-active stays: it sets `none`, which is what SEP wants on press
+     * and is harmless anywhere else. -brand-shadow-hover stays too — its name
+     * scopes it to the brand variants. */
+    --slds-s-button-brand-shadow-hover: var(--site-shadow-overlay);
+    --slds-s-button-shadow-active: none;
+
+    /* Brand, default. The border matches the fill: SEP draws none, but
+       --slds-s-button-sizing-border is shared, and zeroing it would erase the
+       border a neutral button depends on to be visible at all. Costs 2px of
+       height against the design — see the note in the build report. */
+    --slds-c-button-brand-color-background: var(--site-color-brand-blue);
+    --slds-c-button-brand-color-border: var(--site-color-brand-blue);
+    --slds-c-button-brand-text-color: var(--slds-g-color-on-accent-1);
+
+    /* Brand, hover. The fill is a gradient, which cannot travel through a hook
+       feeding `background`/`background-color` — see site.css. This is the flat
+       colour beneath it. */
+    --slds-c-button-brand-color-background-hover: var(--site-color-brand-blue);
+    /* Transparent, not navy: the border paints on top of the gradient and a
+       navy ring against a blue-to-navy fill reads as an outline the design does
+       not have. `.slds-button` clips its background to the border box, so the
+       gradient fills the border area instead. */
+    --slds-c-button-brand-color-border-hover: transparent;
+    --slds-c-button-brand-text-color-hover: var(--slds-g-color-on-accent-1);
+
+    /* Brand, active. */
+    --slds-c-button-brand-color-background-active: var(--site-color-brand-navy);
+    --slds-c-button-brand-color-border-active: var(--site-color-brand-navy);
+    --slds-c-button-brand-text-color-active: var(--slds-g-color-on-accent-1);
+}

@@ -10,10 +10,7 @@ Is slds-global-header custom? I dont see it in the design-system.
 --slds-s-header-sizing-height: 80px; for desktop
 .slds-global-header__item: this should align vertically centered with the main nav
 
-
-
-
-
+Filter buttons smaller
 
 
 
