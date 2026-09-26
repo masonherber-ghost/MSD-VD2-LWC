@@ -1,0 +1,74 @@
+/* =============================================================================
+ * Typeface — Atkinson Hyperlegible Next.
+ *
+ * The @font-face declarations only. The token that switches SLDS onto this
+ * family lives in `design-tokens.css` — declaring the resource and deciding to
+ * use it are two different things, and this file is the first half.
+ *
+ * Source: @fontsource-variable/atkinson-hyperlegible-next 5.2.6, vendored from
+ * `_reference/atkinson-hyperlegible-next/` rather than installed, so the static
+ * build carries the files with no npm dependency. The subsets, unicode ranges
+ * and weight axis below are the package's own — do not hand-tune them. To
+ * upgrade, re-copy `files/*.woff2` and re-check this file against the
+ * package's `index.css` and `wght-italic.css`.
+ *
+ * One variable axis, wght 200-800, which covers every weight SLDS names
+ * (--slds-g-font-weight-1..7 are 100..700; 100 renders at the 200 floor).
+ *
+ * The `url()`s are ABSOLUTE, and must stay that way.
+ *
+ * A relative `../fonts/` passes `npm run dev` and then breaks the static build,
+ * which is the trap `rules-architecture.md` describes: in dev every asset is
+ * served under one `/1/asset/s/latest/` prefix, so `../fonts/` resolves; in the
+ * build LWR gives each asset its own immutable hash directory, so fonts.css
+ * lands alone in its own and `../fonts/` points at nothing. LWR does not
+ * rewrite `url()` inside a stylesheet, so it cannot fix this for us.
+ *
+ * /public/assets/fonts/ is the path the `assetsDir` mapping serves under both,
+ * and the files are emitted there in `site/` as well. Cost: the font files miss
+ * out on immutable-hash caching. `font-display: swap` plus the preload in
+ * `main.njk` covers the difference.
+ *
+ * Licensed OFL-1.1 — see `src/assets/fonts/LICENSE`.
+ * ============================================================================= */
+
+/* latin-ext */
+@font-face {
+    font-family: 'Atkinson Hyperlegible Next Variable';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 200 800;
+    src: url(/public/assets/fonts/atkinson-hyperlegible-next-latin-ext-wght-normal.woff2) format('woff2-variations');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+    font-family: 'Atkinson Hyperlegible Next Variable';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 200 800;
+    src: url(/public/assets/fonts/atkinson-hyperlegible-next-latin-wght-normal.woff2) format('woff2-variations');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* latin-ext, italic. Shipped so the browser never has to synthesise an oblique
+   from the variable font, which skews badly at heading sizes. */
+@font-face {
+    font-family: 'Atkinson Hyperlegible Next Variable';
+    font-style: italic;
+    font-display: swap;
+    font-weight: 200 800;
+    src: url(/public/assets/fonts/atkinson-hyperlegible-next-latin-ext-wght-italic.woff2) format('woff2-variations');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin, italic */
+@font-face {
+    font-family: 'Atkinson Hyperlegible Next Variable';
+    font-style: italic;
+    font-display: swap;
+    font-weight: 200 800;
+    src: url(/public/assets/fonts/atkinson-hyperlegible-next-latin-wght-italic.woff2) format('woff2-variations');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}

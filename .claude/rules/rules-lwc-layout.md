@@ -235,6 +235,31 @@ the short version:
   component's stylesheet.
 - Overriding a shipped `--slds-c-*` hook is a component-level decision and lives with that
   component, not in the tokens file.
+- Overriding a shipped `--slds-g-*` **global** token is the opposite: it has no component to live
+  with, so it belongs in the tokens file, under its own commented block saying what it changes and
+  why. The one we do today is `--slds-g-font-family-base` → Atkinson Hyperlegible Next. Such an
+  override wins without `!important` or a specificity fight, because this file is unlayered and
+  SLDS sets its defaults inside `@layer defaults` — unlayered always beats layered.
+
+### Typeface
+
+The site typeface is set by that one token. SLDS 2 ships a single family token: it is set on
+`:where(html)`, `--slds-g-font-family` aliases it, one `html` rule consumes it, and everything else
+inherits — through shadow roots, and into form controls via SLDS's own
+`button, input, optgroup, select, textarea { font: inherit }` reset. So there is nothing to chase
+component by component, and **no second place to set a font**. `--slds-g-font-family-monospace` is
+separate and deliberately untouched.
+
+There is no heading-family token, so headings and body share one face.
+
+The `@font-face` declarations live in `src/assets/css/fonts.css`, loaded by `main.njk` before
+`design-tokens.css`, with the woff2 files vendored in `src/assets/fonts/` — not installed, so the
+static build carries them with no npm dependency.
+
+**Their `url()`s must be absolute**, and so must every other `url()` we write. A relative one
+passes both `npm run dev` and `npm run build` and then 404s in the built site. The rule and the
+reason are in `rules-architecture.md` § *`url()` inside a stylesheet must be absolute*; read it
+before touching this file.
 
 ---
 

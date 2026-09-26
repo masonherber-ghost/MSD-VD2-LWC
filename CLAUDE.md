@@ -116,6 +116,9 @@ LWR renders client-side, so a template error only appears at runtime.
 
 - `npm run dev` on a free port, then drive the page and read the console.
 - `npm run build` must exit 0 before reporting completion.
+- **If the change adds an asset a stylesheet points at** (a font, an image), dev and a green build
+  both prove nothing — serve the build (`npm run start`) and request the file. See
+  `rules-architecture.md` § *`url()` inside a stylesheet must be absolute*.
 - If a test wrote to `data/msd-vd2.db`, **restore it** and confirm with `git status`.
 
 ## Always
@@ -135,3 +138,5 @@ LWR renders client-side, so a template error only appears at runtime.
 - Build a custom component without asking first.
 - Let a screen call the database directly, or trust the client for a business rule.
 - Commit a `data/*.db` change that is only a side effect of testing.
+- Write a relative `url()` in a stylesheet. It works in dev, survives the build, and 404s in the
+  built site — use the `/public/assets/…` path the `assets[]` mapping serves.

@@ -74,6 +74,59 @@ The stylesheet is the **unscoped** `slds2.lightning-blue.css`, loaded globally i
 is no cascade-layer juggling and no scope wrapper — which is precisely why every component must be
 light DOM (see `rules-lwc-components.md`).
 
+### `url()` inside a stylesheet must be absolute — the trap
+
+**A relative `url()` in our CSS passes `npm run dev`, passes `npm run build`, and then 404s in the
+built site.**
+
+LWR rewrites the `href` of a `<link>` in `main.njk` to the hashed asset URL. It does **not** parse
+a stylesheet, so a `url()` inside one is emitted byte for byte — and by the CSS spec a relative URL
+in a stylesheet resolves against *that stylesheet's* URL, not the page's. Those differ between dev
+and the build:
+
+| | `fonts.css` is served at | `url(../fonts/x.woff2)` resolves to |
+|---|---|---|
+| `npm run dev` | `/1/asset/s/latest/public/assets/css/` | `/1/asset/s/latest/public/assets/fonts/x.woff2` — **exists** |
+| `npm run build` | `/1/asset/immutable/s/<hashA>/public/assets/css/` | `/1/asset/immutable/s/<hashA>/public/assets/fonts/x.woff2` — **does not** |
+
+In dev every asset shares one `s/latest/` prefix, so relative paths between assets happen to work.
+The build gives **each asset its own immutable hash directory**: `fonts.css` lands alone in
+`<hashA>`, the woff2 files get `<hashB>`, `<hashC>` and so on, and nothing sits beside anything.
+
+So: write the path the `assets[]` mapping serves, not a path relative to the stylesheet.
+
+```css
+/* Yes — the assetsDir mapping serves this under dev and the build alike */
+src: url(/public/assets/fonts/atkinson-hyperlegible-next-latin-wght-normal.woff2);
+
+/* No — resolves against the stylesheet's own URL, which the build changes */
+src: url(../fonts/atkinson-hyperlegible-next-latin-wght-normal.woff2);
+```
+
+The cost is that the referenced file misses immutable-hash caching. Take it; a broken font is worse
+than a revalidation. `font-display: swap` plus a `<link rel="preload">` in `main.njk` covers it.
+
+This applies to every relative URL in a stylesheet, not just `@font-face` — `background-image`,
+`mask-image`, `@import`, all of them resolve the same way. `src/assets/css/fonts.css` is currently
+the only file in the project with a `url()` at all; keep it that way by checking before you add one:
+
+```bash
+grep -rn "url(" src/assets/css/ src/modules --include="*.css"
+```
+
+**Why it gets through both checks.** `npm run build` exits 0 because the CSS is valid and the file
+is copied; nothing verifies that a URL inside it resolves. The dev server answers because of the
+shared prefix. Neither proves the other, exactly as with the module cache below. The only honest
+check is to serve the build and request the asset:
+
+```bash
+npm run build && PORT=3200 npm run start
+curl -sL -o /dev/null -w '%{http_code} %{content_type}\n' \
+  http://localhost:3200/public/assets/fonts/<file>.woff2
+```
+
+`200 font/woff2` is the pass. Loading a page in dev will not tell you.
+
 ## Light DOM everywhere
 
 Every component:

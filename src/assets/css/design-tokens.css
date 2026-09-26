@@ -29,6 +29,44 @@
  * ============================================================================= */
 
 /* -----------------------------------------------------------------------------
+ * Typeface
+ *
+ * The one SLDS global token that is overridden site-wide, rather than a
+ * `--site-*` token of our own — because SLDS already has the right token and
+ * defining a parallel one would be exactly the drift rule 1 warns about.
+ *
+ * SLDS 2 ships a single family token. `--slds-g-font-family-base` is set on
+ * `:where(html)` inside `@layer defaults`, `--slds-g-font-family` aliases it,
+ * and one `html { font-family: ... }` rule consumes it. Everything else
+ * inherits, including through shadow roots, and SLDS's own reset
+ * (`button, input, optgroup, select, textarea { font: inherit }`) pulls the
+ * form controls in too. So this one declaration retypes the whole site and
+ * there is nothing left to chase.
+ *
+ * It wins over the shipped value because this file is unlayered and SLDS sets
+ * its default inside `@layer defaults` — unlayered always beats layered,
+ * whatever the specificity or the load order.
+ *
+ * The fallbacks are SLDS's own stack, unchanged, so a failed font load lands
+ * back on exactly what Lightning would have rendered.
+ *
+ * There is no separate heading-family token in SLDS, so this is body as well as
+ * headings. That was the deliberate choice: Atkinson Hyperlegible Next is an
+ * accessibility typeface designed to hold up at small sizes, which is where
+ * most of a Lightning page lives.
+ *
+ * The @font-face declarations are in `fonts.css`, which `main.njk` loads first.
+ * -------------------------------------------------------------------------- */
+
+:root {
+    --slds-g-font-family-base:
+        'Atkinson Hyperlegible Next Variable',
+        system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'Helvetica Neue', Arial, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+/* -----------------------------------------------------------------------------
  * Content width
  *
  * Lightning Experience itself is fluid — a record page fills the browser at any

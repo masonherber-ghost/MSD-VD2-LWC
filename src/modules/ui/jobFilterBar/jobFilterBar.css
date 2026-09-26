@@ -1,15 +1,38 @@
-/* A custom element is display:inline unless told otherwise. Inside the
-   wrapping flex row the host is blockified anyway, but stating it keeps the
-   margin utilities on the tag working if the row is ever changed to something
-   that is not a grid. */
+/* Spacing comes from `gap`, not from a margin on each button.
+ *
+ * A bottom margin is trailing space: it made this wrapper 40px tall while the
+ * buttons inside it were 32px, so `vertical-align="center"` on the layout
+ * centred the taller box and left the buttons sitting 3px above the search
+ * field beside them. `gap` only spaces between items, so the wrapper is exactly
+ * as tall as one row and the two line up — while still separating the rows when
+ * the buttons wrap on a phone.
+ *
+ * SLDS 2 ships no gap utility, so this is the token in custom CSS. */
+.job-filter-bar__filters {
+    gap: var(--slds-g-spacing-2, 0.5rem);
+}
+
+/* A custom element is display:inline unless told otherwise. */
 .job-filter-bar__filter {
     display: inline-block;
 }
 
 /* The search takes the rest of the row but should not collapse to nothing when
    the filter set is wide, so it keeps a floor and wraps to its own line below
-   it. `--slds-g-sizing-15` is 20rem. */
+   it. `--slds-g-sizing-15` is 20rem.
+ *
+ * Centred explicitly: `lightning-input` reserves a couple of pixels beneath
+ * itself for the help/error message it can show, so this item's content box is
+ * taller than the field in it and the field would otherwise sit at the top of
+ * it — a pixel above the buttons alongside. */
 .job-filter-bar__search {
     min-width: var(--slds-g-sizing-15, 20rem);
+    display: flex;
+    align-items: center;
+}
+
+.job-filter-bar__search lightning-input {
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
