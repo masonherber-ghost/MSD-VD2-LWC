@@ -301,6 +301,19 @@
     --site-font-body: 1.0625rem;        /* 17 */
     --site-font-body-sm: 0.875rem;      /* 14 */
 
+    /* The page's default text size.
+     *
+     * DELIBERATELY NOT --site-font-body. 15px is not on the SEP scale at all
+     * (its body steps are 20 / 17 / 14) — this is a project decision to run
+     * page copy a step smaller than the controls.
+     *
+     * The split matters: --site-font-body is still 17px and still drives the
+     * buttons, the nav links and the input text, which were set to 17px
+     * deliberately. Collapsing the two would drag all three down with the body
+     * copy. Change this one to move page text; change --site-font-body to move
+     * the controls. */
+    --site-font-page-base: 0.9375rem;   /* 15 */
+
     /* Line heights, tightening as the size grows */
     --site-lineheight-heading-2xl: 1.05;
     --site-lineheight-heading-xl: 1.1;
@@ -365,7 +378,7 @@
  * -------------------------------------------------------------------------- */
 
 :root {
-    --slds-g-font-scale-base: var(--site-font-body);
+    --slds-g-font-scale-base: var(--site-font-page-base);
     --slds-g-font-scale-4: var(--site-font-heading-md);
     --slds-g-font-scale-6: var(--site-font-heading-lg);
     --slds-g-font-line-height-base: var(--site-lineheight-body);
@@ -634,7 +647,10 @@
     /* Geometry — the component family only. */
     --slds-c-input-radius-border: var(--site-radius-mid);
     --slds-c-input-sizing-border: 2px;
-    --slds-c-input-font-size: var(--site-font-body-lg);
+    /* Matched to the button (--slds-s-button-font-size), so a field and a
+       button sitting on one row read at the same weight. Smaller than SEP's
+       Input text style, which specifies 20px. */
+    --slds-c-input-font-size: var(--site-font-body);
 
     /* Field height. The default is --slds-g-sizing-9 (2rem / 32px), Lightning's
        dense data-app size. 3rem gives the field the same presence as the SEP

@@ -1,5 +1,6 @@
 import { LightningElement } from 'lwc';
 import api, { ApiError, DEV_ACCOUNT_ID, type Row } from 'data/api';
+import { iconUrl } from 'data/jobIcons';
 import { currentAccountId } from 'data/session';
 import {
     currentRelease,
@@ -182,6 +183,15 @@ export default class JobDetail extends LightningElement {
     }
 
     /** The switcher label is the record name, as it is on a Lightning record page. */
+    /**
+     * The vacancy's category icon. '' when the job type has no artwork yet, in
+     * which case the header keeps the shipped `standard:job_profile` icon —
+     * the same fallback the list cards use.
+     */
+    get iconUrl(): string {
+        return iconUrl(this.job?.icon);
+    }
+
     get recordTitle(): string {
         return String(this.job?.title ?? '');
     }

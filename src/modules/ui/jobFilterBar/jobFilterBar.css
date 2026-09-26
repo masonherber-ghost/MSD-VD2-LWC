@@ -16,23 +16,24 @@
 .job-filter-bar__filter {
     display: inline-block;
 
-    /* A filter chip is not a call to action.
+    /* The chip's own size and edge.
      *
-     * The site-wide button hooks in design-tokens.css give every button the SEP
-     * primary size, which measured 48.6px here — exactly the height of the
-     * "List a job" CTA on the same screen. Five chips carrying the same weight
-     * as the one action on the page reads as five calls to action.
+     * These are the site-wide button hooks from design-tokens.css, redeclared
+     * on the host. Custom properties inherit into the component's shadow root,
+     * so setting them here re-sizes the chips in this bar and nothing else —
+     * the "List a job" CTA on the same screen is untouched.
      *
-     * These are the same shared hooks, redeclared on the host. Custom
-     * properties inherit into the component's shadow root, so setting them here
-     * scopes the smaller size to this bar and nothing else — the CTA beside it
-     * is untouched.
-     *
-     * 16px inline matches the SEP filter pill (Spacing 200/300 in that file);
-     * the rest steps down the SLDS scale rather than inventing values. */
+     * NOTE: it has to be `--slds-s-button-sizing-border`, not `border-width`.
+     * A plain `border-width` on the host does nothing: the host carries no
+     * border (its border-style is `none`) and the element you can actually see
+     * is the <button> inside the shadow root, which a light-DOM declaration
+     * cannot reach. Measured — the host stayed at 0px and the button at 1px.
+     * The hook works because it is a custom property, and those do cross the
+     * shadow boundary. */
     --slds-s-button-font-size: var(--slds-g-font-scale-2);
     --slds-s-button-spacing-block: var(--slds-g-spacing-3);
     --slds-s-button-spacing-inline: var(--slds-g-spacing-5);
+    --slds-s-button-sizing-border: 2px;
 }
 
 /* The search takes the rest of the row but should not collapse to nothing when

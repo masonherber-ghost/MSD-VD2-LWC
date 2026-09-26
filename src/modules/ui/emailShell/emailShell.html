@@ -1,0 +1,33 @@
+<template lwc:render-mode="light">
+    <div class="email">
+        <div class="email__masthead">
+            <img
+                class="email__logo"
+                src="/public/assets/logo-employer-portal.svg"
+                alt="MSD Employer portal"
+            />
+        </div>
+
+        <div class="email__body">
+            <template lwc:if={heading}>
+                <h1 class="email__heading">{heading}</h1>
+            </template>
+            <slot></slot>
+        </div>
+
+        <div class="email__footer">
+            <p class="email__footer-links">
+                <a href="/help-centre">Help centre</a>
+                <span class="email__footer-sep">&middot;</span>
+                <a href="/contact-us">Contact us</a>
+                <span class="email__footer-sep">&middot;</span>
+                <a href="/about-this-site">About this site</a>
+            </p>
+            <p>
+                You received this email because your address is linked to an MSD
+                Employer portal account.
+            </p>
+            <p>Ministry of Social Development &mdash; Te Manat&#363; Whakahiato Ora</p>
+        </div>
+    </div>
+</template>

@@ -27,7 +27,14 @@ body {
     max-width: var(--site-content-max-width);
     margin-inline: auto;
     padding: var(--slds-g-spacing-5, 1.5rem) var(--site-content-gutter);
+
+    /* 64em / 1024px — the same large breakpoint the content cap steps at. */
+    /* @media (min-width: 64em) {
+        padding: var(--slds-g-spacing-10, 1.5rem) var(--site-content-gutter);
+    } */
 }
+
+
 
 /* A flex child of the header bar, so the bar keeps its own full-bleed
    background and shadow while its contents sit in the content column.
@@ -234,6 +241,12 @@ lightning-button[variant='brand']::part(button):disabled {
  * decisions there — the size always comes from a class or a hook.
  * ============================================================================= */
 
+.slds-page-header {
+    border: none;
+    box-shadow: 0;
+    padding: 0;
+}
+
 /* H1 — the largest step in the scale.
  *
  * The page-header title is handled by its hook and is not listed here. These
@@ -252,4 +265,8 @@ h1.slds-text-heading_large {
  * specificity to that rule, so this wins on load order: site.css is last. */
 h1.slds-page-header__title {
     line-height: var(--site-lineheight-heading-2xl);
+    
+}
+.slds-page-header__title {
+    color: var(--site-color-brand-navy);
 }

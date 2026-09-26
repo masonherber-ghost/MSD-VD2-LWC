@@ -985,6 +985,12 @@
             "layoutTemplate": "$layoutsDir/main.njk"
         },
         {
+            "id": "emails",
+            "path": "/emails",
+            "rootComponent": "example/emails",
+            "layoutTemplate": "$layoutsDir/main.njk"
+        },
+        {
             "id": "vacancies",
             "path": "/vacancies",
             "rootComponent": "example/vacancies",

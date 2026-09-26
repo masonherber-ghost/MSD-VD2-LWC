@@ -2,3 +2,15 @@
 .job-detail__loading {
     min-height: 8rem;
 }
+
+/* The vacancy's category icon in the highlights panel.
+ *
+ * Sized to match the `size="medium"` lightning-icon it replaces, so the header
+ * row keeps its height whether a job type has artwork or not. `display: block`
+ * because an <img> is inline by default and would otherwise sit on a baseline
+ * with a few pixels of descender space beneath it. */
+.job-detail__icon {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+}

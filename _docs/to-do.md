@@ -18,11 +18,6 @@ Use the size values from the design system
 
 -----
 
-#Form input styles
-Input styles:
-https://www.figma.com/design/BIYTe4aj1tFOEPvEWoBjgb/SEP---Foundations-UI-Library?node-id=87-2171&m=dev
-border color, font size, color, border-radius etc
-
 
 Login for 1.1
 

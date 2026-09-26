@@ -1,0 +1,43 @@
+<template lwc:render-mode="light">
+    <ui-email-shell heading="You have been invited to the MSD Employer portal">
+        <!-- {{Recipient.FirstName}} -->
+        <p>Kia ora Tomasi,</p>
+
+        <p>
+            <!-- {{Inviter.FullName}} at {{Account.CompanyName}} -->
+            Hana Reweti has invited you to join <strong>Neighbourhood Builders Ltd</strong>
+            on the MSD Employer portal, so you can list vacancies and work through
+            applicants with the rest of your team.
+        </p>
+
+        <p>Use the secure link below to set your password and activate your account.</p>
+
+        <div class="email__cta">
+            <!-- {{InviteUrl}} — single use, tied to the contact record -->
+            <a class="email__cta-button" href="/register">Accept your invitation</a>
+            <p class="email__cta-fallback">
+                If the button does not work, copy this link into your browser:<br />
+                https://employers.msd.govt.nz/invite/8f3c1a7e-4b92-4d60-9c55-2e10ab77d431
+            </p>
+        </div>
+
+        <div class="email__callout">
+            <p class="email__callout-title">This link is secure and expires</p>
+            <p>
+                It works once, only for this email address, and stops working
+                <!-- {{InviteExpiry}} -->
+                7 days after it was sent. Do not forward this email &mdash; if
+                someone else on your team needs access, ask Hana to invite them.
+            </p>
+        </div>
+
+        <p>
+            MSD will never email you asking for your password. If you were not
+            expecting this invitation you can ignore it, and nothing will be set
+            up. Let us know through <a href="/contact-us">Contact us</a> if you
+            think it was sent in error.
+        </p>
+
+        <p>Ng&#257; mihi,<br />The MSD Employer portal team</p>
+    </ui-email-shell>
+</template>

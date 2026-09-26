@@ -1,0 +1,67 @@
+<template lwc:render-mode="light">
+    <ui-site-header current="emails"></ui-site-header>
+
+    <div class="site__body">
+        <main class="site__main">
+            <div class="slds-page-header slds-m-bottom_medium">
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <lightning-icon icon-name="standard:email" size="medium"></lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <h1 class="slds-page-header__title slds-truncate">Emails</h1>
+                                <p class="slds-page-header__name-meta">
+                                    Every transactional email the portal sends, at send width.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <lightning-layout multiple-rows pull-to-boundary="small">
+                <lightning-layout-item size="12" medium-device-size="4" large-device-size="3" padding="around-small">
+                    <lightning-vertical-navigation
+                        selected-item={selected}
+                        shaded
+                        onselect={handleSelect}
+                    >
+                        <lightning-vertical-navigation-section label="Templates">
+                            <template for:each={emails} for:item="email">
+                                <lightning-vertical-navigation-item
+                                    key={email.name}
+                                    label={email.label}
+                                    name={email.name}
+                                ></lightning-vertical-navigation-item>
+                            </template>
+                        </lightning-vertical-navigation-section>
+                    </lightning-vertical-navigation>
+
+                    <p class="emails__trigger slds-p-around_small slds-text-body_small slds-text-color_weak">
+                        {current.trigger}
+                    </p>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" medium-device-size="8" large-device-size="9" padding="around-small">
+                    <ui-email-preview
+                        subject={current.subject}
+                        from={current.from}
+                        to={current.to}
+                        preheader={current.preheader}
+                    >
+                        <template lwc:if={isSecureInvite}>
+                            <ui-email-secure-invite></ui-email-secure-invite>
+                        </template>
+                        <template lwc:if={isWelcome}>
+                            <ui-email-welcome></ui-email-welcome>
+                        </template>
+                    </ui-email-preview>
+                </lightning-layout-item>
+            </lightning-layout>
+        </main>
+    </div>
+
+    <ui-site-footer></ui-site-footer>
+</template>

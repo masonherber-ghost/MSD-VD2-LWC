@@ -30,7 +30,22 @@
                         <div class="slds-page-header__col-title">
                             <div class="slds-media">
                                 <div class="slds-media__figure">
+                                    <!-- The vacancy's category icon, from
+                                         `jobs.icon`. Decorative: alt is empty
+                                         so the header still reads as the
+                                         vacancy's title, exactly as it did
+                                         with the shipped icon here. -->
+                                    <img
+                                        lwc:if={iconUrl}
+                                        src={iconUrl}
+                                        alt=""
+                                        class="job-detail__icon"
+                                    />
+                                    <!-- No artwork for this job type yet, so
+                                         the header keeps the icon it always
+                                         had. See `server/lib/job-icons.ts`. -->
                                     <lightning-icon
+                                        lwc:else
                                         icon-name="standard:job_profile"
                                         size="medium"
                                     ></lightning-icon>

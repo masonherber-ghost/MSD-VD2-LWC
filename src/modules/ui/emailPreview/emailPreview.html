@@ -1,0 +1,25 @@
+<template lwc:render-mode="light">
+    <div class="email-preview">
+        <dl class="email-preview__meta">
+            <dt>Subject</dt>
+            <dd class="email-preview__subject">{subject}</dd>
+
+            <dt>From</dt>
+            <dd>{from}</dd>
+
+            <dt>To</dt>
+            <dd>{to}</dd>
+
+            <template lwc:if={preheader}>
+                <dt>Preview text</dt>
+                <dd class="email-preview__preheader">{preheader}</dd>
+            </template>
+        </dl>
+
+        <div class="email-preview__canvas">
+            <div class="email-preview__sheet">
+                <slot></slot>
+            </div>
+        </div>
+    </div>
+</template>

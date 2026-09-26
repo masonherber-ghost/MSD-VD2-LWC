@@ -3199,6 +3199,11 @@ export const PROJECT_TOKENS = [
         "steps": []
     },
     {
+        "name": "--site-font-page-base",
+        "value": "0.9375rem",
+        "steps": []
+    },
+    {
         "name": "--site-lineheight-heading-2xl",
         "value": "1.05",
         "steps": []

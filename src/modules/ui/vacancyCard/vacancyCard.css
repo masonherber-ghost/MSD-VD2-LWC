@@ -134,7 +134,7 @@
  * against the card. --slds-c-icon-color-foreground-default is the public hook
  * the default variant actually reads. */
 .vacancy-card__meta-icon {
-    --slds-c-icon-color-foreground-default: var(--slds-g-color-on-surface-2);
+    --slds-c-icon-color-foreground-default: var(--site-color-brand-navy);
     flex: none;
     
 }
@@ -142,6 +142,7 @@
 .vacancy-card__meta-value {
     color: var(--slds-g-color-on-surface-1);
     min-width: 0;
+    /* font-size: var(--site-font-body-sm); */
 }
 
 /* Status tag — SEP's four states.

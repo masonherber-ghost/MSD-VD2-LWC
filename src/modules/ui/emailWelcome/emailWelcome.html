@@ -1,0 +1,42 @@
+<template lwc:render-mode="light">
+    <ui-email-shell heading="Welcome to the MSD Employer portal">
+        <!-- {{Recipient.FirstName}} -->
+        <p>Kia ora Tomasi,</p>
+
+        <p>
+            <!-- {{Account.CompanyName}} -->
+            Your account is active and you are now part of
+            <strong>Neighbourhood Builders Ltd</strong> on the MSD Employer portal.
+        </p>
+
+        <p>From here you can:</p>
+
+        <ul class="email__list">
+            <li><strong>List a job</strong> and have MSD match candidates to it.</li>
+            <li><strong>Track applicants</strong> through screening, shortlist and interview.</li>
+            <li><strong>Manage your organisation</strong> &mdash; your details and who else has access.</li>
+        </ul>
+
+        <div class="email__cta">
+            <!-- {{PortalUrl}} -->
+            <a class="email__cta-button" href="/">Go to the portal</a>
+        </div>
+
+        <div class="email__callout">
+            <p class="email__callout-title">New to recruiting with MSD?</p>
+            <p>
+                <a href="/how-it-works">How it works</a> walks through listing a
+                vacancy and what happens after you do. The
+                <a href="/help-centre">Help centre</a> has the rest.
+            </p>
+        </div>
+
+        <p>
+            <!-- {{Recipient.Email}} — the sign-in identifier -->
+            You sign in with <strong>employer2@test.com</strong>. If you ever need
+            to change that, an admin on your account can update it from Manage org.
+        </p>
+
+        <p>Ng&#257; mihi,<br />The MSD Employer portal team</p>
+    </ui-email-shell>
+</template>
