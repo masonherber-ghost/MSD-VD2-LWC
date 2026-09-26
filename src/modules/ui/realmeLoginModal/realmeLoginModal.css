@@ -1,0 +1,111 @@
+/* Styles for the RealMe modal's own markup.
+ *
+ * WHY THIS FILE CARRIES SPACING AT ALL. `LightningModal` renders into a shadow
+ * root, and the SLDS stylesheet is a <link> in the document head — document
+ * stylesheets do not cross a native shadow boundary. So every `slds-*` utility
+ * class is INERT in here, and the spacing has to be declared rather than
+ * borrowed. That is only true of class-based styling: custom properties are
+ * inherited, so `--slds-g-*` and `--site-*` tokens still resolve, which is why
+ * the values below are tokens and not numbers.
+ *
+ * The `lightning-*` children are unaffected — each ships its own stylesheet and
+ * styles itself, which is why the inputs and buttons look right regardless.
+ */
+
+/* The brand band that leads the body, standing in for the modal header the
+   design shows. The rule below is the divider under it. */
+.realme__brand {
+    display: flex;
+    justify-content: center;
+    padding-block-end: var(--slds-g-spacing-4);
+    margin-block-end: var(--slds-g-spacing-4);
+    border-block-end: 1px solid var(--site-stroke-secondary);
+}
+
+/* The supplied wordmark is 166x33. Height is pinned so the band keeps its own
+   sizing whatever the file's intrinsic size; width follows the ratio. */
+.realme__wordmark {
+    display: block;
+    height: 1.75rem;
+    width: auto;
+}
+
+.realme__intro {
+    margin: 0 0 var(--slds-g-spacing-4);
+}
+
+/* The field after the first needs separating; the inputs carry no outer
+   margin of their own. */
+.realme__field {
+    margin-block-start: var(--slds-g-spacing-3);
+}
+
+/* Form-level error. `slds-notify_alert` would have done this, so the tokens
+   below are the ones that theme drives. */
+.realme__error {
+    margin-block-end: var(--slds-g-spacing-3);
+    padding: var(--slds-g-spacing-3);
+    border-inline-start: 4px solid var(--site-stroke-error);
+    border-radius: var(--slds-g-radius-border-2, 0.25rem);
+    background: var(--site-bg-error);
+    color: var(--site-text-error);
+}
+
+/* The shipped `slds-assistive-text` pattern, which cannot reach in here. */
+.realme__assistive {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.realme__links {
+    margin: var(--slds-g-spacing-4) 0 0;
+    font-size: var(--site-font-body-sm, 0.875rem);
+}
+
+.realme__links_tight {
+    margin-block-start: var(--slds-g-spacing-2);
+}
+
+/* Prototype furniture — deliberately looks like a note, not like the form. */
+.realme__hint {
+    margin-block-start: var(--slds-g-spacing-4);
+    padding: var(--slds-g-spacing-3);
+    border: 1px solid var(--site-stroke-secondary);
+    border-radius: var(--slds-g-radius-border-2, 0.25rem);
+    background: var(--site-bg-secondary);
+    font-size: var(--site-font-body-sm, 0.875rem);
+    color: var(--site-text-secondary);
+}
+
+.realme__hint p {
+    margin: 0;
+}
+
+.realme__hint ul {
+    margin: var(--slds-g-spacing-1) 0;
+    padding-inline-start: var(--slds-g-spacing-5);
+    list-style: disc;
+}
+
+/* Separates the footer's two actions.
+ *
+ * SLDS spaces adjacent footer buttons with `.slds-button + .slds-button`, which
+ * never matches here: `.slds-button` sits on the <button> inside each
+ * lightning-button's own shadow root, not on the host that is the actual
+ * sibling. A margin on the host is the reachable equivalent — and it applies
+ * because the margin is horizontal; a vertical one would not, the host being
+ * display:inline. */
+.realme__continue {
+    /* Measured: spacing-2 (8px) reads as touching between two pill buttons,
+       because LWC also strips the whitespace text node that would otherwise
+       put a few pixels between two inline-level tags. spacing-4 is the gap the
+       design shows. */
+    margin-inline-start: var(--slds-g-spacing-4);
+}

@@ -1,0 +1,14 @@
+<template lwc:render-mode="light">
+    <lightning-card title="Vacancies" icon-name="standard:job_profile">
+        <div class="slds-p-horizontal_medium">
+            <p class="vacancy-summary__count">{count}</p>
+            <p class="slds-text-body_small slds-text-color_weak">{activeLabel}</p>
+        </div>
+
+        <!-- The card's own footer slot, so the link sits on the card's baseline
+             rather than being spaced by hand. -->
+        <div slot="footer">
+            <a href="/jobs">Manage your vacancies</a>
+        </div>
+    </lightning-card>
+</template>

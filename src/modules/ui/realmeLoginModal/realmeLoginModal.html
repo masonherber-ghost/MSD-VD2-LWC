@@ -1,0 +1,79 @@
+<!-- Shadow DOM, deliberately — see the note in realmeLoginModal.ts.
+     No `slds-*` utility classes in here: the SLDS stylesheet is a <link> in the
+     document head and cannot reach this shadow root, so they would be inert.
+     Spacing and type come from realmeLoginModal.css, which IS injected here. -->
+<template>
+    <!-- No <lightning-modal-header>. The design wants the RealMe wordmark and
+         no heading text, and a header with no `label` makes modalBase UNSET the
+         dialog's accessible name — measured: role="dialog" with no aria-label
+         and no aria-labelledby. With no header element, modalBase falls back to
+         the `label` passed to open(), which is the supported route for this
+         case and what the component's own console warning points at. So the
+         wordmark leads the body instead. -->
+    <lightning-modal-body>
+        <div class="realme__brand">
+            <img
+                class="realme__wordmark"
+                src="/public/assets/realme-logo.svg"
+                alt="RealMe"
+            />
+        </div>
+
+        <p class="realme__intro">Login with RealMe to register with MyMSD Employer</p>
+
+        <div lwc:if={hasError} class="realme__error" role="alert">
+            <span class="realme__assistive">Error</span>
+            <span>{error}</span>
+        </div>
+
+        <!-- RealMe labels this "Username"; there is no username column in
+             `ciam`, so it is the email address that identifies the login. -->
+        <lightning-input
+            label="Username"
+            value={username}
+            onchange={handleUsername}
+            onkeyup={handleKeyUp}
+            autocomplete="username"
+            required
+        ></lightning-input>
+
+        <div class="realme__field">
+            <lightning-input
+                type="password"
+                label="Password"
+                value={password}
+                onchange={handlePassword}
+                onkeyup={handleKeyUp}
+                autocomplete="current-password"
+                required
+            ></lightning-input>
+        </div>
+
+        <p class="realme__links">Don't have a RealMe login? <a href="#" onclick={handleMockLink}>Create a login</a></p>
+
+        <p class="realme__links realme__links_tight"><a href="#" onclick={handleMockLink}>Forgot Username</a> or <a href="#" onclick={handleMockLink}>Forgot Password?</a></p>
+
+        <!-- Prototype furniture, not part of the RealMe design. It sits here
+             rather than on the login page because this is where the
+             credentials are typed. -->
+        <div class="realme__hint">
+            <p>Prototype logins &mdash; the <em>Username</em> is the email address</p>
+            <ul>
+                <li><code>employer@test.com</code></li>
+                <li><code>employer6@test.com</code></li>
+            </ul>
+            <p>Password for both: <code>password123</code></p>
+        </div>
+    </lightning-modal-body>
+
+    <lightning-modal-footer>
+        <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+        <lightning-button
+            class="realme__continue"
+            variant="brand"
+            label="Continue"
+            onclick={handleContinue}
+            disabled={submitting}
+        ></lightning-button>
+    </lightning-modal-footer>
+</template>

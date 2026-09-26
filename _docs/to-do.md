@@ -9,12 +9,18 @@ Header and nav unauth
 basic skinning explore for header
 Mobile header skinning explore
 
+Invite email:
+
 
 ----
 
+#Register: (later)
+Flow needs re-creating based on the designs
+
+-----
+
 #Text styles:
-buttons and nav links: 17px
-Use the size values from the design system
+font-family included on login and register headings (need a mixin thing for this)
 
 -----
 

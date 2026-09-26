@@ -9,19 +9,28 @@
  *
  * SLDS 2 ships no gap utility, so this is the token in custom CSS. */
 .job-filter-bar__filters {
-    gap: var(--slds-g-spacing-3, 0.5rem);
+    gap: var(--slds-g-spacing-3, 0.75rem);
 }
 
 /* A custom element is display:inline unless told otherwise. */
 .job-filter-bar__filter {
     display: inline-block;
 
-    /* The chip's own size and edge.
+    /* A filter chip is not a call to action.
      *
-     * These are the site-wide button hooks from design-tokens.css, redeclared
-     * on the host. Custom properties inherit into the component's shadow root,
-     * so setting them here re-sizes the chips in this bar and nothing else —
-     * the "List a job" CTA on the same screen is untouched.
+     * The site-wide button hooks in design-tokens.css give every button the SEP
+     * primary size, which measured 48.6px here — exactly the height of the
+     * "List a job" CTA on the same screen. Five chips carrying the same weight
+     * as the one action on the page reads as five calls to action.
+     *
+     * These are the same shared hooks, redeclared on the host. Custom
+     * properties inherit into the component's shadow root, so setting them here
+     * scopes the size to this bar and nothing else — the CTA beside it is
+     * untouched.
+     *
+     * The inline padding steps down the SLDS scale rather than inventing
+     * values. (It read 16px / --slds-g-spacing-4 until a946d9b moved it to
+     * --slds-g-spacing-5; the comment said 16px for a while after it did not.)
      *
      * NOTE: it has to be `--slds-s-button-sizing-border`, not `border-width`.
      * A plain `border-width` on the host does nothing: the host carries no

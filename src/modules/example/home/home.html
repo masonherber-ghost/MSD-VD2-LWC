@@ -8,20 +8,14 @@
                 <div class="slds-page-header slds-m-bottom_medium">
                     <div class="slds-page-header__row">
                         <div class="slds-page-header__col-title">
-                            <div class="slds-media">
-                                <div class="slds-media__figure">
-                                    <lightning-icon
-                                        icon-name="standard:home"
-                                        size="medium"
-                                    ></lightning-icon>
-                                </div>
-                                <div class="slds-media__body">
-                                    <h1 class="slds-page-header__title slds-truncate">
-                                        Kia ora, {firstName}
-                                    </h1>
-                                    <p class="slds-page-header__name-meta">{companyName}</p>
-                                </div>
+                            
+                            <div class="slds-media__body">
+                                <h1 class="slds-page-header__title slds-truncate">
+                                    Kia ora, {firstName}
+                                </h1>
+                                <p class="slds-page-header__name-meta">{companyName}</p>
                             </div>
+                            
                         </div>
                         <div class="slds-page-header__col-actions">
                             <div class="slds-page-header__controls">
@@ -38,39 +32,64 @@
                     </div>
                 </div>
 
-                <lightning-layout multiple-rows pull-to-boundary="small">
-                    <lightning-layout-item lwc:if={hasSummary} size="12" padding="around-small">
-                        <lightning-layout multiple-rows pull-to-boundary="small">
-                            <lightning-layout-item size="12" medium-device-size="4" padding="around-small">
-                                <lightning-card title="Vacancies" icon-name="standard:job_profile">
-                                    <p class="home__stat slds-p-horizontal_medium">{jobCount}</p>
-                                    <p class="slds-text-body_small slds-text-color_weak slds-p-horizontal_medium slds-p-bottom_medium">
-                                        {activeCount} currently active
-                                    </p>
-                                </lightning-card>
-                            </lightning-layout-item>
-                            <lightning-layout-item size="12" medium-device-size="4" padding="around-small">
-                                <lightning-card title="Applicants" icon-name="standard:groups">
-                                    <p class="home__stat slds-p-horizontal_medium">{applicantCount}</p>
-                                    <p class="slds-text-body_small slds-text-color_weak slds-p-horizontal_medium slds-p-bottom_medium">
-                                        Across all vacancies
-                                    </p>
-                                </lightning-card>
-                            </lightning-layout-item>
-                            <lightning-layout-item size="12" medium-device-size="4" padding="around-small">
-                                <lightning-card title="Next steps" icon-name="standard:task">
-                                    <div class="slds-p-horizontal_medium slds-p-bottom_medium">
-                                        <p><a href="/jobs">Review your vacancies</a></p>
-                                        <p class="slds-m-top_xx-small">
-                                            <a href="/profile">Update your profile</a>
-                                        </p>
-                                        <p class="slds-m-top_xx-small">
-                                            <a href="/help-centre">Visit the help centre</a>
-                                        </p>
-                                    </div>
-                                </lightning-card>
-                            </lightning-layout-item>
-                        </lightning-layout>
+                <!-- Welcome and next step. The page header greets them; this
+                     says what to do with the place. Only shown once the
+                     vacancies are known — see hasVacancies. -->
+                <p lwc:if={hasVacancies} class="home__welcome slds-m-bottom_medium">
+                    Welcome back. Your next step is to manage your vacancies &mdash;
+                    review applicants, update the details and close the roles you
+                    have filled.
+                </p>
+
+                <template lwc:if={hasNoVacancies}>
+                    <ui-vacancy-empty-state></ui-vacancy-empty-state>
+                </template>
+
+                <lightning-layout lwc:elseif={hasVacancies} multiple-rows pull-to-boundary="small">
+                    <lightning-layout-item
+                        size="12"
+                        medium-device-size={vacancyCardSize}
+                        padding="around-small"
+                    >
+                        <ui-vacancy-summary-card
+                            count={jobCount}
+                            active-count={activeCount}
+                        ></ui-vacancy-summary-card>
+                    </lightning-layout-item>
+
+                    <!-- Applicants and Next steps landed in 1.2; the Vacancies
+                         card above ships from 1.1. -->
+                    <lightning-layout-item
+                        lwc:if={hasSummary}
+                        size="12"
+                        medium-device-size="4"
+                        padding="around-small"
+                    >
+                        <lightning-card title="Applicants" icon-name="standard:groups">
+                            <p class="home__stat slds-p-horizontal_medium">{applicantCount}</p>
+                            <p class="slds-text-body_small slds-text-color_weak slds-p-horizontal_medium slds-p-bottom_medium">
+                                Across all vacancies
+                            </p>
+                        </lightning-card>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item
+                        lwc:if={hasSummary}
+                        size="12"
+                        medium-device-size="4"
+                        padding="around-small"
+                    >
+                        <lightning-card title="Next steps" icon-name="standard:task">
+                            <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+                                <p><a href="/profile">Update your profile</a></p>
+                                <p class="slds-m-top_xx-small">
+                                    <a href="/manage-org">Manage your organisation</a>
+                                </p>
+                                <p class="slds-m-top_xx-small">
+                                    <a href="/help-centre">Visit the help centre</a>
+                                </p>
+                            </div>
+                        </lightning-card>
                     </lightning-layout-item>
                 </lightning-layout>
             </template>

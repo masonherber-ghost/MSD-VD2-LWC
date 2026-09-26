@@ -78,14 +78,25 @@
     text-align: center;
 }
 
-.email__cta-button {
+/* The standard primary button, as a link.
+ *
+ * It reads the same hooks design-tokens.css sets for every button on the site
+ * rather than restating their values, so the email CTA moves when the button
+ * style does instead of drifting from it.
+ *
+ * The selector carries `.email__body` because `.email__body a` sets the link
+ * colour and would otherwise win on specificity — which is what left the label
+ * navy on the blue fill. */
+.email__body a.email__cta-button {
     display: inline-block;
-    padding: var(--slds-g-spacing-3) var(--slds-g-spacing-6);
-    background: var(--site-bg-accent-primary);
-    color: var(--site-text-inverse-primary);
-    font-weight: 700;
+    padding: var(--slds-s-button-spacing-block) var(--slds-s-button-spacing-inline);
+    background: var(--slds-c-button-brand-color-background);
+    color: var(--slds-c-button-brand-text-color);
+    font-size: var(--slds-s-button-font-size);
+    line-height: var(--slds-s-button-font-lineheight);
+    font-weight: var(--slds-s-button-font-weight);
     text-decoration: none;
-    border-radius: var(--site-radius-pill);
+    border-radius: var(--slds-s-button-radius-border);
 }
 
 /* The fallback link under the button, for clients that strip the anchor. */

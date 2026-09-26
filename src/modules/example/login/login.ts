@@ -1,15 +1,18 @@
 import { LightningElement } from 'lwc';
-import api, { ApiError } from 'data/api';
 import { signIn, isSignedIn } from 'data/session';
+import RealmeLoginModal from 'ui/realmeLoginModal';
+import type { AuthUser } from 'data/api';
 
-/** Sign-in form. Verifies against the ciam table and starts a prototype session. */
+/**
+ * Employer login.
+ *
+ * RealMe is the only way in, as it is in the R1.1 design: the page's whole job
+ * is to hand off to the identity provider. The modal verifies against `ciam`
+ * and resolves with the user; this page starts the session, which is the split
+ * a real IDP handoff has.
+ */
 export default class Login extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
-
-    email = '';
-    password = '';
-    error = '';
-    submitting = false;
 
     connectedCallback(): void {
         // Nothing to do here if a session already exists.
@@ -18,41 +21,17 @@ export default class Login extends LightningElement {
         }
     }
 
-    handleEmail(event: Event): void {
-        this.email = (event.target as HTMLInputElement).value;
-    }
+    async handleRealmeLogin(): Promise<void> {
+        const user = (await RealmeLoginModal.open({
+            size: 'small',
+            // The accessible name for the dialog, not the visible header.
+            label: 'Log in with RealMe'
+        })) as AuthUser | null;
 
-    handlePassword(event: Event): void {
-        this.password = (event.target as HTMLInputElement).value;
-    }
-
-    /** Enter anywhere in the form submits, as a real sign-in page would. */
-    handleKeyUp(event: KeyboardEvent): void {
-        if (event.key === 'Enter') {
-            this.handleSubmit();
-        }
-    }
-
-    async handleSubmit(): Promise<void> {
-        if (!this.email || !this.password) {
-            this.error = 'Enter your email and password.';
-            return;
-        }
-        this.submitting = true;
-        this.error = '';
-        try {
-            const user = await api.auth.login(this.email, this.password);
+        // null means cancelled or dismissed — stay put, say nothing.
+        if (user) {
             signIn(user);
             window.location.assign('/');
-        } catch (e) {
-            this.error =
-                e instanceof ApiError ? e.message : 'Could not sign in. Try again.';
-        } finally {
-            this.submitting = false;
         }
-    }
-
-    get hasError(): boolean {
-        return Boolean(this.error);
     }
 }

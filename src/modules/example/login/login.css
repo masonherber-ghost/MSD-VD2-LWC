@@ -7,3 +7,30 @@
 .auth__submit {
     display: block;
 }
+
+/* The RealMe mark on the sign-in button.
+ *
+ * `lightning-button` renders images only from the SLDS icon sprite — `iconName`
+ * takes a sprite name, and there is no slot to put an <img> in. So the mark is
+ * a background on the button's own ::before, reached through the `button` part
+ * the component exposes. That is the public API (tier 6), not a reach into its
+ * shadow DOM: `::part(button)` is what it is there for.
+ *
+ * The inner button is a flex row with `gap: --slds-g-spacing-2` (set by
+ * `button.slds.css`), so the ::before becomes a flex item and is spaced from
+ * the label without a margin here.
+ *
+ * The url() is absolute on purpose. A relative one passes dev AND the build and
+ * then 404s in the built site — see rules-architecture.md § `url()` inside a
+ * stylesheet must be absolute. */
+.login__realme::part(button)::before {
+    content: '';
+    display: block;
+    flex: 0 0 auto;
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    background-image: url(/public/assets/realme-logo-mark.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}

@@ -1,0 +1,6 @@
+/* The headline figure. Sized from the SEP type scale rather than a raw value. */
+.vacancy-summary__count {
+    font-size: var(--site-font-heading-lg);
+    line-height: var(--site-lineheight-heading-lg);
+    font-weight: 300;
+}

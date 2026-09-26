@@ -18,11 +18,12 @@ import { currentUser } from 'data/session';
  * Paths that must stay reachable even while the gate is down.
  *
  * `/login` and `/register` are the way in — gating them would lock the door
- * from the inside. `/design-system` and `/data` are the prototype's own tools
- * and have no signed-in meaning. The footer's release toggle rides on every one
- * of these, so there is always a way back up to 1.2.
+ * from the inside. `/design-system`, `/data` and `/emails` are the prototype's
+ * own tools and have no signed-in meaning — they are the three the footer's App
+ * Launcher offers. The footer's release toggle rides on every one of these, so
+ * there is always a way back up to 1.2.
  */
-const EXEMPT = ['/login', '/register', '/design-system', '/data'];
+const EXEMPT = ['/login', '/register', '/design-system', '/data', '/emails'];
 
 function currentPath(): string {
     return window.location.pathname.replace(/\/+$/, '') || '/';

@@ -19,7 +19,7 @@ const EMAILS: EmailEntry[] = [
         subject: 'Hana Reweti has invited you to the MSD Employer portal',
         from: 'MSD Employer portal <no-reply@employers.msd.govt.nz>',
         to: 'Tomasi Fifita <employer2@test.com>',
-        preheader: 'Accept your invitation to join Neighbourhood Builders Ltd.',
+        preheader: 'Accept your invitation to join the MSD employer portal.',
         trigger: 'Sent when an admin invites a colleague from Manage org.'
     },
     {

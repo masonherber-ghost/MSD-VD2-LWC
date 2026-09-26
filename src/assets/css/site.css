@@ -243,7 +243,7 @@ lightning-button[variant='brand']::part(button):disabled {
 
 .slds-page-header {
     border: none;
-    box-shadow: 0;
+    box-shadow: none;
     padding: 0;
 }
 
@@ -264,9 +264,18 @@ h1.slds-text-heading_large {
  * `line-height: 1`, which was fine at 18px and is too tight at 60px. Equal
  * specificity to that rule, so this wins on load order: site.css is last. */
 h1.slds-page-header__title {
-    line-height: var(--site-lineheight-heading-2xl);
+    
+    
+    
+}
+.slds-text-heading_large {
+    color: var(--site-color-brand-navy);
+    font-size:  var(--site-font-heading-lg);
+    line-height: var(--site-lineheight-heading-lg); 
     
 }
 .slds-page-header__title {
     color: var(--site-color-brand-navy);
+    font-size:  var(--site-font-heading-lg);
+    line-height: var(--site-lineheight-heading-lg);
 }

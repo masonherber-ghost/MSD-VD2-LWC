@@ -79,8 +79,36 @@ export default class Home extends LightningElement {
         return this.user?.company_name ?? '';
     }
 
-    /** The at-a-glance cards arrived after the first release. */
+    /**
+     * Whether the account's vacancies are known.
+     *
+     * Everything below depends on this. With no /api — the static build — the
+     * count is not zero, it is unknown, and the difference matters: an empty
+     * state that fires on a failed load tells an employer with ten vacancies to
+     * create their first.
+     */
+    get hasVacancies(): boolean {
+        return this.loaded && this.jobCount > 0;
+    }
+
+    get hasNoVacancies(): boolean {
+        return this.loaded && this.jobCount === 0;
+    }
+
+    /**
+     * The Applicants and Next steps cards arrived after the first release. The
+     * Vacancies card did not — it is the landing pad's whole point, so it is
+     * ungated and shows from 1.1 up.
+     */
     get hasSummary(): boolean {
         return this.loaded && isEnabled('home.dashboardStats', this.release);
+    }
+
+    /**
+     * The Vacancies card shares a row with the other two once they arrive, and
+     * would look stranded at a third width on its own before then.
+     */
+    get vacancyCardSize(): string {
+        return this.hasSummary ? '4' : '6';
     }
 }

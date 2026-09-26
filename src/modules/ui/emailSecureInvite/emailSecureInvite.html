@@ -5,16 +5,19 @@
 
         <p>
             <!-- {{Inviter.FullName}} at {{Account.CompanyName}} -->
-            Hana Reweti has invited you to join <strong>Neighbourhood Builders Ltd</strong>
-            on the MSD Employer portal, so you can list vacancies and work through
+            You have been invited to join <strong>Neighbourhood Builders Ltd</strong> on
+            the MSD Employer portal, so you can list vacancies and work through
             applicants with the rest of your team.
         </p>
 
-        <p>Use the secure link below to set your password and activate your account.</p>
+        <p>Use the secure link below to activate your account.</p>
 
         <div class="email__cta">
-            <!-- {{InviteUrl}} — single use, tied to the contact record -->
-            <a class="email__cta-button" href="/register">Accept your invitation</a>
+            <!-- {{InviteUrl}} — single use, tied to the contact record. Lands
+                 on /login, because RealMe is the only way in: accepting an
+                 invitation means authenticating with RealMe, not filling in a
+                 registration form. -->
+            <a class="email__cta-button" href="/login">Accept your invitation</a>
             <p class="email__cta-fallback">
                 If the button does not work, copy this link into your browser:<br />
                 https://employers.msd.govt.nz/invite/8f3c1a7e-4b92-4d60-9c55-2e10ab77d431
@@ -26,7 +29,7 @@
             <p>
                 It works once, only for this email address, and stops working
                 <!-- {{InviteExpiry}} -->
-                7 days after it was sent. Do not forward this email &mdash; if
+                 7 days after it was sent. Do not forward this email &mdash; if
                 someone else on your team needs access, ask Hana to invite them.
             </p>
         </div>
