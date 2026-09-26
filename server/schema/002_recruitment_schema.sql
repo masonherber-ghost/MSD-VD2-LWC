@@ -112,6 +112,11 @@ CREATE TABLE IF NOT EXISTS jobs (
   experience_level       TEXT,
   education_required     TEXT,
   job_type               TEXT,
+  -- Icon SLUG, not a path: names src/assets/icons/<slug>.svg. Auto-filled
+  -- from job_type by server/lib/job-icons.ts on every write that carries a
+  -- job_type and no explicit icon, so it can still be overridden per job.
+  -- NULL is a real state -- the card falls back to standard:job_profile.
+  icon                   TEXT,
   driver_licence_label   TEXT,
   max_shortlist          INTEGER,
   positions_available    INTEGER,

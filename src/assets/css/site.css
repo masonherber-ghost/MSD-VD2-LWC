@@ -2,17 +2,22 @@
 
 body {
     margin: 0;
-    background: var(--slds-g-color-surface-container-1, #f3f3f3);
+    background: var(--site-color-page-background);
 }
 
-/* slds-global-header_container is position:fixed at 50px tall, so page content
-   has to be pushed clear of it. */
+/* slds-global-header_container is position:fixed, so page content has to be
+   pushed clear of it.
+ *
+ * Read from the same hook the header's own height comes from, NOT a repeated
+ * pixel value: the height changes at the large breakpoint, and a hardcoded 50px
+ * here would tuck the top of every page under the bar above 1024px. The
+ * fallback matches the SLDS default in case the hook is ever unset. */
 .site__body {
-    padding-top: 50px;
+    padding-top: var(--slds-s-header-sizing-height, 3.125rem);
     /* The release toggle is docked at the bottom; reserve its height so page
        content can always scroll clear of it. */
     padding-bottom: 3.25rem;
-    min-height: calc(100vh - 50px);
+    min-height: calc(100vh - var(--slds-s-header-sizing-height, 3.125rem));
 }
 
 /* Page-level tokens (--site-content-max-width, --site-content-gutter) are
@@ -36,7 +41,7 @@ body {
     padding-inline: calc(var(--site-content-gutter) - var(--slds-g-spacing-4, 1rem));
 }
 
-/* Keep the wordmark and nav on one row inside the 50px header. */
+/* Keep the wordmark and nav on one row inside the header. */
 .site-header__brand {
     display: flex;
     align-items: center;
@@ -57,8 +62,9 @@ body {
     color: inherit;
 }
 
-/* The supplied lockup is 216x30. Height is pinned so the bar's 50px stays put
-   whatever the file's intrinsic size; width follows the aspect ratio. */
+/* The supplied lockup is 216x30. Height is pinned so the bar's height is set by
+   the header hook alone, whatever the file's intrinsic size; width follows the
+   aspect ratio. */
 .site-header__logo-image {
     display: block;
     height: 1.75rem;
@@ -204,4 +210,46 @@ lightning-button[variant='brand']::part(button):disabled {
     background-image: none;
     border-color: var(--site-color-brand-disabled);
     color: var(--site-color-on-brand-disabled);
+}
+
+/* =============================================================================
+ * Headings — which element takes which step of the SEP scale
+ *
+ * TWO FILES, TWO JOBS. Change them in the right one:
+ *
+ *   design-tokens.css  THE VALUES. `--site-font-heading-2xl` and friends, with
+ *                      their Mobile / Tablet / Desktop numbers. Change a SIZE
+ *                      there and every heading using that step follows.
+ *
+ *   this block         THE ASSIGNMENT. Which heading reads which step. Change
+ *                      what an element USES here.
+ *
+ * Most headings need nothing in either place: SLDS's `slds-text-heading_*`
+ * utilities already read the scale steps we remapped in design-tokens.css, and
+ * the page title comes through `--slds-s-pageheader-title-font-size`. This
+ * block is only for headings whose size cannot be reached by a hook.
+ *
+ * Why any of this is needed: SLDS 2 resets `h1..h6` to `font-size: 1em`, so a
+ * heading element carries no size of its own. Level and size are separate
+ * decisions there — the size always comes from a class or a hook.
+ * ============================================================================= */
+
+/* H1 — the largest step in the scale.
+ *
+ * The page-header title is handled by its hook and is not listed here. These
+ * are the two hero headings, which sit on `slds-text-heading_large` and would
+ * otherwise stop at --site-font-heading-lg. */
+.page-hero__heading,
+h1.slds-text-heading_large {
+    font-size: var(--site-font-heading-2xl);
+    line-height: var(--site-lineheight-heading-2xl);
+}
+
+/* The page title's line height.
+ *
+ * There is no hook for it — SLDS pins `.slds-page-header__name h1` to
+ * `line-height: 1`, which was fine at 18px and is too tight at 60px. Equal
+ * specificity to that rule, so this wins on load order: site.css is last. */
+h1.slds-page-header__title {
+    line-height: var(--site-lineheight-heading-2xl);
 }

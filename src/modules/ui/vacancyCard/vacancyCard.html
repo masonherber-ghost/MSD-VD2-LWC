@@ -18,7 +18,11 @@
                 </span>
             </h2>
 
-            <lightning-badge slot="actions" label={card.statusLabel}></lightning-badge>
+            <lightning-badge
+                slot="actions"
+                label={card.statusLabel}
+                class={card.statusClass}
+            ></lightning-badge>
 
             <!-- In review carries a standing notice in the design. `role=status`
                  rather than `alert`: it is not urgent and should not interrupt. -->

@@ -143,6 +143,36 @@
 
     /* A pill. The SLDS radius scale stops at --slds-g-radius-border-4 (1rem). */
     --site-radius-pill: 999px;
+
+    /* The page canvas. Kept as its own name because `body` reads it directly;
+       the value now comes from the semantic layer below. */
+    --site-color-page-background: var(--site-bg-secondary);
+}
+
+/* -----------------------------------------------------------------------------
+ * Global header height
+ *
+ * `--slds-s-header-sizing-height` is a public shared hook, read by
+ * `.slds-global-header` (and the builder and trial headers). Its default is
+ * 3.125rem / 50px.
+ *
+ * Declared at both breakpoints rather than relying on the `var()` fallback, so
+ * the value is always stated in one place. `site.css` reads this same hook for
+ * the body's top padding, so the two cannot drift.
+ *
+ * Note the COLOUR of that bar is not reachable: SLDS exposes only private
+ * `--_slds-c-globalheader-*` hooks for it. Height is public, colour is not.
+ * -------------------------------------------------------------------------- */
+
+:root {
+    --slds-s-header-sizing-height: 3.125rem;
+}
+
+/* 64em / 1024px — the same large breakpoint the content cap steps at. */
+@media (min-width: 64em) {
+    :root {
+        --slds-s-header-sizing-height: 5rem;
+    }
 }
 
 /* -----------------------------------------------------------------------------
@@ -229,4 +259,314 @@
     --slds-c-button-brand-color-background-active: var(--site-color-brand-navy);
     --slds-c-button-brand-color-border-active: var(--site-color-brand-navy);
     --slds-c-button-brand-text-color-active: var(--slds-g-color-on-accent-1);
+}
+
+/* -----------------------------------------------------------------------------
+ * SEP type scale
+ *
+ * The sizes from the SEP Foundations library, read off the Figma variables:
+ * Mobile / Tablet / Desktop, stepping at the same breakpoints as the content
+ * cap. Declared mobile-first, so each block only restates what changes.
+ *
+ * These are `--site-*` because SLDS genuinely has no equivalent. Its ramp tops
+ * out at --slds-g-font-scale-8 (2.625rem / 42px) with -9 and -10 aliased back
+ * to it, so 48px and 60px have no step at all; and its base is 13px against
+ * SEP's 17px, because Lightning is a dense data app and SEP is a content site.
+ *
+ * Line heights are part of the scale, not a separate decision: SEP tightens
+ * them as the size grows (1.05 at 60px, 1.3 at 20px, 1.6 for body). SLDS ships
+ * 1, 1.25, 1.375, 1.5, 1.75, 2 — only 1.25 lands, so these are ours too.
+ * -------------------------------------------------------------------------- */
+
+:root {
+    /* Headings — Mobile */
+    --site-font-heading-2xl: 2.5rem;    /* 40 */
+    --site-font-heading-xl: 2.25rem;    /* 36 */
+    --site-font-heading-lg: 2rem;       /* 32 */
+    --site-font-heading-md: 1.5rem;     /* 24 */
+    --site-font-heading-sm: 1.25rem;    /* 20 */
+    --site-font-heading-xs: 1.125rem;   /* 18 */
+    --site-font-subtitle: 1.5rem;       /* 24, weight 300 */
+
+    /* Strap titles (the eyebrow above a heading) — Mobile */
+    --site-font-strap-lg: 1.75rem;      /* 28 */
+    --site-font-strap: 1.25rem;         /* 20 */
+    --site-font-strap-sm: 0.875rem;     /* 14 */
+
+    /* Body — one size at every breakpoint in the design */
+    --site-font-body-lg: 1.25rem;       /* 20 */
+    --site-font-body: 1.0625rem;        /* 17 */
+    --site-font-body-sm: 0.875rem;      /* 14 */
+
+    /* Line heights, tightening as the size grows */
+    --site-lineheight-heading-2xl: 1.05;
+    --site-lineheight-heading-xl: 1.1;
+    --site-lineheight-heading-lg: 1.15;
+    --site-lineheight-heading-md: 1.2;
+    --site-lineheight-heading-sm: 1.25;
+    --site-lineheight-heading-xs: 1.3;
+    --site-lineheight-strap: 1;
+    --site-lineheight-body: 1.6;
+}
+
+/* 48em / 768px — Tablet. */
+@media (min-width: 48em) {
+    :root {
+        --site-font-heading-2xl: 3rem;      /* 48 */
+        --site-font-heading-xl: 2.5rem;     /* 40 */
+        --site-font-heading-lg: 2.25rem;    /* 36 */
+        --site-font-heading-md: 1.75rem;    /* 28 */
+        --site-font-heading-sm: 1.375rem;   /* 22 */
+        --site-font-heading-xs: 1.1875rem;  /* 19 */
+        --site-font-subtitle: 1.75rem;      /* 28 */
+        --site-font-strap-lg: 1.875rem;     /* 30 */
+        --site-font-strap: 1.375rem;        /* 22 */
+        --site-font-strap-sm: 0.9375rem;    /* 15 */
+    }
+}
+
+/* 64em / 1024px — Desktop. */
+@media (min-width: 64em) {
+    :root {
+        --site-font-heading-2xl: 3.75rem;   /* 60 */
+        --site-font-heading-xl: 3rem;       /* 48 */
+        --site-font-heading-lg: 2.5rem;     /* 40 */
+        --site-font-heading-md: 2rem;       /* 32 */
+        --site-font-heading-sm: 1.5rem;     /* 24 */
+        --site-font-heading-xs: 1.25rem;    /* 20 */
+        --site-font-subtitle: 2rem;         /* 32 */
+        --site-font-strap-lg: 2rem;         /* 32 */
+        --site-font-strap: 1.5rem;          /* 24 */
+        --site-font-strap-sm: 1rem;         /* 16 */
+    }
+}
+
+/* -----------------------------------------------------------------------------
+ * Mapping the SEP scale onto SLDS
+ *
+ * Only three steps are remapped, and the reason is consumer count. Each SLDS
+ * step is read by a different number of declarations in the shipped stylesheet:
+ *
+ *   scale-base    6 consumers   the body size            -> remapped
+ *   scale-4       7 consumers   .slds-text-heading_medium -> remapped
+ *   scale-6       5 consumers   .slds-text-heading_large  -> remapped
+ *   scale-2      25 consumers   .slds-text-heading_small, card titles, …
+ *   scale-1      23 consumers   page header titles, labels, …
+ *   scale-neg-1  62 consumers   help text, badges, assistive chrome
+ *
+ * The bottom three carry Lightning's UI chrome, not page content. Pushing
+ * SEP's content sizes through them would resize every label, badge and helper
+ * on the site — a different change from applying a type scale, and not this
+ * one. Our own headings can reach the full scale through the --site-* tokens
+ * above; that is what they are for.
+ * -------------------------------------------------------------------------- */
+
+:root {
+    --slds-g-font-scale-base: var(--site-font-body);
+    --slds-g-font-scale-4: var(--site-font-heading-md);
+    --slds-g-font-scale-6: var(--site-font-heading-lg);
+    --slds-g-font-line-height-base: var(--site-lineheight-body);
+
+    /* A card title is a heading, and the reset leaves a bare <h2> at 1em.
+       This is the public hook `.slds-card__header-title` reads. */
+    --slds-c-card-heading-font-size: var(--site-font-heading-xs);
+
+    /* The page title — the H1 on every list and record page — takes the top
+       step of the scale. SLDS sets this hook to 1.125rem in `@layer shared`;
+       this file is unlayered, so it wins. */
+    --slds-s-pageheader-title-font-size: var(--site-font-heading-2xl);
+}
+
+/* =============================================================================
+ * SEP COLOUR — three layers, as the Figma library has them
+ *
+ *   1. Primitives   the raw palette. Never referenced by a component.
+ *   2. Semantic     what a colour is FOR. Named by role, aliases a primitive.
+ *   3. Mapping      SLDS's global colour tokens pointed at the semantic layer.
+ *
+ * Layer 3 is why this works at all. Unlike the type scale — where SLDS's steps
+ * carry Lightning's UI chrome and remapping them wholesale would have resized
+ * every label — colour tokens mean the SAME THING in both systems.
+ * `surface-container-1` is "the primary surface" in SLDS and `Background/
+ * Primary` in SEP. Pointing one at the other preserves the role and only
+ * changes the value, which is exactly what theming is.
+ *
+ * To restyle the site, change layer 2. Layer 1 is the palette and should only
+ * change when the brand does; layer 3 is plumbing.
+ * ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+ * 1. Primitives — the SEP palette
+ * -------------------------------------------------------------------------- */
+
+:root {
+    /* Brand. --site-color-brand-blue / -navy are declared further up, with the
+       button skin that first needed them; they belong to this set. */
+    --site-color-brand-dark-navy: #162c45;
+    --site-color-brand-blue-accessible: #0071bb;
+    --site-color-brand-teal: #35c0ba;
+    --site-color-brand-teal-accessible: #1b7a75;
+    --site-color-brand-purple: #3a54a1;
+    --site-color-brand-salmon: #f75c58;
+    --site-color-brand-green: #06b271;
+    --site-color-brand-grey: #696969;
+
+    /* Greys */
+    --site-color-black-80: #333333;
+    --site-color-black-60: #666666;
+    --site-color-black-40: #999999;
+    --site-color-black-20: #cccccc;
+    --site-color-black-10: #dddddd;
+    --site-color-black-05: #f2f2f2;
+    --site-color-white: #ffffff;
+
+    /* Blues */
+    --site-color-blue-76: #3d99d6;
+    --site-color-blue-60: #67afdf;
+    --site-color-blue-40: #99cae9;
+    --site-color-blue-25: #bfdef1;
+    --site-color-blue-15: #d9ebf7;
+    --site-color-blue-10: #e6f2fa;
+    --site-color-blue-04: #f5fafd;
+
+    /* Navies */
+    --site-color-navy-90: #465565;
+    --site-color-navy-70: #5a7b9f;
+    --site-color-navy-60: #718ead;
+    --site-color-navy-40: #a1b3c8;
+    --site-color-navy-30: #b8c6d6;
+    --site-color-navy-20: #d0d9e4;
+
+    /* Feedback */
+    --site-color-red: #d03633;
+    --site-color-red-15: #f8e1e0;
+    --site-color-red-05: #fdf5f5;
+    --site-color-green-90: #2d750a;
+    --site-color-green-70: #388314;
+    --site-color-green-05: #f5fbf4;
+    --site-color-orange: #fa7f14;
+    --site-color-orange-dark: #e87512;
+    --site-color-pink: #b53cde;
+}
+
+/* -----------------------------------------------------------------------------
+ * 2. Semantic — what each colour is for
+ *
+ * These are SEP's own names, from the Semantic Colours page of the library.
+ * -------------------------------------------------------------------------- */
+
+:root {
+    /* Text */
+    --site-text-primary: var(--site-color-black-80);
+    --site-text-secondary: var(--site-color-black-60);
+    --site-text-accent-primary: var(--site-color-brand-blue-accessible);
+    --site-text-accent-secondary: var(--site-color-brand-navy);
+    --site-text-inverse-primary: var(--site-color-white);
+    --site-text-inverse-disabled: var(--site-color-blue-10);
+    --site-text-disabled: var(--site-color-navy-40);
+    --site-text-error: var(--site-color-red);
+    --site-text-success: var(--site-color-green-90);
+
+    /* Background */
+    --site-bg-primary: var(--site-color-white);
+    --site-bg-secondary: var(--site-color-blue-04);
+    --site-bg-tertiary: var(--site-color-blue-10);
+    --site-bg-accent-primary: var(--site-color-brand-blue);
+    --site-bg-accent-secondary: var(--site-color-brand-navy);
+    --site-bg-disabled: var(--site-color-navy-40);
+    --site-bg-error: var(--site-color-red-05);
+    --site-bg-success-primary: var(--site-color-green-70);
+    --site-bg-success-secondary: var(--site-color-green-05);
+    --site-bg-warning: var(--site-color-orange);
+    --site-bg-overlay: #00000099;
+
+    /* Icon */
+    --site-icon-primary: var(--site-color-black-80);
+    --site-icon-secondary: var(--site-color-black-60);
+    --site-icon-accent-primary: var(--site-color-brand-blue-accessible);
+    --site-icon-accent-secondary: var(--site-color-brand-navy);
+    --site-icon-inverse-primary: var(--site-color-white);
+    --site-icon-disabled: var(--site-color-navy-40);
+    --site-icon-error: var(--site-color-red);
+    --site-icon-success: var(--site-color-green-70);
+    --site-icon-warning: var(--site-color-orange);
+
+    /* Stroke */
+    --site-stroke-primary: var(--site-color-navy-60);
+    --site-stroke-secondary: var(--site-color-navy-20);
+    --site-stroke-tertiary: var(--site-color-navy-40);
+    --site-stroke-accent-primary: var(--site-color-brand-blue);
+    --site-stroke-accent-secondary: var(--site-color-brand-navy);
+    --site-stroke-error: var(--site-color-red);
+    --site-stroke-success: var(--site-color-green-70);
+    --site-stroke-focus: var(--site-color-pink);
+}
+
+/* -----------------------------------------------------------------------------
+ * 3. Mapping — SLDS global colour tokens onto the semantic layer
+ *
+ * The number after each line is how many declarations in the shipped stylesheet
+ * read that token, so the reach of each line is visible. Roles line up, so the
+ * mapping is by meaning, not by matching hex values.
+ *
+ * Note the direction of SLDS's `on-surface` ramp: -1 is the LIGHTEST (#757575)
+ * and -3 the darkest (#181818), so -1 takes SEP's secondary text and -2/-3 take
+ * its primary. Getting that backwards would wash out every body copy on site.
+ * -------------------------------------------------------------------------- */
+
+:root {
+    /* Surfaces */
+    --slds-g-color-surface-1: var(--site-bg-primary);              /* 12 */
+    --slds-g-color-surface-2: var(--site-bg-secondary);            /* 13 */
+    --slds-g-color-surface-3: var(--site-bg-tertiary);             /*  1 */
+    --slds-g-color-surface-container-1: var(--site-bg-primary);    /* 127 */
+    --slds-g-color-surface-container-2: var(--site-bg-secondary);  /* 90 */
+    --slds-g-color-surface-container-3: var(--site-bg-tertiary);   /*  7 */
+
+    /* Text on those surfaces */
+    --slds-g-color-on-surface-1: var(--site-text-secondary);       /* 71 */
+    --slds-g-color-on-surface-2: var(--site-text-primary);         /* 39 */
+    --slds-g-color-on-surface-3: var(--site-text-primary);         /* 56 */
+
+    /* Accent — links and brand fills */
+    --slds-g-color-accent-1: var(--site-text-accent-primary);      /* 48 */
+    --slds-g-color-accent-2: var(--site-text-accent-secondary);    /* 49 */
+    --slds-g-color-accent-3: var(--site-text-accent-secondary);    /* 26 */
+    --slds-g-color-accent-container-1: var(--site-bg-accent-primary);   /* 38 */
+    --slds-g-color-accent-container-2: var(--site-bg-accent-secondary); /* 25 */
+    --slds-g-color-accent-container-3: var(--site-bg-accent-secondary); /*  7 */
+    --slds-g-color-on-accent-1: var(--site-text-inverse-primary);  /* 29 */
+    --slds-g-color-on-accent-2: var(--site-text-inverse-primary);  /* 12 */
+
+    /* Borders */
+    --slds-g-color-border-1: var(--site-stroke-secondary);         /* 122 */
+    --slds-g-color-border-2: var(--site-stroke-primary);           /* 36 */
+
+    /* Status */
+    --slds-g-color-error-1: var(--site-text-error);                /* 40 */
+    --slds-g-color-on-error-1: var(--site-text-inverse-primary);   /* 18 */
+    --slds-g-color-success-1: var(--site-bg-success-primary);      /* 19 */
+    --slds-g-color-on-success-1: var(--site-text-inverse-primary); /* 21 */
+    --slds-g-color-warning-1: var(--site-bg-warning);              /*  4 */
+
+    /* Links.
+     *
+     * These need the shared hook set directly, NOT just --slds-g-color-accent-*.
+     * `--slds-s-link-color` resolves as
+     *   var(--lwc-brandTextLink, var(--slds-g-color-accent-2))
+     * and the Lightning Blue theme defines --lwc-brandTextLink, so the fallback
+     * never runs and remapping accent-2 alone leaves every link on the old
+     * #0176d3. Measured, not assumed. */
+    --slds-s-link-color: var(--site-text-accent-primary);
+    --slds-s-link-color-hover: var(--site-text-accent-secondary);
+    --slds-s-link-color-active: var(--site-text-accent-secondary);
+    --slds-s-link-color-focus: var(--site-text-accent-secondary);
+    --slds-s-link-outline-color: var(--site-stroke-focus);
+
+    /* Disabled */
+    --slds-g-color-disabled-1: var(--site-text-disabled);          /* 16 */
+    --slds-g-color-on-disabled-1: var(--site-text-disabled);       /* 14 */
+    --slds-g-color-on-disabled-2: var(--site-text-disabled);       /* 23 */
+    --slds-g-color-disabled-container-1: var(--site-bg-primary);   /* 14 */
+    --slds-g-color-disabled-container-2: var(--site-bg-disabled);  /* 18 */
 }

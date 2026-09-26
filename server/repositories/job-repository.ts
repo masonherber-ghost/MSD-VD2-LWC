@@ -1,6 +1,7 @@
 import type { Statement } from 'better-sqlite3'
 import { db } from '../database.ts'
 import { applyUpdate, groupBy, parseJsonArray, placeholders } from '../lib/sql.ts'
+import { iconForJobType } from '../lib/job-icons.ts'
 import type {
   Job, JobDetail, JobDriverLicence, JobLanguage, JobListItem, JobSchedule, JobStatus,
 } from '../types.ts'
@@ -8,7 +9,7 @@ import type {
 const UPDATABLE = [
   'title', 'subtitle', 'company_name', 'description', 'about_us', 'location', 'pay',
   'contract_type', 'start_date', 'hours_description', 'posted_date', 'closing_date',
-  'external_job_id', 'experience_level', 'education_required', 'job_type',
+  'external_job_id', 'experience_level', 'education_required', 'job_type', 'icon',
   'driver_licence_label', 'max_shortlist', 'positions_available',
   'application_management', 'interview_options', 'campaign_length_weeks',
   'vacancy_contact_id', 'status', 'views',
@@ -29,6 +30,31 @@ type ContentChildKey = keyof typeof CONTENT_CHILDREN
 
 let selectById: Statement | undefined
 let insertJob: Statement | undefined
+
+/**
+ * Normalise a write payload before it reaches the allow-list.
+ *
+ * Two things happen here, and both belong server-side rather than in a form:
+ *
+ * 1. The JSON array columns are stringified.
+ * 2. `icon` is derived from `job_type`. A payload that sets `job_type` and says
+ *    nothing about `icon` gets the mapped icon -- or null, when the type has no
+ *    artwork, which correctly CLEARS a stale icon left by a previous type.
+ *    An explicit `icon` in the payload always wins, so a job can be overridden
+ *    away from its type's default; a payload with neither key leaves the stored
+ *    icon alone, because `applyUpdate` only writes keys it is given.
+ */
+function toPatch(input: Record<string, unknown>): Record<string, unknown> {
+  const patch = { ...input }
+
+  for (const k of ['application_management', 'interview_options'] as const) {
+    if (k in patch) patch[k] = JSON.stringify(patch[k] ?? [])
+  }
+  if ('job_type' in patch && !('icon' in patch)) {
+    patch.icon = iconForJobType(patch.job_type)
+  }
+  return patch
+}
 
 function toJob(row: Record<string, unknown>): Job {
   return {
@@ -247,11 +273,7 @@ export function create(
       (input.status as string) ?? 'draft',
     ) as { id: number }
 
-    const patch = { ...input }
-    for (const k of ['application_management', 'interview_options'] as const) {
-      if (k in patch) patch[k] = JSON.stringify(patch[k] ?? [])
-    }
-    applyUpdate('jobs', id, patch, UPDATABLE)
+    applyUpdate('jobs', id, toPatch(input), UPDATABLE)
     writeChildren(id, input as ChildInput)
     return id
   })
@@ -264,11 +286,7 @@ export function update(id: number, input: Record<string, unknown>): JobDetail | 
     if (!selectById) selectById = db.prepare('SELECT * FROM jobs WHERE id = ?')
     if (!selectById.get(id)) return false
 
-    const patch = { ...input }
-    for (const k of ['application_management', 'interview_options'] as const) {
-      if (k in patch) patch[k] = JSON.stringify(patch[k] ?? [])
-    }
-    applyUpdate('jobs', id, patch, UPDATABLE)
+    applyUpdate('jobs', id, toPatch(input), UPDATABLE)
     writeChildren(id, input as ChildInput)
     return true
   })

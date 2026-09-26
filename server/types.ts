@@ -138,6 +138,8 @@ export interface Job {
   experience_level: string | null
   education_required: string | null
   job_type: string | null
+  /** Icon slug -> src/assets/icons/<slug>.svg. Derived from job_type. */
+  icon: string | null
   driver_licence_label: string | null
   max_shortlist: number | null
   positions_available: number | null

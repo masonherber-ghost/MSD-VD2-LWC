@@ -45,6 +45,17 @@ const JOB_STATUS_LABELS: Record<string, string> = {
     closed: 'Closed'
 };
 
+/**
+ * The status tag's modifier class. SEP gives each status its own fill, text and
+ * border rather than one neutral badge, so the colour has to travel with the
+ * record. The styles are in `ui/vacancyCard`; this only names them.
+ */
+function statusClass(status: string): string {
+    const known = ['draft', 'in_review', 'active', 'closed'];
+    const mod = known.includes(status) ? status.replace('_', '-') : 'draft';
+    return `vacancy-card__status vacancy-card__status_${mod}`;
+}
+
 interface MetaItem {
     key: string;
     icon: string;
@@ -58,6 +69,7 @@ interface JobCard {
     subtitle: string;
     href: string;
     statusLabel: string;
+    statusClass: string;
     isInReview: boolean;
     reviewNotice: string;
     meta: MetaItem[];
@@ -183,6 +195,7 @@ export default class Jobs extends LightningElement {
                 subtitle: String(j.subtitle ?? ''),
                 href: `/jobs/job-detail?id=${j.id}`,
                 statusLabel: JOB_STATUS_LABELS[status] ?? status,
+                statusClass: statusClass(status),
                 isInReview: status === 'in_review',
                 reviewNotice: IN_REVIEW_NOTICE,
                 meta,

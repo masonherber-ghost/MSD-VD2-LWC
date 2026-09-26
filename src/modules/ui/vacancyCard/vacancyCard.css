@@ -70,9 +70,84 @@
 .vacancy-card__meta-icon {
     --slds-c-icon-color-foreground-default: var(--slds-g-color-on-surface-2);
     flex: none;
+    
 }
 
 .vacancy-card__meta-value {
     color: var(--slds-g-color-on-surface-1);
     min-width: 0;
+}
+
+/* Status tag — SEP's four states.
+ *
+ * All of it is tier-4 hooks. `lightning-badge` exposes twelve public
+ * `--slds-c-badge-*` hooks and, unusually, NO private ones — so nothing here
+ * bends anything it shouldn't.
+ *
+ * The shipped geometry already matches the design: `.slds-badge` uses
+ * padding-block 4px + padding-inline 8px, so at the 14px text below the tag is
+ * 24px tall and 8px padded — the design's numbers exactly. Only the radius,
+ * the size and the three colours per state need setting.
+ *
+ * Two of the four are filled with white text, two are tinted with a matching
+ * border. That is a real distinction in the design, not decoration: filled
+ * means terminal (Active, Closed), outlined means in progress (In review,
+ * Draft). Keep it if you add a state. */
+
+.vacancy-card__status {
+    --slds-c-badge-font-size: var(--site-font-body-sm);
+    --slds-c-badge-radius-border: var(--site-radius-pill);
+
+}
+
+/* The tag's height.
+ *
+ * SEP's Tag specifies line-height 1. The badge's default is `normal`, which in
+ * Atkinson gives an 18px line box at 14px, making the tag 28px against the
+ * design's 24.
+ *
+ * This has to go on the PART, and the route there is worth recording because
+ * two plausible levers do nothing:
+ *
+ *   --slds-c-badge-font-lineheight   declared in the component's own
+ *       `badge.slds.css`, but every rule in that file is scoped to
+ *       `:host([data-render-mode="shadow"])`, and `lightning-badge` — unlike
+ *       `lightning-button` — never sets that attribute. The file is inert; the
+ *       badge is styled entirely by the global `.slds-badge` rule on its host.
+ *       Setting the hook is measurably a no-op.
+ *
+ *   line-height on the host   does not reach the label, which lives in the
+ *       shadow span and keeps its own `normal`.
+ *
+ * Verified by reading the computed line-height off both elements. */
+.vacancy-card__status::part(badge) {
+    line-height: 1;
+}
+
+/* Active — filled navy. */
+.vacancy-card__status_active {
+    --slds-c-badge-color-background: var(--site-bg-accent-secondary);
+    --slds-c-badge-color-border: var(--site-bg-accent-secondary);
+    --slds-c-badge-text-color: var(--site-text-inverse-primary);
+}
+
+/* In review — tinted, with a warning-orange border and text. */
+.vacancy-card__status_in-review {
+    --slds-c-badge-color-background: var(--site-color-red-05);
+    --slds-c-badge-color-border: var(--site-bg-warning);
+    --slds-c-badge-text-color: var(--site-bg-warning);
+}
+
+/* Draft — tinted, with a purple border and text. */
+.vacancy-card__status_draft {
+    --slds-c-badge-color-background: var(--site-bg-secondary);
+    --slds-c-badge-color-border: var(--site-color-brand-purple);
+    --slds-c-badge-text-color: var(--site-color-brand-purple);
+}
+
+/* Closed — filled, in the disabled blue-grey. */
+.vacancy-card__status_closed {
+    --slds-c-badge-color-background: var(--site-bg-disabled);
+    --slds-c-badge-color-border: var(--site-bg-disabled);
+    --slds-c-badge-text-color: var(--site-text-inverse-primary);
 }
