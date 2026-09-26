@@ -79,10 +79,11 @@ light DOM (see `rules-lwc-components.md`).
 **A relative `url()` in our CSS passes `npm run dev`, passes `npm run build`, and then 404s in the
 built site.**
 
-LWR rewrites the `href` of a `<link>` in `main.njk` to the hashed asset URL. It does **not** parse
-a stylesheet, so a `url()` inside one is emitted byte for byte — and by the CSS spec a relative URL
-in a stylesheet resolves against *that stylesheet's* URL, not the page's. Those differ between dev
-and the build:
+LWR rewrites the `href` of a `<link>` in `main.njk` to the hashed asset URL. It does **not** rewrite
+a `url()` inside a stylesheet — that is emitted byte for byte, verified against both our
+`fonts.css` and the shipped SLDS stylesheet, whose own `url(../../public/einstein-figure.svg)`
+comes out of the build unchanged. And by the CSS spec a relative URL in a stylesheet resolves
+against *that stylesheet's* URL, not the page's. Those differ between dev and the build:
 
 | | `fonts.css` is served at | `url(../fonts/x.woff2)` resolves to |
 |---|---|---|
@@ -114,10 +115,22 @@ the only file in the project with a `url()` at all; keep it that way by checking
 grep -rn "url(" src/assets/css/ src/modules --include="*.css"
 ```
 
-**Why it gets through both checks.** `npm run build` exits 0 because the CSS is valid and the file
-is copied; nothing verifies that a URL inside it resolves. The dev server answers because of the
-shared prefix. Neither proves the other, exactly as with the module cache below. The only honest
-check is to serve the build and request the asset:
+**Why nothing catches it.** LWR does check asset references, and warns when one cannot be resolved:
+
+```
+[warn][lwr-default-asset-transformer] Failed to resolve reference
+  '../../public/einstein-figure.svg' in asset '…/slds2.lightning-blue.css'
+```
+
+That warning is no help here, because it resolves the reference **against the source tree**, where
+`src/assets/css/` → `../fonts/` → `src/assets/fonts/` is perfectly valid. The path is only wrong
+once served. So the transformer stays quiet, the build exits 0, and the dev server answers because
+of its shared prefix. All three agree, and all three are looking at the wrong thing.
+
+(Those two `einstein-*.svg` warnings are pre-existing and are SLDS's own — the bundled dist omits
+the images its stylesheet points at. Not ours, and not fixable from here.)
+
+The only honest check is to serve the build and request the asset:
 
 ```bash
 npm run build && PORT=3200 npm run start

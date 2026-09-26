@@ -11,22 +11,9 @@ Is slds-global-header custom? I dont see it in the design-system.
 .slds-global-header__item: this should align vertically centered with the main nav
 
 
-Main title:
-page /jobs
-.slds-page-header: remove all styles. including padding, remove background, border and shadow
-remove .slds-media__figure eleemnt
 
 
-Buttons:
-This is the design for the button component:
-https://www.figma.com/design/BIYTe4aj1tFOEPvEWoBjgb/SEP---Foundations-UI-Library?node-id=11-125&m=dev
-only consider the following variants:
-Size=Small, State=Default, Colour=Light
-Size=Small, State=Hover, Colour=Light
-Size=Small, State=Active, Colour=Light
-Size=Small, State=Disabled, Colour=Light
-/build-from-wireframe. identify the tokens that can be used to skin the button component (text) color, background-color, hover styles, border-radius, shadow
-font-size, font-weight, 
+
 
 
 
