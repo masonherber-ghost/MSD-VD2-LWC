@@ -56,6 +56,10 @@ const FEATURES: Record<string, Release> = {
     'jobDetail.applicants': '1.2',
     'manageOrg.team': '1.2',
     'jobs.applicantCount': '1.2',
+    // 1.1 had no public site at all: signed out, every route sent you to the
+    // login screen. From 1.2 there is a public front door with its own nav, so
+    // this one flag governs both the gate and the nav it replaced.
+    'site.public': '1.2',
     'jobDetail.vacancyContact': '1.3',
 
     // Not shipped yet — the bell is dressing until there is something behind it.

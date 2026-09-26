@@ -76,7 +76,7 @@ const HOW_IT_WORKS = {
         }
     ],
     linkLabel: 'How it works',
-    linkHref: '#'
+    linkHref: '/how-it-works'
 };
 
 const PARTNER = {
@@ -97,7 +97,7 @@ const PARTNER = {
         }
     ],
     linkLabel: 'Why recruit with us',
-    linkHref: '#',
+    linkHref: '/why-recruit-with-msd',
     iconName: 'standard:partners'
 };
 
@@ -122,7 +122,7 @@ const THRIVING = {
         }
     ],
     linkLabel: 'Supporting employees',
-    linkHref: '#',
+    linkHref: '/supporting-employees',
     iconName: 'standard:reward'
 };
 

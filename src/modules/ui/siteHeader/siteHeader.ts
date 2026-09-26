@@ -12,6 +12,7 @@ import {
     onChange as onReleaseChange,
     type Release
 } from 'data/release';
+import { enforceLoginGate } from 'data/gate';
 
 const LINK = 'site-header__link';
 const LINK_ACTIVE = 'site-header__link site-header__link_active';
@@ -40,10 +41,18 @@ export default class SiteHeader extends LightningElement {
         this.user = currentUser();
         this.unsubscribe = onChange(() => {
             this.user = currentUser();
+            enforceLoginGate(this.release);
         });
         this.unsubRelease = onReleaseChange(() => {
             this.release = currentRelease();
+            enforceLoginGate(this.release);
         });
+        // The header is the one component every route renders, which makes it
+        // the only place a site-wide gate can run without touching all sixteen
+        // of them. It re-runs on session and release changes, so toggling down
+        // to 1.1 while signed out redirects immediately rather than on the next
+        // navigation.
+        enforceLoginGate(this.release);
     }
 
     disconnectedCallback(): void {
@@ -68,24 +77,6 @@ export default class SiteHeader extends LightningElement {
 
     get companyName(): string {
         return this.user?.company_name ?? '';
-    }
-
-    get listAJobClass(): string {
-        return this.current === 'list-a-job' ? LINK_ACTIVE : LINK;
-    }
-
-    get myJobsClass(): string {
-        return this.current === 'jobs' ? LINK_ACTIVE : LINK;
-    }
-
-    /**
-     * The Help centre entry is a `lightning-button-menu`, not an `<a>`, so it
-     * takes its own classes — the link classes style an anchor and there is no
-     * anchor here. `site.css` talks the button down to match its neighbours.
-     */
-    get helpCentreMenuClass(): string {
-        const base = 'site-header__menu';
-        return this.current === 'help-centre' ? `${base} site-header__menu_active` : base;
     }
 
     get loginClass(): string {

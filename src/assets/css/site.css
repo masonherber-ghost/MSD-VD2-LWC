@@ -95,36 +95,6 @@ body {
     white-space: nowrap;
 }
 
-.site-header__nav {
-    display: flex;
-    gap: 1rem;
-    margin-left: 1.5rem;
-}
-
-/* The Help centre nav entry is a lightning-button-menu so it can hold a
-   dropdown, but it has to read as one of the plain links beside it. Its
-   <button> is exposed as a part; nothing deeper is reachable. The values match
-   .site-header__link below deliberately — the two sit on the same row and any
-   difference shows as a misalignment. */
-.site-header__menu::part(button) {
-    color: var(--slds-g-color-on-surface-2, #444);
-    font-size: 0.8125rem;
-    line-height: 1;
-    padding: 0.35rem 0;
-    border: 0;
-    border-bottom: 2px solid transparent;
-    border-radius: 0;
-}
-
-.site-header__menu::part(button):hover {
-    color: var(--slds-g-color-accent-container-1, #0176d3);
-}
-
-.site-header__menu_active::part(button) {
-    color: var(--slds-g-color-accent-container-1, #0176d3);
-    border-bottom-color: var(--slds-g-color-accent-container-1, #0176d3);
-    font-weight: 600;
-}
 
 .site-header__link {
     color: var(--slds-g-color-on-surface-2, #444);

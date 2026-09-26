@@ -1039,6 +1039,18 @@
             "layoutTemplate": "$layoutsDir/main.njk"
         },
         {
+            "id": "whyRecruitWithMsd",
+            "path": "/why-recruit-with-msd",
+            "rootComponent": "example/whyRecruitWithMsd",
+            "layoutTemplate": "$layoutsDir/main.njk"
+        },
+        {
+            "id": "supportingEmployees",
+            "path": "/supporting-employees",
+            "rootComponent": "example/supportingEmployees",
+            "layoutTemplate": "$layoutsDir/main.njk"
+        },
+        {
             "id": "profile",
             "path": "/profile",
             "rootComponent": "example/profile",
