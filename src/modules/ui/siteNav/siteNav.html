@@ -1,95 +1,97 @@
 <template lwc:render-mode="light">
-    <!-- Two audiences, one component. Signed in: the employer's workspace.
-         Signed out from 1.2: the public front door. Signed out at 1.1: nothing,
-         because there was no public site — `data/gate` is already sending the
-         visitor to the login form. -->
+    <!-- Two audiences, two regions.
+         `region="links"` is the inline row beside the logo, desktop only.
+         `region="menu"` is the trigger that sits with the global actions on the
+         right, phone only. The header places one of each, so the destination
+         list stays in this one file. -->
 
-    <!-- Mobile. One flat menu: a submenu has nowhere to open on a phone, so the
-         desktop dropdown's items sit under a subheader instead. -->
-    <lightning-button-menu
-        lwc:if={showNav}
-        class="site-nav__trigger slds-hide_medium slds-m-right_xx-small"
-        icon-name="utility:rows"
-        icon-size="small"
-        variant="bare"
-        alternative-text="Open navigation"
-        menu-alignment="left"
-    >
-        <template lwc:if={isSignedIn}>
-            <lightning-menu-item
-                href="/list-a-job"
-                label="List a job"
-                prefix-icon-name="utility:new"
-            ></lightning-menu-item>
-            <lightning-menu-item
-                href="/jobs"
-                label="My jobs"
-                prefix-icon-name="utility:list"
-            ></lightning-menu-item>
-            <lightning-menu-item
-                href="/help-centre"
-                label="Help centre"
-                prefix-icon-name="utility:question"
-            ></lightning-menu-item>
-            <lightning-menu-subheader label="Help centre"></lightning-menu-subheader>
-            <lightning-menu-item href="/about-this-site" label="About this site"></lightning-menu-item>
-            <lightning-menu-item href="/how-it-works" label="How it works"></lightning-menu-item>
-            <lightning-menu-item href="/contact-us" label="Contact us"></lightning-menu-item>
-            <lightning-menu-item href="/request-support" label="Request support"></lightning-menu-item>
-        </template>
-
-        <template lwc:else>
-            <lightning-menu-item
-                href="/list-a-job"
-                label="List your job"
-                prefix-icon-name="utility:new"
-            ></lightning-menu-item>
-            <lightning-menu-subheader label="Recruiting with MSD"></lightning-menu-subheader>
-            <lightning-menu-item href="/why-recruit-with-msd" label="Why recruit with MSD"></lightning-menu-item>
-            <lightning-menu-item href="/supporting-employees" label="Supporting employees"></lightning-menu-item>
-            <lightning-menu-item href="/how-it-works" label="How it works"></lightning-menu-item>
-            <lightning-menu-item href="/contact-us" label="Contact us"></lightning-menu-item>
-        </template>
-    </lightning-button-menu>
-
-    <!-- Desktop -->
-    <nav lwc:if={showNav} class="site-nav slds-show_medium">
-        <template lwc:if={isSignedIn}>
-            <a href="/list-a-job" class={listAJobClass}>List a job</a>
-            <a href="/jobs" class={myJobsClass}>My jobs</a>
-            <!-- icon-name="utility:chevrondown" is deliberate: the menu appends
-                 its own utility:down unless the icon is already a down chevron,
-                 so any other name renders two carets. -->
-            <lightning-button-menu
-                class={helpCentreMenuClass}
-                label="Help centre"
-                icon-name="utility:chevrondown"
-                variant="bare"
-                menu-alignment="left"
-            >
-                <lightning-menu-item href="/help-centre" label="Help centre"></lightning-menu-item>
-                <lightning-menu-divider></lightning-menu-divider>
-                <lightning-menu-item href="/about-this-site" label="About this site"></lightning-menu-item>
+    <template lwc:if={isMenu}>
+        <lightning-button-menu
+            lwc:if={showNav}
+            class="site-nav__trigger slds-hide_medium"
+            icon-name="utility:rows"
+            icon-size="medium"
+            variant="bare"
+            alternative-text="Open navigation"
+            menu-alignment="right"
+        >
+            <template lwc:if={isSignedIn}>
+                <lightning-menu-item href="/" label="Home" prefix-icon-name="utility:home"></lightning-menu-item>
+                <lightning-menu-item
+                    href={firstSlotHref}
+                    label={firstSlotLabel}
+                    prefix-icon-name={firstSlotIcon}
+                ></lightning-menu-item>
+                <lightning-menu-subheader label="How it works"></lightning-menu-subheader>
                 <lightning-menu-item href="/how-it-works" label="How it works"></lightning-menu-item>
-                <lightning-menu-item href="/contact-us" label="Contact us"></lightning-menu-item>
+                <lightning-menu-item href="/why-recruit-with-msd" label="Why recruit with MSD"></lightning-menu-item>
+                <lightning-menu-item href="/supporting-employees" label="Supporting employees"></lightning-menu-item>
+                <lightning-menu-item href="/help-centre" label="Help centre"></lightning-menu-item>
+                <lightning-menu-item href="/about-this-site" label="About this site"></lightning-menu-item>
                 <lightning-menu-item href="/request-support" label="Request support"></lightning-menu-item>
-            </lightning-button-menu>
-        </template>
+                <lightning-menu-divider></lightning-menu-divider>
+                <lightning-menu-item href="/contact-us" label="Contact us" prefix-icon-name="utility:call"></lightning-menu-item>
+            </template>
 
-        <template lwc:else>
-            <a href="/list-a-job" class={listYourJobClass}>List your job</a>
-            <lightning-button-menu
-                class={recruitingMenuClass}
-                label="Recruiting with MSD"
-                icon-name="utility:chevrondown"
-                variant="bare"
-                menu-alignment="left"
-            >
+            <template lwc:else>
+                <lightning-menu-item href="/list-a-job" label="List your job" prefix-icon-name="utility:new"></lightning-menu-item>
+                <lightning-menu-subheader label="Recruiting with MSD"></lightning-menu-subheader>
                 <lightning-menu-item href="/why-recruit-with-msd" label="Why recruit with MSD"></lightning-menu-item>
                 <lightning-menu-item href="/supporting-employees" label="Supporting employees"></lightning-menu-item>
                 <lightning-menu-item href="/how-it-works" label="How it works"></lightning-menu-item>
                 <lightning-menu-item href="/contact-us" label="Contact us"></lightning-menu-item>
-            </lightning-button-menu>
-        </template>
-    </nav>
+                <!-- Signed out on a phone the whole header is logo + this menu,
+                     so the way in has to live inside it. -->
+                <lightning-menu-divider></lightning-menu-divider>
+                <lightning-menu-item href="/login" label="Login" prefix-icon-name="utility:user"></lightning-menu-item>
+            </template>
+        </lightning-button-menu>
+    </template>
+
+    <template lwc:else>
+        <nav lwc:if={showNav} class="site-nav slds-show_medium">
+            <template lwc:if={isSignedIn}>
+                <a href="/" class={homeClass}>Home</a>
+                <!-- One slot, two labels: an employer with nothing listed is sent
+                     to create their first vacancy; once anything exists — a draft
+                     counts — it becomes the way back to the list. -->
+                <a href={firstSlotHref} class={firstSlotClass}>{firstSlotLabel}</a>
+                <!-- icon-name="utility:chevrondown" is deliberate: the menu appends
+                     its own utility:down unless the icon is already a down chevron,
+                     so any other name renders two carets. -->
+                <lightning-button-menu
+                    class={howItWorksMenuClass}
+                    label="How it works"
+                    icon-name="utility:chevrondown"
+                    variant="bare"
+                    menu-alignment="left"
+                >
+                    <lightning-menu-item href="/how-it-works" label="How it works"></lightning-menu-item>
+                    <lightning-menu-divider></lightning-menu-divider>
+                    <lightning-menu-item href="/why-recruit-with-msd" label="Why recruit with MSD"></lightning-menu-item>
+                    <lightning-menu-item href="/supporting-employees" label="Supporting employees"></lightning-menu-item>
+                    <lightning-menu-item href="/help-centre" label="Help centre"></lightning-menu-item>
+                    <lightning-menu-item href="/about-this-site" label="About this site"></lightning-menu-item>
+                    <lightning-menu-item href="/request-support" label="Request support"></lightning-menu-item>
+                </lightning-button-menu>
+                <a href="/contact-us" class={contactUsClass}>Contact us</a>
+            </template>
+
+            <template lwc:else>
+                <a href="/list-a-job" class={listYourJobClass}>List your job</a>
+                <lightning-button-menu
+                    class={recruitingMenuClass}
+                    label="Recruiting with MSD"
+                    icon-name="utility:chevrondown"
+                    variant="bare"
+                    menu-alignment="left"
+                >
+                    <lightning-menu-item href="/why-recruit-with-msd" label="Why recruit with MSD"></lightning-menu-item>
+                    <lightning-menu-item href="/supporting-employees" label="Supporting employees"></lightning-menu-item>
+                    <lightning-menu-item href="/how-it-works" label="How it works"></lightning-menu-item>
+                    <lightning-menu-item href="/contact-us" label="Contact us"></lightning-menu-item>
+                </lightning-button-menu>
+            </template>
+        </nav>
+    </template>
 </template>

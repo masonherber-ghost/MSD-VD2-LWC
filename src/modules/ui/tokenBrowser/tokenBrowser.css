@@ -1,0 +1,39 @@
+/* A fixed preview column keeps every token name on the same left edge, however
+   wide the sample beside it is. */
+.token-browser__preview {
+    flex: 0 0 auto;
+    width: var(--slds-g-sizing-11, 4rem);
+    display: flex;
+    align-items: center;
+}
+
+.token-browser__name {
+    min-width: 0;
+}
+
+.token-browser__swatch,
+.token-browser__radius,
+.token-browser__shadow {
+    display: inline-block;
+    width: var(--slds-g-sizing-9, 2rem);
+    height: var(--slds-g-sizing-9, 2rem);
+    border: 1px solid var(--slds-g-color-border-1, #e5e5e5);
+}
+
+/* Spacing and sizing tokens are drawn to scale, capped so the long end of the
+   scale does not push the page sideways. */
+.token-browser__bar {
+    display: inline-block;
+    height: var(--slds-g-sizing-5, 1rem);
+    max-width: var(--slds-g-sizing-11, 4rem);
+    background: var(--slds-g-color-accent-container-1, #0176d3);
+}
+
+.token-browser__shadow {
+    border: 0;
+    background: var(--slds-g-color-surface-1, #fff);
+}
+
+.token-browser__text {
+    line-height: 1;
+}

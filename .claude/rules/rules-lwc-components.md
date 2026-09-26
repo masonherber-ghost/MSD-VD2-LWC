@@ -26,6 +26,11 @@ Regenerate after upgrading the package: `npm run catalog`. It rewrites the catal
 registry, `src/assets/example-sources.json`, and the `examples/*` module records in
 `lwr.config.json` — never the `routes` block.
 
+`src/modules/data/tokens/tokens.js` is generated the same way, by `npm run tokens`
+(`scripts/build-tokens.mjs`), from the installed SLDS stylesheet plus `design-tokens.css`. It backs
+the **Tokens** tab at `/design-system` and is likewise never hand-edited. Both scripts read what is
+installed, so after upgrading either package run both.
+
 ---
 
 ## Verify before you write — two commands

@@ -30,6 +30,28 @@ export default class SiteNav extends LightningElement {
     @api current = '';
     @api release: Release = '2+';
 
+    /**
+     * True when the account has no vacancy at all, drafts included.
+     *
+     * Phrased as the negative because LWC requires a boolean `@api` to default
+     * to `false` (LWC1099) — an absent attribute is false. False therefore has
+     * to mean "assume there are vacancies", which is also the safe default: a
+     * missing or failed `/api` leaves the nav as it was rather than telling an
+     * employer with ten vacancies to create their first.
+     */
+    @api noVacancies = false;
+
+    /**
+     * Which half to render: `links` (the inline desktop row, the default) or
+     * `menu` (the phone trigger). The header places one of each so both forms
+     * keep reading from the same destination list.
+     */
+    @api region: 'links' | 'menu' = 'links';
+
+    get isMenu(): boolean {
+        return this.region === 'menu';
+    }
+
     get isSignedIn(): boolean {
         return this.signedIn;
     }
@@ -39,20 +61,44 @@ export default class SiteNav extends LightningElement {
         return this.signedIn || hasPublicSite(this.release);
     }
 
-    get listAJobClass(): string {
-        return this.current === 'list-a-job' ? LINK_ACTIVE : LINK;
+    /**
+     * The second nav slot. An employer with nothing listed gets "Create a job",
+     * pointing at the form; once anything exists — a draft counts — it becomes
+     * "My jobs", pointing at the list. One slot, so the nav keeps its shape.
+     */
+    get firstSlotLabel(): string {
+        return this.noVacancies ? 'Create a job' : 'My jobs';
+    }
+
+    get firstSlotHref(): string {
+        return this.noVacancies ? '/list-a-job' : '/jobs';
+    }
+
+    get firstSlotIcon(): string {
+        return this.noVacancies ? 'utility:new' : 'utility:list';
+    }
+
+    get firstSlotClass(): string {
+        const active = this.noVacancies
+            ? this.current === 'list-a-job'
+            : this.current === 'jobs';
+        return active ? LINK_ACTIVE : LINK;
+    }
+
+    get homeClass(): string {
+        return this.current === 'home' ? LINK_ACTIVE : LINK;
+    }
+
+    get contactUsClass(): string {
+        return this.current === 'contact-us' ? LINK_ACTIVE : LINK;
+    }
+
+    get howItWorksMenuClass(): string {
+        return this.current === 'how-it-works' ? MENU_ACTIVE : MENU;
     }
 
     get listYourJobClass(): string {
-        return this.listAJobClass;
-    }
-
-    get myJobsClass(): string {
-        return this.current === 'jobs' ? LINK_ACTIVE : LINK;
-    }
-
-    get helpCentreMenuClass(): string {
-        return this.current === 'help-centre' ? MENU_ACTIVE : MENU;
+        return this.current === 'list-a-job' ? LINK_ACTIVE : LINK;
     }
 
     get recruitingMenuClass(): string {

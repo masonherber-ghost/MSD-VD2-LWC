@@ -13,7 +13,7 @@
                             <div class="slds-media__body">
                                 <h1 class="slds-page-header__title slds-truncate">Design system</h1>
                                 <p class="slds-page-header__name-meta">
-                                    Every example that ships with lightning-base-components, rendered live.
+                                    What ships: every component example, and every design token.
                                 </p>
                             </div>
                         </div>
@@ -21,7 +21,21 @@
                 </div>
             </div>
 
-            <ui-kitchen-sink></ui-kitchen-sink>
+            <lightning-tabset variant="scoped">
+                <lightning-tab label="Components">
+                    <ui-kitchen-sink></ui-kitchen-sink>
+                </lightning-tab>
+                <lightning-tab label="Tokens">
+                    <div class="slds-p-top_small">
+                        <ui-token-browser section="tokens"></ui-token-browser>
+                    </div>
+                </lightning-tab>
+                <lightning-tab label="Component hooks">
+                    <div class="slds-p-top_small">
+                        <ui-token-browser section="hooks"></ui-token-browser>
+                    </div>
+                </lightning-tab>
+            </lightning-tabset>
         </main>
     </div>
 

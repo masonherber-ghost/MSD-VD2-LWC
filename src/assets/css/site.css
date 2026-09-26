@@ -15,46 +15,8 @@ body {
     min-height: calc(100vh - 50px);
 }
 
-/* Content width.
- *
- * Lightning Experience itself is fluid — a record page fills the browser at any
- * width. An Experience Cloud site is not: the Theme panel's maximum content
- * width compiles to --dxp-s-section-columns-max-width (plus the matching header
- * and footer hooks), and its -mobile variants are set to `none`. Production LWR
- * sites run 1440px or 1800px.
- *
- * This follows that model: fluid on phones and tablets, capped from the large
- * breakpoint up, and the header and footer bars capped to the same edge so the
- * wordmark, the page and the release toggle share one content column. Change
- * the cap in one place — these two custom properties.
- */
-:root {
-    --site-content-max-width: none;
-    --site-content-gutter: var(--slds-g-spacing-4, 1rem);
-}
-
-/* 48em / 768px — the SLDS medium breakpoint. Still fluid, wider gutter. */
-@media (min-width: 48em) {
-    :root {
-        --site-content-gutter: var(--slds-g-spacing-5, 1.5rem);
-    }
-}
-
-/* 64em / 1024px — the SLDS large breakpoint. 80rem is slds-container_x-large,
-   the widest cap SLDS ships. */
-@media (min-width: 64em) {
-    :root {
-        --site-content-max-width: 80rem;
-    }
-}
-
-/* 100em / 1600px — 90rem (1440px) is the cap the production LWR sites use, and
-   at this viewport it still leaves a real margin either side. */
-@media (min-width: 100em) {
-    :root {
-        --site-content-max-width: 90rem;
-    }
-}
+/* Page-level tokens (--site-content-max-width, --site-content-gutter) are
+   defined in design-tokens.css, which main.njk loads before this file. */
 
 .site__main {
     max-width: var(--site-content-max-width);
@@ -89,10 +51,18 @@ body {
 }
 
 .site-header__wordmark {
-    font-weight: 700;
+    display: flex;
+    align-items: center;
     text-decoration: none;
     color: inherit;
-    white-space: nowrap;
+}
+
+/* The supplied lockup is 216x30. Height is pinned so the bar's 50px stays put
+   whatever the file's intrinsic size; width follows the aspect ratio. */
+.site-header__logo-image {
+    display: block;
+    height: 1.75rem;
+    width: auto;
 }
 
 

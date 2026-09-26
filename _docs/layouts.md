@@ -1,5 +1,291 @@
-In Salesforce architecture, layout systems operate at two distinct tiers: Page-Level Templates (Macro) and In-Component Grid Systems (Micro).   Understanding the capabilities, configuration options, and constraints of both tiers is essential to building an interface that looks native and ports seamlessly to production.   Tier 1: Page-Level Layouts (FlexiPage Templates)When users navigate Salesforce, they view a Lightning Page (FlexiPage). The page is divided into standardized regions where administrators drop standard or custom Lightning Web Components.   Page TemplateStructural BreakdownTypical Use CasePrimary Platform ConstraintsHeader and Right SidebarFull-width top header, ~66%–70% main body region, ~30%–33% right sidebar.   Canonical Record Pages (Accounts, Opportunities, Cases).   The right sidebar is a "narrow" region (~300–360px). Standard components (like Related Lists or Data Tables) dropped here automatically switch into collapsed card modes and truncate displays.   Header and Two Equal RegionsFull-width top header, 50% left column, 50% right column.   Comparison dashboards, split record views, approval workflows.   Consumes significant horizontal space; both columns will stack vertically on mobile or smaller viewports.   Header and Three RegionsFull-width top header, 3 equal columns (~33% each).   Command centers, high-density analytics, Home pages.   Information density is extremely high; components must be designed for narrow containers or risk horizontal clipping.   Header and One RegionFull-width top header, 100% full-width main canvas.   Extended data tables, large multi-step wizard flows, complex tabsets.   Lacks contextual sidebars; secondary information must be moved into tab sets or modal dialogs.   Pinned Region Templates (e.g., Pinned Left Sidebar)Persistent non-scrolling side region (often 20%–25% width) alongside scrolling workspace canvas.   Console Navigation Apps (Customer Support / Service Cloud).   Desktop-only. Pinned templates do not adapt to the Salesforce Mobile App and cannot be used in Standard Navigation apps.   Platform Constraints of Page Templates:Injected Vertical Spacing (.flexipageComponent): In production Salesforce, every component dropped into a page region is automatically wrapped in a container that applies an external bottom margin:CSS.flexipageComponent:not(:last-child):not(:empty) {
+# Salesforce Lightning Layout Architecture & Constraints Guide
+
+Salesforce layout architecture is divided into two distinct levels: **Macro Layouts** (Lightning Page / FlexiPage templates governing page regions) and **Micro Layouts** (in-component responsive grid systems governing layout inside individual components).
+
+---
+
+## 1. Macro Layouts: Lightning Page Templates (FlexiPages)
+
+In Salesforce, pages are assembled declaratively inside Lightning App Builder using pre-defined page templates. Custom Lightning Web Components are designed to live inside one of these defined regions.
+
+### Standard Page Templates
+
+| Template Name | Layout Composition | Standard Use Case | Platform Constraints |
+| --- | --- | --- | --- |
+| **Header and Right Sidebar** | Full-width header; ~66%–70% left main body; ~30%–33% right sidebar.
+
+ | Standard Record Pages (Accounts, Contacts, Opportunities, Cases).
+
+ | The right sidebar operates as a "narrow" region (~300–360px wide). Standard components like Related Lists automatically collapse into narrow tile formats and truncate displays to 3 items.
+
+ |
+| **Header and Two Equal Regions** | Full-width header; 50% left column; 50% right column.
+
+ | Side-by-side comparisons, operational split-views, approval queues.
+
+ | Columns stack into a single column on mobile devices. Wide elements (e.g., multi-column data tables) cause horizontal scrolling if content is dense.
+
+ |
+| **Header and Three Regions** | Full-width header; three equal columns (~33.3% each).
+
+ | Home pages, command centers, high-density KPI monitoring.
+
+ | High information density; components must support narrow container widths.
+
+ |
+| **Header and One Region** | Full-width header; 100% full-width canvas.
+
+ | Full-screen data grids, complex wizard workflows, heavy administrative tools.
+
+ | Offers no contextual sidebars; secondary information must be embedded in tab sets or modals.
+
+ |
+| **Pinned Region Templates** (e.g., Pinned Left Sidebar) | Non-scrolling persistent side column alongside a scrolling workspace canvas.
+
+ | Service Cloud / Lightning Console apps.
+
+ | **Desktop-only.** Pinned templates do not adapt to the Salesforce Mobile App and cannot be used in Standard Navigation apps.
+
+ |
+
+### FlexiPage Structural Constraints
+
+* **Injected Component Gutters (`.flexipageComponent`):** Lightning App Builder wraps every component dropped onto a page in a system container that automatically injects a vertical bottom margin:
+
+
+```css
+.flexipageComponent:not(:last-child):not(:empty) {
   margin-bottom: var(--lwc-cardSpacingMargin, 0.75rem);
 }
-Constraint: You cannot override or remove this gap from inside your LWC stylesheet. If your design assumes two cards sit flush against each other without a 12px (0.75rem) gutter, it cannot be implemented cleanly on-platform.   Region Width Awareness: Salesforce base components adapt their layout depending on whether the region is classified as "narrow" or "wide". For example, an Enhanced Related List dropped into the narrow right sidebar will truncate to 3 items and switch from a tabular grid to a stacked tile view.   Tier 2: In-Component Grid Systems (lightning-layout & SLDS Grids)Inside an individual component, layout is managed using the 12-column flexbox grid system via <lightning-layout> and <lightning-layout-item>.   Layout Options and API Capabilities:12-Column Responsive Sizing: <lightning-layout-item> accepts integer spans from 1 to 12 across four distinct form factors:   size="12" (Default / mobile portrait)   small-device-size="12" (Mobile landscape)   medium-device-size="6" (Tablets, $\ge$ 768px)   large-device-size="4" (Desktop monitors, $\ge$ 1024px)   Row Wrapping: multiple-rows="true" enables items whose total size exceeds 12 to wrap onto subsequent rows seamlessly.   Horizontal Alignment (horizontal-align): Supports center, space (spaces between and at edges), spread (maximum space between, flush at edges), and end (aligned right).   Vertical Alignment (vertical-align): Supports start, center, end, and stretch (equal-height columns).   Boundary Gutters (pull-to-boundary): When layout items have internal padding (padding="around-small"), the parent layout needs pull-to-boundary="small" to cancel out outer padding and align flush with card edges.   Constraints of <lightning-layout>:Strict Descendant Hierarchy: Only <lightning-layout-item> components are valid structural children of <lightning-layout>. Inserting plain wrapper <div> elements, conditional template wrappers, or foreign components between the layout and its items breaks flex calculations and column alignment.   The Viewport vs. Container Breakpoint Trap:
-The device-sizing attributes (size, medium-device-size, large-device-size) evaluate browser viewport media queries, not container widths.   The Problem: If a component configured with large-device-size="6" is placed inside a 300px sidebar on a 1440px desktop screen, it triggers the desktop breakpoint and attempts to render as a 150px column, breaking labels and content.   The Solution: For components intended to be dropped anywhere, rely on CSS Container Queries (@container (min-width: ...)) in custom styles rather than device-size attributes.   Form Field Density Constraints: A standard 2-column form (size="6" per field) becomes unreadable if placed inside a container narrower than 500px. Forms placed in sidebars must always be structured as single-column layouts (size="12").   Comparison of Layout ToolsLayout MechanismScopePrimary OptionsMajor ConstraintsLightning App Builder Templates[cite: 2]Entire Page ShellHeader + 1, 2, or 3 regions; Pinned console sidebars.   Injects un-removable .flexipageComponent bottom margins (0.75rem); pinned templates are desktop-only.   <lightning-layout>[cite: 1]Within a Component12-column grid; responsive device attributes; horizontal/vertical alignment; pull-to-boundary.   Responsive attributes map to screen viewport, not container width; strict parent-child requirement.   SLDS 2 Grid Utilities (slds-grid)[cite: 1, 6]Within a ComponentRaw CSS utility classes (.slds-col, .slds-size_1-of-2, .slds-gutters).   Requires hand-writing class names; does not encapsulate spacing logic as cleanly as <lightning-layout>.   CSS Container Queries[cite: 6]Within a Component@container (min-width: 480px) responsive breakpoints.   Must be declared in the component's private .css file; not declarative in HTML.   Prototyping Best PracticeWhen prototyping your interface with LWC and SQLite:Model the Macro Page as a FlexiPage Template: Do not build the entire screen in one file. Build an outer shell representing the Header and Right Sidebar (8/4 split).   Build Within Self-Contained Cards: Place each feature (Form, Data Table, Activity Feed) inside an independent <lightning-card>.   Assume an 8/4 Grid for Record Views: Allocate 8 columns (size="8") for the primary tabs/detail lists, and 4 columns (size="4") for contextual widgets and activity feeds.   Use Single-Column Fields in the Sidebar: If putting inputs in the right 4-column sidebar, always force size="12" on items so fields stack vertically rather than attempting a side-by-side layout.  
+
+```
+
+
+This margin cannot be removed or styled from within a custom component’s CSS stylesheet. Any design requiring multiple cards to sit flush without a 12px (`0.75rem`) vertical gap will break when moved to production.
+
+
+* **Width-Aware Components:** Standard Salesforce components adapt their UI depending on whether they sit in a "wide" or "narrow" region. For example, `<lightning-datatable>` preserves columns in wide regions but requires horizontal scrolling in narrow regions, whereas list views automatically switch from tabular grids to stacked record tiles.
+
+
+
+---
+
+## 2. Micro Layouts: In-Component Grid Systems
+
+Inside a custom component, layout is structured using `<lightning-layout>` and `<lightning-layout-item>` (which wrap the SLDS responsive flexbox grid).
+
+### Configuration Options for `<lightning-layout>`
+
+* **Responsive 12-Column Sizing:** Layout item widths are set using integer spans from `1` to `12` based on device breakpoints:
+
+
+* `size="12"`: Default / mobile portrait (100% width).
+
+
+* `small-device-size="12"`: Mobile landscape.
+
+
+* `medium-device-size="6"`: Tablets / mid-size screens ($\ge$ 768px, 50% width).
+
+
+* `large-device-size="4"`: Desktops ($\ge$ 1024px, 33.3% width).
+
+
+
+
+* **Wrapping Rows (`multiple-rows`):** Boolean attribute (`multiple-rows="true"`) allowing items to wrap to subsequent lines when their cumulative size exceeds 12.
+
+
+* **Horizontal Alignment (`horizontal-align`):**
+* `center`: Groups items tightly in the container center.
+
+
+* `space`: Distributes items evenly with spaces around and between elements.
+
+
+* `spread`: Places first/last items flush to the edges and distributes remaining space evenly.
+
+
+* `end`: Aligns items to the far right edge.
+
+
+
+
+* **Vertical Alignment (`vertical-align`):**
+* `start`: Top-aligns items.
+
+
+* `center`: Vertically centers items.
+
+
+* `end`: Bottom-aligns items.
+
+
+* `stretch`: Forces all column items to match the height of the tallest item.
+
+
+
+
+* **Gutters & Boundary Padding (`pull-to-boundary`):**
+* Layout items accept internal padding (`padding="around-small"`, `padding="around-medium"`).
+
+
+* The parent `<lightning-layout>` requires `pull-to-boundary="small"` (or medium) to counteract this padding on outer edges, keeping exterior borders flush with cards.
+
+
+
+
+
+### Grid Constraints & Architectural Pitfalls
+
+* **Strict Descendant Hierarchy:** Only `<lightning-layout-item>` elements can be direct children of `<lightning-layout>`. Placing raw `<div>` wrappers, custom components, or conditional `<template lwc:if>` tags between them breaks flexbox calculations and column sizing.
+
+
+* **The Viewport Breakpoint Trap:** The responsive attributes (`medium-device-size`, `large-device-size`) evaluate **browser viewport media queries**, not the component container width.
+
+
+* *The Trap:* Placing a component configured with `large-device-size="6"` into a 300px sidebar on a wide desktop screen will trigger the desktop breakpoint, forcing the component into a 150px column and breaking text labels.
+
+
+* *The Fix:* Use CSS Container Queries in your component stylesheet instead of viewport attributes for components designed to live anywhere:
+
+
+```css
+:host {
+  display: block;
+  container-type: inline-size;
+}
+@container (max-width: 400px) {
+  .responsive-column {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+```
+
+
+
+
+* **Form Field Density:** A 2-column input layout (`size="6"` per field) requires at least 480px–500px of container width to remain readable. Inside a sidebar region, input fields must be set to `size="12"`.
+
+
+
+---
+
+## 3. UI Composition Rules for Realistic Salesforce Interfaces
+
+1. **The Card Container Pattern:** Salesforce UI never places inputs, tables, or buttons directly onto the bare page canvas. Every feature must be enclosed in a `<lightning-card>` with an icon, title, and action buttons.
+
+
+2. **Page Anatomy Formula:**
+* **Top:** Page Header / Highlights Panel with record icon, title, and action button group.
+
+
+* **Main Column (Left 66%–70%):** `<lightning-tabset>` containing "Details" (2-column forms) and "Related Lists" (`<lightning-datatable>`).
+
+
+* **Context Column (Right 30%–33%):** Stacked single-column cards (Activity Timelines, Tasks, Quick Notes).
+
+
+
+
+3. **Spacing Tokens:**
+* Spacing between vertically stacked cards: `slds-m-bottom_small` (12px) or `slds-m-bottom_medium` (16px).
+
+
+* Canvas padding around the page: `slds-p-around_small` or `slds-p-around_medium`.
+
+
+
+
+
+---
+
+## 4. Production-Aligned Code Template
+
+This implementation represents a standard, responsive Salesforce record layout:
+
+```html
+<template>
+  <div class="slds-p-around_small">
+    
+    <!-- Highlights Panel / Page Header -->
+    <div class="slds-page-header slds-m-bottom_small">
+      <div class="slds-page-header__row">
+        <div class="slds-page-header__col-title">
+          <div class="slds-media">
+            <div class="slds-media__figure">
+              <lightning-icon icon-name="standard:account" size="large"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+              <h1 class="slds-page-header__title">Acme Corporation</h1>
+              <p class="slds-text-body_small">Account • Telecommunications</p>
+            </div>
+          </div>
+        </div>
+        <div class="slds-page-header__col-actions">
+          <lightning-button-group>
+            <lightning-button label="Edit"></lightning-button>
+            <lightning-button label="Delete"></lightning-button>
+          </lightning-button-group>
+        </div>
+      </div>
+    </div>
+
+    <!-- Macro 8 / 4 Responsive Grid -->
+    <lightning-layout multiple-rows="true" pull-to-boundary="small">
+      
+      <!-- Main Content Column (Left ~66%) -->
+      <lightning-layout-item size="12" medium-device-size="8" padding="around-small">
+        <lightning-tabset variant="default">
+          <lightning-tab label="Details">
+            <lightning-card title="Account Details" icon-name="utility:record">
+              <!-- Micro 2-Column Form Grid -->
+              <lightning-layout multiple-rows="true" class="slds-p-around_medium">
+                <lightning-layout-item size="12" small-device-size="6" class="slds-p-around_xx-small">
+                  <lightning-input label="Account Name" value="Acme Corporation" readonly></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="6" class="slds-p-around_xx-small">
+                  <lightning-input label="Phone" value="(555) 019-2834" readonly></lightning-input>
+                </lightning-layout-item>
+              </lightning-layout>
+            </lightning-card>
+          </lightning-tab>
+
+          <lightning-tab label="Related Contacts">
+            <lightning-card title="Contacts (3)" icon-name="standard:contact">
+              <div class="slds-p-horizontal_medium">
+                <lightning-datatable
+                  key-field="id"
+                  data={contacts}
+                  columns={columns}
+                  hide-checkbox-column>
+                </lightning-datatable>
+              </div>
+            </lightning-card>
+          </lightning-tab>
+        </lightning-tabset>
+      </lightning-layout-item>
+
+      <!-- Sidebar Context Column (Right ~33%) -->
+      <lightning-layout-item size="12" medium-device-size="4" padding="around-small">
+        <lightning-card title="Activity" icon-name="standard:task" class="slds-m-bottom_small">
+          <div class="slds-p-around_medium">
+            <lightning-input label="Log a Call" placeholder="Enter notes..."></lightning-input>
+          </div>
+        </lightning-card>
+
+        <lightning-card title="Key Metrics" icon-name="standard:lead_insights">
+          <div class="slds-p-around_medium">
+            <p class="slds-text-body_small">Annual Revenue: $4,500,000</p>
+            <p class="slds-text-body_small">Account Tier: Enterprise</p>
+          </div>
+        </lightning-card>
+      </lightning-layout-item>
+
+    </lightning-layout>
+  </div>
+</template>
+
+```

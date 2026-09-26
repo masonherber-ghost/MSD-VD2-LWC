@@ -13,6 +13,8 @@ import {
     type Release
 } from 'data/release';
 import { enforceLoginGate } from 'data/gate';
+// Aliased: `api` is already taken by the @api decorator imported from lwc.
+import apiClient, { DEV_ACCOUNT_ID } from 'data/api';
 
 const LINK = 'site-header__link';
 const LINK_ACTIVE = 'site-header__link site-header__link_active';
@@ -37,11 +39,24 @@ export default class SiteHeader extends LightningElement {
     release: Release = currentRelease();
     private unsubRelease: (() => void) | null = null;
 
+    /**
+     * Whether the account has any vacancy at all — a draft counts.
+     *
+     * The nav's first slot reads "Create a job" for an employer with nothing
+     * listed yet and "My jobs" once there is something to go back to, so the
+     * header has to know. It stays false until proven otherwise, so a failed or
+     * absent API — the static build has no `/api` — leaves the nav as it was
+     * rather than telling an employer with ten vacancies to create their first.
+     */
+    noVacancies = false;
+
     connectedCallback(): void {
         this.user = currentUser();
+        void this.loadVacancyState();
         this.unsubscribe = onChange(() => {
             this.user = currentUser();
             enforceLoginGate(this.release);
+            void this.loadVacancyState();
         });
         this.unsubRelease = onReleaseChange(() => {
             this.release = currentRelease();
@@ -53,6 +68,19 @@ export default class SiteHeader extends LightningElement {
         // to 1.1 while signed out redirects immediately rather than on the next
         // navigation.
         enforceLoginGate(this.release);
+    }
+
+    /** Signed out there is no account to ask about, so nothing is fetched. */
+    private async loadVacancyState(): Promise<void> {
+        if (this.user === null) {
+            return;
+        }
+        try {
+            const jobs = await apiClient.jobs(this.user.account_id ?? DEV_ACCOUNT_ID);
+            this.noVacancies = jobs.length === 0;
+        } catch {
+            // No /api in the static build. Leave the default — see the field.
+        }
     }
 
     disconnectedCallback(): void {

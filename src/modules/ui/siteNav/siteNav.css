@@ -1,3 +1,20 @@
+/* The phone trigger is a flex item in the global actions row; the host must be
+   a block for its size and spacing to apply. */
+.site-nav__trigger {
+    display: inline-block;
+}
+
+/* `lightning-button-menu` always renders a caret beside its icon — the extra
+   icon is in its shadow root with no part, so it can neither be removed nor
+   moved. A bordered variant therefore draws its box around icon *and* caret,
+   which is what made the small button look broken. `bare` drops the box, so the
+   caret simply sits beside the icon, matching how the avatar's menu reads.
+   Bare leaves a 16px hit area, well under a comfortable touch target, so the
+   button part is padded out — the part is the component's own public surface. */
+.site-nav__trigger::part(button) {
+    padding: var(--slds-g-spacing-3);
+}
+
 .site-nav {
     display: flex;
     align-items: center;

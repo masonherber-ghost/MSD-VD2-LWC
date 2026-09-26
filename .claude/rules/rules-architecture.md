@@ -129,6 +129,44 @@ curl -sL -o /dev/null -w '%{http_code}\n' \
   "http://localhost:3000/1/module/esm/0/l/en-US/mi/example%2Fjobs%2Fv%2F0_0_1/latest/example_jobs.js"
 ```
 
+`500` there is a compile error — the dev server log has it in full. If the error quotes source that
+is no longer in the file, it is cached: see *The module cache* below.
+
+## The module cache — the trap
+
+`__lwr_cache__/` holds LWR's compiled modules. **It caches failures as well as successes**, and a
+cached compile error survives editing the file that caused it: the dev server keeps answering `500`
+and keeps printing the *original* error, quoting source lines that are no longer on disk.
+
+The tell is an error whose quoted code does not match the file:
+
+```
+SyntaxError: .../siteNav.ts: LWC1099: Boolean public property must default to false.
+> 34 |   @api
+     |   ^
+  35 |   hasVacancies = true;      <- but the file now says `noVacancies = false`
+```
+
+When the quoted line and the file disagree, stop debugging the code. The code is already fixed.
+
+```bash
+lsof -ti:3000 | xargs kill      # the watcher does not clear this on its own
+rm -rf __lwr_cache__
+npm run dev
+```
+
+Two things follow from this:
+
+- **A fix that "did not take" is usually this**, not a wrong fix. Check the file on disk against the
+  error's quoted lines before changing anything else.
+- **`__lwr_cache__` is disposable.** It is gitignored and rebuilt on demand, so deleting it is
+  always safe — it only costs one slow first compile.
+
+`npm run build` writes `site/` from scratch and is unaffected, which is why a build can pass while
+the dev server still serves a stale 500. Neither proves the other.
+
+Not to be confused with the **npm** cache below — different cache, different problem.
+
 ## Version pinning
 
 `create-lwr` scaffolds `lwc` a version behind the compiler `lwr` bundles, which makes every

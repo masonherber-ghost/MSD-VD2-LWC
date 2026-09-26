@@ -1,0 +1,78 @@
+/* =============================================================================
+ * Design tokens — the ones THIS PROJECT defines.
+ *
+ * Everything here is ours. Nothing here is Salesforce's.
+ *
+ * SLDS 2 already ships 514 global tokens (`--slds-g-*`) and 275 component hooks
+ * (`--slds-c-*`). Those are the palette; this file is only for the handful of
+ * decisions the design system has no opinion about — page-level facts that
+ * several components must agree on.
+ *
+ * THE RULES
+ *
+ * 1. Prefer an SLDS token. Define one here only when SLDS has no equivalent.
+ *    A project token that duplicates `--slds-g-spacing-4` is a liability: it
+ *    will drift from the design system and nobody will notice.
+ * 2. Every token here is prefixed `--site-`, so a grep can always separate what
+ *    we own from what we inherit.
+ * 3. Values are expressed in SLDS tokens wherever one fits, so a theme change
+ *    still reaches them.
+ * 4. This is the ONLY file that defines `--site-*` tokens. Component stylesheets
+ *    consume them; they do not declare new ones. A value used in one component
+ *    is not a token — it is just a value, and belongs in that component's CSS.
+ * 5. Loaded before `site.css` in `src/layouts/main.njk`, so everything can
+ *    consume these.
+ *
+ * Overriding a shipped `--slds-c-*` hook is a different thing and does not
+ * belong here — it is a component-level decision and lives with that component.
+ * See `.claude/rules/rules-lwc-layout.md` § Design tokens.
+ * ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+ * Content width
+ *
+ * Lightning Experience itself is fluid — a record page fills the browser at any
+ * width. An Experience Cloud site is not: the Theme panel's maximum content
+ * width compiles to --dxp-s-section-columns-max-width (plus the matching header
+ * and footer hooks), with its -mobile variants set to `none`. Production LWR
+ * sites run 1440px or 1800px.
+ *
+ * This follows that model: fluid on phones and tablets, capped from the large
+ * breakpoint up. `.site__main`, `.site-header__inner` and `.site-footer__inner`
+ * all read these, so the wordmark, the page and the release toggle share one
+ * content column.
+ *
+ * Breakpoints are the SLDS ones (48em / 64em), so the page steps at the same
+ * widths the grid does.
+ * -------------------------------------------------------------------------- */
+
+:root {
+    /* The page's maximum content width. `none` = fluid. */
+    --site-content-max-width: none;
+
+    /* The horizontal page gutter, inside the cap. */
+    --site-content-gutter: var(--slds-g-spacing-4, 1rem);
+}
+
+/* 48em / 768px — the SLDS medium breakpoint. Still fluid, wider gutter. */
+@media (min-width: 48em) {
+    :root {
+        --site-content-gutter: var(--slds-g-spacing-5, 1.5rem);
+    }
+}
+
+/* 64em / 1024px — the SLDS large breakpoint. 80rem is slds-container_x-large,
+   the widest cap SLDS ships. */
+@media (min-width: 64em) {
+    :root {
+        --site-content-max-width: 80rem;
+    }
+}
+
+/* 100em / 1600px — 90rem (1440px) is the cap the production LWR sites use, and
+   at this viewport it still leaves a real margin either side. */
+@media (min-width: 100em) {
+    :root {
+        --site-content-max-width: 90rem;
+    }
+}

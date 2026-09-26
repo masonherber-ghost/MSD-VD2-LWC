@@ -54,6 +54,16 @@ specific one wins.
 
 ## Workflows
 
+### Build from a wireframe, mockup or Figma design
+**Use the `build-from-wireframe` skill.** Any visual design — an attached image, a pasted
+screenshot, a Figma link or frame — routes there by default, without being asked for by name.
+
+The short version, which the skill expands: map every region of the design to something that
+already ships, build it out of that, and report what you could not match. Match structure, labels,
+order, states and behaviour; leave the skin as Lightning ships it. **Never build a new custom
+component and never customise a shipped one to chase the picture** — get as close as the Salesforce
+lego allows and say where it falls short.
+
 ### Build or change a page
 1. `rules-lwc-components.md` — find the components that already exist. **Do not invent tags.**
 2. `rules-lwc-layout.md` — pick the page anatomy and compose it modularly.
@@ -77,8 +87,14 @@ component gate*.
 to `isEnabled`, and gate the whole widget.
 
 ### Browse what the component library can do
-`npm run dev` → `/design-system` renders every shipped example live. The catalog behind it is
-generated: `npm run catalog`.
+`npm run dev` → `/design-system`. Two tabs, both generated from what is installed:
+
+- **Components** — every shipped example, rendered live. Regenerate with `npm run catalog`.
+- **Tokens** — every design token, with its resolved value: this project's `--site-*`, the SLDS
+  global tokens by family, the component hooks you may set, and the private hooks you may not.
+  Regenerate with `npm run tokens`.
+
+Neither list is hand-maintained; re-run both after upgrading a package.
 
 ### Reset or reseed data
 `npm run db:reset` (restore from seed), `npm run auth:dev-passwords`, `npm run seed:team`.
@@ -113,6 +129,8 @@ LWR renders client-side, so a template error only appears at runtime.
 ## Never
 
 - Invent a `lightning-*` tag, attribute, or SLDS class without verifying it ships.
+- Restyle a shipped component's internals to match a mockup. Get as close as the lego allows,
+  then say what is off.
 - Hand-author markup for something a shipped component already renders.
 - Build a custom component without asking first.
 - Let a screen call the database directly, or trust the client for a business rule.

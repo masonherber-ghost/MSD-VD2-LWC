@@ -5,21 +5,32 @@
                  so the wordmark lines up with the page below. See site.css. -->
             <div class="site-header__inner slds-grid slds-grid_align-spread">
                 <div class="slds-global-header__item site-header__brand">
+                    <!-- Logo first, nav after, as the wireframe has it. -->
+                    <div class="slds-global-header__logo site-header__logo">
+                        <a href="/" class="site-header__wordmark">
+                            <img
+                                src="/public/assets/logo-employer-portal.svg"
+                                alt="myMSD — Employers"
+                                class="site-header__logo-image"
+                            />
+                        </a>
+                    </div>
+
                     <ui-site-nav
+                        region="links"
                         signed-in={isSignedIn}
                         current={current}
                         release={release}
+                        no-vacancies={noVacancies}
                     ></ui-site-nav>
-
-                    <div class="slds-global-header__logo site-header__logo">
-                        <a href="/" class="site-header__wordmark">MSD</a>
-                    </div>
                 </div>
 
                 <div class="slds-global-header__item">
                     <ul class="slds-global-actions slds-grid slds-grid_vertical-align-center">
                         <template lwc:if={isSignedIn}>
-                            <li lwc:if={showNotifications} class="slds-global-actions__item">
+                            <!-- Desktop only: the wireframe's phone bar carries
+                                 the avatar and the menu, nothing else. -->
+                            <li lwc:if={showNotifications} class="slds-global-actions__item slds-show_medium">
                                 <lightning-button-icon
                                     icon-name="utility:notification"
                                     variant="bare"
@@ -31,6 +42,7 @@
                                     fallback-icon-name="standard:user"
                                     alternative-text={userName}
                                     size="small"
+                                    variant="circle"
                                 ></lightning-avatar>
                                 <lightning-button-menu
                                     icon-name="utility:down"
@@ -59,9 +71,23 @@
                             </li>
                         </template>
 
-                        <!-- Signed out: one way in. -->
-                        <li lwc:else class="slds-global-actions__item">
+                        <!-- Signed out: the Login link is the way in on desktop.
+                             On a phone it moves inside the menu instead, so the
+                             bar is just the logo and one control — see ui/siteNav. -->
+                        <li lwc:else class="slds-global-actions__item slds-show_medium">
                             <a href="/login" class={loginClass}>Login</a>
+                        </li>
+
+                        <!-- The phone trigger sits last in the actions row, to the
+                             right of the avatar, as the wireframe has it. -->
+                        <li class="slds-global-actions__item slds-p-left_xx-small">
+                            <ui-site-nav
+                                region="menu"
+                                signed-in={isSignedIn}
+                                current={current}
+                                release={release}
+                                no-vacancies={noVacancies}
+                            ></ui-site-nav>
                         </li>
                     </ul>
                 </div>
