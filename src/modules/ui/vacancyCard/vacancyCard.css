@@ -1,0 +1,78 @@
+/* The positioning context for the stretched link.
+ *
+ * `lightning-card` renders its <article> inside a shadow root, so it cannot be
+ * the containing block for anything we write. This wrapper can: the link's
+ * ::after is absolutely positioned against it, and slotted content resolves its
+ * containing block through the flattened tree, so the pseudo-element covers the
+ * whole card even though the anchor sits in the card's title slot. */
+.vacancy-card {
+    position: relative;
+}
+
+/* The whole card is one link.
+ *
+ * The alternative — wrapping the card in an <a> — nests interactive elements
+ * and breaks keyboard navigation the moment the card gains a second control.
+ * This keeps exactly one tab stop and one thing for a screen reader to
+ * announce, while the click target is the full card. */
+.vacancy-card__link {
+    text-decoration: none;
+}
+
+.vacancy-card__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* Above the card's own background, below anything interactive added later.
+       If a control is ever added to this card, give it `position: relative` and
+       a higher z-index or it will stop being clickable. */
+    z-index: 1;
+}
+
+.vacancy-card:hover .vacancy-card__link {
+    text-decoration: underline;
+}
+
+/* The subtitle sits under the title rather than inline with it. */
+.vacancy-card__subtitle {
+    display: block;
+    font-weight: var(--slds-g-font-weight-4);
+}
+
+/* Icon + value pairs, one per line.
+ *
+ * A wrapping row read as a run-on sentence once a card carried five of them —
+ * the eye had no column to follow. Stacked, each value starts at the same x and
+ * the icons form a scannable rail down the left.
+ *
+ * Padding comes from `slds-p-around_medium` on the element, not from here: the
+ * spacing rules want the utility where one exists. SLDS 2 ships no gap utility,
+ * so the row gap is the token in custom CSS. */
+.vacancy-card__meta {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--slds-g-spacing-1);
+}
+
+.vacancy-card__meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--slds-g-spacing-2);
+    min-width: 0;
+}
+
+/* A utility icon is filled by its own hook, not by `color`.
+ *
+ * `variant="bare"` looked like the way to make it inherit currentColor; it is
+ * not — the icons rendered with real path data and were simply invisible
+ * against the card. --slds-c-icon-color-foreground-default is the public hook
+ * the default variant actually reads. */
+.vacancy-card__meta-icon {
+    --slds-c-icon-color-foreground-default: var(--slds-g-color-on-surface-2);
+    flex: none;
+}
+
+.vacancy-card__meta-value {
+    color: var(--slds-g-color-on-surface-1);
+    min-width: 0;
+}

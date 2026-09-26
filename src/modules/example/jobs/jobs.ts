@@ -24,6 +24,20 @@ const FILTERS: { value: string; label: string; status?: string }[] = [
     { value: 'closed', label: 'Closed', status: 'closed' }
 ];
 
+/**
+ * Shown on a vacancy the employer has submitted and cannot yet edit.
+ *
+ * Deliberately says nothing about how long review takes — the design's copy
+ * quotes 24 hours, and nothing in the data or the rules backs that up.
+ */
+const IN_REVIEW_NOTICE = 'This vacancy is with MSD for review.';
+
+/** `creator_name` is already joined in by `job-repository.findByAccount`. */
+function managedBy(name: unknown): string {
+    const text = String(name ?? '').trim();
+    return text ? `Managed by ${text}` : '';
+}
+
 const JOB_STATUS_LABELS: Record<string, string> = {
     draft: 'Draft',
     in_review: 'In review',
@@ -31,16 +45,22 @@ const JOB_STATUS_LABELS: Record<string, string> = {
     closed: 'Closed'
 };
 
+interface MetaItem {
+    key: string;
+    icon: string;
+    label: string;
+    value: string;
+}
+
 interface JobCard {
     id: number;
     title: string;
     subtitle: string;
     href: string;
     statusLabel: string;
-    location: string;
-    pay: string;
-    contractType: string;
-    closingDate: string;
+    isInReview: boolean;
+    reviewNotice: string;
+    meta: MetaItem[];
     applicants: string;
     newApplicants: string;
     hasNew: boolean;
@@ -135,30 +155,37 @@ export default class Jobs extends LightningElement {
         return isEnabled('jobs.applicantCount', this.release);
     }
 
-    /**
-     * With the count gone the footer holds only the action, and spreading one
-     * child pushes it left. Ending the row keeps the button where it was.
-     */
-    get cardFooterClass(): string {
-        const align = this.showApplicants ? 'slds-grid_align-spread' : 'slds-grid_align-end';
-        return `slds-grid ${align} slds-grid_vertical-align-center`;
-    }
-
     get cards(): JobCard[] {
         return this.filteredJobs.map((j) => {
             const status = String(j.status ?? '');
             const count = Number(j.candidate_count ?? 0);
             const fresh = Number(j.new_candidate_count ?? 0);
+
+            // Only rows the record actually holds. A missing value is left out
+            // rather than shown as an em dash: on a wrapping row a placeholder
+            // costs as much space as a real value and says less.
+            const meta: MetaItem[] = [];
+            const push = (key: string, icon: string, label: string, value: unknown) => {
+                const text = String(value ?? '').trim();
+                if (text) meta.push({ key, icon, label, value: text });
+            };
+            push('closes', 'utility:event', 'Closes', j.closing_date);
+            // No label: the value already reads "Managed by <name>", and a
+            // screen reader would otherwise hear it twice.
+            push('owner', 'utility:user', '', managedBy(j.creator_name));
+            push('location', 'utility:location', 'Location', j.location);
+            push('pay', 'utility:moneybag', 'Pay', j.pay);
+            push('contract', 'utility:contract', 'Contract', j.contract_type);
+
             return {
                 id: Number(j.id),
                 title: String(j.title ?? 'Untitled vacancy'),
                 subtitle: String(j.subtitle ?? ''),
                 href: `/jobs/job-detail?id=${j.id}`,
                 statusLabel: JOB_STATUS_LABELS[status] ?? status,
-                location: String(j.location ?? '—'),
-                pay: String(j.pay ?? '—'),
-                contractType: String(j.contract_type ?? '—'),
-                closingDate: String(j.closing_date ?? '—'),
+                isInReview: status === 'in_review',
+                reviewNotice: IN_REVIEW_NOTICE,
+                meta,
                 applicants: count === 1 ? '1 applicant' : `${count} applicants`,
                 newApplicants: `${fresh} new`,
                 hasNew: fresh > 0

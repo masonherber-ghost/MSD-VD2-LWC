@@ -15,6 +15,24 @@
 /* A custom element is display:inline unless told otherwise. */
 .job-filter-bar__filter {
     display: inline-block;
+
+    /* A filter chip is not a call to action.
+     *
+     * The site-wide button hooks in design-tokens.css give every button the SEP
+     * primary size, which measured 48.6px here — exactly the height of the
+     * "List a job" CTA on the same screen. Five chips carrying the same weight
+     * as the one action on the page reads as five calls to action.
+     *
+     * These are the same shared hooks, redeclared on the host. Custom
+     * properties inherit into the component's shadow root, so setting them here
+     * scopes the smaller size to this bar and nothing else — the CTA beside it
+     * is untouched.
+     *
+     * 16px inline matches the SEP filter pill (Spacing 200/300 in that file);
+     * the rest steps down the SLDS scale rather than inventing values. */
+    --slds-s-button-font-size: var(--slds-g-font-scale-1);
+    --slds-s-button-spacing-block: var(--slds-g-spacing-2);
+    --slds-s-button-spacing-inline: var(--slds-g-spacing-4);
 }
 
 /* The search takes the rest of the row but should not collapse to nothing when

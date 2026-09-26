@@ -1,0 +1,75 @@
+<template lwc:render-mode="light">
+    <!-- The positioning context for the stretched link below. It has to be our
+         own element: `lightning-card`'s <article> is in its shadow root. -->
+    <div class="vacancy-card">
+        <lightning-card icon-name="standard:job_profile">
+            <h2 slot="title" class="slds-truncate">
+                <!-- The ONLY anchor in the card. Its ::after covers the whole
+                     card, which is what makes the card clickable without
+                     nesting one interactive element inside another. -->
+                <a href={card.href} class="vacancy-card__link" title={card.title}>
+                    {card.title}
+                </a>
+                <span
+                    lwc:if={card.subtitle}
+                    class="slds-text-body_small slds-text-color_weak vacancy-card__subtitle"
+                >
+                    {card.subtitle}
+                </span>
+            </h2>
+
+            <lightning-badge slot="actions" label={card.statusLabel}></lightning-badge>
+
+            <!-- In review carries a standing notice in the design. `role=status`
+                 rather than `alert`: it is not urgent and should not interrupt. -->
+            <div
+                lwc:if={card.isInReview}
+                class="slds-scoped-notification slds-media slds-media_center slds-m-horizontal_medium slds-m-bottom_small"
+                role="status"
+            >
+                <div class="slds-media__figure">
+                    <lightning-icon
+                        icon-name="utility:info"
+                        size="x-small"
+                        alternative-text="Information"
+                    ></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <p class="slds-text-body_small">{card.reviewNotice}</p>
+                </div>
+            </div>
+
+            <!-- One wrapping row of icon + value pairs, replacing the
+                 description list. A full-width card has the room for them to
+                 sit side by side; they stack on a phone. -->
+            <div class="slds-p-around_medium vacancy-card__meta">
+                <template for:each={card.meta} for:item="item">
+                    <span key={item.key} class="vacancy-card__meta-item">
+                        <lightning-icon
+                            icon-name={item.icon}
+                            size="xx-small"
+                            class="vacancy-card__meta-icon"
+                        ></lightning-icon>
+                        <span lwc:if={item.label} class="slds-assistive-text">{item.label}</span>
+                        <span class="vacancy-card__meta-value">{item.value}</span>
+                    </span>
+                </template>
+
+                <span lwc:if={showApplicants} class="vacancy-card__meta-item">
+                    <lightning-icon
+                        icon-name="utility:groups"
+                        size="xx-small"
+                        class="vacancy-card__meta-icon"
+                    ></lightning-icon>
+                    <span class="vacancy-card__meta-value">{card.applicants}</span>
+                    <span
+                        lwc:if={card.hasNew}
+                        class="slds-badge slds-badge_inverse slds-m-left_xx-small"
+                    >
+                        {card.newApplicants}
+                    </span>
+                </span>
+            </div>
+        </lightning-card>
+    </div>
+</template>

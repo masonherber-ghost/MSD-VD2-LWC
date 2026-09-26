@@ -168,10 +168,15 @@ there, say so rather than filling the space.
 Follow `rules-lwc-layout.md` § *The modular component rule*. A region that reads as a named widget
 becomes a component under `src/modules/ui/`; the page fetches and passes down.
 
-### 6. Verify in a browser at more than one width
+### 6. Verify
 
-A wireframe is one width. The build has to hold at the others. Drive the page, read the console, and
-check at least 390px and a desktop width. Then `npm run build` must exit 0.
+**FAST MODE is on — see `CLAUDE.md` § Verifying.** Check the route's module compiles (`200`), read
+back any value the design specified off the rendered element, and make sure `npm run build` exits 0.
+Do not screenshot and analyse unless asked.
+
+A wireframe is one width and the build has to hold at the others, so **say plainly that you did not
+check the other widths** rather than implying it held. Responsive breakage is exactly what this mode
+stops catching.
 
 ---
 

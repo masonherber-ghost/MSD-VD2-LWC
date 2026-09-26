@@ -68,7 +68,7 @@ lego allows and say where it falls short.
 1. `rules-lwc-components.md` — find the components that already exist. **Do not invent tags.**
 2. `rules-lwc-layout.md` — pick the page anatomy and compose it modularly.
 3. `rules-app-logic.md` if the screen touches auth, accounts, or permissions.
-4. Verify in a browser before reporting it done — see *Verifying* below.
+4. Verify before reporting it done — see *Verifying* below.
 
 ### Add a route
 `lwr.config.json` → `routes[]` entry + a matching component under `src/modules/example/`.
@@ -111,15 +111,41 @@ All documented in `rules-database.md`.
 
 ## Verifying
 
+<!-- FAST MODE — enabled deliberately to see how much time the screenshot loop costs.
+     To restore the full checks, delete this block and uncomment "Full mode" below. -->
+
+Run the cheap checks. **Do not screenshot and analyse the page unless asked**, or unless a
+cheap check comes back wrong and you need to see why.
+
+- `npm run dev` on a free port, then **curl the route's module** — a `200` proves the template
+  compiled, a `500` is a compile error with the detail in the dev server log:
+  ```bash
+  curl -sL -o /dev/null -w '%{http_code}\n' \
+    "http://localhost:3000/1/module/esm/0/l/en-US/mi/example%2Fjobs%2Fv%2F0_0_1/latest/example_jobs.js"
+  ```
+- `npm run build` must exit 0 before reporting completion.
+- **Reading a computed value beats looking at a picture** and is faster. When a change has a
+  number behind it — a size, a colour, a font — read it back off the rendered element rather
+  than eyeballing it. That is what caught a button silently rendering in Arial, and a
+  `font-weight` hook that was a no-op.
+- **If the change adds an asset a stylesheet points at** (a font, an image), dev and a green build
+  both prove nothing — serve the build (`npm run start`) and request the file. See
+  `rules-architecture.md` § *`url()` inside a stylesheet must be absolute*.
+- If a test wrote to `data/msd-vd2.db`, **restore it** and confirm with `git status`.
+
+**Say so when reporting.** A change verified this way is "compiles and builds", not "checked in a
+browser" — claim only what was done. This trades away the class of bug that shows up only visually:
+an invisible icon, an element sitting behind another, a control off the edge at 390px.
+
+<!-- Full mode — restore by deleting the block above.
+
 A change is not done until it has run in a browser. The static build passing is not sufficient —
 LWR renders client-side, so a template error only appears at runtime.
 
 - `npm run dev` on a free port, then drive the page and read the console.
 - `npm run build` must exit 0 before reporting completion.
-- **If the change adds an asset a stylesheet points at** (a font, an image), dev and a green build
-  both prove nothing — serve the build (`npm run start`) and request the file. See
-  `rules-architecture.md` § *`url()` inside a stylesheet must be absolute*.
-- If a test wrote to `data/msd-vd2.db`, **restore it** and confirm with `git status`.
+- If a test wrote to `data/msd-vd2.db`, restore it and confirm with `git status`.
+-->
 
 ## Always
 

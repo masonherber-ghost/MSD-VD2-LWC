@@ -25,34 +25,3 @@
     min-height: 8rem;
 }
 
-/* Cards in a row are only as tall as their content, so stretch them to match. */
-.jobs__cell {
-    display: flex;
-}
-
-.jobs__cell lightning-card {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-/* The card's <article> is inside its shadow root, reachable only via its part. */
-.jobs__cell lightning-card::part(card) {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
-
-.jobs__link {
-    text-decoration: none;
-}
-
-.jobs__link:hover {
-    text-decoration: underline;
-}
-
-/* The card title slot holds both the name and its level. */
-.jobs__subtitle {
-    display: block;
-    font-weight: 400;
-}

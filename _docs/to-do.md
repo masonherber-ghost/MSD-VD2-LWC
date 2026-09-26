@@ -10,9 +10,19 @@ Is slds-global-header custom? I dont see it in the design-system.
 --slds-s-header-sizing-height: 80px; for desktop
 .slds-global-header__item: this should align vertically centered with the main nav
 
-Filter buttons smaller
+The background on the body should be #F5FAFD - update tokens with these values.
+
+job card:
+vacancy-card__meta flex direction: column
+row-gap: 4px;
+padding on all sides including bottom
+
+Text styles:
+buttons and nav links: 17px
+H1: 60px desktop
 
 
+Form input styles
 
 Login for 1.1
 

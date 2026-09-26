@@ -3,126 +3,97 @@
 
     <div class="site__body">
         <main class="site__main">
-            <!-- Object home header ------------------------------------------>
-            <div class="slds-page-header jobs__page-header slds-m-bottom_medium">
-                <div class="slds-page-header__row">
-                    <div class="slds-page-header__col-title">
-                        <div class="slds-page-header__name">
-                            <div class="slds-page-header__name-title">
-                                <h1 class="slds-page-header__title slds-truncate">My jobs</h1>
+            <!-- One measure for the whole screen.
+                 The header, the filter bar and the list are all children of a
+                 single 8-of-12 column rather than each being sized on its own,
+                 so they cannot drift out of alignment with one another. Full
+                 width below the large breakpoint, where 8 columns would leave
+                 the cards too narrow to read.
+
+                 No `padding` on the item: the layouts nested inside already
+                 pair `padding="around-small"` with `pull-to-boundary="small"`,
+                 which cancels at the edges. Adding padding here would inset
+                 the list but not the header above it. -->
+            <lightning-layout horizontal-align="center">
+                <lightning-layout-item size="12" large-device-size="10">
+                    <!-- Object home header ------------------------------------------>
+                    <div class="slds-page-header jobs__page-header slds-m-bottom_medium">
+                        <div class="slds-page-header__row">
+                            <div class="slds-page-header__col-title">
+                                <div class="slds-page-header__name">
+                                    <div class="slds-page-header__name-title">
+                                        <h1 class="slds-page-header__title slds-truncate">My jobs</h1>
+                                    </div>
+                                </div>
+                                <p class="slds-page-header__name-meta">{itemCount}</p>
+                            </div>
+                            <div class="slds-page-header__col-actions">
+                                <div class="slds-page-header__controls">
+                                    <div class="slds-page-header__control">
+                                        <a href="/list-a-job">
+                                            <lightning-button
+                                                variant="brand"
+                                                label="List a job"
+                                            ></lightning-button>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <p class="slds-page-header__name-meta">{itemCount}</p>
                     </div>
-                    <div class="slds-page-header__col-actions">
-                        <div class="slds-page-header__controls">
-                            <div class="slds-page-header__control">
-                                <a href="/list-a-job">
-                                    <lightning-button
-                                        variant="brand"
-                                        label="List a job"
-                                    ></lightning-button>
-                                </a>
-                            </div>
+
+                    <ui-job-filter-bar
+                        options={filterOptions}
+                        value={filter}
+                        search-term={search}
+                        onfilterchange={handleFilterChange}
+                        onsearchchange={handleSearchChange}
+                    ></ui-job-filter-bar>
+
+                    <div lwc:if={loading} class="slds-is-relative jobs__loading slds-box slds-theme_default">
+                        <lightning-spinner alternative-text="Loading vacancies" size="small"></lightning-spinner>
+                    </div>
+
+                    <div lwc:elseif={hasError} class="slds-box slds-theme_default">
+                        <lightning-icon icon-name="utility:info" size="small" class="slds-m-right_x-small"></lightning-icon>
+                        <span>{error}</span>
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
+                            The data API runs under <code>npm run dev</code> only.
+                        </p>
+                    </div>
+
+                    <!-- One card per row. The design is a stacked list, not a grid:
+                         a full-width card has room for the metadata to sit on one line
+                         beside the title instead of wrapping under it. -->
+                    <lightning-layout lwc:elseif={hasJobs} multiple-rows pull-to-boundary="small">
+                        <template for:each={cards} for:item="card">
+                            <lightning-layout-item key={card.id} size="12" padding="around-small">
+                                <ui-vacancy-card
+                                    card={card}
+                                    show-applicants={showApplicants}
+                                ></ui-vacancy-card>
+                            </lightning-layout-item>
+                        </template>
+                    </lightning-layout>
+
+                    <!-- "Nothing matches" is a different state from "nothing exists",
+                         and only the first one is worth offering a way out of. -->
+                    <div lwc:elseif={hasNoMatches} class="slds-box slds-theme_default">
+                        <p>No vacancies match these filters.</p>
+                        <div class="slds-m-top_x-small">
+                            <lightning-button
+                                variant="base"
+                                label="Clear filters"
+                                onclick={handleClearFilters}
+                            ></lightning-button>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <ui-job-filter-bar
-                options={filterOptions}
-                value={filter}
-                search-term={search}
-                onfilterchange={handleFilterChange}
-                onsearchchange={handleSearchChange}
-            ></ui-job-filter-bar>
-
-            <div lwc:if={loading} class="slds-is-relative jobs__loading slds-box slds-theme_default">
-                <lightning-spinner alternative-text="Loading vacancies" size="small"></lightning-spinner>
-            </div>
-
-            <div lwc:elseif={hasError} class="slds-box slds-theme_default">
-                <lightning-icon icon-name="utility:info" size="small" class="slds-m-right_x-small"></lightning-icon>
-                <span>{error}</span>
-                <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
-                    The data API runs under <code>npm run dev</code> only.
-                </p>
-            </div>
-
-            <!-- Card grid ---------------------------------------------------->
-            <lightning-layout lwc:elseif={hasJobs} multiple-rows pull-to-boundary="small">
-                <template for:each={cards} for:item="card">
-                    <lightning-layout-item
-                        key={card.id}
-                        size="12"
-                        medium-device-size="6"
-                        large-device-size="4"
-                        padding="around-small"
-                        class="jobs__cell"
-                    >
-                        <lightning-card icon-name="standard:job_profile">
-                            <h2 slot="title" class="slds-truncate">
-                                <a href={card.href} class="jobs__link" title={card.title}>
-                                    {card.title}
-                                </a>
-                                <span class="slds-text-body_small slds-text-color_weak jobs__subtitle">
-                                    {card.subtitle}
-                                </span>
-                            </h2>
-                            <lightning-badge
-                                slot="actions"
-                                label={card.statusLabel}
-                            ></lightning-badge>
-
-                            <div class="slds-p-horizontal_medium">
-                                <dl class="slds-list_horizontal slds-wrap">
-                                    <dt class="slds-item_label slds-text-color_weak slds-truncate">Location</dt>
-                                    <dd class="slds-item_detail slds-truncate" title={card.location}>
-                                        {card.location}
-                                    </dd>
-                                    <dt class="slds-item_label slds-text-color_weak slds-truncate">Pay</dt>
-                                    <dd class="slds-item_detail slds-truncate">{card.pay}</dd>
-                                    <dt class="slds-item_label slds-text-color_weak slds-truncate">Contract</dt>
-                                    <dd class="slds-item_detail slds-truncate">{card.contractType}</dd>
-                                    <dt class="slds-item_label slds-text-color_weak slds-truncate">Closes</dt>
-                                    <dd class="slds-item_detail slds-truncate">{card.closingDate}</dd>
-                                </dl>
-                            </div>
-
-                            <div slot="footer" class={cardFooterClass}>
-                                <span lwc:if={showApplicants} class="slds-text-body_small">
-                                    {card.applicants}
-                                    <template lwc:if={card.hasNew}>
-                                        <span class="slds-badge slds-badge_inverse slds-m-left_xx-small">
-                                            {card.newApplicants}
-                                        </span>
-                                    </template>
-                                </span>
-                                <a href={card.href}>
-                                    <lightning-button label="View vacancy"></lightning-button>
-                                </a>
-                            </div>
-                        </lightning-card>
-                    </lightning-layout-item>
-                </template>
+                    <div lwc:else class="slds-box slds-theme_default">
+                        <p>No vacancies for this account.</p>
+                    </div>
+                </lightning-layout-item>
             </lightning-layout>
-
-            <!-- "Nothing matches" is a different state from "nothing exists",
-                 and only the first one is worth offering a way out of. -->
-            <div lwc:elseif={hasNoMatches} class="slds-box slds-theme_default">
-                <p>No vacancies match these filters.</p>
-                <div class="slds-m-top_x-small">
-                    <lightning-button
-                        variant="base"
-                        label="Clear filters"
-                        onclick={handleClearFilters}
-                    ></lightning-button>
-                </div>
-            </div>
-
-            <div lwc:else class="slds-box slds-theme_default">
-                <p>No vacancies for this account.</p>
-            </div>
         </main>
     </div>
 
