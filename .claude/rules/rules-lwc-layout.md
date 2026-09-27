@@ -294,6 +294,159 @@ custom control — it does **not** need the custom component gate.
 
 ---
 
+## Restyling a shipped blueprint: `sep-` classes, never a bare override
+
+A bare `.slds-page-header { border: none }` in `site.css` restyles **every** page header on the
+site, including ones that wanted the Lightning default, and there is no way to opt out. So our
+changes to a shipped SLDS blueprint go on an opt-in class of our own, prefixed **`sep-`**.
+
+```html
+<div class="slds-page-header sep-page-header slds-m-bottom_medium">
+```
+
+### The order to reach for things
+
+1. **Set the component's own hook**, if it has one. This is not an override — SLDS's own rule reads
+   `var()` on it, so you are using the published API. It cannot be broken by a specificity change
+   and it survives an upgrade.
+2. **Declare the property on the `sep-` class**, only where no hook exists.
+3. **An SLDS utility in the markup**, for a one-off deviation on a single screen.
+
+`.sep-page-header` is the worked example of all three:
+
+```css
+.sep-page-header {
+    /* 1. Hooks — SLDS reads these itself. */
+    --slds-s-pageheader-sizing-border: 0;
+    --slds-s-pageheader-shadow: none;
+
+    /* 2. Override — there is no page-header padding hook. SLDS reads the
+       GLOBAL --slds-g-spacing-var-*-4, which is used far beyond this
+       component, so redefining that is not an option. */
+    padding: 0;
+}
+```
+
+### Finding the hooks — the trap
+
+Page-header hooks are `--slds-s-pageheader-*`: the **shared** tier, and **no hyphen in
+"pageheader"**. Grepping for the obvious `--slds-c-page-header-*` returns nothing and makes it look
+like the component has no hooks at all. It has nine. Search both tiers and both spellings:
+
+```bash
+C=node_modules/@salesforce-ux/design-system-2/dist/css/bundled/slds2.lightning-blue.css
+grep -o -- "--slds-[sc]-pageheader-[a-z-]*" $C | sort -u
+```
+
+### Why the padding override needs no `!important`
+
+SLDS declares `.slds-page-header` inside `@layer component`. This project's stylesheets are
+unlayered, and **unlayered always beats layered**, whatever the specificity or the load order. It is
+the same mechanism `design-tokens.css` relies on for `--slds-g-font-family-base`. Reaching for
+`!important` here would be cargo cult.
+
+### Identity versus placement
+
+The `sep-` class carries what the element **is** — borderless, flush, our colours. Where it sits is
+a property of the screen, so **spacing stays in the markup as a utility**: `slds-m-top_x-large`,
+`slds-m-bottom_medium`. A margin baked into `.sep-page-header` makes every screen agree about its
+own vertical rhythm, and they do not.
+
+### Responsive spacing has to be CSS
+
+**SLDS ships no responsive spacing utilities.** Its only responsive families are `size_*`,
+`order_*` and `show_*` / `show-only_*` — 214 classes, not one of them a margin or a padding. There
+is no `slds-large-m-top_x-large`, and no amount of looking will find one:
+
+```bash
+grep -o -- "\.slds-\(small\|medium\|large\)-[a-z-]*_[a-z0-9-]*" $C | sed 's/_[a-z0-9-]*$/_*/' | sort -u
+```
+
+So a margin that only applies from a breakpoint up cannot be a utility. Make it a **modifier on the
+`sep-` class**, which keeps the markup deciding *whether* while CSS handles *how it responds*:
+
+```css
+/* class="slds-page-header sep-page-header sep-page-header_spaced" */
+@media (min-width: 64em) {
+    .sep-page-header_spaced { margin-block-start: var(--slds-g-spacing-6); }
+}
+```
+
+Use it **instead of** the unconditional utility, never alongside: `slds-m-top_x-large` carries
+`!important` and would win at every width.
+
+Breakpoints are the SLDS ones (48em / 64em), the same ones the content cap steps at — see
+*Content width*. Verified by measuring: 0px at 390/768/1023, 32px at 1024/1440.
+
+### Verifying one of these
+
+Strip the class at runtime and read the values back. If the shipped defaults return, the change is
+genuinely scoped and the component underneath is intact:
+
+```js
+el.classList.remove('sep-page-header');   // → border 1px, shadow 0 2px 2px, padding 16px
+```
+
+---
+
+## Every landmark element gets an `id`
+
+A page is reviewed, annotated, automated against and handed over. All of that needs a **stable
+handle that does not move when a class changes**, so every landmark element on a screen carries an
+`id`. `example/profile` and `example/manageOrg` are the reference implementations.
+
+### What gets one
+
+| Gets an `id` | Does not |
+|---|---|
+| Page containers — `.site__body`, `.site__main` | Every `<p>`, `<span>` and wrapper `<div>` |
+| Layout columns — each `lightning-layout-item` that is a region | Purely presentational nesting |
+| Header blocks — the `slds-page-header` and its title, detail blocks, badges | Text inside a block that already has one |
+| Cards — every `lightning-card` | |
+| Buttons and links that do something | |
+| Icons, avatars, spinners, badges | |
+| Form fields — both the editable control and its read-only twin | |
+| Tabs and tabsets | |
+| State blocks — loading, signed-out, empty, error, confirmation | |
+
+The test: **would you point at it in a review, or reach for it in a script?** If yes, it gets one.
+
+### Naming
+
+`{page}-{region}[-{element}]`, kebab-case, page prefix always:
+
+```html
+<main class="site__main" id="profile-main">
+<lightning-layout-item id="profile-col-main" …>
+<lightning-card id="profile-details-card" …>
+<lightning-button id="profile-save-button" …>
+<lightning-input id="org-field-company-name" …>
+<div id="org-static-company-name" class="slds-form-element slds-form-element_readonly">
+```
+
+The page prefix (`profile-`, `org-`) is what keeps ids unique across a document and readable in a
+diff. A field's editable control and its locked read-only twin are `-field-` and `-static-` on the
+same name, because only one of them is ever in the DOM.
+
+### Four things that bite
+
+- **`id` is for identity, never for styling or lookup.** Style with classes; find elements inside a
+  component with `data-*` and `querySelector`, which is what the existing screens do
+  (`data-field` in `manageOrg`). An `id` in a stylesheet couples the handle to the appearance and
+  one of them will move.
+- **Never put a static `id` inside a `for:each`.** It renders once per row and duplicate ids are
+  invalid. Rows are identified by `key` and `data-*`; if a row genuinely needs one, compose it from
+  the record id in the getter that builds the list.
+- **Conditional branches cannot collide**, so give each its own name anyway. `lwc:if` / `lwc:else`
+  only ever render one, and naming them apart is what makes a failing selector readable.
+- **An `id` on a `lightning-*` host is safe.** It lands on the host and does not disturb the
+  component's internals — measured on `lightning-input`, whose inner `<label for>` still matches its
+  own generated input id. Light DOM keeps the `id` literal: `document.getElementById()` finds
+  exactly what the template wrote. (LWC scopes ids inside *shadow* components; our route components
+  are light DOM, so they are left alone.)
+
+---
+
 ## Known debt
 
 The current screens predate this file and do not all follow it. When you next touch one of these,

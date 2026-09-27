@@ -25,33 +25,11 @@
                 </lightning-breadcrumbs>
 
                 <!-- Highlights panel ---------------------------------------->
-                <div class="slds-page-header">
+                <div class="slds-page-header sep-page-header sep-page-header_spaced">
                     <div class="slds-page-header__row">
                         <div class="slds-page-header__col-title">
-                            <div class="slds-media">
-                                <div class="slds-media__figure">
-                                    <!-- The vacancy's category icon, from
-                                         `jobs.icon`. Decorative: alt is empty
-                                         so the header still reads as the
-                                         vacancy's title, exactly as it did
-                                         with the shipped icon here. -->
-                                    <img
-                                        lwc:if={iconUrl}
-                                        src={iconUrl}
-                                        alt=""
-                                        class="job-detail__icon"
-                                    />
-                                    <!-- No artwork for this job type yet, so
-                                         the header keeps the icon it always
-                                         had. See `server/lib/job-icons.ts`. -->
-                                    <lightning-icon
-                                        lwc:else
-                                        icon-name="standard:job_profile"
-                                        size="medium"
-                                    ></lightning-icon>
-                                </div>
-                                <div class="slds-media__body">
-                                    <div class="slds-page-header__name">
+                            <div class="slds-media__body">
+                                <div class="slds-page-header__name">
                                         <div class="slds-page-header__name-title">
                                             <h1>
                                                 <span class="slds-page-header__title slds-truncate">
@@ -79,10 +57,9 @@
                                             </lightning-button-menu>
                                         </div>
                                     </div>
-                                    <p class="slds-page-header__name-meta">
-                                        Vacancy &bull; {job.subtitle}
-                                    </p>
-                                </div>
+                                <p class="slds-page-header__name-meta">
+                                    Vacancy &bull; {job.subtitle}
+                                </p>
                             </div>
                         </div>
                         <div class="slds-page-header__col-actions">
@@ -149,7 +126,7 @@
                 </div>
 
                 <!-- Path ------------------------------------------------------>
-                <div class="slds-m-vertical_medium">
+                <!-- <div class="slds-m-vertical_medium">
                     <lightning-progress-indicator
                         type="path"
                         variant="base"
@@ -163,7 +140,7 @@
                             ></lightning-progress-step>
                         </template>
                     </lightning-progress-indicator>
-                </div>
+                </div> -->
 
                 <!-- Split content body: 2:1 ---------------------------------->
                 <lightning-layout multiple-rows pull-to-boundary="small">

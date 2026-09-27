@@ -38,9 +38,11 @@ the server — `tsx` executes TypeScript directly.
 
 ## Routes
 
+**Routes live in `routes.json`, not in `lwr.config.json`.**
+
 Adding a route is two steps:
 
-1. An entry in `lwr.config.json` → `routes[]`:
+1. An entry in `routes.json` → `routes[]`:
    ```json
    { "id": "jobs", "path": "/jobs", "rootComponent": "example/jobs",
      "layoutTemplate": "$layoutsDir/main.njk" }
@@ -48,7 +50,30 @@ Adding a route is two steps:
 2. A matching component at `src/modules/example/jobs/`.
 
 Every route uses `src/layouts/main.njk`, which loads the SLDS stylesheet and `site.css` and is the
-only HTML shell.
+only HTML shell. So "the template for a route" is always two files: that one shell, shared by every
+route, plus the `rootComponent`'s own `.html`.
+
+### How routes get out of routes.json — the hook
+
+`lwr.config.json` is the only file LWR reads, it is JSON, and JSON has no include mechanism. Routes
+therefore cannot simply live elsewhere. What LWR does support is `hooks`: modules it instantiates
+during config resolution, whose `initConfigs` may mutate the global config **before** routes are
+normalised and validated. That is the seam `scripts/routes-hook.mjs` uses, declared as:
+
+```json
+"hooks": ["$rootDir/scripts/routes-hook.mjs"]
+```
+
+It runs for `npm run dev` **and** `npm run build`, because hooks belong to config resolution rather
+than to the dev server. Verified both ways: every route serves in dev, and all 19 are emitted to
+`site/`.
+
+Two consequences:
+
+- **`lwr.config.json` has no `routes` block.** Adding one back does nothing — the hook overwrites
+  `globalConfig.routes` wholesale.
+- **A malformed `routes.json` fails the boot**, deliberately, rather than starting a site with no
+  routes.
 
 **Query parameters are not part of the route.** LWR matches on path only, so `?id=2` is read at
 runtime from `window.location.search`. Guard it for the static build:

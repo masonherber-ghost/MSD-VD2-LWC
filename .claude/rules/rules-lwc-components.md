@@ -24,7 +24,8 @@ component it records:
 
 Regenerate after upgrading the package: `npm run catalog`. It rewrites the catalog, the example
 registry, `src/assets/example-sources.json`, and the `examples/*` module records in
-`lwr.config.json` — never the `routes` block.
+`lwr.config.json`. It cannot disturb routes: those live in `routes.json` — see
+`rules-architecture.md` § *Routes*.
 
 `src/modules/data/tokens/tokens.js` is generated the same way, by `npm run tokens`
 (`scripts/build-tokens.mjs`), from the installed SLDS stylesheet plus `design-tokens.css`. It backs

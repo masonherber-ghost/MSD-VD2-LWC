@@ -9,13 +9,22 @@
             Builders Ltd</strong> on the MSD Employer portal.
         </p>
 
-        <p>From here you can:</p>
+        <!-- 1.2 up: the portal can do all three of these. -->
+        <template lwc:if={showFeatureList}>
+            <p>From here you can:</p>
 
-        <ul class="email__list">
-            <li><strong>List a job</strong> and have MSD match candidates to it.</li>
-            <li><strong>Track applicants</strong> through screening, shortlist and interview.</li>
-            <li><strong>Manage your organisation</strong> &mdash; your details and who else has access.</li>
-        </ul>
+            <ul class="email__list">
+                <li><strong>List a job</strong> and have MSD match candidates to it.</li>
+                <li><strong>Track applicants</strong> through screening, shortlist and interview.</li>
+                <li><strong>Manage your organisation</strong> &mdash; your details and who else has access.</li>
+            </ul>
+        </template>
+
+        <!-- 1.1: applicant tracking and org management do not exist yet, so the
+             email promises only what the release actually delivers. -->
+        <template lwc:else>
+            <p>Now you can manage your jobs in one place and have MSD match candidates to it.</p>
+        </template>
 
         <div class="email__cta">
             <!-- {{PortalUrl}} -->
@@ -31,12 +40,7 @@
             </p>
         </div>
 
-        <p>
-            <!-- {{Recipient.Email}} — the sign-in identifier -->
-            You sign in with <strong>employer2@test.com</strong>. If you ever need
-            to change that, an admin on your account can update it from Manage org.
-        </p>
-
+       
         <p>Ng&#257; mihi,<br />The MSD Employer portal team</p>
     </ui-email-shell>
 </template>

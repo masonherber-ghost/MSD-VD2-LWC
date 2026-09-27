@@ -1,23 +1,23 @@
 <template lwc:render-mode="light">
     <ui-site-header current="manage-org"></ui-site-header>
 
-    <div class="site__body">
-        <main class="site__main">
-            <div lwc:if={loading} class="slds-is-relative manage-org__loading slds-box slds-theme_default">
-                <lightning-spinner alternative-text="Loading organisation" size="small"></lightning-spinner>
+    <div class="site__body" id="org-body">
+        <main class="site__main" id="org-main">
+            <div lwc:if={loading} id="org-loading" class="slds-is-relative manage-org__loading slds-box slds-theme_default">
+                <lightning-spinner id="org-loading-spinner" alternative-text="Loading organisation" size="small"></lightning-spinner>
             </div>
 
             <template lwc:elseif={isSignedOut}>
-                <lightning-card>
+                <lightning-card id="org-signed-out-card">
                     <div class="slds-p-around_large slds-align_absolute-center slds-text-align_center">
                         <div>
-                            <lightning-icon icon-name="utility:lock" size="small"></lightning-icon>
+                            <lightning-icon id="org-signed-out-icon" icon-name="utility:lock" size="small"></lightning-icon>
                             <h1 class="slds-text-heading_medium slds-m-top_x-small">
                                 Log in to manage your organisation
                             </h1>
                             <div class="slds-m-top_medium">
                                 <a href="/login">
-                                    <lightning-button variant="brand" label="Log in"></lightning-button>
+                                    <lightning-button id="org-signed-out-login-button" variant="brand" label="Log in"></lightning-button>
                                 </a>
                             </div>
                         </div>
@@ -27,52 +27,49 @@
 
             <template lwc:elseif={ready}>
                 <!-- Highlights panel ---------------------------------------->
-                <div class="slds-page-header slds-m-bottom_medium">
+                <div id="org-header" class="slds-page-header sep-page-header sep-page-header_spaced slds-m-bottom_medium">
                     <div class="slds-page-header__row">
                         <div class="slds-page-header__col-title">
-                            <div class="slds-media">
-                                <div class="slds-media__figure">
-                                    <lightning-icon
-                                        icon-name="standard:account"
-                                        size="medium"
-                                    ></lightning-icon>
-                                </div>
-                                <div class="slds-media__body">
-                                    <h1 class="slds-page-header__title slds-truncate">{companyName}</h1>
-                                    <p class="slds-page-header__name-meta">Manage org</p>
-                                </div>
+                            <div class="slds-media__body">
+                                <h1 id="org-header-title" class="slds-page-header__title slds-truncate">{companyName}</h1>
+                                <p class="slds-page-header__name-meta">Manage org</p>
                             </div>
                         </div>
                         <div class="slds-page-header__col-actions">
                             <div class="slds-page-header__controls">
                                 <div class="slds-page-header__control">
-                                    <lightning-badge label={verifiedLabel}></lightning-badge>
+                                    <lightning-badge id="org-header-verified-badge" label={verifiedLabel}></lightning-badge>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <lightning-tabset variant="scoped">
+                <lightning-tabset id="org-tabset" variant="scoped">
                     <!-- Tab 1: Org details -------------------------------->
-                    <lightning-tab label="Org details">
-                        <div lwc:if={hasError} class="slds-m-bottom_small">
+                    <lightning-tab id="org-tab-details" label="Org details">
+                        <div lwc:if={hasError} id="org-details-error" class="slds-m-bottom_small">
                             <div class="slds-notify slds-notify_alert slds-theme_error" role="alert">
                                 <span class="slds-assistive-text">Error</span>
                                 <span>{error}</span>
                             </div>
                         </div>
-                        <div lwc:if={saved} class="slds-m-bottom_small">
+                        <div lwc:if={saved} id="org-details-saved" class="slds-m-bottom_small">
                             <div class="slds-notify slds-notify_alert slds-theme_success" role="status">
                                 <span>Organisation details saved.</span>
                             </div>
                         </div>
 
-                        <lightning-card title="Company" icon-name="standard:account" class="slds-m-bottom_medium">
+                        <lightning-card id="org-company-card" title="Company" icon-name="standard:account" class="slds-m-bottom_medium">
                             <div class="slds-p-horizontal_medium slds-p-bottom_medium">
                                 <lightning-layout multiple-rows pull-to-boundary="small">
-                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
-                                        <div lwc:if={lockCompanyName} class="slds-form-element slds-form-element_readonly">
+                                    <lightning-layout-item
+                                        id="org-col-company-name"
+                                        size="12"
+                                        medium-device-size="6"
+                                        padding="horizontal-small"
+                                    >
+                                        <div lwc:if={lockCompanyName} id="org-static-company-name" class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Company name</span>
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{companyNameDisplay}</div>
@@ -80,14 +77,20 @@
                                         </div>
                                         <lightning-input
                                             lwc:else
+                                            id="org-field-company-name"
                                             data-field="company_name"
                                             label="Company name"
                                             value={draft.company_name}
                                             onchange={handleFieldChange}
                                         ></lightning-input>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
-                                        <div lwc:if={lockTradingName} class="slds-form-element slds-form-element_readonly">
+                                    <lightning-layout-item
+                                        id="org-col-trading-name"
+                                        size="12"
+                                        medium-device-size="6"
+                                        padding="horizontal-small"
+                                    >
+                                        <div lwc:if={lockTradingName} id="org-static-trading-name" class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Trading name</span>
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{tradingNameDisplay}</div>
@@ -95,14 +98,20 @@
                                         </div>
                                         <lightning-input
                                             lwc:else
+                                            id="org-field-trading-name"
                                             data-field="trading_name"
                                             label="Trading name"
                                             value={draft.trading_name}
                                             onchange={handleFieldChange}
                                         ></lightning-input>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
-                                        <div lwc:if={lockIndustry} class="slds-form-element slds-form-element_readonly">
+                                    <lightning-layout-item
+                                        id="org-col-industry"
+                                        size="12"
+                                        medium-device-size="6"
+                                        padding="horizontal-small"
+                                    >
+                                        <div lwc:if={lockIndustry} id="org-static-industry" class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Industry</span>
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{industryDisplay}</div>
@@ -110,14 +119,20 @@
                                         </div>
                                         <lightning-input
                                             lwc:else
+                                            id="org-field-industry"
                                             data-field="industry"
                                             label="Industry"
                                             value={draft.industry}
                                             onchange={handleFieldChange}
                                         ></lightning-input>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
-                                        <div lwc:if={lockOrgType} class="slds-form-element slds-form-element_readonly">
+                                    <lightning-layout-item
+                                        id="org-col-company-type"
+                                        size="12"
+                                        medium-device-size="6"
+                                        padding="horizontal-small"
+                                    >
+                                        <div lwc:if={lockOrgType} id="org-static-company-type" class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Org type</span>
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{orgTypeDisplay}</div>
@@ -125,6 +140,7 @@
                                         </div>
                                         <lightning-combobox
                                             lwc:else
+                                            id="org-field-company-type"
                                             data-field="company_type"
                                             label="Org type"
                                             value={draft.company_type}
@@ -132,8 +148,13 @@
                                             onchange={handleFieldChange}
                                         ></lightning-combobox>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
-                                        <div lwc:if={lockWebAddress} class="slds-form-element slds-form-element_readonly">
+                                    <lightning-layout-item
+                                        id="org-col-web-address"
+                                        size="12"
+                                        medium-device-size="6"
+                                        padding="horizontal-small"
+                                    >
+                                        <div lwc:if={lockWebAddress} id="org-static-web-address" class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Website</span>
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{webAddressDisplay}</div>
@@ -141,14 +162,20 @@
                                         </div>
                                         <lightning-input
                                             lwc:else
+                                            id="org-field-web-address"
                                             data-field="web_address"
                                             label="Website"
                                             value={draft.web_address}
                                             onchange={handleFieldChange}
                                         ></lightning-input>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
-                                        <div lwc:if={lockCompanyAddress} class="slds-form-element slds-form-element_readonly">
+                                    <lightning-layout-item
+                                        id="org-col-company-address"
+                                        size="12"
+                                        medium-device-size="6"
+                                        padding="horizontal-small"
+                                    >
+                                        <div lwc:if={lockCompanyAddress} id="org-static-company-address" class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Company address</span>
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{companyAddressDisplay}</div>
@@ -156,14 +183,20 @@
                                         </div>
                                         <lightning-input
                                             lwc:else
+                                            id="org-field-company-address"
                                             data-field="company_address"
                                             label="Company address"
                                             value={draft.company_address}
                                             onchange={handleFieldChange}
                                         ></lightning-input>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
-                                        <div lwc:if={lockWorkplaceAddress} class="slds-form-element slds-form-element_readonly">
+                                    <lightning-layout-item
+                                        id="org-col-workplace-address"
+                                        size="12"
+                                        medium-device-size="6"
+                                        padding="horizontal-small"
+                                    >
+                                        <div lwc:if={lockWorkplaceAddress} id="org-static-workplace-address" class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Workplace address</span>
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{workplaceAddressDisplay}</div>
@@ -171,6 +204,7 @@
                                         </div>
                                         <lightning-input
                                             lwc:else
+                                            id="org-field-workplace-address"
                                             data-field="workplace_address"
                                             label="Workplace address"
                                             value={draft.workplace_address}
@@ -181,11 +215,16 @@
                             </div>
                         </lightning-card>
 
-                        <lightning-card title="Registration" icon-name="standard:record">
+                        <lightning-card id="org-registration-card" title="Registration" icon-name="standard:record">
                             <div class="slds-p-horizontal_medium slds-p-bottom_medium">
                                 <lightning-layout multiple-rows pull-to-boundary="small">
-                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
-                                        <div lwc:if={lockIrdNumber} class="slds-form-element slds-form-element_readonly">
+                                    <lightning-layout-item
+                                        id="org-col-ird-number"
+                                        size="12"
+                                        medium-device-size="6"
+                                        padding="horizontal-small"
+                                    >
+                                        <div lwc:if={lockIrdNumber} id="org-static-ird-number" class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">IRD number</span>
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{irdNumberDisplay}</div>
@@ -193,14 +232,20 @@
                                         </div>
                                         <lightning-input
                                             lwc:else
+                                            id="org-field-ird-number"
                                             data-field="ird_number"
                                             label="IRD number"
                                             value={draft.ird_number}
                                             onchange={handleFieldChange}
                                         ></lightning-input>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
-                                        <div lwc:if={lockNzbn} class="slds-form-element slds-form-element_readonly">
+                                    <lightning-layout-item
+                                        id="org-col-nzbn"
+                                        size="12"
+                                        medium-device-size="6"
+                                        padding="horizontal-small"
+                                    >
+                                        <div lwc:if={lockNzbn} id="org-static-nzbn" class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">NZBN</span>
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{nzbnDisplay}</div>
@@ -208,6 +253,7 @@
                                         </div>
                                         <lightning-input
                                             lwc:else
+                                            id="org-field-nzbn"
                                             data-field="nzbn"
                                             label="NZBN"
                                             value={draft.nzbn}
@@ -217,13 +263,15 @@
                                 </lightning-layout>
                             </div>
 
-                            <div lwc:if={canEditDetails} slot="footer" class="slds-text-align_right">
+                            <div lwc:if={canEditDetails} slot="footer" id="org-details-actions" class="slds-text-align_right">
                                 <lightning-button
+                                    id="org-cancel-button"
                                     label="Cancel"
                                     onclick={handleCancelDetails}
                                     class="slds-m-right_x-small"
                                 ></lightning-button>
                                 <lightning-button
+                                    id="org-save-button"
                                     variant="brand"
                                     label="Save org details"
                                     onclick={handleSaveDetails}
@@ -235,15 +283,15 @@
                     </lightning-tab>
 
                     <!-- Tab 2: Manage team -------------------------------->
-                    <lightning-tab lwc:if={showTeamTab} label={teamTabLabel}>
-                        <div lwc:if={hasTeamMessage} class="slds-m-bottom_small">
+                    <lightning-tab lwc:if={showTeamTab} id="org-tab-team" label={teamTabLabel}>
+                        <div lwc:if={hasTeamMessage} id="org-team-message" class="slds-m-bottom_small">
                             <div class="slds-notify slds-notify_alert slds-theme_success" role="status">
                                 <span>{teamMessage}</span>
                             </div>
                         </div>
 
                         <!-- Removing someone is destructive, so it is confirmed. -->
-                        <div lwc:if={hasPendingRemoval} class="slds-m-bottom_small">
+                        <div lwc:if={hasPendingRemoval} id="org-team-removal-confirm" class="slds-m-bottom_small">
                             <div class="slds-box slds-theme_warning">
                                 <p class="slds-text-heading_small">{removalPrompt}</p>
                                 <p class="slds-text-body_small slds-m-top_xx-small">
@@ -251,12 +299,14 @@
                                 </p>
                                 <div class="slds-m-top_small">
                                     <lightning-button
+                                        id="org-team-remove-confirm-button"
                                         variant="destructive"
                                         label="Remove"
                                         onclick={handleConfirmRemove}
                                         class="slds-m-right_x-small"
                                     ></lightning-button>
                                     <lightning-button
+                                        id="org-team-remove-cancel-button"
                                         label="Cancel"
                                         onclick={handleCancelRemove}
                                     ></lightning-button>
@@ -264,11 +314,12 @@
                             </div>
                         </div>
 
-                        <lightning-card title="Team" icon-name="standard:groups">
+                        <lightning-card id="org-team-card" title="Team" icon-name="standard:groups">
                             <span slot="actions" class="slds-text-body_small slds-text-color_weak">
                                 {memberCount}
                             </span>
                             <lightning-datatable
+                                id="org-team-table"
                                 key-field="id"
                                 columns={memberColumns}
                                 data={memberRows}
@@ -284,8 +335,8 @@
                 </lightning-tabset>
             </template>
 
-            <div lwc:else class="slds-box slds-theme_default">
-                <lightning-icon icon-name="utility:info" size="small" class="slds-m-right_x-small"></lightning-icon>
+            <div lwc:else id="org-unavailable" class="slds-box slds-theme_default">
+                <lightning-icon id="org-unavailable-icon" icon-name="utility:info" size="small" class="slds-m-right_x-small"></lightning-icon>
                 <span>{error}</span>
                 <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
                     The data API runs under <code>npm run dev</code> only.

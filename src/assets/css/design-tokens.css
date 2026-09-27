@@ -636,7 +636,8 @@
     --slds-s-input-color-border-disabled: var(--site-stroke-tertiary);
 
     /* Label — 20px Medium, in the primary text colour. */
-    --slds-s-label-font-size: var(--site-font-body-lg);
+    --slds-s-label-font-size: 15px; /* to do */
+    /* var(--site-font-body-lg); */
     --slds-s-label-font-weight: var(--slds-g-font-weight-5);
     --slds-s-label-color: var(--site-text-primary);
 

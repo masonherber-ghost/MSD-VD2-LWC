@@ -62,6 +62,11 @@ const FEATURES: Record<string, Release> = {
     'site.public': '1.2',
     'jobDetail.vacancyContact': '1.3',
 
+    // The welcome email's "From here you can" list names tracking applicants
+    // and managing the organisation — neither of which exists before 1.2
+    // (jobDetail.applicants, manageOrg.*). At 1.1 it says the one true thing.
+    'emails.welcomeFeatureList': '1.2',
+
     // Not shipped yet — the bell is dressing until there is something behind it.
     'siteHeader.notifications': '2+'
 };

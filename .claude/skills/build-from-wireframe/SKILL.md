@@ -168,6 +168,11 @@ there, say so rather than filling the space.
 Follow `rules-lwc-layout.md` § *The modular component rule*. A region that reads as a named widget
 becomes a component under `src/modules/ui/`; the page fetches and passes down.
 
+**Give every landmark element an `id`** as you go — containers, columns, header blocks, cards,
+buttons, icons, form fields and state blocks. The convention and the four traps are in
+`rules-lwc-layout.md` § *Every landmark element gets an `id`*. A design gets reviewed against the
+build, so the things being pointed at need names.
+
 ### 6. Verify
 
 **FAST MODE is on — see `CLAUDE.md` § Verifying.** Check the route's module compiles (`200`), read

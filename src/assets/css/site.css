@@ -26,7 +26,8 @@ body {
 .site__main {
     max-width: var(--site-content-max-width);
     margin-inline: auto;
-    padding: var(--slds-g-spacing-5, 1.5rem) var(--site-content-gutter);
+     padding: var(--slds-g-spacing-4) var(--site-content-gutter);
+    /* padding: var(--site-content-gutter) var(--site-content-gutter) var(--slds-g-spacing-5); */
 
     /* 64em / 1024px — the same large breakpoint the content cap steps at. */
     /* @media (min-width: 64em) {
@@ -179,6 +180,53 @@ lightning-button[variant='brand']::part(button) {
     box-shadow: var(--site-shadow-raised);
 }
 
+/* 1c. The dropdown trigger inside a button group.
+ *
+ * THE PROBLEM IS OURS, not SLDS's. The shared button hooks in design-tokens.css
+ * make every `lightning-button` the SEP size — measured 49px tall. The trigger
+ * inside `lightning-button-menu` is an ICON button, and SLDS pins those to the
+ * 2rem step of its sizing scale, so it stayed 32px and sat short of the segments
+ * beside it. Stock Lightning never shows this: there, every button is 32px.
+ *
+ * Why the height is reached this way, having measured all three candidates:
+ *
+ *   --sds-c-button-sizing-height   set on the host does NOTHING. The component
+ *                                  declares it on its own inner element, and a
+ *                                  declaration always beats an inherited value.
+ *   --slds-c-buttonicon-sizing-height  is the public hook for exactly this, but
+ *                                  its rule is gated behind `[size='medium']`,
+ *                                  and `size` is NOT a public property of
+ *                                  lightning-button-menu (the catalog lists
+ *                                  `iconSize`, not `size`). Setting it would be
+ *                                  reaching into internals through an
+ *                                  undeclared attribute.
+ *   --slds-g-sizing-9              IS public, tier 5, and is the value the
+ *                                  component's own rule reads. Scoped to this
+ *                                  one host it reaches exactly the two
+ *                                  declarations we want and nothing else.
+ *
+ * The trigger comes out square, because the component reads the same token for
+ * width. That is the correct shape for a group segment, and there is no
+ * separate width lever: the width declaration has the same problem as the
+ * height one above.
+ *
+ * The value is COMPUTED from the very hooks that size a button, not typed as a
+ * number — so if the SEP button size is ever retuned in design-tokens.css, the
+ * trigger follows instead of silently going out of step again. It is the
+ * button's own box: block padding top and bottom, plus the rendered line, plus
+ * the border on each edge.
+ *
+ * Scoped to a menu INSIDE a group on purpose — a standalone button menu (the
+ * App Launcher in the footer) is not sitting next to anything and should keep
+ * the shipped 32px. */
+lightning-button-group lightning-button-menu {
+    --slds-g-sizing-9: calc(
+        var(--slds-s-button-spacing-block) * 2
+        + var(--slds-s-button-font-size) * var(--slds-s-button-font-lineheight)
+        + var(--slds-s-button-sizing-border, 1px) * 2
+    );
+}
+
 /* 2. The hover gradient.
  *
  * Every background hook feeds `background` or `background-color`, neither of
@@ -241,10 +289,87 @@ lightning-button[variant='brand']::part(button):disabled {
  * decisions there — the size always comes from a class or a hook.
  * ============================================================================= */
 
-.slds-page-header {
-    border: none;
-    box-shadow: none;
+/* The SEP page header.
+ *
+ * SCOPED, not a bare `.slds-page-header` override: every screen opts in with
+ * `class="slds-page-header sep-page-header"`, so a stock Lightning page header
+ * is still available if one is ever wanted.
+ *
+ * Border and shadow are set through SLDS's OWN public hooks rather than
+ * overridden. `.slds-page-header` reads
+ * `box-shadow: var(--slds-s-pageheader-shadow, …)` and
+ * `border: var(--slds-s-pageheader-sizing-border, …) solid …`, so feeding those
+ * is using the component's published API, not fighting it — it cannot be broken
+ * by a specificity change and it survives a package upgrade.
+ *
+ * Padding is the exception, and the only real override here: SLDS ships no
+ * page-header padding hook. It reads the GLOBAL
+ * `--slds-g-spacing-var-block-4` / `--slds-g-spacing-var-inline-4`, which are
+ * used well beyond this component, so redefining those is not an option.
+ *
+ * That override needs no `!important` and no specificity trick: SLDS declares
+ * `.slds-page-header` inside `@layer component`, this file is unlayered, and
+ * unlayered always beats layered whatever the specificity. Same mechanism as
+ * the font-family override in design-tokens.css.
+ *
+ * NOTE: top margin is deliberately NOT here — it is placement, not identity,
+ * and differs per screen. Use the `slds-m-top_*` utility in the markup, beside
+ * the `slds-m-bottom_*` the headers already carry. */
+.sep-page-header {
+    --slds-s-pageheader-sizing-border: 0;
+    --slds-s-pageheader-shadow: none;
     padding: 0;
+}
+
+/* Removing the header's padding has a consequence two of its own rows depend on.
+ *
+ * SLDS builds `__row_gutters` and `__detail-row` to BLEED to the header's
+ * edges: each carries a negative inline margin of exactly the header's 16px
+ * padding, and the detail row adds a negative BOTTOM margin too, then puts its
+ * own padding back. That is elegant while the padding exists. With
+ * `.sep-page-header { padding: 0 }` there is nothing left to cancel, so the
+ * negative margins push the row 16px outside its container on each side and
+ * 16px down over whatever follows.
+ *
+ * Only the compensations aimed at the HEADER's padding are zeroed, and they are
+ * the two below. The detail row's own `margin-inline: -16px` is deliberately
+ * LEFT ALONE: it cancels the padding on `__col-details`, which still exists, and
+ * is what pulls the band back out to sit flush with the title above it. Zeroing
+ * that one too indents the band 16px and misaligns it from the heading —
+ * measured.
+ *
+ * This is our own blueprint markup — we hand-write the page header — so
+ * adjusting these classes is not reaching into a shipped component. */
+.sep-page-header .slds-page-header__row_gutters {
+    margin-inline: 0;
+}
+
+.sep-page-header .slds-page-header__detail-row {
+    margin-block-end: 0;
+}
+
+/* Modifier: top space, from the large breakpoint up.
+ *
+ * WHY THIS IS NOT A UTILITY. SLDS ships no responsive spacing utilities — its
+ * only responsive families are `size_*`, `order_*` and `show_*`/`show-only_*`.
+ * There is no `slds-large-m-top_x-large` to reach for, so a breakpoint-scoped
+ * margin has to be CSS.
+ *
+ * It stays a MODIFIER rather than folding into `.sep-page-header`, so the
+ * markup still decides *whether* a screen takes the space — the identity vs
+ * placement split described above. Only the *how it responds* part moves into
+ * CSS, because markup cannot express it.
+ *
+ * 64em is the same large breakpoint the content cap steps at
+ * (design-tokens.css), so the header gains its space exactly when the page
+ * stops being fluid.
+ *
+ * Use INSTEAD of `slds-m-top_x-large`, never alongside it: that utility is
+ * unconditional and carries `!important`, so it would win at every width. */
+@media (min-width: 64em) {
+    .sep-page-header_spaced {
+        margin-block-start: var(--slds-g-spacing-6);
+    }
 }
 
 /* H1 — the largest step in the scale.

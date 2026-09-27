@@ -1,19 +1,34 @@
 <template lwc:render-mode="light">
     <ui-site-header current="profile"></ui-site-header>
 
-    <div class="site__body">
-        <main class="site__main">
-            <div lwc:if={loading} class="slds-is-relative profile__loading slds-box slds-theme_default">
-                <lightning-spinner alternative-text="Loading your profile" size="small"></lightning-spinner>
+    <div class="site__body" id="profile-body">
+        <main class="site__main" id="profile-main">
+            <div
+                lwc:if={loading}
+                id="profile-loading"
+                class="slds-is-relative profile__loading slds-box slds-theme_default"
+            >
+                <lightning-spinner
+                    id="profile-loading-spinner"
+                    alternative-text="Loading your profile"
+                    size="small"
+                ></lightning-spinner>
             </div>
 
             <!-- Signed out: this page has no meaning without a session. -->
             <template lwc:elseif={isSignedOut}>
-                <lightning-card>
+                <lightning-card id="profile-signed-out-card">
                     <div class="slds-p-around_large slds-align_absolute-center slds-text-align_center">
-                        <div>
-                            <lightning-icon icon-name="utility:lock" size="small"></lightning-icon>
-                            <h1 class="slds-text-heading_medium slds-m-top_x-small">
+                        <div id="profile-signed-out-body">
+                            <lightning-icon
+                                id="profile-signed-out-icon"
+                                icon-name="utility:lock"
+                                size="small"
+                            ></lightning-icon>
+                            <h1
+                                id="profile-signed-out-title"
+                                class="slds-text-heading_medium slds-m-top_x-small"
+                            >
                                 Log in to see your profile
                             </h1>
                             <p class="slds-text-color_weak slds-m-top_xx-small">
@@ -22,6 +37,7 @@
                             <div class="slds-m-top_medium">
                                 <a href="/login">
                                     <lightning-button
+                                        id="profile-signed-out-login-button"
                                         variant="brand"
                                         label="Log in"
                                     ></lightning-button>
@@ -34,36 +50,30 @@
 
             <template lwc:elseif={ready}>
                 <!-- Highlights panel ---------------------------------------->
-                <div class="slds-page-header slds-m-bottom_medium">
+                <div id="profile-header" class="slds-page-header sep-page-header sep-page-header_spaced slds-m-bottom_medium">
                     <div class="slds-page-header__row">
                         <div class="slds-page-header__col-title">
-                            <div class="slds-media">
-                                <div class="slds-media__figure">
-                                    <lightning-avatar
-                                        fallback-icon-name="standard:user"
-                                        alternative-text={fullName}
-                                        size="medium"
-                                    ></lightning-avatar>
-                                </div>
-                                <div class="slds-media__body">
-                                    <h1 class="slds-page-header__title slds-truncate">{fullName}</h1>
-                                    <p class="slds-page-header__name-meta">My profile</p>
-                                </div>
+                            <div class="slds-media__body">
+                                <h1
+                                    id="profile-header-title"
+                                    class="slds-page-header__title slds-truncate"
+                                >{fullName}</h1>
+                                <p class="slds-page-header__name-meta">My profile</p>
                             </div>
                         </div>
                     </div>
                     <div class="slds-page-header__row slds-page-header__row_gutters">
                         <div class="slds-page-header__col-details">
-                            <ul class="slds-page-header__detail-row">
-                                <li class="slds-page-header__detail-block">
+                            <ul id="profile-header-details" class="slds-page-header__detail-row">
+                                <li id="profile-header-detail-email" class="slds-page-header__detail-block">
                                     <div class="slds-text-title slds-truncate">Email</div>
                                     <div class="slds-truncate" title={email}>{email}</div>
                                 </li>
-                                <li class="slds-page-header__detail-block">
+                                <li id="profile-header-detail-company" class="slds-page-header__detail-block">
                                     <div class="slds-text-title slds-truncate">Company</div>
                                     <div class="slds-truncate" title={companyName}>{companyName}</div>
                                 </li>
-                                <li class="slds-page-header__detail-block">
+                                <li id="profile-header-detail-role" class="slds-page-header__detail-block">
                                     <div class="slds-text-title slds-truncate">Role</div>
                                     <div class="slds-truncate">{roleLabel}</div>
                                 </li>
@@ -72,79 +82,112 @@
                     </div>
                 </div>
 
-                <lightning-layout multiple-rows pull-to-boundary="small">
-                    <lightning-layout-item size="12" large-device-size="8" padding="around-small">
-                        <lightning-card title="Your details" icon-name="standard:contact">
+                <lightning-layout id="profile-layout" multiple-rows pull-to-boundary="small">
+                    <lightning-layout-item
+                        id="profile-col-main"
+                        size="12"
+                        large-device-size="8"
+                        padding="around-small"
+                    >
+                        <lightning-card
+                            id="profile-details-card"
+                            title="Your details"
+                            icon-name="standard:contact"
+                        >
                             <div class="slds-p-horizontal_medium slds-p-bottom_medium">
-                                <div lwc:if={hasError} class="slds-m-bottom_small">
+                                <div lwc:if={hasError} id="profile-details-error" class="slds-m-bottom_small">
                                     <div class="slds-notify slds-notify_alert slds-theme_error" role="alert">
                                         <span class="slds-assistive-text">Error</span>
                                         <span>{error}</span>
                                     </div>
                                 </div>
 
-                                <div lwc:if={saved} class="slds-m-bottom_small">
+                                <div lwc:if={saved} id="profile-details-saved" class="slds-m-bottom_small">
                                     <div class="slds-notify slds-notify_alert slds-theme_success" role="status">
                                         <span>Profile saved.</span>
                                     </div>
                                 </div>
 
-                                <lightning-layout multiple-rows pull-to-boundary="small">
-                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
+                                <lightning-layout id="profile-details-grid" multiple-rows pull-to-boundary="small">
+                                    <lightning-layout-item
+                                        id="profile-col-first-name"
+                                        size="12"
+                                        medium-device-size="6"
+                                        padding="horizontal-small"
+                                    >
                                         <lightning-input
                                             lwc:if={canEdit}
+                                            id="profile-field-first-name"
                                             data-field="first_name"
                                             label="First name"
                                             value={draft.first_name}
                                             onchange={handleChange}
                                         ></lightning-input>
-                                        <div lwc:else class="slds-form-element slds-form-element_readonly">
+                                        <div lwc:else id="profile-static-first-name" class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">First name</span>
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{firstNameDisplay}</div>
                                             </div>
                                         </div>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
+                                    <lightning-layout-item
+                                        id="profile-col-last-name"
+                                        size="12"
+                                        medium-device-size="6"
+                                        padding="horizontal-small"
+                                    >
                                         <lightning-input
                                             lwc:if={canEdit}
+                                            id="profile-field-last-name"
                                             data-field="last_name"
                                             label="Last name"
                                             value={draft.last_name}
                                             onchange={handleChange}
                                         ></lightning-input>
-                                        <div lwc:else class="slds-form-element slds-form-element_readonly">
+                                        <div lwc:else id="profile-static-last-name" class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Last name</span>
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{lastNameDisplay}</div>
                                             </div>
                                         </div>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
+                                    <lightning-layout-item
+                                        id="profile-col-job-title"
+                                        size="12"
+                                        medium-device-size="6"
+                                        padding="horizontal-small"
+                                    >
                                         <lightning-input
                                             lwc:if={canEdit}
+                                            id="profile-field-job-title"
                                             data-field="job_title"
                                             label="Job title"
                                             value={draft.job_title}
                                             onchange={handleChange}
                                         ></lightning-input>
-                                        <div lwc:else class="slds-form-element slds-form-element_readonly">
+                                        <div lwc:else id="profile-static-job-title" class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Job title</span>
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{jobTitleDisplay}</div>
                                             </div>
                                         </div>
                                     </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
+                                    <lightning-layout-item
+                                        id="profile-col-phone"
+                                        size="12"
+                                        medium-device-size="6"
+                                        padding="horizontal-small"
+                                    >
                                         <lightning-input
                                             lwc:if={canEdit}
+                                            id="profile-field-phone"
                                             data-field="phone"
                                             type="tel"
                                             label="Phone"
                                             value={draft.phone}
                                             onchange={handleChange}
                                         ></lightning-input>
-                                        <div lwc:else class="slds-form-element slds-form-element_readonly">
+                                        <div lwc:else id="profile-static-phone" class="slds-form-element slds-form-element_readonly">
                                             <span class="slds-form-element__label">Phone</span>
                                             <div class="slds-form-element__control">
                                                 <div class="slds-form-element__static">{phoneDisplay}</div>
@@ -154,13 +197,15 @@
                                 </lightning-layout>
                             </div>
 
-                            <div lwc:if={canEdit} slot="footer" class="slds-text-align_right">
+                            <div lwc:if={canEdit} slot="footer" id="profile-details-actions" class="slds-text-align_right">
                                 <lightning-button
+                                    id="profile-cancel-button"
                                     label="Cancel"
                                     onclick={handleCancel}
                                     class="slds-m-right_x-small"
                                 ></lightning-button>
                                 <lightning-button
+                                    id="profile-save-button"
                                     variant="brand"
                                     label="Save"
                                     onclick={handleSave}
@@ -170,10 +215,20 @@
                         </lightning-card>
                     </lightning-layout-item>
 
-                    <lightning-layout-item size="12" large-device-size="4" padding="around-small">
-                        <lightning-card title="Sign-in" icon-name="standard:user" class="slds-m-bottom_medium">
+                    <lightning-layout-item
+                        id="profile-col-side"
+                        size="12"
+                        large-device-size="4"
+                        padding="around-small"
+                    >
+                        <lightning-card
+                            id="profile-signin-card"
+                            title="Sign-in"
+                            icon-name="standard:user"
+                            class="slds-m-bottom_medium"
+                        >
                             <div class="slds-p-horizontal_medium slds-p-bottom_medium">
-                                <div class="slds-form-element slds-form-element_readonly">
+                                <div id="profile-static-email" class="slds-form-element slds-form-element_readonly">
                                     <span class="slds-form-element__label">Email</span>
                                     <div class="slds-form-element__control">
                                         <div class="slds-form-element__static">{email}</div>
@@ -185,22 +240,26 @@
                             </div>
                         </lightning-card>
 
-                        <lightning-card title="Organisation" icon-name="standard:account">
+                        <lightning-card
+                            id="profile-org-card"
+                            title="Organisation"
+                            icon-name="standard:account"
+                        >
                             <div class="slds-p-horizontal_medium slds-p-bottom_medium">
-                                <div class="slds-form-element slds-form-element_readonly">
+                                <div id="profile-static-company" class="slds-form-element slds-form-element_readonly">
                                     <span class="slds-form-element__label">Company</span>
                                     <div class="slds-form-element__control">
                                         <div class="slds-form-element__static">{companyName}</div>
                                     </div>
                                 </div>
-                                <div class="slds-form-element slds-form-element_readonly slds-m-top_x-small">
+                                <div id="profile-static-role" class="slds-form-element slds-form-element_readonly slds-m-top_x-small">
                                     <span class="slds-form-element__label">Your role</span>
                                     <div class="slds-form-element__control">
                                         <div class="slds-form-element__static">{roleLabel}</div>
                                     </div>
                                 </div>
                                 <div class="slds-m-top_small">
-                                    <a href="/manage-org">Manage org</a>
+                                    <a id="profile-manage-org-link" href="/manage-org">Manage org</a>
                                 </div>
                             </div>
                         </lightning-card>
@@ -208,8 +267,13 @@
                 </lightning-layout>
             </template>
 
-            <div lwc:else class="slds-box slds-theme_default">
-                <lightning-icon icon-name="utility:info" size="small" class="slds-m-right_x-small"></lightning-icon>
+            <div lwc:else id="profile-unavailable" class="slds-box slds-theme_default">
+                <lightning-icon
+                    id="profile-unavailable-icon"
+                    icon-name="utility:info"
+                    size="small"
+                    class="slds-m-right_x-small"
+                ></lightning-icon>
                 <span>{error}</span>
                 <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
                     The data API runs under <code>npm run dev</code> only.

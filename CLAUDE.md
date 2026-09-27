@@ -71,8 +71,9 @@ lego allows and say where it falls short.
 4. Verify before reporting it done — see *Verifying* below.
 
 ### Add a route
-`lwr.config.json` → `routes[]` entry + a matching component under `src/modules/example/`.
-`npm run catalog` never touches `routes`. Details in `rules-architecture.md`.
+`routes.json` → `routes[]` entry + a matching component under `src/modules/example/`.
+Routes are **not** in `lwr.config.json` — `scripts/routes-hook.mjs` injects them during config
+resolution, for `dev` and `build` alike. Details in `rules-architecture.md`.
 
 ### Add or change data
 `rules-database.md`. The order is always schema → repository → route → `data/api` client → screen.
