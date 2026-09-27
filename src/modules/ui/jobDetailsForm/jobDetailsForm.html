@@ -1,0 +1,61 @@
+<template lwc:render-mode="light">
+    <!-- The Details region of a vacancy record page.
+         Extracted from `example/jobDetail` so it can be rendered either inside
+         a tab or on its own — before 1.2 there is no second tab, so the tabset
+         around it goes away and this renders bare. -->
+    <lightning-layout multiple-rows pull-to-boundary="small">
+        <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
+            <template for:each={columnOne} for:item="field">
+                <div key={field.key} class="slds-form-element slds-form-element_readonly slds-m-bottom_small">
+                    <span class="slds-form-element__label">{field.label}</span>
+                    <div class="slds-form-element__control">
+                        <div class="slds-form-element__static">{field.value}</div>
+                    </div>
+                </div>
+            </template>
+        </lightning-layout-item>
+        <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
+            <template for:each={columnTwo} for:item="field">
+                <div key={field.key} class="slds-form-element slds-form-element_readonly slds-m-bottom_small">
+                    <span class="slds-form-element__label">{field.label}</span>
+                    <div class="slds-form-element__control">
+                        <div class="slds-form-element__static">{field.value}</div>
+                    </div>
+                </div>
+            </template>
+        </lightning-layout-item>
+
+        <lightning-layout-item size="12" class="slds-m-top_medium" padding="horizontal-small">
+            <div class="slds-form-element slds-form-element_readonly">
+                <span class="slds-form-element__label">Description</span>
+                <div class="slds-form-element__control">
+                    <div class="slds-form-element__static">
+                        <lightning-formatted-text value={description}></lightning-formatted-text>
+                    </div>
+                </div>
+            </div>
+        </lightning-layout-item>
+
+        <lightning-layout-item lwc:if={hasResponsibilities} size="12" class="slds-m-top_medium" padding="horizontal-small">
+            <div class="slds-form-element slds-form-element_readonly">
+                <span class="slds-form-element__label">Responsibilities</span>
+                <ul class="slds-list_dotted slds-m-top_xx-small">
+                    <template for:each={responsibilities} for:item="item">
+                        <li key={item.key}>{item.text}</li>
+                    </template>
+                </ul>
+            </div>
+        </lightning-layout-item>
+
+        <lightning-layout-item lwc:if={hasSkills} size="12" class="slds-m-top_medium" padding="horizontal-small">
+            <div class="slds-form-element slds-form-element_readonly">
+                <span class="slds-form-element__label">Skills</span>
+                <div class="slds-m-top_xx-small">
+                    <template for:each={skills} for:item="item">
+                        <lightning-pill key={item.key} label={item.text} variant="plain"></lightning-pill>
+                    </template>
+                </div>
+            </div>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

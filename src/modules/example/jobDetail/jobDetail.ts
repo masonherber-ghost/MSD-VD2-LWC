@@ -284,6 +284,23 @@ export default class JobDetail extends LightningElement {
     }
 
     /**
+     * The tab bar itself.
+     *
+     * Before 1.2 the Details tab is the only one, and a tabset holding a single
+     * tab renders a bar whose only job is to name the panel under it. So the
+     * whole tabset is gated, not its contents — gating the inside would leave
+     * an empty scoped panel, which reads as a bug. `ui/jobDetailsForm` renders
+     * bare instead.
+     *
+     * The tab bar cannot be hidden with CSS: it lives in `lightning-tabset`'s
+     * shadow root, inside a further `lightning-tab-bar` shadow root, and
+     * neither exposes a part. See `rules-lwc-components.md` § Known traps.
+     */
+    get showTabs(): boolean {
+        return isEnabled('jobDetail.tabs', this.release);
+    }
+
+    /**
      * Applicants arrived after the first release: before 1.2 a vacancy was a
      * record you posted and read back, with no view of who had applied. This
      * gates every part of that — the header count, the View applicants action,

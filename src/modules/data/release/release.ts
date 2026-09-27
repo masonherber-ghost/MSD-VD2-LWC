@@ -54,6 +54,11 @@ const FEATURES: Record<string, Release> = {
     'home.dashboardStats': '1.2',
     'jobDetail.activityTimeline': '1.2',
     'jobDetail.applicants': '1.2',
+    // The tab bar on the vacancy record page. 1.1 has only a Details tab, and
+    // a tab bar with one tab in it just labels the thing below it — so the
+    // whole tabset goes and the details render on their own. It lands with the
+    // applicants tab because that is what gives it a second tab to hold.
+    'jobDetail.tabs': '1.2',
     'manageOrg.team': '1.2',
     // 1.1 collected one address for the organisation. The workplace address —
     // where the work actually happens, which can differ from the registered

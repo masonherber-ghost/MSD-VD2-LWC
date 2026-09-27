@@ -131,6 +131,37 @@
     flex-direction: column;
     align-items: flex-start;
     row-gap: var(--slds-g-spacing-1);
+
+    /* Tighten the buttons themselves. The row-gap above was never the problem.
+     *
+     * A UTILITY CANNOT DO THIS. `slds-p-vertical_none` ships, but the padding
+     * sits on the <button> inside `lightning-button`'s shadow root, and a class
+     * on the host does not reach it. Hooks are the only lever, and these two are
+     * published shared-tier ones, so this is the component's API rather than an
+     * override.
+     *
+     * `design-tokens.css` sets both at `:root` for the site's pill CTAs —
+     * spacing-block 12px, spacing-inline 20px. That is right for a standing
+     * button and much too loose for a stacked list of link-style actions: it
+     * made each row ~48px against the design's 32px. Redeclaring them here wins
+     * for these buttons alone, because a custom property resolves from the
+     * nearest ancestor that sets it.
+     *
+     * The arithmetic, read off the stylesheets rather than guessed:
+     *   font-size   --slds-s-button-font-size      17px
+     *   line-height --slds-s-button-font-lineheight 1.33  -> ~22.6px line box
+     *   border                                      1px top + 1px bottom
+     *   + 4px block padding each side               -> ~32px, the design's row
+     *
+     * (Those two font hooks are live here. `lightning-button` sets
+     * `data-render-mode="shadow"` on itself, which is what activates
+     * `button.slds.css` — unlike `lightning-badge`, which never sets it and
+     * whose equivalent hook is inert. See the status-tag note below.)
+     *
+     * Inline padding goes to zero so the icons line up with the column's left
+     * edge; 20px of it indented every row away from the metadata rail. */
+    --slds-s-button-spacing-block: var(--slds-g-spacing-1);
+    --slds-s-button-spacing-inline: 0;
 }
 
 /* Status tag — SEP's four states.

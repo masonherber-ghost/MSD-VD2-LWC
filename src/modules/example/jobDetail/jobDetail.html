@@ -149,69 +149,19 @@
                         large-device-size={mainColumnSize}
                         padding="around-small"
                     >
-                        <lightning-tabset variant="scoped">
+                        <!-- From 1.2 the record has a second tab, so the tabset earns
+                             its place. Before that it would be a bar with one tab in
+                             it, so the whole tabset goes and the details render on
+                             their own — same component either way. -->
+                        <lightning-tabset lwc:if={showTabs} variant="scoped">
                             <lightning-tab label="Details">
-                                <lightning-layout multiple-rows pull-to-boundary="small">
-                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
-                                        <template for:each={detailColumnOne} for:item="field">
-                                            <div key={field.key} class="slds-form-element slds-form-element_readonly slds-m-bottom_small">
-                                                <span class="slds-form-element__label">{field.label}</span>
-                                                <div class="slds-form-element__control">
-                                                    <div class="slds-form-element__static">{field.value}</div>
-                                                </div>
-                                            </div>
-                                        </template>
-                                    </lightning-layout-item>
-                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
-                                        <template for:each={detailColumnTwo} for:item="field">
-                                            <div key={field.key} class="slds-form-element slds-form-element_readonly slds-m-bottom_small">
-                                                <span class="slds-form-element__label">{field.label}</span>
-                                                <div class="slds-form-element__control">
-                                                    <div class="slds-form-element__static">{field.value}</div>
-                                                </div>
-                                            </div>
-                                        </template>
-                                    </lightning-layout-item>
-
-                                    <lightning-layout-item size="12" class="slds-m-top_medium" padding="horizontal-small">
-                                        <div class="slds-form-element slds-form-element_readonly">
-                                            <span class="slds-form-element__label">Description</span>
-                                            <div class="slds-form-element__control">
-                                                <div class="slds-form-element__static">
-                                                    <lightning-formatted-text
-                                                        value={job.description}
-                                                    ></lightning-formatted-text>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </lightning-layout-item>
-
-                                    <lightning-layout-item lwc:if={hasResponsibilities} size="12" class="slds-m-top_medium" padding="horizontal-small">
-                                        <div class="slds-form-element slds-form-element_readonly">
-                                            <span class="slds-form-element__label">Responsibilities</span>
-                                            <ul class="slds-list_dotted slds-m-top_xx-small">
-                                                <template for:each={responsibilities} for:item="item">
-                                                    <li key={item.key}>{item.text}</li>
-                                                </template>
-                                            </ul>
-                                        </div>
-                                    </lightning-layout-item>
-
-                                    <lightning-layout-item lwc:if={hasSkills} size="12" class="slds-m-top_medium" padding="horizontal-small">
-                                        <div class="slds-form-element slds-form-element_readonly">
-                                            <span class="slds-form-element__label">Skills</span>
-                                            <div class="slds-m-top_xx-small">
-                                                <template for:each={skills} for:item="item">
-                                                    <lightning-pill
-                                                        key={item.key}
-                                                        label={item.text}
-                                                        variant="plain"
-                                                    ></lightning-pill>
-                                                </template>
-                                            </div>
-                                        </div>
-                                    </lightning-layout-item>
-                                </lightning-layout>
+                                <ui-job-details-form
+                                    column-one={detailColumnOne}
+                                    column-two={detailColumnTwo}
+                                    description={job.description}
+                                    responsibilities={responsibilities}
+                                    skills={skills}
+                                ></ui-job-details-form>
                             </lightning-tab>
 
                             <lightning-tab lwc:if={showApplicants} label={relatedLabel}>
@@ -228,6 +178,15 @@
                                 </p>
                             </lightning-tab>
                         </lightning-tabset>
+
+                        <ui-job-details-form
+                            lwc:else
+                            column-one={detailColumnOne}
+                            column-two={detailColumnTwo}
+                            description={job.description}
+                            responsibilities={responsibilities}
+                            skills={skills}
+                        ></ui-job-details-form>
                     </lightning-layout-item>
 
                     <!-- Sidebar region ------------------------------------->

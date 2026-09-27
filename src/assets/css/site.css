@@ -279,10 +279,10 @@ lightning-button[variant='brand']::part(button):disabled {
  *   this block         THE ASSIGNMENT. Which heading reads which step. Change
  *                      what an element USES here.
  *
- * Most headings need nothing in either place: SLDS's `slds-text-heading_*`
- * utilities already read the scale steps we remapped in design-tokens.css, and
- * the page title comes through `--slds-s-pageheader-title-font-size`. This
- * block is only for headings whose size cannot be reached by a hook.
+ * RIGHT NOW THIS BLOCK IS EMPTY — see the note below it. Headings take SLDS's
+ * own sizes, so `design-tokens.css` still defines the SEP heading scale but
+ * nothing assigns it. The page title no longer sets
+ * `--slds-s-pageheader-title-font-size` either.
  *
  * Why any of this is needed: SLDS 2 resets `h1..h6` to `font-size: 1em`, so a
  * heading element carries no size of its own. Level and size are separate
@@ -318,10 +318,6 @@ lightning-button[variant='brand']::part(button):disabled {
 .sep-page-header {
     --slds-s-pageheader-sizing-border: 0;
     --slds-s-pageheader-shadow: none;
-    /* Published hook. Inherits down to `.slds-page-header__title`, which reads
-       it directly — see the title rule further down for why only this half of
-       the title's styling can be a hook. */
-    --slds-s-pageheader-title-font-size: var(--site-font-heading-lg);
     padding: 0;
 }
 
@@ -348,8 +344,36 @@ lightning-button[variant='brand']::part(button):disabled {
     margin-inline: 0;
 }
 
+/* The detail band, stripped back to plain text on the page.
+ *
+ * Background is set through SLDS's OWN hook rather than overridden:
+ * `.slds-page-header__detail-row` reads
+ * `background-color: var(--slds-s-pageheader-row-color-background)`, and this
+ * is its only consumer in the whole stylesheet. Published API, so it survives
+ * an upgrade.
+ *
+ * Padding has no hook — SLDS reads the global `--slds-g-spacing-var-inline-4`,
+ * used far beyond this component — so that one is an override.
+ *
+ * MARGIN-INLINE MUST GO WITH THE PADDING, and this is the part that bites.
+ * SLDS pairs them deliberately: `margin-inline: -16px` with `padding: 16px`,
+ * which cancel, so the band's BACKGROUND bleeds to the header edge while its
+ * TEXT still lines up with the title. Zero the padding alone and nothing
+ * cancels the negative margin any more — the text lands 16px LEFT of the
+ * title. Zeroing both restores the alignment, because `__col-details` still
+ * supplies its own 16px.
+ *
+ * NOTE this is the opposite of the advice a few rules up, which says to leave
+ * `margin-inline` alone. That holds while the padding is still 16px: zeroing
+ * the margin on its own indents the band by 16px. The two have to move
+ * together or not at all — it is the PAIR that has to stay consistent, not
+ * either value. With no background left there is no band to bleed, so zero is
+ * the right end of the pair to land on. */
 .sep-page-header .slds-page-header__detail-row {
+    --slds-s-pageheader-row-color-background: transparent;
     margin-block-end: 0;
+    margin-inline: 0;
+    padding: 0;
 }
 
 /* Modifier: top space, from the large breakpoint up.
@@ -461,47 +485,46 @@ lightning-button[variant='brand']::part(button):disabled {
     line-height: var(--site-lineheight-body);
 }
 
-/* H1 — the largest step in the scale.
+/* NOTHING HERE ON PURPOSE — headings run at SLDS's own sizes.
  *
- * The page-header title is handled separately below — part hook, part scoped
- * override. These are the two hero headings, which sit on `slds-text-heading_large` and would
- * otherwise stop at --site-font-heading-lg. */
-.page-hero__heading,
-h1.slds-text-heading_large {
-    font-size: var(--site-font-heading-2xl);
-    line-height: var(--site-lineheight-heading-2xl);
-}
-
-.slds-text-heading_large {
-    color: var(--site-color-brand-navy);
-    font-size: var(--site-font-heading-lg);
-    line-height: var(--site-lineheight-heading-lg);
-}
-
-/* The page-header title.
+ * Four heading customisations were removed to see the stock Lightning
+ * treatment. If they are wanted back, they were:
  *
- * Split deliberately, because only half of it has a published hook.
+ *   .page-hero__heading, h1.slds-text-heading_large
+ *       font-size: var(--site-font-heading-2xl)
+ *       line-height: var(--site-lineheight-heading-2xl)
  *
- *   font-size    HAS one — `--slds-s-pageheader-title-font-size`, which SLDS's
- *                own rule reads as `var(…, var(--slds-g-font-scale-1))`. Set on
- *                `.sep-page-header` it inherits down to the title. That is the
- *                component's API, so it survives an upgrade and cannot be
- *                broken by a specificity change.
+ *   .slds-text-heading_large
+ *       color: var(--site-color-brand-navy)
+ *       font-size: var(--site-font-heading-lg)
+ *       line-height: var(--site-lineheight-heading-lg)
  *
- *   color        has NO hook — SLDS reads the global --slds-g-color-on-surface-3
- *   line-height  has NO hook — SLDS reads the global --slds-g-font-lineheight-2
+ *   .sep-page-header .slds-page-header__title
+ *       color: var(--site-color-brand-navy)
+ *       line-height: var(--site-lineheight-heading-lg)
  *
- * Both of those globals are used far beyond this component, so redefining them
- * is not an option and these two stay overrides. They are scoped to
- * `.sep-page-header` rather than declared bare: a bare `.slds-page-header__title`
- * rule restyles every page header on the site with no way to opt out, which is
- * exactly what the sep- convention exists to prevent. All ten page headers in
- * the project carry the class, so this is the same result, scoped.
+ *   .sep-page-header
+ *       --slds-s-pageheader-title-font-size: var(--site-font-heading-lg)
  *
- * Specificity is also better than the bare form it replaces: 0,2,0 beats SLDS's
- * own `.slds-page-header__name h1` at 0,1,1, so the line-height no longer
- * depends on the unlayered-beats-layered rule alone to win. */
-.sep-page-header .slds-page-header__title {
-    color: var(--site-color-brand-navy);
-    line-height: var(--site-lineheight-heading-lg);
-}
+ * The `--site-font-heading-*` and `--site-lineheight-heading-*` tokens are all
+ * still defined in design-tokens.css — only the ASSIGNMENTS went, so restoring
+ * any of these is a copy back into this block.
+ *
+ * What the site takes instead, read off the shipped stylesheet:
+ *
+ *   slds-text-heading_large   font-size --slds-g-font-scale-6. NOTE: this is
+ *       one design-tokens.css already remaps to --site-font-heading-lg, so the
+ *       SIZE is unchanged at 2rem — the removed rule was restating a value the
+ *       token layer had already set. What DOES change is an <h1> with that
+ *       class, which drops from 2.5rem to 2rem, and the colour, which was navy
+ *       and is now simply inherited (the shipped rule sets no colour).
+ *
+ *   page header title         font-size --slds-s-pageheader-title-font-size,
+ *       which SLDS itself declares as 1.125rem — so the title goes from 2rem to
+ *       18px, NOT to the --slds-g-font-scale-1 fallback. Colour becomes
+ *       --slds-g-color-on-surface-3, and line-height is whatever
+ *       `.slds-page-header__name h1 { line-height: 1 }` leaves.
+ *
+ * `ui/pageHero`'s h1 carries `slds-text-heading_large` as well as its own
+ * class, so it falls back to the shipped size rather than losing one — its own
+ * stylesheet only sets a max-width. */

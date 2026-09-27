@@ -454,8 +454,8 @@ bring it into line rather than matching the existing shape:
 
 | Screen | Deviation |
 |---|---|
-| `example/jobDetail` (324 lines) | Monolithic — highlights, path, tabs and three sidebar cards in one template |
-| `example/manageOrg` (273 lines) | Monolithic — two full tabs in one template |
-| `example/profile` (192 lines) | Monolithic |
+| `example/jobDetail` (299 lines) | Still monolithic — highlights, path and three sidebar cards in one template. The Details region is now `ui/jobDetailsForm` |
+| `example/manageOrg` (426 lines) | Monolithic — two full tabs in one template. Has GROWN since this row was written |
+| `example/profile` (278 lines) | Monolithic. Has grown since this row was written |
 
 This table is the backlog — keep it honest. Delete a row when it is fixed.

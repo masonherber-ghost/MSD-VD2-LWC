@@ -312,7 +312,7 @@
      * deliberately. Collapsing the two would drag all three down with the body
      * copy. Change this one to move page text; change --site-font-body to move
      * the controls. */
-    --site-font-page-base: 0.9375rem;   /* 15 */
+    --site-font-page-base: 0.875rem;   /* 14 */
 
     /* Line heights, tightening as the size grows */
     --site-lineheight-heading-2xl: 1.05;
@@ -325,37 +325,9 @@
     --site-lineheight-body: 1.6;
 }
 
-/* 48em / 768px — Tablet. */
-@media (min-width: 48em) {
-    :root {
-        --site-font-heading-2xl: 3rem;      /* 48 */
-        --site-font-heading-xl: 2.5rem;     /* 40 */
-        --site-font-heading-lg: 2.25rem;    /* 36 */
-        --site-font-heading-md: 1.75rem;    /* 28 */
-        --site-font-heading-sm: 1.375rem;   /* 22 */
-        --site-font-heading-xs: 1.1875rem;  /* 19 */
-        --site-font-subtitle: 1.75rem;      /* 28 */
-        --site-font-strap-lg: 1.875rem;     /* 30 */
-        --site-font-strap: 1.375rem;        /* 22 */
-        --site-font-strap-sm: 0.9375rem;    /* 15 */
-    }
-}
 
-/* 64em / 1024px — Desktop. */
-@media (min-width: 64em) {
-    :root {
-        --site-font-heading-2xl: 3.75rem;   /* 60 */
-        --site-font-heading-xl: 3rem;       /* 48 */
-        --site-font-heading-lg: 2.5rem;     /* 40 */
-        --site-font-heading-md: 2rem;       /* 32 */
-        --site-font-heading-sm: 1.5rem;     /* 24 */
-        --site-font-heading-xs: 1.25rem;    /* 20 */
-        --site-font-subtitle: 2rem;         /* 32 */
-        --site-font-strap-lg: 2rem;         /* 32 */
-        --site-font-strap: 1.5rem;          /* 24 */
-        --site-font-strap-sm: 1rem;         /* 16 */
-    }
-}
+
+
 
 /* -----------------------------------------------------------------------------
  * Mapping the SEP scale onto SLDS
