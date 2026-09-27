@@ -25,6 +25,12 @@ const COMPANY_TYPES = [
  * `applyUpdate` only writes the keys it is handed, so a column absent from this
  * list keeps whatever it already holds. `verified` is shown in the page header
  * only, since an employer verifying themselves would defeat its purpose.
+ *
+ * `workplace_address` is here but release-gated: it does not exist before
+ * 1.2, so `toPayload` skips it whenever it is hidden. That matters because
+ * `applyUpdate` only writes the keys it is handed — omitting it leaves the
+ * column alone rather than nulling it, so previewing 1.1 and saving cannot
+ * destroy an address entered in 1.2.
  */
 const TEXT_FIELDS = [
     'company_name',
@@ -187,7 +193,10 @@ export default class ManageOrg extends LightningElement {
     private toPayload(): Row {
         const payload: Row = {};
         for (const f of TEXT_FIELDS) {
-            if (this.isLocked(f)) {
+            // A hidden field is skipped for the same reason a locked one is: the
+            // value is not the user's to set in this release, so it must not be
+            // writable by a tampered DOM either.
+            if (this.isLocked(f) || !this.isVisible(f)) {
                 continue;
             }
             payload[f] = this.draft[f] === '' ? null : this.draft[f];
@@ -279,12 +288,28 @@ export default class ManageOrg extends LightningElement {
         return this.displayOr(this.account?.web_address);
     }
 
-    get lockCompanyAddress(): boolean {
-        return this.isLocked('company_address');
+    /**
+     * Fields that do not exist in every release.
+     *
+     * Keyed by column so `toPayload` can ask the same question the template
+     * does. A column absent from this map is always visible.
+     */
+    private isVisible(field: string): boolean {
+        if (field === 'workplace_address') {
+            return this.showWorkplaceAddress;
+        }
+        return true;
     }
 
-    get companyAddressDisplay(): string {
-        return this.displayOr(this.account?.company_address);
+    /**
+     * Workplace address arrived at 1.2, so 1.1 does not show it at all.
+     *
+     * Reads `this.release` rather than calling `isEnabled()` bare: the field is
+     * what makes this a render dependency, so the screen re-renders when the
+     * toggle moves. See `rules-app-logic.md` § The reactivity rule.
+     */
+    get showWorkplaceAddress(): boolean {
+        return isEnabled('manageOrg.workplaceAddress', this.release);
     }
 
     get lockWorkplaceAddress(): boolean {
@@ -293,6 +318,37 @@ export default class ManageOrg extends LightningElement {
 
     get workplaceAddressDisplay(): string {
         return this.displayOr(this.account?.workplace_address);
+    }
+
+    get lockCompanyAddress(): boolean {
+        return this.isLocked('company_address');
+    }
+
+    get companyAddressDisplay(): string {
+        return this.displayOr(this.account?.company_address);
+    }
+
+    /**
+     * The relationship manager MSD has assigned to this account.
+     *
+     * Not in TEXT_FIELDS and not in LOCKED_WHEN_SET, because it is not a form
+     * field at all — it is always read-only, the way `verified` is. So there is
+     * no draft entry, no lock getter and nothing in `toPayload`; and the server
+     * leaves `relationship_manager` out of ACCOUNT_UPDATABLE, which is what
+     * actually enforces it.
+     */
+    get relationshipManagerDisplay(): string {
+        return this.displayOr(this.account?.relationship_manager);
+    }
+
+    /**
+     * Whether to offer the contact link. An account with no relationship
+     * manager recorded has nobody to email, so the link goes rather than
+     * pointing at nothing.
+     */
+    get hasRelationshipManager(): boolean {
+        const value = this.account?.relationship_manager;
+        return value !== null && value !== undefined && String(value).trim() !== '';
     }
 
     /** An empty read-only field reads as a dash, not as blank space. */

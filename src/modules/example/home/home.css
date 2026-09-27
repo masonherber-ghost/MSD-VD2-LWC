@@ -23,9 +23,16 @@
 
 /* The welcome line under the page header. Slightly larger than body so it reads
    as an opening sentence rather than as another paragraph of the page. */
+/* The welcome panel.
+ *
+ * Now a `sep-scoped-notification`, which owns the background, border, radius,
+ * padding and the type of both its rows. All that is left here is the measure:
+ * a reading width is a property of THIS block on THIS page, not of the notice
+ * blueprint, so it does not belong on the shared class.
+ *
+ * The three type declarations that used to live here are gone rather than
+ * moved — `sep-scoped-notification__title` and `__body` set them, and leaving
+ * a `font-size` here would silently win over the panel's own. */
 .home__welcome {
-    font-size: var(--site-font-body-lg);
-    line-height: var(--site-lineheight-body);
-    color: var(--site-text-secondary);
     max-width: 50rem;
 }

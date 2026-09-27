@@ -55,6 +55,10 @@ const FEATURES: Record<string, Release> = {
     'jobDetail.activityTimeline': '1.2',
     'jobDetail.applicants': '1.2',
     'manageOrg.team': '1.2',
+    // 1.1 collected one address for the organisation. The workplace address —
+    // where the work actually happens, which can differ from the registered
+    // company address — arrives with the editable org form at 1.2.
+    'manageOrg.workplaceAddress': '1.2',
     'jobs.applicantCount': '1.2',
     // 1.1 had no public site at all: signed out, every route sent you to the
     // login screen. From 1.2 there is a public front door with its own nav, so

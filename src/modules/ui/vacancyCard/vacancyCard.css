@@ -1,35 +1,17 @@
-/* The positioning context for the stretched link.
+/* The card root.
  *
- * `lightning-card` renders its <article> inside a shadow root, so it cannot be
- * the containing block for anything we write. This wrapper can: the link's
- * ::after is absolutely positioned against it, and slotted content resolves its
- * containing block through the flattened tree, so the pseudo-element covers the
- * whole card even though the anchor sits in the card's title slot. */
-.vacancy-card {
-    position: relative;
-}
+ * No `position: relative` here any more. It existed only to be the containing
+ * block for a stretched ::after that made the whole card one click target; that
+ * went when the card gained its action column, because an overlay covering the
+ * card also covers the actions. The title anchor below is now the only link,
+ * which is what Lightning does on a card that carries actions. */
 
-/* The whole card is one link.
- *
- * The alternative — wrapping the card in an <a> — nests interactive elements
- * and breaks keyboard navigation the moment the card gains a second control.
- * This keeps exactly one tab stop and one thing for a screen reader to
- * announce, while the click target is the full card. */
+/* The title link. */
 .vacancy-card__link {
     text-decoration: none;
 }
 
-.vacancy-card__link::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    /* Above the card's own background, below anything interactive added later.
-       If a control is ever added to this card, give it `position: relative` and
-       a higher z-index or it will stop being clickable. */
-    z-index: 1;
-}
-
-.vacancy-card:hover .vacancy-card__link {
+.vacancy-card__link:hover {
     text-decoration: underline;
 }
 
@@ -63,25 +45,6 @@
 .vacancy-card__figure {
     flex: none;
     margin-inline-end: 0;
-}
-
-/* The stretched link's ::after must not be trapped in a new stacking context.
- *
- * `.slds-media__body` sets `z-index: 1` (SLDS 2, @layer component). On a flex
- * item that is enough to establish a stacking context, and the link's ::after
- * lives inside this span — so the card's own body, which paints later in the
- * tree, would come out on top of it and swallow clicks on the lower half of the
- * card.
- *
- * Before the header became a media object the anchor sat one level higher and
- * the question did not arise. `z-index: auto` puts it back: the blueprint class
- * keeps its flex sizing, and the ::after goes on participating in the same
- * context it always did.
- *
- * This wins without !important because our stylesheet is unlayered and SLDS
- * declares that rule inside @layer component — unlayered always beats layered. */
-.vacancy-card__body {
-    z-index: auto;
 }
 
 /* The category icon.
@@ -143,6 +106,31 @@
     color: var(--slds-g-color-on-surface-1);
     min-width: 0;
     /* font-size: var(--site-font-body-sm); */
+}
+
+/* The action column — Edit, Delete, Submit stacked.
+ *
+ * Written as flex here rather than with `slds-grid_vertical`, for two reasons.
+ * It matches `.vacancy-card__meta` directly above, which solves the same problem
+ * the same way; and in a vertical grid the SLDS cross-axis class names invert
+ * (`slds-grid_align-*` sets justify-content, which is the vertical axis once the
+ * direction is column), so the class that reads as "left align" does not do it.
+ *
+ * SLDS ships no gap utility, so the 4px row gap the design specifies is the
+ * token in custom CSS — the same exception `.vacancy-card__meta` takes.
+ *
+ * `align-items: flex-start` keeps each button at its label's width. Without it
+ * the default `stretch` widens every button to the column, which puts a wide
+ * invisible hit area to the right of "Edit".
+ *
+ * Nothing sets the label colour: `variant="base"` reads
+ * --slds-g-color-accent-1, which `design-tokens.css` already points at
+ * #0071bb — the design's accent. */
+.vacancy-card__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: var(--slds-g-spacing-1);
 }
 
 /* Status tag — SEP's four states.

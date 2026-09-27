@@ -64,6 +64,8 @@ export interface Account {
   logo_url: string | null
   company_description: string | null
   verified: boolean
+  /** MSD's assigned relationship manager. Read-only in the portal. */
+  relationship_manager: string | null
   selling_point_1: string | null
   selling_point_2: string | null
   selling_point_3: string | null

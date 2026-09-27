@@ -16,6 +16,9 @@ const ACCOUNT_UPDATABLE = [
   'selling_point_1', 'selling_point_2', 'selling_point_3',
   'campaign_length_weeks', 'max_shortlist', 'interview_options',
   'pre_employment_checks', 'show_company_profile',
+  // NOT 'relationship_manager'. MSD assigns it and the portal only displays it,
+  // so leaving it out of this list is what makes it read-only — a tampered
+  // PATCH cannot set it however the request is shaped. Set it via /data.
 ] as const
 
 const CONTACT_UPDATABLE = [

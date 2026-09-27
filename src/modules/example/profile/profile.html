@@ -82,6 +82,14 @@
                     </div>
                 </div>
 
+                <!-- Full width, above the two columns: the fields it explains are
+                     split across them — your details on the left, sign-in and
+                     organisation on the right. -->
+                <ui-read-only-notice
+                    id="profile-readonly-notice"
+                    message="Your sign-in email, organisation and role cannot be changed here."
+                ></ui-read-only-notice>
+
                 <lightning-layout id="profile-layout" multiple-rows pull-to-boundary="small">
                     <lightning-layout-item
                         id="profile-col-main"
@@ -234,9 +242,6 @@
                                         <div class="slds-form-element__static">{email}</div>
                                     </div>
                                 </div>
-                                <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
-                                    Your sign-in email cannot be changed here.
-                                </p>
                             </div>
                         </lightning-card>
 

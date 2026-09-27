@@ -60,6 +60,73 @@
                             </div>
                         </div>
 
+                        <ui-read-only-notice
+                            id="org-readonly-notice"
+                            message="Some of these organisation details are MSD's record and cannot be changed here."
+                        ></ui-read-only-notice>
+
+                        <!-- Your MSD contact.
+                             Its own card rather than a field in Company: the
+                             relationship manager is MSD's record about the
+                             account, not part of the company details the form
+                             below edits. Always read-only — there is no
+                             editable twin, no `lwc:else` and no draft entry, so
+                             it renders as `slds-form-element__static` in every
+                             release. -->
+                        <lightning-card
+                            id="org-relationship-manager-card"
+                            title="Your MSD contact"
+                            icon-name="standard:user"
+                            class="slds-m-bottom_medium"
+                        >
+                            <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+                                <lightning-layout multiple-rows pull-to-boundary="small">
+                                    <lightning-layout-item
+                                        id="org-col-relationship-manager"
+                                        size="12"
+                                        medium-device-size="6"
+                                        padding="horizontal-small"
+                                    >
+                                        <div
+                                            id="org-static-relationship-manager"
+                                            class="slds-form-element slds-form-element_readonly"
+                                        >
+                                            <span class="slds-form-element__label">Relationship manager</span>
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-form-element__static">{relationshipManagerDisplay}</div>
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item
+                                        lwc:if={hasRelationshipManager}
+                                        id="org-col-relationship-manager-contact"
+                                        size="12"
+                                        medium-device-size="6"
+                                        padding="horizontal-small"
+                                    >
+                                        <!-- MOCK for the prototype: deliberately
+                                             unwired. A working mailto needs an
+                                             address column on accounts, which
+                                             this change did not add — and
+                                             deriving one from the name would be
+                                             inventing data. -->
+                                        <lightning-button
+                                            id="org-relationship-manager-email"
+                                            variant="base"
+                                            icon-name="utility:email"
+                                            label="Email your relationship manager"
+                                        ></lightning-button>
+                                        <p
+                                            id="org-relationship-manager-hint"
+                                            class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small"
+                                        >
+                                            They can help with your listings, candidates and account.
+                                        </p>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </div>
+                        </lightning-card>
+
                         <lightning-card id="org-company-card" title="Company" icon-name="standard:account" class="slds-m-bottom_medium">
                             <div class="slds-p-horizontal_medium slds-p-bottom_medium">
                                 <lightning-layout multiple-rows pull-to-boundary="small">
@@ -190,7 +257,12 @@
                                             onchange={handleFieldChange}
                                         ></lightning-input>
                                     </lightning-layout-item>
+                                    <!-- Workplace address does not exist before 1.2.
+                                         The gate is on the whole layout item, not on
+                                         its contents: gating the inside would leave an
+                                         empty column in the grid. -->
                                     <lightning-layout-item
+                                        lwc:if={showWorkplaceAddress}
                                         id="org-col-workplace-address"
                                         size="12"
                                         medium-device-size="6"

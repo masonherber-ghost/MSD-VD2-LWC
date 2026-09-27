@@ -68,6 +68,11 @@ CREATE TABLE IF NOT EXISTS accounts (
   logo_url              TEXT,                  -- path only; file lives in server/uploads
   company_description   TEXT,
   verified              INTEGER DEFAULT 0,
+  -- MSD's assigned relationship manager for this employer. MSD's record, so
+  -- the portal shows it and never writes it: it is deliberately absent from
+  -- ACCOUNT_UPDATABLE in account-repository.ts, which is what actually enforces
+  -- that. Set it through /data or a seed script.
+  relationship_manager  TEXT,
   selling_point_1       TEXT,
   selling_point_2       TEXT,
   selling_point_3       TEXT,

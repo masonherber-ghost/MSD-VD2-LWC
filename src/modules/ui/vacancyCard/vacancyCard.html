@@ -1,6 +1,4 @@
 <template lwc:render-mode="light">
-    <!-- The positioning context for the stretched link below. It has to be our
-         own element: `lightning-card`'s <article> is in its shadow root. -->
     <div class="vacancy-card">
         <!-- No `icon-name`.
              `lightning-card` renders its icon as a <lightning-icon> inside its
@@ -33,10 +31,13 @@
                 </span>
 
                 <span class="slds-media__body slds-truncate vacancy-card__body">
-                    <!-- The ONLY anchor in the card. Its ::after covers the
-                         whole card, which is what makes the card clickable
-                         without nesting one interactive element inside
-                         another. -->
+                    <!-- The title is the card's link.
+                         It used to stretch a ::after over the whole card so any
+                         click opened the vacancy. That went when the card gained
+                         the action column below: an overlay covering the card
+                         also covers the actions, and the Lightning pattern for a
+                         card that carries actions is a linked title rather than
+                         a linked surface. -->
                     <a href={card.href} class="vacancy-card__link" title={card.title}>
                         {card.title}
                     </a>
@@ -74,36 +75,98 @@
                 </div>
             </div>
 
-            <!-- One wrapping row of icon + value pairs, replacing the
-                 description list. A full-width card has the room for them to
-                 sit side by side; they stack on a phone. -->
-            <div class="slds-p-left_medium slds-p-bottom_medium vacancy-card__meta">
-                <template for:each={card.meta} for:item="item">
-                    <span key={item.key} class="vacancy-card__meta-item">
-                        <lightning-icon
-                            icon-name={item.icon}
-                            size="xx-small"
-                            class="vacancy-card__meta-icon"
-                        ></lightning-icon>
-                        <span lwc:if={item.label} class="slds-assistive-text">{item.label}</span>
-                        <span class="vacancy-card__meta-value">{item.value}</span>
-                    </span>
-                </template>
+            <!-- Body: metadata left, actions right.
+                 The design puts the action column at 86% across a 912px card,
+                 so it is 2 of 12 at the large breakpoint and 3 of 12 at medium,
+                 where 2 columns would crowd the labels. Both fall to `size=12`
+                 below that and the column stacks under the metadata.
 
-                <span lwc:if={showApplicants} class="vacancy-card__meta-item">
-                    <lightning-icon
-                        icon-name="utility:groups"
-                        size="xx-small"
-                        class="vacancy-card__meta-icon"
-                    ></lightning-icon>
-                    <span class="vacancy-card__meta-value">{card.applicants}</span>
-                    <span
-                        lwc:if={card.hasNew}
-                        class="slds-badge slds-badge_inverse slds-m-left_xx-small"
+                 Padding is the documented pair: `horizontal-small` on each item
+                 with `pull-to-boundary="small"` on the parent, which cancels at
+                 the outer edges so the wrapper's own padding still sets the
+                 card's inset. -->
+            <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+                <lightning-layout multiple-rows pull-to-boundary="small" vertical-align="center">
+                    <lightning-layout-item
+                        size="12"
+                        medium-device-size="9"
+                        large-device-size="10"
+                        padding="horizontal-small"
                     >
-                        {card.newApplicants}
-                    </span>
-                </span>
+                        <!-- One icon + value pair per line. -->
+                        <div class="vacancy-card__meta">
+                            <template for:each={card.meta} for:item="item">
+                                <span key={item.key} class="vacancy-card__meta-item">
+                                    <lightning-icon
+                                        icon-name={item.icon}
+                                        size="xx-small"
+                                        class="vacancy-card__meta-icon"
+                                    ></lightning-icon>
+                                    <span lwc:if={item.label} class="slds-assistive-text">{item.label}</span>
+                                    <span class="vacancy-card__meta-value">{item.value}</span>
+                                </span>
+                            </template>
+
+                            <span lwc:if={showApplicants} class="vacancy-card__meta-item">
+                                <lightning-icon
+                                    icon-name="utility:groups"
+                                    size="xx-small"
+                                    class="vacancy-card__meta-icon"
+                                ></lightning-icon>
+                                <span class="vacancy-card__meta-value">{card.applicants}</span>
+                                <span
+                                    lwc:if={card.hasNew}
+                                    class="slds-badge slds-badge_inverse slds-m-left_xx-small"
+                                >
+                                    {card.newApplicants}
+                                </span>
+                            </span>
+                        </div>
+                    </lightning-layout-item>
+
+                    <!-- The action column.
+                         `variant="base"` is the shipped borderless button: its
+                         label takes --slds-g-color-accent-1, which this project
+                         already points at #0071bb — the design's accent colour —
+                         so no colour is set here.
+
+                         No `id` on anything in this component: the card renders
+                         once per row inside a `for:each` in `example/jobs`, and a
+                         static id would repeat. `data-action` is the handle, per
+                         `rules-lwc-layout.md` § Every landmark element gets an id.
+
+                         The actions are deliberately unwired, matching
+                         `example/jobDetail`'s header actions. What each one does
+                         — and which statuses it should appear for — is a product
+                         decision that has not been taken. -->
+                    <lightning-layout-item
+                        size="12"
+                        medium-device-size="3"
+                        large-device-size="2"
+                        padding="horizontal-small"
+                    >
+                        <div class="vacancy-card__actions">
+                            <lightning-button
+                                variant="base"
+                                icon-name="utility:edit"
+                                label="Edit"
+                                data-action="edit"
+                            ></lightning-button>
+                            <lightning-button
+                                variant="base"
+                                icon-name="utility:delete"
+                                label="Delete"
+                                data-action="delete"
+                            ></lightning-button>
+                            <lightning-button
+                                variant="base"
+                                icon-name="utility:upload"
+                                label="Submit"
+                                data-action="submit"
+                            ></lightning-button>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
             </div>
         </lightning-card>
     </div>

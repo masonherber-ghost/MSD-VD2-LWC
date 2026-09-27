@@ -1,0 +1,55 @@
+<template lwc:render-mode="light">
+    <!-- Informational, deliberately not an alert.
+         `slds-scoped-notification` is the quiet, in-page blueprint — it sits
+         inside the content it describes rather than shouting over it, which is
+         what separates it from `slds-notify_alert slds-theme_error` used for
+         save failures on these same screens. `sep-scoped-notification` is our
+         opt-in skin for it; the rule and why every property there is an
+         override rather than a hook are in `site.css`.
+
+         No `role`. A scoped notification is often given `role="status"`, but
+         that makes it a live region, which is for content that CHANGES — this
+         copy is present on every render, so announcing it as an update would be
+         wrong. As a plain paragraph it is read in document order instead.
+
+         The margin lives on this div rather than on the host: a custom element
+         is `display: inline`, so a margin on `ui-read-only-notice` would compute
+         and never apply. -->
+    <div class="slds-scoped-notification sep-scoped-notification slds-m-bottom_medium">
+        <!-- With a heading: the design's stacked form — icon beside the heading,
+             description underneath. -->
+        <template lwc:if={heading}>
+            <div class="sep-scoped-notification__header">
+                <lightning-icon
+                    icon-name="utility:info"
+                    size="small"
+                    alternative-text="Information"
+                ></lightning-icon>
+                <p class="sep-scoped-notification__title">{heading}</p>
+            </div>
+            <p class="sep-scoped-notification__body">
+                {message} To change anything, contact your relationship manager or
+                <a href="/contact-us">contact us</a>.
+            </p>
+        </template>
+
+        <!-- Without a heading: a plain media object. The stacked form would put
+             the icon on a row of its own above the text, which reads as a
+             missing heading rather than as a deliberate choice. -->
+        <div lwc:else class="slds-media slds-media_center">
+            <div class="slds-media__figure">
+                <lightning-icon
+                    icon-name="utility:info"
+                    size="small"
+                    alternative-text="Information"
+                ></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+                <p>
+                    {message} To change anything, contact your relationship manager or
+                    <a href="/contact-us">contact us</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</template>

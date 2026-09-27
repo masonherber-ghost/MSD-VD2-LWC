@@ -372,6 +372,91 @@ lightning-button[variant='brand']::part(button):disabled {
     }
 }
 
+/* SEP's Info Panel, as a skin for the shipped scoped notification.
+ *
+ * WHY EVERY PROPERTY HERE IS AN OVERRIDE, not a hook.
+ * `slds-scoped-notification` has NO styling hooks — not one, in either tier,
+ * under either spelling. Verified against the shipped stylesheet:
+ *
+ *   --slds-c-scopednotification-*   nothing
+ *   --slds-s-scopednotification-*   nothing
+ *   --slds-c-scoped-notification-*  nothing   (hyphenated, in case of the
+ *   --slds-s-scoped-notification-*  nothing    pageheader naming trap)
+ *   --_slds-*scopednotification*    nothing   (so nothing private is bent)
+ *
+ * The whole shipped rule is three declarations reading GLOBAL tokens:
+ *   padding: var(--slds-g-spacing-3)            12px
+ *   border-radius: var(--slds-g-radius-border-2) 4px
+ *   font-weight: var(--slds-s-alert-font-weight) 400
+ * and it has no background or border at all — those come from the separate
+ * `_light` / `_dark` variants, which we do not use.
+ *
+ * So step 1 of the sep- order (set the component's own hook) is genuinely
+ * unavailable, and every property below is step 2: declared on our own opt-in
+ * class. Redefining the globals it reads is not an option — --slds-g-spacing-3
+ * and --slds-g-radius-border-2 are used across the whole design system.
+ *
+ * Nothing needs !important. SLDS declares .slds-scoped-notification inside
+ * @layer component, this file is unlayered, and unlayered beats layered
+ * whatever the specificity — the same mechanism .sep-page-header relies on.
+ *
+ * Opt in per use: `class="slds-scoped-notification sep-scoped-notification"`. */
+.sep-scoped-notification {
+    background-color: var(--site-color-blue-10);
+    /* Navy at 25%. color-mix keeps the brand token as the single source, so a
+       theme change still reaches the border — a baked rgba() would not. */
+    border: var(--slds-g-sizing-border-1) solid
+        color-mix(in srgb, var(--site-color-brand-navy) 25%, transparent);
+    border-radius: var(--site-radius-mid);
+    color: var(--site-text-primary);
+    padding-inline: var(--slds-g-spacing-5);
+    /* 20px is SEP's spacing-450, and the SLDS scale has no step for it
+       (--slds-g-spacing-4 is 16px, -5 is 24px). A value used by exactly one
+       class is a value, not a token — rules-lwc-layout.md § Defining a project
+       token — so it is stated here rather than invented as --site-spacing-*. */
+    padding-block: 1.25rem;
+    /* The info icon is navy, not the SLDS default grey. This one IS a published
+       hook, which is why it sits with the overrides rather than against them. */
+    --slds-c-icon-color-foreground-default: var(--site-color-brand-navy);
+}
+
+/* Header row: icon beside the title, with the description below it.
+ *
+ * The design stacks a header over a description, which the `slds-media` object
+ * alone does not do — media puts the figure beside ALL the body content. So a
+ * panel with a title uses this row for the icon + title, and leaves the
+ * description as a sibling underneath. A panel with no title needs none of
+ * this and stays a plain media object. */
+.sep-scoped-notification__header {
+    display: flex;
+    align-items: center;
+    gap: var(--slds-g-spacing-2);
+}
+
+/* The title. 18px bold navy, line-height 1.3 — all four are existing tokens.
+ *
+ * --site-font-heading-xs grows at the 48em and 64em breakpoints, as the rest of
+ * this project's type does. The design specifies 18px, which is this token's
+ * base value, so the panel matches at small widths and scales with the site
+ * above them rather than pinning one size the page around it does not use. */
+.sep-scoped-notification__title {
+    font-size: var(--site-font-heading-xs);
+    font-weight: var(--slds-g-font-weight-7);
+    line-height: var(--site-lineheight-heading-xs);
+    color: var(--site-text-accent-secondary);
+}
+
+/* The description. Sits under the header row with the design's 8px gap.
+ *
+ * No font-size: it inherits the site body size. The design draws 15px, which is
+ * not on this project's body scale (17px body, 14px small) — matching it would
+ * mean an off-scale value in the one place the page's own body text sets the
+ * measure. See the note in the handover. */
+.sep-scoped-notification__body {
+    margin-block-start: var(--slds-g-spacing-2);
+    line-height: var(--site-lineheight-body);
+}
+
 /* H1 — the largest step in the scale.
  *
  * The page-header title is handled by its hook and is not listed here. These

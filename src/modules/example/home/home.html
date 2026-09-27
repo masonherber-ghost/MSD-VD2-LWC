@@ -34,12 +34,30 @@
 
                 <!-- Welcome and next step. The page header greets them; this
                      says what to do with the place. Only shown once the
-                     vacancies are known — see hasVacancies. -->
-                <p lwc:if={hasVacancies} class="home__welcome slds-m-bottom_medium">
-                    Welcome back. Your next step is to manage your vacancies &mdash;
-                    review applicants, update the details and close the roles you
-                    have filled.
-                </p>
+                     vacancies are known — see hasVacancies.
+
+                     Now SEP's Info Panel rather than a bare paragraph. The copy
+                     is unchanged, only split at the sentence it already had:
+                     "Welcome back." was doing the job of a heading, so it
+                     becomes one. -->
+                <div
+                    lwc:if={hasVacancies}
+                    class="slds-scoped-notification sep-scoped-notification home__welcome slds-m-bottom_medium"
+                >
+                    <div class="sep-scoped-notification__header">
+                        <lightning-icon
+                            icon-name="utility:info"
+                            size="small"
+                            alternative-text="Information"
+                        ></lightning-icon>
+                        <p class="sep-scoped-notification__title">Welcome back</p>
+                    </div>
+                    <p class="sep-scoped-notification__body">
+                        Your next step is to manage your vacancies &mdash; review
+                        applicants, update the details and close the roles you have
+                        filled.
+                    </p>
+                </div>
 
                 <template lwc:if={hasNoVacancies}>
                     <ui-vacancy-empty-state></ui-vacancy-empty-state>
