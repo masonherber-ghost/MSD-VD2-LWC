@@ -22,7 +22,7 @@
         "@salesforce-ux/design-system-2": "^2.264.2",
         "better-sqlite3": "^13.0.3",
         "lightning-base-components": "^1.28.19-alpha",
-        "lwc": "^9.4.3",
+        "lwc": "9.4.3",
         "lwr": "0.24.1"
     },
     "engines": {

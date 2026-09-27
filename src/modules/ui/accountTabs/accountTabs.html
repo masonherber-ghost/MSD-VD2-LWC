@@ -1,0 +1,52 @@
+<template lwc:render-mode="light">
+    <!-- Cross-page navigation that LOOKS like tabs, and is built as navigation.
+         `/profile` and `/manage-org` are two routes, not two panels of one
+         screen, so these have to be real anchors: middle-click, open-in-new-tab,
+         "copy link" and the browser's own history all depend on it, and none of
+         them work on a `lightning-tabset`, which swaps panels in place.
+
+         So this is the `slds-tabs_default` blueprint with nav semantics rather
+         than tab semantics — a <nav> and a list of links, with `aria-current`
+         marking the page you are on. Deliberately NO `role="tablist"`,
+         `role="tab"` or `aria-selected`: those announce "tab, 1 of 2, selected"
+         and promise a panel that will change on this page, which is a lie here.
+
+         That swap costs nothing visually. Verified against the shipped
+         stylesheet: not one tabs rule is scoped to `[role=tab]` — the look comes
+         entirely from the classes, so the underline, the active weight and the
+         hover all still apply. -->
+    <nav class="slds-tabs_default slds-m-bottom_medium" aria-label="Account pages">
+        <ul class="slds-tabs_default__nav" role="list">
+            <li id="account-tabs-profile" class={profileItemClass}>
+                <a
+                    id="account-tabs-profile-link"
+                    class="slds-tabs_default__link"
+                    href="/profile"
+                    aria-current={profileCurrent}
+                >
+                    <lightning-icon
+                        icon-name="utility:user"
+                        size="x-small"
+                        class="slds-m-right_x-small account-tabs__icon"
+                    ></lightning-icon>
+                    My profile
+                </a>
+            </li>
+            <li id="account-tabs-manage-org" class={orgItemClass}>
+                <a
+                    id="account-tabs-manage-org-link"
+                    class="slds-tabs_default__link"
+                    href="/manage-org"
+                    aria-current={orgCurrent}
+                >
+                    <lightning-icon
+                        icon-name="utility:people"
+                        size="x-small"
+                        class="slds-m-right_x-small account-tabs__icon"
+                    ></lightning-icon>
+                    Manage org
+                </a>
+            </li>
+        </ul>
+    </nav>
+</template>

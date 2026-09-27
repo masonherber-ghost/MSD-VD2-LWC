@@ -21,18 +21,11 @@
     line-height: 1.1;
 }
 
-/* The welcome line under the page header. Slightly larger than body so it reads
-   as an opening sentence rather than as another paragraph of the page. */
-/* The welcome panel.
+/* The welcome panel has no rule here any more.
  *
- * Now a `sep-scoped-notification`, which owns the background, border, radius,
- * padding and the type of both its rows. All that is left here is the measure:
- * a reading width is a property of THIS block on THIS page, not of the notice
- * blueprint, so it does not belong on the shared class.
- *
- * The three type declarations that used to live here are gone rather than
- * moved — `sep-scoped-notification__title` and `__body` set them, and leaving
- * a `font-size` here would silently win over the panel's own. */
-.home__welcome {
-    max-width: 50rem;
-}
+ * `sep-scoped-notification` owns its background, border, radius, padding and
+ * the type of both rows, and the 50rem reading measure it used to carry is
+ * gone — the panel now runs the full width of the content column, like the
+ * cards beneath it. With nothing left to declare, `.home__welcome` would be an
+ * empty selector, so the element carries `id="home-welcome"` for identity
+ * instead. See `rules-lwc-layout.md` § Every landmark element gets an id. */

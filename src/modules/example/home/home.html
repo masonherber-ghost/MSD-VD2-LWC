@@ -3,162 +3,182 @@
 
     <div class="site__body">
         <main class="site__main home">
-            <!-- Signed in: the employer's landing pad ---------------------->
-            <template lwc:if={isSignedIn}>
-                <div class="slds-page-header sep-page-header sep-page-header_spaced slds-m-bottom_medium">
-                    <div class="slds-page-header__row">
-                        <div class="slds-page-header__col-title">
+            <!-- One measure for the whole screen.
+                 The page header, the welcome panel and the card grid are all
+                 children of a single 10-of-12 column rather than each being
+                 sized on its own, so they cannot drift out of alignment with
+                 one another. Full width below the large breakpoint, where ten
+                 columns of a narrow viewport would leave the cards unreadable.
+
+                 Both branches sit inside the one column: `lwc:if` and
+                 `lwc:else` have to stay siblings, and the signed-out pitch
+                 wants the same left edge as the signed-in dashboard.
+
+                 No `padding` on the item: the card grid nested inside already
+                 pairs `padding="around-small"` with `pull-to-boundary="small"`,
+                 which cancels at the edges. Adding padding here would inset the
+                 cards but not the page header above them. -->
+            <lightning-layout horizontal-align="center">
+                <lightning-layout-item id="home-col-main" size="12" large-device-size="10">
+                    <!-- Signed in: the employer's landing pad ---------------------->
+                    <template lwc:if={isSignedIn}>
+                        <div class="slds-page-header sep-page-header sep-page-header_spaced slds-m-bottom_medium">
+                            <div class="slds-page-header__row">
+                                <div class="slds-page-header__col-title">
                             
-                            <div class="slds-media__body">
-                                <h1 class="slds-page-header__title slds-truncate">
-                                    Kia ora, {firstName}
-                                </h1>
-                                <p class="slds-page-header__name-meta">{companyName}</p>
-                            </div>
+                                    <div class="slds-media__body">
+                                        <h1 class="slds-page-header__title slds-truncate">
+                                            Kia ora, {firstName}
+                                        </h1>
+                                        <p class="slds-page-header__name-meta">{companyName}</p>
+                                    </div>
                             
-                        </div>
-                        <div class="slds-page-header__col-actions">
-                            <div class="slds-page-header__controls">
-                                <div class="slds-page-header__control">
-                                    <a href="/list-a-job">
-                                        <lightning-button
-                                            variant="brand"
-                                            label="List a job"
-                                        ></lightning-button>
-                                    </a>
+                                </div>
+                                <div class="slds-page-header__col-actions">
+                                    <div class="slds-page-header__controls">
+                                        <div class="slds-page-header__control">
+                                            <a href="/list-a-job">
+                                                <lightning-button
+                                                    variant="brand"
+                                                    label="List a job"
+                                                ></lightning-button>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Welcome and next step. The page header greets them; this
-                     says what to do with the place. Only shown once the
-                     vacancies are known — see hasVacancies.
+                        <!-- Welcome and next step. The page header greets them; this
+                             says what to do with the place. Only shown once the
+                             vacancies are known — see hasVacancies.
 
-                     Now SEP's Info Panel rather than a bare paragraph. The copy
-                     is unchanged, only split at the sentence it already had:
-                     "Welcome back." was doing the job of a heading, so it
-                     becomes one. -->
-                <div
-                    lwc:if={hasVacancies}
-                    class="slds-scoped-notification sep-scoped-notification home__welcome slds-m-bottom_medium"
-                >
-                    <div class="sep-scoped-notification__header">
-                        <lightning-icon
-                            icon-name="utility:info"
-                            size="small"
-                            alternative-text="Information"
-                        ></lightning-icon>
-                        <p class="sep-scoped-notification__title">Welcome back</p>
-                    </div>
-                    <p class="sep-scoped-notification__body">
-                        Your next step is to manage your vacancies &mdash; review
-                        applicants, update the details and close the roles you have
-                        filled.
-                    </p>
-                </div>
-
-                <template lwc:if={hasNoVacancies}>
-                    <ui-vacancy-empty-state></ui-vacancy-empty-state>
-                </template>
-
-                <lightning-layout lwc:elseif={hasVacancies} multiple-rows pull-to-boundary="small">
-                    <lightning-layout-item
-                        size="12"
-                        medium-device-size={vacancyCardSize}
-                        padding="around-small"
-                    >
-                        <ui-vacancy-summary-card
-                            count={jobCount}
-                            active-count={activeCount}
-                        ></ui-vacancy-summary-card>
-                    </lightning-layout-item>
-
-                    <!-- Applicants and Next steps landed in 1.2; the Vacancies
-                         card above ships from 1.1. -->
-                    <lightning-layout-item
-                        lwc:if={hasSummary}
-                        size="12"
-                        medium-device-size="4"
-                        padding="around-small"
-                    >
-                        <lightning-card title="Applicants" icon-name="standard:groups">
-                            <p class="home__stat slds-p-horizontal_medium">{applicantCount}</p>
-                            <p class="slds-text-body_small slds-text-color_weak slds-p-horizontal_medium slds-p-bottom_medium">
-                                Across all vacancies
-                            </p>
-                        </lightning-card>
-                    </lightning-layout-item>
-
-                    <lightning-layout-item
-                        lwc:if={hasSummary}
-                        size="12"
-                        medium-device-size="4"
-                        padding="around-small"
-                    >
-                        <lightning-card title="Next steps" icon-name="standard:task">
-                            <div class="slds-p-horizontal_medium slds-p-bottom_medium">
-                                <p><a href="/profile">Update your profile</a></p>
-                                <p class="slds-m-top_xx-small">
-                                    <a href="/manage-org">Manage your organisation</a>
-                                </p>
-                                <p class="slds-m-top_xx-small">
-                                    <a href="/help-centre">Visit the help centre</a>
-                                </p>
+                             Now SEP's Info Panel rather than a bare paragraph. The copy
+                             is unchanged, only split at the sentence it already had:
+                             "Welcome back." was doing the job of a heading, so it
+                             becomes one. -->
+                        <div
+                            lwc:if={hasVacancies}
+                            id="home-welcome"
+                            class="slds-scoped-notification sep-scoped-notification slds-m-bottom_medium"
+                        >
+                            <div class="sep-scoped-notification__header">
+                                <lightning-icon
+                                    icon-name="utility:info"
+                                    size="small"
+                                    alternative-text="Information"
+                                ></lightning-icon>
+                                <p class="sep-scoped-notification__title">Welcome back</p>
                             </div>
-                        </lightning-card>
-                    </lightning-layout-item>
-                </lightning-layout>
-            </template>
+                            <p class="sep-scoped-notification__body">
+                                Your next step is to manage your vacancies &mdash; review
+                                applicants, update the details and close the roles you have
+                                filled.
+                            </p>
+                        </div>
 
-            <!-- Signed out: the pitch ------------------------------------->
-            <template lwc:else>
-                <div class="home__marketing">
-                <div class="home__hero slds-box slds-theme_default">
-                    <h1 class="slds-text-heading_large">Hire with MSD</h1>
-                    <p class="slds-text-body_regular slds-m-top_x-small slds-text-color_weak">
-                        List a vacancy, reach job seekers across Aotearoa, and manage your
-                        applicants in one place.
-                    </p>
-                    <div class="slds-m-top_medium slds-grid slds-grid_vertical-align-center">
-                        <a href="/login">
-                            <lightning-button
-                                variant="brand"
-                                label="Log in"
-                            ></lightning-button>
-                        </a>
-                        <a href="/register" class="slds-m-left_x-small">
-                            <lightning-button label="Create an account"></lightning-button>
-                        </a>
-                    </div>
-                </div>
+                        <template lwc:if={hasNoVacancies}>
+                            <ui-vacancy-empty-state></ui-vacancy-empty-state>
+                        </template>
 
-                <div class="home__stats slds-m-top_medium">
-                    <article class="slds-box slds-theme_default">
-                        <lightning-icon icon-name="utility:list" size="small"></lightning-icon>
-                        <h2 class="slds-text-heading_small slds-m-top_x-small">List a vacancy</h2>
-                        <p class="slds-text-body_small slds-text-color_weak">
-                            Publish a job and start receiving applications.
-                        </p>
-                    </article>
-                    <article class="slds-box slds-theme_default">
-                        <lightning-icon icon-name="utility:groups" size="small"></lightning-icon>
-                        <h2 class="slds-text-heading_small slds-m-top_x-small">Manage applicants</h2>
-                        <p class="slds-text-body_small slds-text-color_weak">
-                            Shortlist, track and respond from one screen.
-                        </p>
-                    </article>
-                    <article class="slds-box slds-theme_default">
-                        <lightning-icon icon-name="utility:company" size="small"></lightning-icon>
-                        <h2 class="slds-text-heading_small slds-m-top_x-small">Build your profile</h2>
-                        <p class="slds-text-body_small slds-text-color_weak">
-                            Show job seekers who you are and what you stand for.
-                        </p>
-                    </article>
-                </div>
-                </div>
-            </template>
+                        <lightning-layout lwc:elseif={hasVacancies} multiple-rows pull-to-boundary="small">
+                            <lightning-layout-item
+                                size="12"
+                                medium-device-size={vacancyCardSize}
+                                padding="around-small"
+                            >
+                                <ui-vacancy-summary-card
+                                    count={jobCount}
+                                    active-count={activeCount}
+                                ></ui-vacancy-summary-card>
+                            </lightning-layout-item>
+
+                            <!-- Applicants and Next steps landed in 1.2; the Vacancies
+                                 card above ships from 1.1. -->
+                            <lightning-layout-item
+                                lwc:if={hasSummary}
+                                size="12"
+                                medium-device-size="4"
+                                padding="around-small"
+                            >
+                                <lightning-card title="Applicants" icon-name="standard:groups">
+                                    <p class="home__stat slds-p-horizontal_medium">{applicantCount}</p>
+                                    <p class="slds-text-body_small slds-text-color_weak slds-p-horizontal_medium slds-p-bottom_medium">
+                                        Across all vacancies
+                                    </p>
+                                </lightning-card>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item
+                                lwc:if={hasSummary}
+                                size="12"
+                                medium-device-size="4"
+                                padding="around-small"
+                            >
+                                <lightning-card title="Next steps" icon-name="standard:task">
+                                    <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+                                        <p><a href="/profile">Update your profile</a></p>
+                                        <p class="slds-m-top_xx-small">
+                                            <a href="/manage-org">Manage your organisation</a>
+                                        </p>
+                                        <p class="slds-m-top_xx-small">
+                                            <a href="/help-centre">Visit the help centre</a>
+                                        </p>
+                                    </div>
+                                </lightning-card>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </template>
+
+                    <!-- Signed out: the pitch ------------------------------------->
+                    <template lwc:else>
+                        <div class="home__marketing">
+                        <div class="home__hero slds-box slds-theme_default">
+                            <h1 class="slds-text-heading_large">Hire with MSD</h1>
+                            <p class="slds-text-body_regular slds-m-top_x-small slds-text-color_weak">
+                                List a vacancy, reach job seekers across Aotearoa, and manage your
+                                applicants in one place.
+                            </p>
+                            <div class="slds-m-top_medium slds-grid slds-grid_vertical-align-center">
+                                <a href="/login">
+                                    <lightning-button
+                                        variant="brand"
+                                        label="Log in"
+                                    ></lightning-button>
+                                </a>
+                                <a href="/register" class="slds-m-left_x-small">
+                                    <lightning-button label="Create an account"></lightning-button>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="home__stats slds-m-top_medium">
+                            <article class="slds-box slds-theme_default">
+                                <lightning-icon icon-name="utility:list" size="small"></lightning-icon>
+                                <h2 class="slds-text-heading_small slds-m-top_x-small">List a vacancy</h2>
+                                <p class="slds-text-body_small slds-text-color_weak">
+                                    Publish a job and start receiving applications.
+                                </p>
+                            </article>
+                            <article class="slds-box slds-theme_default">
+                                <lightning-icon icon-name="utility:groups" size="small"></lightning-icon>
+                                <h2 class="slds-text-heading_small slds-m-top_x-small">Manage applicants</h2>
+                                <p class="slds-text-body_small slds-text-color_weak">
+                                    Shortlist, track and respond from one screen.
+                                </p>
+                            </article>
+                            <article class="slds-box slds-theme_default">
+                                <lightning-icon icon-name="utility:company" size="small"></lightning-icon>
+                                <h2 class="slds-text-heading_small slds-m-top_x-small">Build your profile</h2>
+                                <p class="slds-text-body_small slds-text-color_weak">
+                                    Show job seekers who you are and what you stand for.
+                                </p>
+                            </article>
+                        </div>
+                        </div>
+                    </template>
+                </lightning-layout-item>
+            </lightning-layout>
         </main>
     </div>
 

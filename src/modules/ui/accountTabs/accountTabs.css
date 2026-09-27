@@ -1,0 +1,9 @@
+/* The icon sits on the text baseline row, not above it.
+ *
+ * `slds-tabs_default__link` is `display: inline-flex` with `align-items: center`
+ * already, so the icon lines up on its own — this only stops the custom element
+ * from stretching, which a flex child does by default and which makes a 20px
+ * icon draw at the full link height. */
+.account-tabs__icon {
+    flex: none;
+}

@@ -318,6 +318,10 @@ lightning-button[variant='brand']::part(button):disabled {
 .sep-page-header {
     --slds-s-pageheader-sizing-border: 0;
     --slds-s-pageheader-shadow: none;
+    /* Published hook. Inherits down to `.slds-page-header__title`, which reads
+       it directly — see the title rule further down for why only this half of
+       the title's styling can be a hook. */
+    --slds-s-pageheader-title-font-size: var(--site-font-heading-lg);
     padding: 0;
 }
 
@@ -459,8 +463,8 @@ lightning-button[variant='brand']::part(button):disabled {
 
 /* H1 — the largest step in the scale.
  *
- * The page-header title is handled by its hook and is not listed here. These
- * are the two hero headings, which sit on `slds-text-heading_large` and would
+ * The page-header title is handled separately below — part hook, part scoped
+ * override. These are the two hero headings, which sit on `slds-text-heading_large` and would
  * otherwise stop at --site-font-heading-lg. */
 .page-hero__heading,
 h1.slds-text-heading_large {
@@ -468,24 +472,36 @@ h1.slds-text-heading_large {
     line-height: var(--site-lineheight-heading-2xl);
 }
 
-/* The page title's line height.
- *
- * There is no hook for it — SLDS pins `.slds-page-header__name h1` to
- * `line-height: 1`, which was fine at 18px and is too tight at 60px. Equal
- * specificity to that rule, so this wins on load order: site.css is last. */
-h1.slds-page-header__title {
-    
-    
-    
-}
 .slds-text-heading_large {
     color: var(--site-color-brand-navy);
-    font-size:  var(--site-font-heading-lg);
-    line-height: var(--site-lineheight-heading-lg); 
-    
+    font-size: var(--site-font-heading-lg);
+    line-height: var(--site-lineheight-heading-lg);
 }
-.slds-page-header__title {
+
+/* The page-header title.
+ *
+ * Split deliberately, because only half of it has a published hook.
+ *
+ *   font-size    HAS one — `--slds-s-pageheader-title-font-size`, which SLDS's
+ *                own rule reads as `var(…, var(--slds-g-font-scale-1))`. Set on
+ *                `.sep-page-header` it inherits down to the title. That is the
+ *                component's API, so it survives an upgrade and cannot be
+ *                broken by a specificity change.
+ *
+ *   color        has NO hook — SLDS reads the global --slds-g-color-on-surface-3
+ *   line-height  has NO hook — SLDS reads the global --slds-g-font-lineheight-2
+ *
+ * Both of those globals are used far beyond this component, so redefining them
+ * is not an option and these two stay overrides. They are scoped to
+ * `.sep-page-header` rather than declared bare: a bare `.slds-page-header__title`
+ * rule restyles every page header on the site with no way to opt out, which is
+ * exactly what the sep- convention exists to prevent. All ten page headers in
+ * the project carry the class, so this is the same result, scoped.
+ *
+ * Specificity is also better than the bare form it replaces: 0,2,0 beats SLDS's
+ * own `.slds-page-header__name h1` at 0,1,1, so the line-height no longer
+ * depends on the unlayered-beats-layered rule alone to win. */
+.sep-page-header .slds-page-header__title {
     color: var(--site-color-brand-navy);
-    font-size:  var(--site-font-heading-lg);
     line-height: var(--site-lineheight-heading-lg);
 }
