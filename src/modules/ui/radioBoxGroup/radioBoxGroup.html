@@ -1,0 +1,36 @@
+<template lwc:render-mode="light">
+    <!-- Nothing here is invented: `slds-box` is the SLDS container blueprint and
+         `lightning-input type="radio"` is the shipped control. This component
+         adds no markup of its own that draws anything, and it has NO stylesheet.
+
+         `required` sits on the legend, not the input — `lightning-input`
+         asserts outright that "the required attribute is not supported on radio
+         inputs directly. It should be implemented at the radio group level." -->
+    <fieldset class="slds-form-element">
+        <legend class="slds-form-element__label">
+            <abbr lwc:if={required} class="slds-required" title="required">*</abbr>
+            {legend}
+        </legend>
+        <p lwc:if={helpText} class="slds-text-body_small slds-m-bottom_small">{helpText}</p>
+        <div class="slds-form-element__control">
+            <template for:each={marked} for:item="opt">
+                <div key={opt.value} class="slds-box slds-m-bottom_small">
+                    <lightning-input
+                        type="radio"
+                        name={name}
+                        label={opt.label}
+                        value={opt.value}
+                        checked={opt.checked}
+                        onchange={handleChange}
+                    ></lightning-input>
+                    <p
+                        lwc:if={opt.description}
+                        class="slds-text-body_small slds-text-color_weak slds-m-left_large"
+                    >
+                        {opt.description}
+                    </p>
+                </div>
+            </template>
+        </div>
+    </fieldset>
+</template>

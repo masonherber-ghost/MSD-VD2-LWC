@@ -61,6 +61,12 @@
       "layoutTemplate": "$layoutsDir/main.njk"
     },
     {
+      "id": "createJobStep4",
+      "path": "/create-job/step4",
+      "rootComponent": "example/createJobStep4",
+      "layoutTemplate": "$layoutsDir/main.njk"
+    },
+    {
       "id": "helpCentre",
       "path": "/help-centre",
       "rootComponent": "example/helpCentre",

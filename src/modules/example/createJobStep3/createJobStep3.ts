@@ -85,10 +85,9 @@ export default class CreateJobStep3 extends LightningElement {
      * there is no need to inspect the others.
      */
     handleRadioChange(event: CustomEvent): void {
-        const target = event.target as HTMLInputElement & { dataset: DOMStringMap };
-        const field = target.dataset.field;
+        const field = (event.target as HTMLElement).dataset.field;
         if (!field) return;
-        this.draft = { ...this.draft, [field]: target.value ?? '' };
+        this.draft = { ...this.draft, [field]: event.detail.value ?? '' };
     }
 
     handleInputChange(event: CustomEvent): void {

@@ -57,7 +57,7 @@ export const VACANCY_STEPS = [
     { value: '1', label: 'Company details' },
     { value: '2', label: 'Job details' },
     { value: '3', label: 'Location, terms and pay' },
-    { value: '4', label: 'Step 4' },
+    { value: '4', label: 'Skills' },
     { value: '5', label: 'Step 5' },
     { value: '6', label: 'Step 6' },
     { value: '7', label: 'Step 7' }
@@ -193,4 +193,50 @@ export const PRE_EMPLOYMENT_CHECKS = [
     { value: 'drug_test', label: "Drug test (Detects drugs in a candidate's urine or saliva sample.)" },
     { value: 'moj_check', label: 'Ministry of Justice check (Checks for official criminal convictions recorded in New Zealand)' },
     { value: 'childrens_worker', label: "Children's Worker Safety Check (Safety check and police vetting for individuals working with children (under 18) as per the Children's Act 2014 and Vulnerable Children Act 2014)" }
+] as const;
+
+// --- Step 4: skills ----------------------------------------------------------
+//
+// Data support:
+//   job_skills.skill_name                                    EXISTS
+//   job_languages.language_name + job_language_abilities      EXIST (parent/child,
+//     which is exactly the design's one-panel-per-language shape)
+//   strengths for a JOB                                       NO TABLE — there is
+//     only `candidate_strengths`. See the handover.
+
+/** Soft skills for a role. No table to store these in yet. */
+export const ROLE_STRENGTHS = [
+    { value: 'team', label: 'Working in a team' },
+    { value: 'problem_solving', label: 'Problem solving' },
+    { value: 'communicating', label: 'Communicating' },
+    { value: 'reliable', label: 'Being reliable' },
+    { value: 'willing_to_learn', label: 'Willing to Learn' },
+    { value: 'leadership', label: 'Showing leadership' },
+    { value: 'adapting', label: 'Adapting to change' },
+    { value: 'attention_to_detail', label: 'Paying attention to detail' }
+] as const;
+
+/** The design caps strengths at four. */
+export const MAX_STRENGTHS = 4;
+
+/** `job_language_abilities.ability`. */
+export const LANGUAGE_ABILITIES = [
+    { value: 'read', label: 'Able to read' },
+    { value: 'write', label: 'Able to write' },
+    { value: 'converse', label: 'Can have a conversation' },
+    { value: 'understand', label: 'Can understand when spoken' }
+] as const;
+
+/**
+ * PLACEHOLDER. The design shows "Suggested skills for Forklift Driver", i.e. a
+ * list derived from the job title chosen on step 2. Nothing in the data
+ * produces that — there is no occupation taxonomy — so these are the design's
+ * own examples, shown as-is.
+ */
+export const SUGGESTED_SKILLS = [
+    'operate forklift',
+    'use telescopic handlers',
+    'transport dangerous goods',
+    'load and unload freight',
+    'complete pre-start checks'
 ] as const;
