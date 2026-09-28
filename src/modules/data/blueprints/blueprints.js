@@ -2024,6 +2024,7 @@ export const BLUEPRINTS = [
             "src/modules/example/createJobStep1/createJobStep1.html",
             "src/modules/example/createJobStep3/createJobStep3.html",
             "src/modules/example/createJobStep5/createJobStep5.html",
+            "src/modules/example/createJobStep7/createJobStep7.html",
             "src/modules/example/manageOrg/manageOrg.html",
             "src/modules/example/profile/profile.html",
             "src/modules/ui/jobDetailsForm/jobDetailsForm.html",
@@ -3378,6 +3379,7 @@ export const BLUEPRINTS = [
             "src/modules/example/createJobStep3/createJobStep3.html",
             "src/modules/example/createJobStep4/createJobStep4.html",
             "src/modules/example/createJobStep6/createJobStep6.html",
+            "src/modules/example/createJobStep7/createJobStep7.html",
             "src/modules/ui/blueprintBrowser/blueprintBrowser.html",
             "src/modules/ui/readOnlyNotice/readOnlyNotice.html",
             "src/modules/ui/vacancyCard/vacancyCard.html"

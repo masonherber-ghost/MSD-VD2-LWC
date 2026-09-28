@@ -454,7 +454,7 @@ bring it into line rather than matching the existing shape:
 
 | Screen | Deviation |
 |---|---|
-| `example/jobDetail` (299 lines) | Still monolithic — highlights, path and three sidebar cards in one template. The Details region is now `ui/jobDetailsForm` |
+| `example/jobDetail` (290 lines) | Still monolithic — highlights, path and three sidebar cards in one template. The Details region is now `ui/jobListingPreview`, shared with the create flow's last step |
 | `example/manageOrg` (426 lines) | Monolithic — two full tabs in one template. Has GROWN since this row was written |
 | `example/profile` (278 lines) | Monolithic. Has grown since this row was written |
 

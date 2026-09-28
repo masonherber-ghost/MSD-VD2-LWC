@@ -200,70 +200,6 @@ export default class JobDetail extends LightningElement {
         return `/jobs/job-detail?id=${this.job?.id ?? ''}`;
     }
 
-    // -- details tab -------------------------------------------------------
-
-    get detailRows(): { key: string; label: string; value: string }[] {
-        const job = this.job;
-        if (!job) {
-            return [];
-        }
-        const fields: [string, unknown][] = [
-            ['Vacancy title', job.title],
-            ['Level', job.subtitle],
-            ['Company', job.company_name],
-            ['Job type', job.job_type],
-            ['Contract type', job.contract_type],
-            ['Experience level', job.experience_level],
-            ['Education required', job.education_required],
-            ['Driver licence', job.driver_licence_label],
-            ['Location', job.location],
-            ['Pay', job.pay],
-            ['Hours', job.hours_description],
-            ['Start date', job.start_date],
-            ['Posted', job.posted_date],
-            ['Closes', job.closing_date],
-            ['Positions available', job.positions_available],
-            ['Shortlist limit', job.max_shortlist],
-            ['Campaign length', job.campaign_length_weeks ? `${job.campaign_length_weeks} weeks` : ''],
-            ['Job reference', job.external_job_id]
-        ];
-        return fields.map(([label, value]) => ({
-            key: label,
-            label,
-            value: value === null || value === undefined || value === '' ? '—' : String(value)
-        }));
-    }
-
-    /** The field form is two columns, so the rows are split down the middle. */
-    get detailColumnOne(): { key: string; label: string; value: string }[] {
-        const rows = this.detailRows;
-        return rows.slice(0, Math.ceil(rows.length / 2));
-    }
-
-    get detailColumnTwo(): { key: string; label: string; value: string }[] {
-        const rows = this.detailRows;
-        return rows.slice(Math.ceil(rows.length / 2));
-    }
-
-    get responsibilities(): { key: string; text: string }[] {
-        return ((this.job?.responsibilities as string[]) ?? []).map((text, i) => ({
-            key: `r${i}`,
-            text
-        }));
-    }
-
-    get skills(): { key: string; text: string }[] {
-        return ((this.job?.skills as string[]) ?? []).map((text, i) => ({ key: `s${i}`, text }));
-    }
-
-    get hasResponsibilities(): boolean {
-        return this.responsibilities.length > 0;
-    }
-
-    get hasSkills(): boolean {
-        return this.skills.length > 0;
-    }
-
     // -- related tab -------------------------------------------------------
 
     get candidateRows(): Row[] {
@@ -289,8 +225,8 @@ export default class JobDetail extends LightningElement {
      * Before 1.2 the Details tab is the only one, and a tabset holding a single
      * tab renders a bar whose only job is to name the panel under it. So the
      * whole tabset is gated, not its contents — gating the inside would leave
-     * an empty scoped panel, which reads as a bug. `ui/jobDetailsForm` renders
-     * bare instead.
+     * an empty scoped panel, which reads as a bug. `ui/jobListingPreview`
+     * renders bare instead.
      *
      * The tab bar cannot be hidden with CSS: it lives in `lightning-tabset`'s
      * shadow root, inside a further `lightning-tab-bar` shadow root, and

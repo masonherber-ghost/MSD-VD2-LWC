@@ -584,3 +584,77 @@ lightning-button[variant='brand']::part(button):disabled {
  * `ui/pageHero`'s h1 carries `slds-text-heading_large` as well as its own
  * class, so it falls back to the shipped size rather than losing one — its own
  * stylesheet only sets a max-width. */
+
+/* The job listing's chips.
+ *
+ * ENTIRELY PUBLISHED HOOKS — there is no override here at all. SLDS's own
+ * `.slds-badge` rule reads all four of these with `var()`, so feeding them is
+ * using the badge's API rather than fighting it: it cannot be broken by a
+ * specificity change and it survives a package upgrade.
+ *
+ * Needed because SLDS 2 ships exactly three badge appearances — the default
+ * light grey, `_lightest` and `_inverse` — and none of them is the design's
+ * solid accent fill. `lightning-badge` has no `variant` property to reach them
+ * with either; `label`, `iconName`, `iconAlternativeText` and `iconPosition`
+ * are the whole of its API. So the appearance has to come from the hooks.
+ *
+ * Every value is a token. `--slds-g-color-accent-container-1` is already
+ * remapped to MSD blue in design-tokens.css, so a brand change reaches this
+ * without the file being touched.
+ *
+ * Opt in per use: `class="sep-listing-chip"` on the badge. */
+.sep-listing-chip {
+    --slds-c-badge-color-background: var(--slds-g-color-accent-container-1);
+    --slds-c-badge-color-border: var(--slds-g-color-accent-container-1);
+    --slds-c-badge-text-color: var(--slds-g-color-on-accent-1);
+    --slds-c-badge-radius-border: var(--site-radius-pill);
+}
+
+/* =============================================================================
+ * Text colour utilities
+ *
+ * The nine text colours from the Semantic Colours page of the SEP Foundations
+ * library, as opt-in classes. Read out of the Figma file rather than eyeballed:
+ *
+ *   Semantic/Text/Primary            #333333   Semantic/Text/Disabled         #a1b3c8
+ *   Semantic/Text/Secondary          #666666   Semantic/Text/Status/Error     #d03633
+ *   Semantic/Text/Accent/Primary     #0071bb   Semantic/Text/Status/Success   #2d750a
+ *   Semantic/Text/Accent/Secondary   #134276   Semantic/Text/Inverse/Primary  #ffffff
+ *   Semantic/Text/Inverse/Disabled   #e6f2fa
+ *
+ * NOT ONE HEX IS WRITTEN HERE. All nine already exist as `--site-text-*` in
+ * design-tokens.css and every value matches the library exactly, so these are
+ * pure consumers — a colour change is still a one-line edit in the tokens file
+ * and it reaches these for free. Adding the hexes again would have created a
+ * second source of truth that drifts silently.
+ *
+ * WHY THESE ARE NEEDED AT ALL. SLDS 2 ships seven text-colour utilities —
+ * `slds-text-color_default`, `_weak`, `_inverse`, `_inverse-weak`, `_error`,
+ * `_success`, `_destructive` — and only four of them mean the same thing as one
+ * of the nine above. There is no SLDS utility for the accent colours, the
+ * disabled pair or the secondary grey, and those are the ones a SEP screen
+ * reaches for most.
+ *
+ * PREFER THE SLDS UTILITY WHERE THE MEANING MATCHES. `slds-text-color_weak` and
+ * `.sep-text-secondary` resolve to the same value, because design-tokens.css
+ * maps the SLDS token onto the same semantic layer. Reach for these where SLDS
+ * has no equivalent, not as a default.
+ *
+ * NO `!important`, deliberately. SLDS declares its text-colour utilities inside
+ * a cascade layer and — unlike its spacing utilities — without `!important`.
+ * This file is unlayered, and unlayered beats layered, so a `sep-` class wins
+ * over an SLDS one on the same element with no specificity fight. Same
+ * mechanism as `.sep-page-header`.
+ *
+ * Each class name mirrors its token exactly: `.sep-text-accent-primary` sets
+ * `--site-text-accent-primary`. One-to-one, so neither can be renamed quietly.
+ * ========================================================================== */
+.sep-text-primary { color: var(--site-text-primary); }
+.sep-text-secondary { color: var(--site-text-secondary); }
+.sep-text-accent-primary { color: var(--site-text-accent-primary); }
+.sep-text-accent-secondary { color: var(--site-text-accent-secondary); }
+.sep-text-inverse-primary { color: var(--site-text-inverse-primary); }
+.sep-text-inverse-disabled { color: var(--site-text-inverse-disabled); }
+.sep-text-disabled { color: var(--site-text-disabled); }
+.sep-text-error { color: var(--site-text-error); }
+.sep-text-success { color: var(--site-text-success); }

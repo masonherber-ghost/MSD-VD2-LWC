@@ -155,13 +155,11 @@
                              their own — same component either way. -->
                         <lightning-tabset lwc:if={showTabs} variant="scoped">
                             <lightning-tab label="Details">
-                                <ui-job-details-form
-                                    column-one={detailColumnOne}
-                                    column-two={detailColumnTwo}
-                                    description={job.description}
-                                    responsibilities={responsibilities}
-                                    skills={skills}
-                                ></ui-job-details-form>
+                                <!-- The listing as a candidate sees it. The same
+                                     component the create flow's last step uses
+                                     to preview a vacancy before it is submitted;
+                                     `editable` is left off here. -->
+                                <ui-job-listing-preview job={job}></ui-job-listing-preview>
                             </lightning-tab>
 
                             <lightning-tab lwc:if={showApplicants} label={relatedLabel}>
@@ -179,14 +177,7 @@
                             </lightning-tab>
                         </lightning-tabset>
 
-                        <ui-job-details-form
-                            lwc:else
-                            column-one={detailColumnOne}
-                            column-two={detailColumnTwo}
-                            description={job.description}
-                            responsibilities={responsibilities}
-                            skills={skills}
-                        ></ui-job-details-form>
+                        <ui-job-listing-preview lwc:else job={job}></ui-job-listing-preview>
                     </lightning-layout-item>
 
                     <!-- Sidebar region ------------------------------------->

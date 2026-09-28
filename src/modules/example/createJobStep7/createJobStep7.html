@@ -1,0 +1,120 @@
+<template lwc:render-mode="light">
+    <ui-site-header current="create-job"></ui-site-header>
+
+    <div class="site__body">
+        <main class="site__main" id="create-job-step7-main">
+            <lightning-layout horizontal-align="center">
+                <lightning-layout-item id="create-job-step7-col-main" size="12" large-device-size="10">
+                    <ui-vacancy-stepper current-step="7"></ui-vacancy-stepper>
+
+                    <h1 id="create-job-step7-title" class="slds-text-heading_large slds-m-bottom_small">
+                        Last step, let's double-check everything.
+                    </h1>
+                    <p id="create-job-step7-intro" class="slds-m-bottom_medium">
+                        This is what your job listing will look like to potential candidates.
+                        Any section left empty will not be displayed on the job listing.<br />
+                        Be sure to review your details and your listing management preferences
+                        as this is how we will get in touch with you.
+                    </p>
+
+                    <!-- No icon, as the design draws it. -->
+                    <div id="create-job-step7-empty-note" class="slds-scoped-notification sep-scoped-notification slds-m-bottom_medium">
+                        <p class="sep-scoped-notification__body">
+                            Any section/s left empty will not be displayed on the job listing.
+                        </p>
+                    </div>
+
+                    <!-- The two review panels. `lightning-accordion` is the
+                         shipped disclosure; the design draws them as rounded
+                         rows with a chevron, which is what it renders. -->
+                    <lightning-accordion
+                        id="create-job-step7-review-panels"
+                        allow-multiple-sections-open
+                        class="slds-m-bottom_x-large"
+                    >
+                        <lightning-accordion-section name="company" label="Review company details">
+                            <div lwc:if={account}>
+                                <template for:each={companyRows} for:item="row">
+                                    <div key={row.key} class="slds-form-element slds-form-element_readonly slds-m-bottom_x-small">
+                                        <span class="slds-form-element__label">{row.label}</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">{row.value}</div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                            <p lwc:else class="slds-text-color_weak">Company details are not available.</p>
+                        </lightning-accordion-section>
+
+                        <lightning-accordion-section name="preferences" label="Review listing preferences">
+                            <div lwc:if={hasJob}>
+                                <template for:each={preferenceRows} for:item="row">
+                                    <div key={row.key} class="slds-form-element slds-form-element_readonly slds-m-bottom_x-small">
+                                        <span class="slds-form-element__label">{row.label}</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">{row.value}</div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                            <p lwc:else class="slds-text-color_weak">Listing preferences are not available.</p>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+
+                    <h2 id="create-job-step7-preview-heading" class="slds-text-heading_large slds-m-bottom_medium">
+                        Preview your job listing
+                    </h2>
+
+                    <div lwc:if={loading} id="create-job-step7-loading" class="slds-is-relative slds-box slds-theme_default">
+                        <lightning-spinner alternative-text="Loading the listing" size="small"></lightning-spinner>
+                    </div>
+
+                    <div lwc:elseif={hasError} id="create-job-step7-error" class="slds-box slds-theme_default">
+                        <lightning-icon icon-name="utility:info" size="small" class="slds-m-right_x-small"></lightning-icon>
+                        <span>{error}</span>
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
+                            The data API runs under <code>npm run dev</code> only.
+                        </p>
+                    </div>
+
+                    <!-- The same component the record page uses. `editable`
+                         is what puts the Edit control on each section. -->
+                    <ui-job-listing-preview
+                        lwc:elseif={hasJob}
+                        id="create-job-step7-preview"
+                        job={job}
+                        editable
+                        onedit={handleEdit}
+                    ></ui-job-listing-preview>
+
+                    <div lwc:else id="create-job-step7-empty" class="slds-box slds-theme_default">
+                        <p>No vacancies on this account to preview.</p>
+                    </div>
+
+                    <!-- Declaration ---------------------------------------->
+                    <h2 id="create-job-step7-declaration-heading" class="slds-text-heading_medium slds-m-top_x-large slds-m-bottom_xx-small">
+                        Declaration
+                    </h2>
+                    <p id="create-job-step7-declaration" class="slds-m-bottom_medium">
+                        By clicking finish, you declare that the information being submitted is
+                        true and accurate.
+                    </p>
+
+                    <div id="create-job-step7-actions" class="slds-grid slds-grid_align-end slds-m-bottom_x-large">
+                        <a href="/create-job/step6">
+                            <lightning-button id="create-job-step7-previous" label="Previous"></lightning-button>
+                        </a>
+                        <lightning-button
+                            id="create-job-step7-finish"
+                            variant="brand"
+                            label="Finish"
+                            class="slds-m-left_x-small"
+                        ></lightning-button>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </main>
+    </div>
+
+    <ui-site-footer></ui-site-footer>
+</template>

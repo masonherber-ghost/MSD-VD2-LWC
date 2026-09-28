@@ -579,6 +579,29 @@ export const COMPOSITIONS = [
         "htmlLines": 47
     },
     {
+        "name": "jobListingPreview",
+        "tag": "ui-job-listing-preview",
+        "doc": "One vacancy rendered as the candidate would see it.\n\nUsed twice, which is the whole point of it being here rather than inside a\npage: the last step of the create-a-vacancy flow previews the listing before\nit is submitted, and `/jobs/job-detail` shows the same thing for a vacancy\nthat already exists. `editable` is the only difference — the flow puts an\nEdit control on each section, the record page does not.\n\nPresentational only. The page fetches and passes `job` down whole; this\nshapes it for display and dispatches `edit` when one of those controls is\npressed. See `rules-lwc-layout.md` § The modular component rule.\n\nTWO REGIONS THE DATA CANNOT FILL, both already known:\n\n- **Important strengths.** There is no job strengths table. `job_skills`,\n`job_languages` and the rest all exist; strengths exist only on\n`candidate_strengths`, which is the other side of the match.\n- **On-the-job training.** No column holds it. The create flow collects it\non step 5 and passes it in through `training-level`; a saved vacancy has\nnowhere to have kept it, so the record page shows the empty state.\n\nNeither is filled with a plausible value. Both render the same \"Nothing\nadded\" state a genuinely empty section gets.",
+        "composes": [
+            "lightning-accordion",
+            "lightning-accordion-section",
+            "lightning-badge",
+            "lightning-button",
+            "lightning-card",
+            "lightning-icon",
+            "lightning-layout",
+            "lightning-layout-item"
+        ],
+        "wraps": [],
+        "blueprints": [],
+        "sepClasses": [
+            "sep-listing-chip"
+        ],
+        "hasCss": false,
+        "css": null,
+        "htmlLines": 244
+    },
+    {
         "name": "kitchenSink",
         "tag": "ui-kitchen-sink",
         "doc": "Storybook-style browser over the examples that ship with\nlightning-base-components: pick a component, pick an example, see it run.",
@@ -1113,7 +1136,7 @@ export const SEP_CLASSES = [
         "rules": [
             {
                 "selector": ".sep-welcome-mat .slds-welcome-mat__content",
-                "body": "height: auto;\n    max-height: none;\n\n    /* Make the info panel run the full height of the row.\n     *\n     * THIS IS THE FIX FOR A PROBLEM WE INTRODUCED. `slds-wrap` is not part of\n     * the stock welcome-mat markup — it is on our `__content` so the two halves\n     * stack on a phone rather than staying side by side. But SLDS declares\n     * `.slds-wrap { flex-wrap: wrap; align-items: flex-start;"
+                "body": "height: auto;\n    max-height: none;\n\n    \n    align-items: stretch;"
             },
             {
                 "selector": ".sep-welcome-mat .slds-welcome-mat__info",
@@ -1139,14 +1162,6 @@ export const SEP_CLASSES = [
             {
                 "selector": ".sep-page-header .slds-page-header__detail-row",
                 "body": "--slds-s-pageheader-row-color-background: transparent;\n    margin-block-end: 0;\n    margin-inline: 0;\n    padding: 0;"
-            },
-            {
-                "selector": ".sep-page-header`, so the * markup still decides *whether* a screen takes the space — the identity vs * placement split described above. Only the *how it responds* part moves into * CSS, because markup cannot express it. * * 64em is the same large breakpoint the content cap steps at * (design-tokens.css), so the header gains its space exactly when the page * stops being fluid. * * Use INSTEAD of `slds-m-top_x-large`, never alongside it: that utility is * unconditional and carries `!important`, so it would win at every width. */ @media (min-width: 64em)",
-                "body": ".sep-page-header_spaced {\n        margin-block-start: var(--slds-g-spacing-6);"
-            },
-            {
-                "selector": ".sep-page-header .slds-page-header__title * color: var(--site-color-brand-navy) * line-height: var(--site-lineheight-heading-lg) * * .sep-page-header * --slds-s-pageheader-title-font-size: var(--site-font-heading-lg) * * The `--site-font-heading-*` and `--site-lineheight-heading-*` tokens are all * still defined in design-tokens.css — only the ASSIGNMENTS went, so restoring * any of these is a copy back into this block. * * What the site takes instead, read off the shipped stylesheet: * * slds-text-heading_large font-size --slds-g-font-scale-6. NOTE: this is * one design-tokens.css already remaps to --site-font-heading-lg, so the * SIZE is unchanged at 2rem — the removed rule was restating a value the * token layer had already set. What DOES change is an <h1> with that * class, which drops from 2.5rem to 2rem, and the colour, which was navy * and is now simply inherited (the shipped rule sets no colour). * * page header title font-size --slds-s-pageheader-title-font-size, * which SLDS itself declares as 1.125rem — so the title goes from 2rem to * 18px, NOT to the --slds-g-font-scale-1 fallback. Colour becomes * --slds-g-color-on-surface-3, and line-height is whatever * `.slds-page-header__name h1",
-                "body": "line-height: 1"
             }
         ],
         "usedIn": [
@@ -1163,12 +1178,30 @@ export const SEP_CLASSES = [
         ]
     },
     {
+        "name": "sep-page-header_spaced",
+        "note": "",
+        "rules": [
+            {
+                "selector": ".sep-page-header_spaced",
+                "body": "margin-block-start: var(--slds-g-spacing-6);"
+            }
+        ],
+        "usedIn": [
+            "src/modules/example/emails/emails.html",
+            "src/modules/example/home/home.html",
+            "src/modules/example/jobDetail/jobDetail.html",
+            "src/modules/example/jobs/jobs.html",
+            "src/modules/example/manageOrg/manageOrg.html",
+            "src/modules/example/profile/profile.html"
+        ]
+    },
+    {
         "name": "sep-scoped-notification",
         "note": "SEP's Info Panel, as a skin for the shipped scoped notification. WHY EVERY PROPERTY HERE IS AN OVERRIDE, not a hook. `slds-scoped-notification` has NO styling hooks — not one, in either tier, under either spelling. Verified against the shipped stylesheet: --slds-c-scopednotification-*   nothing --slds-s-scopednotification-*   nothing --slds-c-scoped-notification-*  nothing   (hyphenated, in case of the --slds-s-scoped-notification-*  nothing    pageheader naming trap) --_slds-*scopednotification*    nothing   (so nothing private is bent) The whole shipped rule is three declarations reading GLOBAL tokens: padding: var(--slds-g-spacing-3)            12px border-radius: var(--slds-g-radius-border-2) 4px font-weight: var(--slds-s-alert-font-weight) 400 and it has no background or border at all — those come from the separate `_light` / `_dark` variants, which we do not use. So step 1 of the sep- order (set the component's own hook) is genuinely unavailable, and every property below is step 2: declared on our own opt-in class. Redefining the globals it reads is not an option — --slds-g-spacing-3 and --slds-g-radius-border-2 are used across the whole design system. Nothing needs !important. SLDS declares .slds-scoped-notification inside @layer component, this file is unlayered, and unlayered beats layered whatever the specificity — the same mechanism .sep-page-header relies on. Opt in per use: `class=\"slds-scoped-notification sep-scoped-notification\"`.",
         "rules": [
             {
                 "selector": ".sep-scoped-notification",
-                "body": "background-color: var(--site-color-blue-10);\n    /* Navy at 25%. color-mix keeps the brand token as the single source, so a\n       theme change still reaches the border — a baked rgba() would not. */\n    border: var(--slds-g-sizing-border-1) solid\n        color-mix(in srgb, var(--site-color-brand-navy) 25%, transparent);\n    border-radius: var(--site-radius-mid);\n    color: var(--site-text-primary);\n    padding-inline: var(--slds-g-spacing-5);\n    /* 20px is SEP's spacing-450, and the SLDS scale has no step for it\n       (--slds-g-spacing-4 is 16px, -5 is 24px). A value used by exactly one\n       class is a value, not a token — rules-lwc-layout.md § Defining a project\n       token — so it is stated here rather than invented as --site-spacing-*. */\n    padding-block: 1.25rem;\n    /* The info icon is navy, not the SLDS default grey. This one IS a published\n       hook, which is why it sits with the overrides rather than against them. */\n    --slds-c-icon-color-foreground-default: var(--site-color-brand-navy);"
+                "body": "background-color: var(--site-color-blue-10);\n    \n    border: var(--slds-g-sizing-border-1) solid\n        color-mix(in srgb, var(--site-color-brand-navy) 25%, transparent);\n    border-radius: var(--site-radius-mid);\n    color: var(--site-text-primary);\n    padding-inline: var(--slds-g-spacing-5);\n    \n    padding-block: 1.25rem;\n    \n    --slds-c-icon-color-foreground-default: var(--site-color-brand-navy);"
             },
             {
                 "selector": ".sep-scoped-notification__header",
@@ -1189,8 +1222,121 @@ export const SEP_CLASSES = [
             "src/modules/example/createJobStep3/createJobStep3.html",
             "src/modules/example/createJobStep4/createJobStep4.html",
             "src/modules/example/createJobStep6/createJobStep6.html",
+            "src/modules/example/createJobStep7/createJobStep7.html",
             "src/modules/ui/blueprintBrowser/blueprintBrowser.html",
             "src/modules/ui/readOnlyNotice/readOnlyNotice.html"
         ]
+    },
+    {
+        "name": "sep-listing-chip",
+        "note": "The job listing's chips. ENTIRELY PUBLISHED HOOKS — there is no override here at all. SLDS's own `.slds-badge` rule reads all four of these with `var()`, so feeding them is using the badge's API rather than fighting it: it cannot be broken by a specificity change and it survives a package upgrade. Needed because SLDS 2 ships exactly three badge appearances — the default light grey, `_lightest` and `_inverse` — and none of them is the design's solid accent fill. `lightning-badge` has no `variant` property to reach them with either; `label`, `iconName`, `iconAlternativeText` and `iconPosition` are the whole of its API. So the appearance has to come from the hooks. Every value is a token. `--slds-g-color-accent-container-1` is already remapped to MSD blue in design-tokens.css, so a brand change reaches this without the file being touched. Opt in per use: `class=\"sep-listing-chip\"` on the badge.",
+        "rules": [
+            {
+                "selector": ".sep-listing-chip",
+                "body": "--slds-c-badge-color-background: var(--slds-g-color-accent-container-1);\n    --slds-c-badge-color-border: var(--slds-g-color-accent-container-1);\n    --slds-c-badge-text-color: var(--slds-g-color-on-accent-1);\n    --slds-c-badge-radius-border: var(--site-radius-pill);"
+            }
+        ],
+        "usedIn": [
+            "src/modules/ui/jobListingPreview/jobListingPreview.html"
+        ]
+    },
+    {
+        "name": "sep-text-primary",
+        "note": "Text colour utilities The nine text colours from the Semantic Colours page of the SEP Foundations library, as opt-in classes. Read out of the Figma file rather than eyeballed: Semantic/Text/Primary            #333333   Semantic/Text/Disabled         #a1b3c8 Semantic/Text/Secondary          #666666   Semantic/Text/Status/Error     #d03633 Semantic/Text/Accent/Primary     #0071bb   Semantic/Text/Status/Success   #2d750a Semantic/Text/Accent/Secondary   #134276   Semantic/Text/Inverse/Primary  #ffffff Semantic/Text/Inverse/Disabled   #e6f2fa NOT ONE HEX IS WRITTEN HERE. All nine already exist as `--site-text-*` in design-tokens.css and every value matches the library exactly, so these are pure consumers — a colour change is still a one-line edit in the tokens file and it reaches these for free. Adding the hexes again would have created a second source of truth that drifts silently. WHY THESE ARE NEEDED AT ALL. SLDS 2 ships seven text-colour utilities — `slds-text-color_default`, `_weak`, `_inverse`, `_inverse-weak`, `_error`, `_success`, `_destructive` — and only four of them mean the same thing as one of the nine above. There is no SLDS utility for the accent colours, the disabled pair or the secondary grey, and those are the ones a SEP screen reaches for most. PREFER THE SLDS UTILITY WHERE THE MEANING MATCHES. `slds-text-color_weak` and `.sep-text-secondary` resolve to the same value, because design-tokens.css maps the SLDS token onto the same semantic layer. Reach for these where SLDS has no equivalent, not as a default. NO `!important`, deliberately. SLDS declares its text-colour utilities inside a cascade layer and — unlike its spacing utilities — without `!important`. This file is unlayered, and unlayered beats layered, so a `sep-` class wins over an SLDS one on the same element with no specificity fight. Same mechanism as `.sep-page-header`. Each class name mirrors its token exactly: `.sep-text-accent-primary` sets `--site-text-accent-primary`. One-to-one, so neither can be renamed quietly.",
+        "rules": [
+            {
+                "selector": ".sep-text-primary",
+                "body": "color: var(--site-text-primary);"
+            }
+        ],
+        "usedIn": []
+    },
+    {
+        "name": "sep-text-secondary",
+        "note": "",
+        "rules": [
+            {
+                "selector": ".sep-text-secondary",
+                "body": "color: var(--site-text-secondary);"
+            }
+        ],
+        "usedIn": []
+    },
+    {
+        "name": "sep-text-accent-primary",
+        "note": "",
+        "rules": [
+            {
+                "selector": ".sep-text-accent-primary",
+                "body": "color: var(--site-text-accent-primary);"
+            }
+        ],
+        "usedIn": []
+    },
+    {
+        "name": "sep-text-accent-secondary",
+        "note": "",
+        "rules": [
+            {
+                "selector": ".sep-text-accent-secondary",
+                "body": "color: var(--site-text-accent-secondary);"
+            }
+        ],
+        "usedIn": []
+    },
+    {
+        "name": "sep-text-inverse-primary",
+        "note": "",
+        "rules": [
+            {
+                "selector": ".sep-text-inverse-primary",
+                "body": "color: var(--site-text-inverse-primary);"
+            }
+        ],
+        "usedIn": []
+    },
+    {
+        "name": "sep-text-inverse-disabled",
+        "note": "",
+        "rules": [
+            {
+                "selector": ".sep-text-inverse-disabled",
+                "body": "color: var(--site-text-inverse-disabled);"
+            }
+        ],
+        "usedIn": []
+    },
+    {
+        "name": "sep-text-disabled",
+        "note": "",
+        "rules": [
+            {
+                "selector": ".sep-text-disabled",
+                "body": "color: var(--site-text-disabled);"
+            }
+        ],
+        "usedIn": []
+    },
+    {
+        "name": "sep-text-error",
+        "note": "",
+        "rules": [
+            {
+                "selector": ".sep-text-error",
+                "body": "color: var(--site-text-error);"
+            }
+        ],
+        "usedIn": []
+    },
+    {
+        "name": "sep-text-success",
+        "note": "",
+        "rules": [
+            {
+                "selector": ".sep-text-success",
+                "body": "color: var(--site-text-success);"
+            }
+        ],
+        "usedIn": []
     }
 ];

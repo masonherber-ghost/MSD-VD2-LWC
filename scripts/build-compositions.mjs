@@ -175,34 +175,59 @@ const components = fs
 
 const siteCss = fs.existsSync(SITE_CSS) ? fs.readFileSync(SITE_CSS, 'utf8') : '';
 
-/** Each `sep-` rule block, with the comment above it as its explanation. */
-const sepClasses = [];
-// The comment is only taken when it sits directly above the selector, and the
-// comment body is matched so that it cannot contain `*\/`. Without both, the
-// lazy match walked backwards and swallowed every comment between the previous
-// rule and this one.
+/**
+ * Each `sep-` rule block, with the comment above it as its explanation.
+ *
+ * TWO PASSES, and the reason matters. A `sep-` class is often NAMED inside a
+ * comment -- these comments explain which class does what -- and a single pass
+ * over the raw file matches those mentions as if they were selectors, then runs
+ * `[^{}]*` forward from the comment into the next real rule and swallows it.
+ * That silently merged `.sep-text-primary` into `.sep-text-secondary`.
+ *
+ * So notes are read from the original text, where the comments are, and rules
+ * from a comment-stripped copy, where they cannot be.
+ */
+const NAMED = '\\.sep-[a-z0-9-]+(?:_[a-z0-9-]+)?';
+const nameOf = (selector) =>
+    selector.match(/\.(sep-[a-z0-9-]+(?:_[a-z0-9-]+)?)/)?.[1] ?? null;
+
+/** class -> the comment sitting directly above its first rule. */
+const notes = new Map();
 for (const m of siteCss.matchAll(
-    /(?:\/\*((?:[^*]|\*(?!\/))*)\*\/[ \t]*\n[ \t]*)?(\.sep-[a-z0-9-]+(?:_[a-z0-9-]+)?[^{}]*)\{([^}]*)\}/g
+    new RegExp(
+        `\\/\\*((?:[^*]|\\*(?!\\/))*)\\*\\/[ \\t]*\\n[ \\t]*(${NAMED}[^{}]*)\\{`,
+        'g'
+    )
 )) {
-    const [, comment, selector, body] = m;
-    const name = selector.match(/\.(sep-[a-z0-9-]+(?:_[a-z0-9-]+)?)/)?.[1];
+    const name = nameOf(m[2]);
+    if (name && !notes.has(name)) {
+        notes.set(
+            name,
+            m[1]
+                .split('\n')
+                .map((l) => l.replace(/^\s*\*?/, '').trim())
+                .filter((l) => l && !/^[=-]+$/.test(l))
+                .join(' ')
+        );
+    }
+}
+
+const withoutComments = siteCss.replace(/\/\*[\s\S]*?\*\//g, '');
+
+const sepClasses = [];
+for (const m of withoutComments.matchAll(
+    new RegExp(`(${NAMED}[^{}]*)\\{([^}]*)\\}`, 'g')
+)) {
+    const [, selector, body] = m;
+    const name = nameOf(selector);
     if (!name) continue;
-    const existing = sepClasses.find((s) => s.name === name);
     const rule = { selector: selector.trim().replace(/\s+/g, ' '), body: body.trim() };
+    const existing = sepClasses.find((s) => s.name === name);
     if (existing) {
         existing.rules.push(rule);
         continue;
     }
-    sepClasses.push({
-        name,
-        note: (comment ?? '')
-            .split('\n')
-            .map((l) => l.replace(/^\s*\*?/, '').trim())
-            .filter((l) => l && !/^[=-]+$/.test(l))
-            .join(' '),
-        rules: [rule],
-        usedIn: []
-    });
+    sepClasses.push({ name, note: notes.get(name) ?? '', rules: [rule], usedIn: [] });
 }
 
 // Where each one is written, so an unused class is visible as unused.
