@@ -43,11 +43,13 @@
                                     </div>
                                 </template>
                             </div>
-                            <p lwc:else class="slds-text-color_weak">Company details are not available.</p>
+                            <p lwc:else id="create-job-step7-company-error" class="slds-text-color_weak">
+                                {companyUnavailable}
+                            </p>
                         </lightning-accordion-section>
 
                         <lightning-accordion-section name="preferences" label="Review listing preferences">
-                            <div lwc:if={hasJob}>
+                            <div>
                                 <template for:each={preferenceRows} for:item="row">
                                     <div key={row.key} class="slds-form-element slds-form-element_readonly slds-m-bottom_x-small">
                                         <span class="slds-form-element__label">{row.label}</span>
@@ -57,7 +59,6 @@
                                     </div>
                                 </template>
                             </div>
-                            <p lwc:else class="slds-text-color_weak">Listing preferences are not available.</p>
                         </lightning-accordion-section>
                     </lightning-accordion>
 
@@ -69,27 +70,16 @@
                         <lightning-spinner alternative-text="Loading the listing" size="small"></lightning-spinner>
                     </div>
 
-                    <div lwc:elseif={hasError} id="create-job-step7-error" class="slds-box slds-theme_default">
-                        <lightning-icon icon-name="utility:info" size="small" class="slds-m-right_x-small"></lightning-icon>
-                        <span>{error}</span>
-                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
-                            The data API runs under <code>npm run dev</code> only.
-                        </p>
-                    </div>
-
-                    <!-- The same component the record page uses. `editable`
-                         is what puts the Edit control on each section. -->
+                    <!-- The same component the record page uses, reading the
+                         draft rather than a saved record. `editable` is what
+                         puts the Edit control on each section. -->
                     <ui-job-listing-preview
-                        lwc:elseif={hasJob}
+                        lwc:else
                         id="create-job-step7-preview"
-                        job={job}
+                        job={previewJob}
                         editable
                         onedit={handleEdit}
                     ></ui-job-listing-preview>
-
-                    <div lwc:else id="create-job-step7-empty" class="slds-box slds-theme_default">
-                        <p>No vacancies on this account to preview.</p>
-                    </div>
 
                     <!-- Declaration ---------------------------------------->
                     <h2 id="create-job-step7-declaration-heading" class="slds-text-heading_medium slds-m-top_x-large slds-m-bottom_xx-small">
@@ -108,6 +98,7 @@
                             id="create-job-step7-finish"
                             variant="brand"
                             label="Finish"
+                            onclick={handleFinish}
                             class="slds-m-left_x-small"
                         ></lightning-button>
                     </div>

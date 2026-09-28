@@ -1,5 +1,7 @@
 import { LightningElement } from 'lwc';
+import Toast from 'lightning/toast';
 import api, { ApiError, DEV_ACCOUNT_ID, type Row } from 'data/api';
+import { takeFlash } from 'data/flash';
 import { currentAccountId } from 'data/session';
 import { iconUrl } from 'data/jobIcons';
 import {
@@ -100,6 +102,28 @@ export default class Jobs extends LightningElement {
         this.unsubRelease = onReleaseChange(() => {
             this.release = currentRelease();
         });
+
+        // Anything the previous route raised — today, the confirmation that a
+        // vacancy was submitted from the last step of the create flow. Taken
+        // BEFORE the await, so a slow API cannot delay the confirmation, and
+        // taken at all only once: `takeFlash` clears as it reads.
+        //
+        // `lightning/toast` builds its own overlay container, so this needs no
+        // markup and no host app. `ShowToastEvent` on its own would not work
+        // here — see `rules-architecture.md` § Version pinning.
+        const flash = takeFlash();
+        if (flash) {
+            Toast.show(
+                {
+                    label: flash.label,
+                    message: flash.message,
+                    variant: flash.variant ?? 'info',
+                    mode: 'dismissible'
+                },
+                this
+            );
+        }
+
         try {
             this.jobs = await api.jobs(currentAccountId() ?? DEV_ACCOUNT_ID);
         } catch (e) {

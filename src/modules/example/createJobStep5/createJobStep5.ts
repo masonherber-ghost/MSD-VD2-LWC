@@ -1,5 +1,6 @@
 import { LightningElement } from 'lwc';
 import { TRAINING_LEVELS } from 'data/reference';
+import { current as currentDraft, patch as patchDraft } from 'data/jobDraft';
 
 /**
  * Step 5 of the create-a-vacancy flow: the role's description, its selling
@@ -35,6 +36,15 @@ export default class CreateJobStep5 extends LightningElement {
     /** Which "Show example and tips" panels are open, by field name. */
     openTips: string[] = [];
 
+    /** Hydrate from the shared draft — populated when editing a vacancy. */
+    connectedCallback(): void {
+        const d = currentDraft();
+        this.description = d.description;
+        this.trainingLevel = d.training_level;
+        // The table is unbounded; this step shows exactly three.
+        this.sellingPoints = [0, 1, 2].map((i) => d.selling_points[i] ?? '');
+    }
+
     get descriptionTipsOpen(): boolean {
         return this.openTips.includes('description');
     }
@@ -54,6 +64,7 @@ export default class CreateJobStep5 extends LightningElement {
 
     handleDescription(event: Event): void {
         this.description = (event.target as HTMLTextAreaElement).value ?? '';
+        patchDraft({ description: this.description });
     }
 
     handleSellingPoint(event: Event): void {
@@ -62,10 +73,13 @@ export default class CreateJobStep5 extends LightningElement {
         const next = [...this.sellingPoints];
         next[index] = el.value ?? '';
         this.sellingPoints = next;
+        // Empty lines are not rows: `job_selling_points` holds what was written.
+        patchDraft({ selling_points: this.sellingPoints.filter(Boolean) });
     }
 
     handleTrainingChange(event: CustomEvent): void {
         this.trainingLevel = (event.detail as { value: string }).value;
+        patchDraft({ training_level: this.trainingLevel });
     }
 
     handleToggleTips(event: Event): void {

@@ -6,14 +6,20 @@ import {
     LICENCE_ENDORSEMENTS,
     LICENCE_STAGES
 } from 'data/reference';
+import { current as currentDraft, patch as patchDraft } from 'data/jobDraft';
 
 /**
  * Step 2 of the create-a-vacancy flow: job details.
  *
  * Unlike step 1, which shows back MSD's record read-only, everything here is
- * new information the employer supplies — so these are real inputs held in a
- * draft. Nothing is persisted yet: the flow has no save until its last step,
- * and `jobs` rows are created by the repository, not from here.
+ * new information the employer supplies. It is held in `data/jobDraft`, which
+ * carries it across the other step routes and is what "Edit" on a vacancy
+ * seeds. Nothing is persisted: the flow has no save until its last step, and
+ * `jobs` rows are created by the repository, not from here.
+ *
+ * The draft is copied into FIELDS on connect and those fields are reassigned on
+ * every change, because a getter reading the module would record no render
+ * dependency — `rules-app-logic.md` § The reactivity rule.
  */
 export default class CreateJobStep2 extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
@@ -34,6 +40,20 @@ export default class CreateJobStep2 extends LightningElement {
         education_required: '',
         certification: ''
     };
+
+    /** Hydrate from the shared draft — populated when editing a vacancy. */
+    connectedCallback(): void {
+        const d = currentDraft();
+        this.draft = {
+            title: d.title,
+            occupation_id: d.occupation_id,
+            experience_level: d.experience_level,
+            education_required: d.education_required,
+            certification: d.certification
+        };
+        this.licenceStageByClass = { ...d.driver_licence_stages };
+        this.selectedEndorsements = [...d.licence_endorsements];
+    }
 
     licenceStages = LICENCE_STAGES;
 
@@ -59,6 +79,7 @@ export default class CreateJobStep2 extends LightningElement {
             ...this.draft,
             [field]: (event.target as HTMLInputElement).value ?? ''
         };
+        patchDraft({ [field]: this.draft[field] });
     }
 
     handleLicenceStageChange(event: CustomEvent): void {
@@ -68,6 +89,7 @@ export default class CreateJobStep2 extends LightningElement {
             ...this.licenceStageByClass,
             [cls]: (event.target as HTMLInputElement).value ?? ''
         };
+        patchDraft({ driver_licence_stages: this.licenceStageByClass });
     }
 
     /**
@@ -85,5 +107,6 @@ export default class CreateJobStep2 extends LightningElement {
 
     handleEndorsementChange(event: CustomEvent): void {
         this.selectedEndorsements = (event.detail as { value: string[] }).value ?? [];
+        patchDraft({ licence_endorsements: this.selectedEndorsements });
     }
 }

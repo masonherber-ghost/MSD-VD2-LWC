@@ -1,6 +1,14 @@
 import { LightningElement } from 'lwc';
 import api, { ApiError, DEV_ACCOUNT_ID, type Row } from 'data/api';
 import { currentAccountId } from 'data/session';
+import { setFlash } from 'data/flash';
+import {
+    current as currentDraft,
+    editingJobId,
+    toJobShape,
+    clear as clearDraft,
+    type JobDraft
+} from 'data/jobDraft';
 
 const value = (v: unknown): string => {
     const text = String(v ?? '').trim();
@@ -10,53 +18,63 @@ const value = (v: unknown): string => {
 /**
  * Step 7 of the create-a-vacancy flow: review everything, then finish.
  *
- * WHAT IT IS PREVIEWING, AND WHY. The flow has no draft store — each
- * `/create-job/stepN` is its own route with its own local state, and nothing
- * is written until the end. So there is no in-progress vacancy for this step
- * to render. Rather than fabricate one, it loads a REAL vacancy off the
- * account and previews that, the same way `example/jobDetail` picks a record.
- * Every value on screen therefore comes from the database.
+ * WHAT IT PREVIEWS. The draft the employer has just filled in — `data/jobDraft`,
+ * carried here across the six earlier routes. Not the saved record: an edit
+ * made on step 5 has to show up here before anything is submitted, or the
+ * review screen is reviewing the wrong thing.
  *
- * Giving the flow a genuine draft that survives between steps is a real piece
- * of work and a decision to raise, not to quietly patch around here.
+ * When the flow was entered from a vacancy's Edit action the saved record is
+ * fetched too, and the draft is laid over it. That is what fills the parts of
+ * the listing no step collects — the schedule's days, `about_us` — which would
+ * otherwise vanish from the preview of a vacancy that has them.
  *
- * The preview itself is `ui/jobListingPreview`, shared with the record page —
- * this step passes `editable` so each section gets an Edit control.
+ * A vacancy being created from scratch fetches no job at all, so its preview
+ * shows exactly what has been entered and "Nothing added" everywhere else.
+ * That is the honest result, and it is the design's own rule for this screen:
+ * "Any section left empty will not be displayed on the job listing."
  */
 export default class CreateJobStep7 extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
 
-    job: Row | null = null;
+    /** A field, not a getter — see `rules-app-logic.md` § The reactivity rule. */
+    draft: JobDraft = currentDraft();
+    savedJob: Row | null = null;
     account: Row | null = null;
     error = '';
     loading = true;
 
     async connectedCallback(): Promise<void> {
         const accountId = currentAccountId() ?? DEV_ACCOUNT_ID;
+        const editing = editingJobId();
         try {
-            const [jobs, account] = await Promise.all([
-                api.jobs(accountId),
-                api.account(accountId)
-            ]);
-            this.account = account;
-            if (jobs.length) {
-                this.job = await api.job(Number(jobs[0].id));
+            this.account = await api.account(accountId);
+            if (editing) {
+                this.savedJob = await api.job(editing);
             }
         } catch (e) {
             // The static build has no /api, so this is an expected state there.
             this.error =
-                e instanceof ApiError ? e.message : 'Could not load the listing to review.';
+                e instanceof ApiError ? e.message : 'Could not load your company details.';
         } finally {
             this.loading = false;
         }
     }
 
-    get hasError(): boolean {
-        return Boolean(this.error);
+    /**
+     * Only the company panel needs the API now — the preview reads the draft —
+     * so a failure costs that panel and nothing else.
+     */
+    get companyUnavailable(): string {
+        return this.error || 'Company details are not available.';
     }
 
-    get hasJob(): boolean {
-        return !this.loading && !this.error && this.job !== null;
+    /** The draft in the shape `ui/jobListingPreview` reads. */
+    get previewJob(): Row {
+        return toJobShape(this.draft, this.savedJob);
+    }
+
+    get isEditing(): boolean {
+        return this.draft.job_id !== null;
     }
 
     /** The "Review company details" panel — the account as MSD holds it. */
@@ -76,20 +94,41 @@ export default class CreateJobStep7 extends LightningElement {
         return fields.map(([label, v]) => ({ key: label, label, value: value(v) }));
     }
 
-    /** The "Review listing preferences" panel — step 6's fields, as saved. */
+    /** The "Review listing preferences" panel — step 6's answers, from the draft. */
     get preferenceRows(): { key: string; label: string; value: string }[] {
-        const j = this.job;
-        if (!j) return [];
-        const interviews = (j.interview_options as string[]) ?? [];
+        const d = this.draft;
         const fields: [string, unknown][] = [
-            ['Publish date', j.posted_date],
-            ['Positions available', j.positions_available],
-            ['Maximum shortlist', j.max_shortlist],
-            ['Interview options', interviews.join(', ')],
-            ['Campaign length', j.campaign_length_weeks ? `${j.campaign_length_weeks} weeks` : ''],
-            ['Closing date', j.closing_date]
+            [
+                'Publish',
+                d.publish_timing === 'scheduled' ? d.posted_date : 'As soon as possible'
+            ],
+            ['Positions available', d.positions_available],
+            ['Maximum shortlist', d.max_shortlist],
+            ['Interview options', d.interview_options.join(', ')]
         ];
         return fields.map(([label, v]) => ({ key: label, label, value: value(v) }));
+    }
+
+    /**
+     * Finish: raise the confirmation, drop the draft, go back to the list.
+     *
+     * NOTHING IS WRITTEN. The draft exists and is complete enough to submit,
+     * but there is no POST behind this yet — `job-repository` has no create or
+     * update path reachable from the client, and adding one is a decision to
+     * raise. When it lands it goes here, before the flash, with the navigation
+     * waiting on it.
+     *
+     * The draft is cleared either way, so a second pass through the flow does
+     * not reopen this one.
+     */
+    handleFinish(): void {
+        setFlash({
+            label: this.isEditing ? 'Vacancy updated' : 'Vacancy submitted',
+            message: 'MSD staff will review your listing within 48 hours.',
+            variant: 'success'
+        });
+        clearDraft();
+        window.location.assign('/jobs');
     }
 
     /**

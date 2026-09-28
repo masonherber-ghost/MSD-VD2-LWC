@@ -7,6 +7,18 @@
                 <lightning-layout-item id="create-job-step1-col-main" size="12" large-device-size="10">
                     <ui-vacancy-stepper current-step="1"></ui-vacancy-stepper>
 
+                    <!-- Only when the flow was entered from a vacancy's Edit
+                         action. Otherwise a pre-filled form gives no clue which
+                         record it came from. -->
+                    <div
+                        lwc:if={isEditing}
+                        id="create-job-step1-editing-notice"
+                        class="slds-scoped-notification sep-scoped-notification slds-m-bottom_medium"
+                    >
+                        <p class="sep-scoped-notification__title">Editing an existing vacancy</p>
+                        <p class="sep-scoped-notification__body">{editingNotice}</p>
+                    </div>
+
                     <h1 id="create-job-step1-title" class="slds-text-heading_large slds-m-bottom_x-small">
                         First, let's get your company details.
                     </h1>

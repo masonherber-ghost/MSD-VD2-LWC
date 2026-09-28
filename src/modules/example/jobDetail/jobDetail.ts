@@ -2,6 +2,7 @@ import { LightningElement } from 'lwc';
 import api, { ApiError, DEV_ACCOUNT_ID, type Row } from 'data/api';
 import { iconUrl } from 'data/jobIcons';
 import { currentAccountId } from 'data/session';
+import { startFromJob } from 'data/jobDraft';
 import {
     currentRelease,
     isEnabled,
@@ -147,6 +148,22 @@ export default class JobDetail extends LightningElement {
         } finally {
             this.loading = false;
         }
+    }
+
+    /**
+     * Edit: seed the create flow from this vacancy, then open it at step 1.
+     *
+     * `this.job` is already the hydrated record — `api.job()` returns every
+     * child collection — so there is nothing more to fetch. The id travels in
+     * the URL as well as in the draft so step 1 can tell a real edit from a
+     * stale draft left in this tab. See `data/jobDraft`.
+     */
+    handleEdit(): void {
+        if (!this.job) {
+            return;
+        }
+        startFromJob(this.job);
+        window.location.assign(`/create-job/step1?edit=${this.job.id}`);
     }
 
     // -- state ------------------------------------------------------------

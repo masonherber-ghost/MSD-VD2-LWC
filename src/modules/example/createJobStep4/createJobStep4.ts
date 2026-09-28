@@ -5,6 +5,7 @@ import {
     LANGUAGE_ABILITIES,
     SUGGESTED_SKILLS
 } from 'data/reference';
+import { current as currentDraft, patch as patchDraft } from 'data/jobDraft';
 
 const VISIBLE_SUGGESTIONS = 3;
 
@@ -33,6 +34,35 @@ export default class CreateJobStep4 extends LightningElement {
         { id: 1, name: 'English', abilities: [], saved: false }
     ];
     private nextLanguageId = 2;
+
+    /**
+     * Hydrate from the shared draft — populated when editing a vacancy.
+     *
+     * A language that came off a saved record is already `saved`, so the
+     * "Please save before adding other languages" gate does not fire on a
+     * vacancy the employer has only opened to change something else.
+     */
+    connectedCallback(): void {
+        const d = currentDraft();
+        this.selectedSkills = [...d.skills];
+        this.selectedStrengths = [...d.strengths];
+        if (d.languages.length) {
+            this.languages = d.languages.map((l, i) => ({
+                id: i + 1,
+                name: l.name,
+                abilities: [...l.abilities],
+                saved: true
+            }));
+            this.nextLanguageId = d.languages.length + 1;
+        }
+    }
+
+    /** `job_languages` + `job_language_abilities`, as the draft holds them. */
+    private syncLanguages(): void {
+        patchDraft({
+            languages: this.languages.map((l) => ({ name: l.name, abilities: l.abilities }))
+        });
+    }
 
     // -- Skills -------------------------------------------------------------
 
@@ -92,11 +122,13 @@ export default class CreateJobStep4 extends LightningElement {
     handleRemoveSkill(event: CustomEvent): void {
         const name = (event.target as HTMLElement & { name?: string }).name;
         this.selectedSkills = this.selectedSkills.filter((s) => s !== name);
+        patchDraft({ skills: this.selectedSkills });
     }
 
     private addSkill(name: string): void {
         if (!name || this.selectedSkills.includes(name)) return;
         this.selectedSkills = [...this.selectedSkills, name];
+        patchDraft({ skills: this.selectedSkills });
     }
 
     toggleSuggestions(): void {
@@ -114,6 +146,7 @@ export default class CreateJobStep4 extends LightningElement {
         const next = (event.detail as { value: string[] }).value ?? [];
         if (next.length > MAX_STRENGTHS) return;
         this.selectedStrengths = next;
+        patchDraft({ strengths: this.selectedStrengths });
     }
 
     get strengthsHelp(): string {
@@ -140,6 +173,7 @@ export default class CreateJobStep4 extends LightningElement {
         this.languages = this.languages.map((l) =>
             l.id === id ? { ...l, abilities, saved: false } : l
         );
+        this.syncLanguages();
     }
 
     handleLanguageName(event: CustomEvent): void {
@@ -148,6 +182,7 @@ export default class CreateJobStep4 extends LightningElement {
         this.languages = this.languages.map((l) =>
             l.id === id ? { ...l, name, saved: false } : l
         );
+        this.syncLanguages();
     }
 
     handleSaveLanguage(event: Event): void {
@@ -155,6 +190,7 @@ export default class CreateJobStep4 extends LightningElement {
         this.languages = this.languages.map((l) =>
             l.id === id ? { ...l, saved: true } : l
         );
+        this.syncLanguages();
     }
 
     handleAddLanguage(): void {
@@ -163,5 +199,6 @@ export default class CreateJobStep4 extends LightningElement {
             { id: this.nextLanguageId, name: '', abilities: [], saved: false }
         ];
         this.nextLanguageId += 1;
+        this.syncLanguages();
     }
 }

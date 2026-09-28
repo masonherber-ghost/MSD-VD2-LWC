@@ -2,6 +2,7 @@ import { LightningElement } from 'lwc';
 import api, { ApiError, type Row } from 'data/api';
 import { currentAccountId } from 'data/session';
 import { COMPANY_TYPES, CONTACT_ROLES, labelFor } from 'data/reference';
+import { startBlank, editingJobId, current as currentDraft } from 'data/jobDraft';
 
 const DEV_ACCOUNT_ID = 1;
 
@@ -14,9 +15,15 @@ const EM_DASH = '—';
  * Step 1 of listing a job.
  *
  * Every field on this screen is MSD's record, pre-populated and read-only —
- * the employer confirms what is held rather than entering it. So there is no
- * draft and no payload: the page fetches, formats and renders static output,
- * the same way `example/manageOrg` renders a locked field.
+ * the employer confirms what is held rather than entering it. So this step
+ * contributes nothing to the vacancy draft: it fetches, formats and renders
+ * static output, the same way `example/manageOrg` renders a locked field.
+ *
+ * IT IS ALSO THE FLOW'S FRONT DOOR, which makes it responsible for the draft's
+ * lifetime. Arriving with `?edit=<id>` means the record page has just seeded
+ * `data/jobDraft` from that vacancy, so the draft is kept. Arriving any other
+ * way starts a blank one — otherwise "List a job" would silently reopen an
+ * abandoned edit, with another vacancy's answers already filled in.
  */
 export default class CreateJobStep1 extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
@@ -44,7 +51,12 @@ export default class CreateJobStep1 extends LightningElement {
         email: ''
     };
 
+    /** The vacancy being edited, when the flow was entered from one. */
+    editingTitle = '';
+
     async connectedCallback(): Promise<void> {
+        this.resolveDraft();
+
         const accountId = currentAccountId() ?? DEV_ACCOUNT_ID;
         try {
             const [account, members] = await Promise.all([
@@ -64,6 +76,33 @@ export default class CreateJobStep1 extends LightningElement {
         } finally {
             this.loading = false;
         }
+    }
+
+    /**
+     * Keep the seeded draft, or start a clean one.
+     *
+     * The id in the URL must match the one in the draft. They disagree when a
+     * link is shared, or a stale draft outlives the tab that started it — and
+     * in both cases starting fresh is the safe answer.
+     */
+    private resolveDraft(): void {
+        if (typeof window === 'undefined') {
+            return;
+        }
+        const wanted = Number(new URLSearchParams(window.location.search).get('edit'));
+        if (Number.isInteger(wanted) && wanted > 0 && editingJobId() === wanted) {
+            this.editingTitle = currentDraft().title;
+            return;
+        }
+        startBlank();
+    }
+
+    get isEditing(): boolean {
+        return this.editingTitle !== '';
+    }
+
+    get editingNotice(): string {
+        return `You are editing “${this.editingTitle}”. Your answers are filled in from the vacancy — change what you need and carry on.`;
     }
 
     get ready(): boolean {

@@ -9,6 +9,7 @@ import {
     SHOW_PAY_OPTIONS,
     PRE_EMPLOYMENT_CHECKS
 } from 'data/reference';
+import { current as currentDraft, patch as patchDraft } from 'data/jobDraft';
 
 type Option = { value: string; label: string; description?: string };
 type Marked = Option & { checked: boolean };
@@ -16,8 +17,13 @@ type Marked = Option & { checked: boolean };
 /**
  * Step 3 of the create-a-vacancy flow: location, terms and pay.
  *
- * All input, no fetch — nothing here is MSD's record. Held in a draft; the flow
- * has no save until its last step.
+ * All input, no fetch — nothing here is MSD's record. Held in `data/jobDraft`,
+ * which carries it across the other step routes and is what "Edit" on a vacancy
+ * seeds; the flow has no save until its last step.
+ *
+ * The draft is copied into a FIELD on connect and reassigned on change, because
+ * a getter reading the module would record no render dependency — see
+ * `rules-app-logic.md` § The reactivity rule.
  *
  * Each choice renders as one `slds-box` holding a `lightning-input type="radio"`
  * plus its description. That is a shipped container around a shipped control
@@ -51,6 +57,25 @@ export default class CreateJobStep3 extends LightningElement {
     };
 
     selectedChecks: string[] = [];
+
+    /** Hydrate from the shared draft — populated when editing a vacancy. */
+    connectedCallback(): void {
+        const d = currentDraft();
+        this.draft = {
+            workplace_arrangement: d.workplace_arrangement,
+            contract_type: d.contract_type,
+            start_option: d.start_option,
+            start_date: d.start_date,
+            work_hours: d.work_hours,
+            hours_per_week: d.hours_per_week,
+            schedule_type: d.schedule_type,
+            pay_type: d.pay_type,
+            pay_from: d.pay_from,
+            pay_to: d.pay_to,
+            show_pay: d.show_pay
+        };
+        this.selectedChecks = [...d.pre_employment_checks];
+    }
 
     /** Options with the current selection flagged, so each box can bind it. */
     private mark(list: readonly Option[], selected: string): Marked[] {
@@ -88,6 +113,7 @@ export default class CreateJobStep3 extends LightningElement {
         const field = (event.target as HTMLElement).dataset.field;
         if (!field) return;
         this.draft = { ...this.draft, [field]: event.detail.value ?? '' };
+        patchDraft({ [field]: this.draft[field] });
     }
 
     handleInputChange(event: CustomEvent): void {
@@ -97,10 +123,12 @@ export default class CreateJobStep3 extends LightningElement {
             ...this.draft,
             [field]: (event.target as HTMLInputElement).value ?? ''
         };
+        patchDraft({ [field]: this.draft[field] });
     }
 
     handleChecksChange(event: CustomEvent): void {
         this.selectedChecks = (event.detail as { value: string[] }).value ?? [];
+        patchDraft({ pre_employment_checks: this.selectedChecks });
     }
 
     /** "Set date" is the only start option that needs a date field. */
