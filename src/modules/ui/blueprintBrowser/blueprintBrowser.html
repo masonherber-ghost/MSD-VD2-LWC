@@ -1,0 +1,154 @@
+<template lwc:render-mode="light">
+    <div id="blueprint-browser">
+        <p id="blueprint-browser-summary" class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+            {summary}
+        </p>
+
+        <lightning-layout multiple-rows pull-to-boundary="small">
+            <!-- The rail. `lightning-vertical-navigation` is the shipped list;
+                 the badge item carries the class count. -->
+            <lightning-layout-item id="blueprint-browser-col-rail" size="12" medium-device-size="4" large-device-size="3" padding="around-small">
+                <lightning-input
+                    id="blueprint-browser-filter"
+                    type="search"
+                    label="Filter blueprints"
+                    variant="label-hidden"
+                    placeholder="Filter by name or class..."
+                    value={query}
+                    onchange={handleSearch}
+                ></lightning-input>
+                <lightning-input
+                    id="blueprint-browser-used-only"
+                    type="checkbox"
+                    label="Only the ones this site uses"
+                    checked={usedOnly}
+                    onchange={handleUsedOnly}
+                    class="slds-m-top_x-small"
+                ></lightning-input>
+                <p id="blueprint-browser-count" class="slds-text-body_small slds-text-color_weak slds-m-vertical_x-small">
+                    {matchCount}
+                </p>
+
+                <div class="blueprint-browser__rail">
+                    <lightning-vertical-navigation
+                        selected-item={selectedName}
+                        onselect={handleSelect}
+                        compact
+                    >
+                        <lightning-vertical-navigation-section>
+                            <template for:each={navItems} for:item="item">
+                                <lightning-vertical-navigation-item-badge
+                                    key={item.name}
+                                    label={item.label}
+                                    name={item.name}
+                                    badge-count={item.count}
+                                    assistive-text="classes"
+                                ></lightning-vertical-navigation-item-badge>
+                            </template>
+                        </lightning-vertical-navigation-section>
+                    </lightning-vertical-navigation>
+                </div>
+            </lightning-layout-item>
+
+            <!-- The detail. -->
+            <lightning-layout-item id="blueprint-browser-col-detail" size="12" medium-device-size="8" large-device-size="9" padding="around-small">
+                <lightning-card id="blueprint-browser-card" title={current.name}>
+                    <div class="slds-p-horizontal_medium">
+                        <dl class="slds-list_horizontal slds-wrap slds-m-bottom_medium">
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Main class</dt>
+                            <dd id="blueprint-browser-root" class="slds-item_detail slds-truncate">
+                                <code>{current.root}</code>
+                            </dd>
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Component</dt>
+                            <dd id="blueprint-browser-tag" class="slds-item_detail slds-truncate">{tagLabel}</dd>
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Stylesheet</dt>
+                            <dd id="blueprint-browser-size" class="slds-item_detail slds-truncate">{sizeLabel}</dd>
+                        </dl>
+
+                        <!-- A class in the blueprint's own file but not in the
+                             bundle main.njk loads cannot be written on this
+                             build, whatever the package documents. -->
+                        <div lwc:if={hasMissing} id="blueprint-browser-missing" class="slds-scoped-notification sep-scoped-notification slds-m-bottom_medium">
+                            <p class="sep-scoped-notification__title">Not in the bundled stylesheet</p>
+                            <p class="sep-scoped-notification__body">
+                                These are declared in the blueprint's own CSS file but do not
+                                appear in <code>slds2.lightning-blue.css</code>, which is the
+                                stylesheet this site loads. Writing one renders unstyled markup.
+                            </p>
+                            <ul class="slds-list_horizontal slds-wrap slds-m-top_x-small">
+                                <template for:each={missingList} for:item="c">
+                                    <li key={c.key} class="slds-m-right_x-small">
+                                        <lightning-badge label={c.name}></lightning-badge>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+
+                        <div lwc:if={current.deprecated} id="blueprint-browser-deprecated" class="slds-scoped-notification sep-scoped-notification slds-m-bottom_medium">
+                            <p class="sep-scoped-notification__title">Ships a deprecated stylesheet</p>
+                            <p class="sep-scoped-notification__body">
+                                This blueprint also ships a <code>.deprecated.css</code> file.
+                                Classes only found there are on their way out — check before relying on one.
+                            </p>
+                        </div>
+
+                        <h3 class="slds-text-title_caps slds-m-bottom_x-small">Classes it declares</h3>
+                        <ul id="blueprint-browser-classes" class="slds-list_horizontal slds-wrap slds-m-bottom_medium">
+                            <template for:each={ownClasses} for:item="c">
+                                <li key={c.key} class="slds-m-right_xx-small slds-m-bottom_xx-small">
+                                    <lightning-badge label={c.name}></lightning-badge>
+                                </li>
+                            </template>
+                        </ul>
+
+                        <template lwc:if={hasBorrowed}>
+                            <h3 class="slds-text-title_caps slds-m-bottom_x-small">Classes it styles inside itself</h3>
+                            <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_x-small">
+                                Declared by other blueprints. This one changes how they look when nested inside it.
+                            </p>
+                            <ul id="blueprint-browser-borrowed" class="slds-list_horizontal slds-wrap slds-m-bottom_medium">
+                                <template for:each={borrowedClasses} for:item="c">
+                                    <li key={c.key} class="slds-m-right_xx-small slds-m-bottom_xx-small">
+                                        <lightning-badge label={c.name}></lightning-badge>
+                                    </li>
+                                </template>
+                            </ul>
+                        </template>
+
+                        <template lwc:if={hasHooks}>
+                            <h3 class="slds-text-title_caps slds-m-bottom_x-small">Hooks you may set</h3>
+                            <ul id="blueprint-browser-hooks" class="slds-m-bottom_medium">
+                                <template for:each={hookList} for:item="h">
+                                    <li key={h.key} class="slds-text-body_small"><code>{h.name}</code></li>
+                                </template>
+                            </ul>
+                        </template>
+
+                        <template lwc:if={hasPrivate}>
+                            <h3 class="slds-text-title_caps slds-m-bottom_x-small">Off limits</h3>
+                            <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_x-small">
+                                Private hooks. The leading underscore is the contract: internal,
+                                unannounced, and free to change on any upgrade.
+                            </p>
+                            <ul id="blueprint-browser-private" class="slds-m-bottom_medium">
+                                <template for:each={privateList} for:item="h">
+                                    <li key={h.key} class="slds-text-body_small slds-text-color_weak"><code>{h.name}</code></li>
+                                </template>
+                            </ul>
+                        </template>
+
+                        <h3 class="slds-text-title_caps slds-m-bottom_x-small">Where this site uses it</h3>
+                        <ul lwc:if={isUsed} id="blueprint-browser-used" class="slds-m-bottom_medium">
+                            <template for:each={usedList} for:item="f">
+                                <li key={f.key} class="slds-text-body_small"><code>{f.name}</code></li>
+                            </template>
+                        </ul>
+                        <p lwc:else id="blueprint-browser-unused" class="slds-text-body_small slds-text-color_weak slds-m-bottom_medium">
+                            Not used on this site yet.
+                        </p>
+                    </div>
+                </lightning-card>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

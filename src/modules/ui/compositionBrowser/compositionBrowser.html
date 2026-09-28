@@ -1,0 +1,166 @@
+<template lwc:render-mode="light">
+    <div id="composition-browser">
+        <p id="composition-browser-intro" class="slds-text-body_regular slds-m-bottom_x-small">
+            Everything in <code>src/modules/ui/</code>. A wrapper here assembles
+            shipped components and blueprint markup — it is composition, not a new
+            control. What it costs is the stylesheet it needed to do that.
+        </p>
+        <p id="composition-browser-summary" class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+            {summary}
+        </p>
+
+        <lightning-input
+            id="composition-browser-filter"
+            type="search"
+            label="Filter wrappers"
+            variant="label-hidden"
+            placeholder="Filter by name or by the component it composes..."
+            value={query}
+            onchange={handleSearch}
+            class="slds-m-bottom_medium"
+        ></lightning-input>
+
+        <template for:each={rows} for:item="row">
+            <lightning-card key={row.key} title={row.tag} class="slds-m-bottom_small">
+                <!-- `lightning-badge` has no `variant` -- label, iconName,
+                     iconAlternativeText and iconPosition are the whole of its
+                     API, and SLDS 2 ships no success/warning badge modifier
+                     either. So severity is carried by the icon. -->
+                <lightning-badge
+                    slot="actions"
+                    label={row.cssLabel}
+                    icon-name={row.cssIcon}
+                ></lightning-badge>
+
+                <div class="slds-p-horizontal_medium">
+                    <p lwc:if={row.doc} class="slds-text-body_small slds-m-bottom_small composition-browser__doc">{row.doc}</p>
+
+                    <dl class="slds-list_horizontal slds-wrap slds-m-bottom_small">
+                        <template lwc:if={row.hasComposes}>
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Composes</dt>
+                            <dd class="slds-item_detail">
+                                <template for:each={row.composesList} for:item="t">
+                                    <span key={t.key}><code>{t.name}</code> </span>
+                                </template>
+                            </dd>
+                        </template>
+                        <template lwc:if={row.hasWraps}>
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Wraps ours</dt>
+                            <dd class="slds-item_detail">
+                                <template for:each={row.wrapsList} for:item="t">
+                                    <span key={t.key}><code>{t.name}</code> </span>
+                                </template>
+                            </dd>
+                        </template>
+                        <template lwc:if={row.hasBlueprints}>
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Blueprints</dt>
+                            <dd class="slds-item_detail">
+                                <template for:each={row.blueprintList} for:item="b">
+                                    <span key={b.key}>{b.name} </span>
+                                </template>
+                            </dd>
+                        </template>
+                        <template lwc:if={row.hasSep}>
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Our classes</dt>
+                            <dd class="slds-item_detail">
+                                <template for:each={row.sepList} for:item="s">
+                                    <span key={s.key}><code>{s.name}</code> </span>
+                                </template>
+                            </dd>
+                        </template>
+                    </dl>
+
+                    <!-- What the stylesheet touches. The tiers are in
+                         rules-lwc-layout.md; this is each wrapper's score
+                         against them. -->
+                    <template lwc:if={row.hasCss}>
+                        <h3 class="slds-text-title_caps slds-m-bottom_xx-small">What its CSS touches</h3>
+                        <ul class="slds-list_horizontal slds-wrap slds-m-bottom_x-small">
+                            <li lwc:if={row.hasHooks} class="slds-m-right_xx-small slds-m-bottom_xx-small">
+                                <lightning-badge label="Sets published component hooks" icon-name="utility:success"></lightning-badge>
+                            </li>
+                            <li lwc:if={row.hasTokens} class="slds-m-right_xx-small slds-m-bottom_xx-small">
+                                <lightning-badge label="Uses design tokens" icon-name="utility:success"></lightning-badge>
+                            </li>
+                            <li lwc:if={row.hasParts} class="slds-m-right_xx-small slds-m-bottom_xx-small">
+                                <lightning-badge label="Reaches an exposed ::part()" icon-name="utility:warning"></lightning-badge>
+                            </li>
+                            <li lwc:if={row.hasRaw} class="slds-m-right_xx-small slds-m-bottom_xx-small">
+                                <lightning-badge label="Has raw colour values" icon-name="utility:warning"></lightning-badge>
+                            </li>
+                            <li lwc:if={row.hasImportant} class="slds-m-right_xx-small slds-m-bottom_xx-small">
+                                <lightning-badge label={row.importantLabel} icon-name="utility:warning"></lightning-badge>
+                            </li>
+                            <li lwc:if={row.hasPrivate} class="slds-m-right_xx-small slds-m-bottom_xx-small">
+                                <lightning-badge label="Sets a private --_slds hook" icon-name="utility:error"></lightning-badge>
+                            </li>
+                        </ul>
+
+                        <template lwc:if={row.hasParts}>
+                            <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_x-small">
+                                <code>::part()</code> is sanctioned, but only for parts the
+                                component really declares — and a part removed in a later
+                                version takes this styling with it.
+                                Parts used:
+                                <template for:each={row.partsList} for:item="p">
+                                    <span key={p.key}><code>{p.name}</code> </span>
+                                </template>
+                            </p>
+                        </template>
+
+                        <lightning-accordion allow-multiple-sections-open>
+                            <lightning-accordion-section name="css" label="The stylesheet">
+                                <div class="slds-scrollable_x">
+                                    <pre class="composition-browser__code slds-text-body_small">{row.cssText}</pre>
+                                </div>
+                            </lightning-accordion-section>
+                        </lightning-accordion>
+                    </template>
+
+                    <p lwc:else class="slds-text-body_small slds-text-color_weak">
+                        No stylesheet. Everything it draws is drawn by something that ships.
+                    </p>
+                </div>
+            </lightning-card>
+        </template>
+
+        <!-- The site-level half of the same question. -->
+        <h2 id="composition-browser-sep-heading" class="slds-text-heading_medium slds-m-top_large slds-m-bottom_xx-small">
+            Our classes over shipped blueprints
+        </h2>
+        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+            A change to a shipped SLDS blueprint goes on an opt-in <code>sep-</code>
+            class, never a bare <code>.slds-*</code> override — so a screen that wants
+            the Lightning default can still have it. These live in
+            <code>src/assets/css/site.css</code>.
+        </p>
+
+        <template for:each={sepRows} for:item="sep">
+            <lightning-card key={sep.key} title={sep.name} class="slds-m-bottom_small">
+                <lightning-badge slot="actions" label={sep.usedLabel}></lightning-badge>
+                <div class="slds-p-horizontal_medium">
+                    <p lwc:if={sep.note} class="slds-text-body_small slds-m-bottom_small">{sep.note}</p>
+                    <lightning-accordion allow-multiple-sections-open>
+                        <lightning-accordion-section name="rules" label="The rules">
+                            <template for:each={sep.ruleRows} for:item="rule">
+                                <div key={rule.key} class="slds-m-bottom_x-small">
+                                    <p class="slds-text-body_small"><code>{rule.selector}</code></p>
+                                    <div class="slds-scrollable_x">
+                                        <pre class="composition-browser__code slds-text-body_small">{rule.body}</pre>
+                                    </div>
+                                </div>
+                            </template>
+                        </lightning-accordion-section>
+                        <lightning-accordion-section name="used" label="Where it is used">
+                            <ul>
+                                <template for:each={sep.usedList} for:item="f">
+                                    <li key={f.key} class="slds-text-body_small"><code>{f.name}</code></li>
+                                </template>
+                            </ul>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                </div>
+            </lightning-card>
+        </template>
+    </div>
+</template>

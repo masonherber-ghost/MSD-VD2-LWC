@@ -1,0 +1,10 @@
+/* The only rule this component needs.
+ *
+ * 89 blueprints is a rail taller than any screen, and SLDS's own
+ * `slds-scrollable_y` caps at `max-height: 100%`, which resolves against a
+ * parent that has no height here. So the height is stated once, in viewport
+ * units, and the shipped vertical navigation is left entirely alone. */
+.blueprint-browser__rail {
+    max-height: 70vh;
+    overflow-y: auto;
+}

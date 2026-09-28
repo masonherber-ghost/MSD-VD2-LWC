@@ -58,9 +58,12 @@ export const VACANCY_STEPS = [
     { value: '2', label: 'Job details' },
     { value: '3', label: 'Location, terms and pay' },
     { value: '4', label: 'Skills' },
-    { value: '5', label: 'Step 5' },
+    { value: '5', label: 'About the role' },
+    // PLACEHOLDER. The design's rail shows eight dots and names only the
+    // current step, so 6 to 8 exist but have no label yet.
     { value: '6', label: 'Step 6' },
-    { value: '7', label: 'Step 7' }
+    { value: '7', label: 'Step 7' },
+    { value: '8', label: 'Step 8' }
 ] as const;
 
 export function labelForStep(value: string): string {
@@ -239,4 +242,33 @@ export const SUGGESTED_SKILLS = [
     'transport dangerous goods',
     'load and unload freight',
     'complete pre-start checks'
+] as const;
+
+/**
+ * On-the-job training offered with the role — step 5.
+ *
+ * NO COLUMN HOLDS THIS. `jobs` has `education_required` and
+ * `experience_level`, both of which are about what the candidate arrives with;
+ * training is what the employer provides, which is the opposite direction and
+ * has nowhere to go. Labels and descriptions are the design's own.
+ */
+export const TRAINING_LEVELS = [
+    {
+        value: 'basic',
+        label: 'Basic',
+        description:
+            'Simple job instructions are given. The person should have all the skills ' +
+            'for the role from day one.'
+    },
+    {
+        value: 'specific',
+        label: 'Specific',
+        description: 'Training is given on specific tools or processes for the role.'
+    },
+    {
+        value: 'full',
+        label: 'Full',
+        description:
+            'Full training for the job is given. This is usually for starting-out roles.'
+    }
 ] as const;

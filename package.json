@@ -1,37 +1,39 @@
 {
-    "name": "msd-vd2-lwc",
-    "version": "0.0.1",
-    "license": "MIT",
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "catalog": "node scripts/build-catalog.mjs",
-  "tokens": "node scripts/build-tokens.mjs",
-        "dev": "tsx scripts/dev-server.ts",
-        "dev:lwr": "lwr dev",
-        "db:reset": "rm -f data/msd-vd2.db data/msd-vd2.db-wal data/msd-vd2.db-shm && cp data/msd-vd2.seed.db data/msd-vd2.db && echo \"database restored from data/msd-vd2.seed.db\"",
-        "build": "lwr build --clean --mode prod-compat",
-        "start": "lwr start",
-        "stage": "npm run build && npm run start",
-        "clean": "rimraf node_modules __lwr_cache__ site",
-        "build:esm": "lwr build --clean",
-        "auth:dev-passwords": "tsx scripts/set-dev-passwords.ts",
-        "seed:team": "tsx scripts/seed-team.ts"
-    },
-    "dependencies": {
-        "@salesforce-ux/design-system-2": "^2.264.2",
-        "better-sqlite3": "^13.0.3",
-        "lightning-base-components": "^1.28.19-alpha",
-        "lwc": "9.4.3",
-        "lwr": "0.24.1"
-    },
-    "engines": {
-        "node": ">=22.0.0"
-    },
-    "volta": {
-        "node": "24.13.1"
-    },
-    "devDependencies": {
-        "tsx": "^4.23.15"
-    }
+  "name": "msd-vd2-lwc",
+  "version": "0.0.1",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "catalog": "node scripts/build-catalog.mjs",
+    "tokens": "node scripts/build-tokens.mjs",
+    "blueprints": "node scripts/build-blueprints.mjs",
+    "compositions": "node scripts/build-compositions.mjs",
+    "dev": "tsx scripts/dev-server.ts",
+    "dev:lwr": "lwr dev",
+    "db:reset": "rm -f data/msd-vd2.db data/msd-vd2.db-wal data/msd-vd2.db-shm && cp data/msd-vd2.seed.db data/msd-vd2.db && echo \"database restored from data/msd-vd2.seed.db\"",
+    "build": "lwr build --clean --mode prod-compat",
+    "start": "lwr start",
+    "stage": "npm run build && npm run start",
+    "clean": "rimraf node_modules __lwr_cache__ site",
+    "build:esm": "lwr build --clean",
+    "auth:dev-passwords": "tsx scripts/set-dev-passwords.ts",
+    "seed:team": "tsx scripts/seed-team.ts"
+  },
+  "dependencies": {
+    "@salesforce-ux/design-system-2": "^2.264.2",
+    "better-sqlite3": "^13.0.3",
+    "lightning-base-components": "^1.28.19-alpha",
+    "lwc": "9.4.3",
+    "lwr": "0.24.1"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "volta": {
+    "node": "24.13.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.15"
+  }
 }

@@ -1,0 +1,15 @@
+/* Two rules, both for text this page prints verbatim.
+ *
+ * A docblock and a stylesheet are both written with their line breaks carrying
+ * meaning, and SLDS has no blueprint for either -- it styles prose, not source.
+ * `white-space: pre-wrap` is the whole of what is needed; the surrounding
+ * `slds-scrollable_x` handles a line too long to wrap. */
+.composition-browser__doc {
+    white-space: pre-wrap;
+}
+
+.composition-browser__code {
+    white-space: pre;
+    margin: 0;
+    font-family: var(--slds-g-font-family-monospace, ui-monospace, Menlo, monospace);
+}

@@ -13,7 +13,8 @@
                             <div class="slds-media__body">
                                 <h1 class="slds-page-header__title slds-truncate">Design system</h1>
                                 <p class="slds-page-header__name-meta">
-                                    What ships: every component example, and every design token.
+                                    What ships: every component example, every blueprint and
+                                    every design token — plus what this project built on top.
                                 </p>
                             </div>
                         </div>
@@ -24,6 +25,16 @@
             <lightning-tabset variant="scoped">
                 <lightning-tab label="Components">
                     <ui-kitchen-sink></ui-kitchen-sink>
+                </lightning-tab>
+                <lightning-tab label="Blueprints">
+                    <div class="slds-p-top_small">
+                        <ui-blueprint-browser></ui-blueprint-browser>
+                    </div>
+                </lightning-tab>
+                <lightning-tab label="Compositions">
+                    <div class="slds-p-top_small">
+                        <ui-composition-browser></ui-composition-browser>
+                    </div>
                 </lightning-tab>
                 <lightning-tab label="Tokens">
                     <div class="slds-p-top_small">

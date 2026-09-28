@@ -88,14 +88,20 @@ component gate*.
 to `isEnabled`, and gate the whole widget.
 
 ### Browse what the component library can do
-`npm run dev` → `/design-system`. Two tabs, both generated from what is installed:
+`npm run dev` → `/design-system`. Five tabs, every one generated — from the installed packages, or
+from this project's own source. Nothing on that page is hand-maintained.
 
-- **Components** — every shipped example, rendered live. Regenerate with `npm run catalog`.
-- **Tokens** — every design token, with its resolved value: this project's `--site-*`, the SLDS
-  global tokens by family, the component hooks you may set, and the private hooks you may not.
-  Regenerate with `npm run tokens`.
+| Tab | Shows | Regenerate |
+|---|---|---|
+| **Components** | Every shipped `lightning-*` example, rendered live | `npm run catalog` |
+| **Blueprints** | Every SLDS 2 blueprint: the classes it declares, whether they are in the stylesheet we actually load, the hooks you may set, the private ones you may not, and where this site uses it | `npm run blueprints` |
+| **Compositions** | Every wrapper in `src/modules/ui/`, ordered by how much CSS it needed, with what that CSS touches — plus the `sep-` classes in `site.css` | `npm run compositions` |
+| **Tokens** | Every design token with its resolved value: this project's `--site-*` and the SLDS globals by family | `npm run tokens` |
+| **Component hooks** | The `--slds-c-*` hooks you may set, grouped by component | `npm run tokens` |
 
-Neither list is hand-maintained; re-run both after upgrading a package.
+Re-run `catalog`, `tokens` and `blueprints` after upgrading a package. Re-run `compositions` after
+adding or restyling a wrapper — it reads our source, not the packages, and each wrapper's
+description on that page is its own leading docblock, so the explanation lives with the code.
 
 ### Reset or reseed data
 `npm run db:reset` (restore from seed), `npm run auth:dev-passwords`, `npm run seed:team`.

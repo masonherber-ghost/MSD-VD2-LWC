@@ -1,0 +1,138 @@
+<template lwc:render-mode="light">
+    <ui-site-header current="create-job"></ui-site-header>
+
+    <div class="site__body">
+        <main class="site__main" id="create-job-step5-main">
+            <lightning-layout horizontal-align="center">
+                <lightning-layout-item id="create-job-step5-col-main" size="12" large-device-size="10">
+                    <ui-vacancy-stepper current-step="5"></ui-vacancy-stepper>
+
+                    <h1 id="create-job-step5-title" class="slds-text-heading_large slds-m-bottom_large">
+                        Tell us about the role
+                    </h1>
+
+                    <!-- Job description ----------------------------------------
+                         The label sits above the help text and the tips button
+                         rather than on the control, so it is written as the
+                         form-element blueprint and the textarea's own label is
+                         hidden. `slds-required` is the shipped asterisk. -->
+                    <div id="create-job-step5-description-field" class="slds-form-element slds-m-bottom_x-large">
+                        <label id="create-job-step5-description-label" class="slds-form-element__label" for="create-job-step5-description">
+                            <abbr class="slds-required" title="required">*</abbr>
+                            Job description
+                        </label>
+                        <p id="create-job-step5-description-help" class="slds-m-bottom_small">
+                            Describe what the person will do, how they work within the team and
+                            how they help you meet your goals. Include what your place of work
+                            does, its main goal, what you value, and what extras the job offers.
+                        </p>
+
+                        <lightning-button
+                            id="create-job-step5-description-tips-button"
+                            data-tips="description"
+                            variant="brand"
+                            label="Show example and tips"
+                            onclick={handleToggleTips}
+                            class="slds-m-bottom_small"
+                        ></lightning-button>
+
+                        <div lwc:if={descriptionTipsOpen} id="create-job-step5-description-tips" class="slds-box slds-m-bottom_small">
+                            <p class="slds-text-body_small">
+                                PLACEHOLDER — the example and tips copy for this field has not
+                                been supplied with the design.
+                            </p>
+                        </div>
+
+                        <!-- The design draws a rich text editor here, with bold,
+                             italic and list controls. Nothing in the library
+                             ships one, so this is the plain textarea. -->
+                        <lightning-textarea
+                            id="create-job-step5-description"
+                            label="Job description"
+                            variant="label-hidden"
+                            value={description}
+                            onchange={handleDescription}
+                            required
+                        ></lightning-textarea>
+                    </div>
+
+                    <!-- What makes this job great ------------------------------->
+                    <h2 id="create-job-step5-selling-heading" class="slds-text-heading_medium slds-m-bottom_xx-small">
+                        What makes this job great (optional)
+                    </h2>
+                    <p id="create-job-step5-selling-help" class="slds-m-bottom_small">
+                        Briefly describe the best things about the role that are likely to
+                        attract great candidates. Use short, impactful statements that
+                        highlight the top benefits of the role.
+                    </p>
+
+                    <lightning-button
+                        id="create-job-step5-selling-tips-button"
+                        data-tips="selling"
+                        variant="brand"
+                        label="Show example and tips"
+                        onclick={handleToggleTips}
+                        class="slds-m-bottom_small"
+                    ></lightning-button>
+
+                    <div lwc:if={sellingTipsOpen} id="create-job-step5-selling-tips" class="slds-box slds-m-bottom_small">
+                        <p class="slds-text-body_small">
+                            PLACEHOLDER — the example and tips copy for this field has not
+                            been supplied with the design.
+                        </p>
+                    </div>
+
+                    <lightning-layout multiple-rows pull-to-boundary="small">
+                        <lightning-layout-item id="create-job-step5-col-selling" size="12" medium-device-size="8" padding="horizontal-small">
+                            <!-- Three rows of `job_selling_points`. The table is
+                                 unbounded; the design fixes it at three. -->
+                            <template for:each={sellingPointFields} for:item="point">
+                                <lightning-textarea
+                                    key={point.key}
+                                    data-index={point.index}
+                                    label={point.label}
+                                    value={point.value}
+                                    onchange={handleSellingPoint}
+                                    class="slds-m-bottom_small"
+                                ></lightning-textarea>
+                            </template>
+                        </lightning-layout-item>
+                    </lightning-layout>
+
+                    <!-- On-the-job training ------------------------------------->
+                    <h2 id="create-job-step5-training-heading" class="slds-text-heading_medium slds-m-top_large slds-m-bottom_xx-small">
+                        On-the-job training
+                    </h2>
+
+                    <lightning-layout multiple-rows pull-to-boundary="small">
+                        <lightning-layout-item id="create-job-step5-col-training" size="12" medium-device-size="8" large-device-size="6" padding="horizontal-small">
+                            <ui-radio-box-group
+                                id="create-job-step5-training"
+                                name="training-level"
+                                legend="What level of training will you give new employees?"
+                                help-text="Choose the option that best fits how much training your new employee will get when they start the role."
+                                options={trainingOptions}
+                                value={trainingLevel}
+                                onchange={handleTrainingChange}
+                            ></ui-radio-box-group>
+                        </lightning-layout-item>
+                    </lightning-layout>
+
+                    <div id="create-job-step5-actions" class="slds-grid slds-grid_align-end slds-m-top_x-large slds-m-bottom_x-large">
+                        <a href="/create-job/step4">
+                            <lightning-button id="create-job-step5-previous" label="Previous"></lightning-button>
+                        </a>
+                        <lightning-button
+                            id="create-job-step5-next"
+                            variant="brand"
+                            label="Next"
+                            class="slds-m-left_x-small"
+                        ></lightning-button>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </main>
+    </div>
+
+    <ui-site-footer></ui-site-footer>
+</template>
