@@ -267,6 +267,62 @@ lightning-button[variant='brand']::part(button):disabled {
     color: var(--site-color-on-brand-disabled);
 }
 
+/* SEP's welcome mat.
+ *
+ * The blueprint is built around a background illustration, and THIS PACKAGE
+ * SHIPS NO IMAGES — not one png, jpg or svg anywhere in
+ * @salesforce-ux/design-system-2. Its stylesheet still points at
+ * `url('../../public/bg-info@2x.png')`, a file that is not in the dist. (Same
+ * root cause as the two `einstein-*.svg` build warnings that rules-architecture
+ * documents as pre-existing and not ours.)
+ *
+ * That default lives behind `--_slds-c-welcomemat-image-background`, a PRIVATE
+ * hook, so it is off limits regardless. The supported seam is the public
+ * fallback inside it, `--lwc-welcomeMatBackgroundImageInfo`, which SLDS never
+ * declares — it exists purely to be set. To put a real illustration behind the
+ * info panel, set that here to an ABSOLUTE url (see rules-architecture.md
+ * § `url()` inside a stylesheet must be absolute):
+ *
+ *     --lwc-welcomeMatBackgroundImageInfo: url(/public/assets/<file>);
+ *
+ * Two consequences of having no image, both fixed below.
+ *
+ *   1. The info panel reserves 7.75rem (124px) of bottom padding for the
+ *      illustration. With nothing there it is just a hole, so it comes back to
+ *      the same 3rem the sides already use.
+ *
+ *   2. `_info-only` pins the content to `height: 37.5rem` (600px), and the base
+ *      rule adds `max-height: 37.5rem` on top. That suits the fixed modal the
+ *      mat was designed for, not a dashboard block that has to wrap to one
+ *      column on a phone. Both are released so the block sizes to its content;
+ *      `min-height: 25rem` is left alone, since a floor is still wanted.
+ *
+ *      Without releasing the max-height too, `height: auto` only half works:
+ *      the box still caps at 600px and `__tiles` (which is `overflow: auto`)
+ *      grows an inner scrollbar the moment a fourth tile is added. */
+.sep-welcome-mat .slds-welcome-mat__content {
+    height: auto;
+    max-height: none;
+
+    /* Make the info panel run the full height of the row.
+     *
+     * THIS IS THE FIX FOR A PROBLEM WE INTRODUCED. `slds-wrap` is not part of
+     * the stock welcome-mat markup — it is on our `__content` so the two halves
+     * stack on a phone rather than staying side by side. But SLDS declares
+     * `.slds-wrap { flex-wrap: wrap; align-items: flex-start; }`, and that
+     * second declaration is what leaves the blue info panel at its own content
+     * height while the taller tiles column sets the row height.
+     *
+     * Restoring `stretch` (the flex default) gives the panel the full height
+     * and keeps the wrapping. It is safe when wrapped: each item is then its
+     * own flex line, so stretching to the line's cross size changes nothing. */
+    align-items: stretch;
+}
+
+.sep-welcome-mat .slds-welcome-mat__info {
+    padding-block-end: var(--slds-g-spacing-8);
+}
+
 /* =============================================================================
  * Headings — which element takes which step of the SEP scale
  *

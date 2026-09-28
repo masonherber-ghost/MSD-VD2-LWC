@@ -1,0 +1,49 @@
+/* The current step's name, under the dotted rail.
+ *
+ * `lightning-progress-indicator type="base"` puts a step's label in its TOOLTIP
+ * only, so the design's persistent caption has to be our own element. Centred
+ * on the rail rather than the page, which is where the design puts it. */
+.list-a-job__step-label {
+    text-align: center;
+    color: var(--slds-g-color-on-surface-2);
+}
+
+/* reCAPTCHA MOCKUP.
+ *
+ * Nothing here verifies anything — see the template. The box borrows the real
+ * widget's proportions (a squat bordered panel, checkbox left, branding right)
+ * so the step reads correctly, and nothing else.
+ *
+ * Its geometry is a literal because it is imitating a third-party control at a
+ * fixed size, not expressing this design system's scale. A value used by one
+ * block is a value, not a token — rules-lwc-layout.md § Defining a project
+ * token. Colours and spacing still come from tokens. */
+.list-a-job__captcha {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--slds-g-spacing-4);
+    inline-size: 18.5rem;
+    max-inline-size: 100%;
+    padding: var(--slds-g-spacing-3) var(--slds-g-spacing-4);
+    border: var(--slds-g-sizing-border-1) solid var(--slds-g-color-border-1);
+    border-radius: var(--site-radius-mid);
+    background: var(--slds-g-color-surface-1);
+}
+
+.list-a-job__captcha-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--slds-g-spacing-1);
+    text-align: center;
+    color: var(--slds-g-color-on-surface-2);
+}
+
+.list-a-job__captcha-name {
+    font-size: var(--site-font-body-sm);
+}
+
+.list-a-job__captcha-legal {
+    font-size: var(--slds-g-font-scale-neg-2, 0.625rem);
+}

@@ -14,8 +14,45 @@ import {
  * Signed out it is the pitch, with the ways in. Signed in it is the employer's
  * landing pad: their vacancies at a glance and the actions they came to do.
  */
+/**
+ * The welcome mat's orientation tiles.
+ *
+ * Copy is the supplied design's, verbatim. Icons are shipped `utility:` and
+ * `standard:` glyphs chosen to match each tile's meaning — the design's
+ * placeholder book icon is not a Salesforce icon and has no equivalent.
+ */
+const WELCOME_TILES = [
+    {
+        key: 'new-listing',
+        icon: 'standard:job_profile',
+        title: 'New job listing',
+        description:
+            'Begin drafting and submitting a new vacancy directly through the Employer Portal.',
+        href: '/list-a-job'
+    },
+    {
+        key: 'manage-jobs',
+        icon: 'standard:task',
+        title: 'Manage your jobs',
+        description:
+            'Manage all your vacancies in one place. Partner with your relationship manager to review applications and get tailored candidate recommendations.',
+        href: '/jobs'
+    },
+    {
+        key: 'profile-business',
+        icon: 'standard:account',
+        title: 'Profile & business info',
+        description:
+            'View your profile and company details. Contact us to request updates to your information.',
+        href: '/profile'
+    }
+];
+
 export default class Home extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
+
+    /** Orientation tiles for the welcome mat. Static copy, so a constant. */
+    welcomeTiles = WELCOME_TILES;
 
     user: SessionUser | null = null;
     jobCount = 0;

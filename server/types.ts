@@ -52,6 +52,8 @@ export interface Account {
   secondary_contact_id: number | null
   company_name: string | null
   industry: string | null
+  /** Sub-industry under `industry`. Read-only in the portal. */
+  industry_detail: string | null
   company_type: string | null
   company_address: string | null
   workplace_address: string | null

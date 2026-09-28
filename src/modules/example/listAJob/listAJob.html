@@ -1,8 +1,325 @@
 <template lwc:render-mode="light">
-    <ui-page-placeholder
-        current="list-a-job"
-        heading="List a job"
-        icon-name="standard:job_profile"
-        message="Create and publish a new vacancy."
-    ></ui-page-placeholder>
+    <ui-site-header current="list-a-job"></ui-site-header>
+
+    <div class="site__body">
+        <main class="site__main" id="list-a-job-main">
+            <lightning-layout horizontal-align="center">
+                <lightning-layout-item id="list-a-job-col-main" size="12" large-device-size="10">
+                    <!-- Step tracker. `type="base"` is the dotted rail the design
+                         draws; the path variant is the record-page lifecycle and
+                         is a different thing. Base shows a step's label only in
+                         its tooltip, so the current one is repeated underneath as
+                         the design does. -->
+                    <div id="list-a-job-progress" class="slds-m-top_large slds-m-bottom_medium">
+                        <lightning-progress-indicator
+                            type="base"
+                            current-step={currentStep}
+                            variant="base"
+                        >
+                            <template for:each={steps} for:item="step">
+                                <lightning-progress-step
+                                    key={step.value}
+                                    label={step.label}
+                                    value={step.value}
+                                ></lightning-progress-step>
+                            </template>
+                        </lightning-progress-indicator>
+                        <p id="list-a-job-step-label" class="slds-text-body_small slds-m-top_x-small list-a-job__step-label">
+                            {currentStepLabel}
+                        </p>
+                    </div>
+
+                    <h1 id="list-a-job-title" class="slds-text-heading_large slds-m-bottom_x-small">
+                        First, let's get your company details.
+                    </h1>
+                    <p id="list-a-job-intro" class="slds-m-bottom_medium">
+                        These details are used to create an employer profile or link your new
+                        job listing to existing details we hold about you. All fields are
+                        mandatory, unless it says 'optional'.
+                    </p>
+
+                    <!-- Our styled scoped notification rather than the design's
+                         plain grey block, so every informational panel on the
+                         site reads the same. `ui/readOnlyNotice` is not reused
+                         here: it appends a fixed "contact your relationship
+                         manager" line, which is not this note's message. -->
+                    <div
+                        id="list-a-job-privacy-note"
+                        class="slds-scoped-notification sep-scoped-notification slds-media slds-media_center slds-m-bottom_large"
+                    >
+                        <div class="slds-media__figure">
+                            <lightning-icon
+                                icon-name="utility:info"
+                                size="small"
+                                alternative-text="Information"
+                            ></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <p>
+                                Company contact details will never be displayed on job listings
+                                or given to candidates without your permission.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div lwc:if={loading} id="list-a-job-loading" class="slds-is-relative slds-box slds-theme_default">
+                        <lightning-spinner alternative-text="Loading your company details" size="small"></lightning-spinner>
+                    </div>
+
+                    <div lwc:elseif={hasError} id="list-a-job-error" class="slds-box slds-theme_default">
+                        <lightning-icon icon-name="utility:info" size="small" class="slds-m-right_x-small"></lightning-icon>
+                        <span>{error}</span>
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
+                            The data API runs under <code>npm run dev</code> only.
+                        </p>
+                    </div>
+
+                    <lightning-layout lwc:elseif={ready} multiple-rows pull-to-boundary="small">
+                        <lightning-layout-item size="12" large-device-size="8" padding="horizontal-small">
+                            <!-- Company information ------------------------------>
+                            <h2 id="list-a-job-company-heading" class="slds-text-heading_medium slds-m-bottom_small">
+                                Company information
+                            </h2>
+
+                            <div id="list-a-job-static-company-type" class="slds-form-element slds-form-element_readonly slds-m-bottom_large">
+                                <span class="slds-form-element__label">What is your company type?</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static">{companyTypeDisplay}</div>
+                                </div>
+                            </div>
+
+                            <!-- Industry ------------------------------------------>
+                            <h3 class="slds-text-title_bold slds-m-bottom_xx-small">Industry</h3>
+                            <div id="list-a-job-static-industry" class="slds-form-element slds-form-element_readonly slds-m-bottom_medium">
+                                <span class="slds-form-element__label">Industry</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static">{industryDisplay}</div>
+                                </div>
+                            </div>
+
+                            <!-- Company address ------------------------------------>
+                            <h3 class="slds-text-title_bold slds-m-bottom_xx-small">Company address</h3>
+                            <div id="list-a-job-static-street" class="slds-form-element slds-form-element_readonly slds-m-bottom_small">
+                                <span class="slds-form-element__label">Street address</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static">{streetDisplay}</div>
+                                </div>
+                            </div>
+                            <div id="list-a-job-static-district" class="slds-form-element slds-form-element_readonly slds-m-bottom_small">
+                                <span class="slds-form-element__label">District or suburb</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static">{districtDisplay}</div>
+                                </div>
+                            </div>
+                            <div id="list-a-job-static-postcode" class="slds-form-element slds-form-element_readonly slds-m-bottom_large">
+                                <span class="slds-form-element__label">Postcode</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static">{postcodeDisplay}</div>
+                                </div>
+                            </div>
+
+                            <!-- Company Contact ------------------------------------>
+                            <h2 id="list-a-job-contact-heading" class="slds-text-heading_medium slds-m-bottom_small">
+                                Company Contact
+                            </h2>
+                            <lightning-layout multiple-rows pull-to-boundary="small">
+                                <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
+                                    <div id="list-a-job-static-first-name" class="slds-form-element slds-form-element_readonly">
+                                        <span class="slds-form-element__label">First name</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">{firstNameDisplay}</div>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
+                                    <div id="list-a-job-static-last-name" class="slds-form-element slds-form-element_readonly">
+                                        <span class="slds-form-element__label">Last name</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">{lastNameDisplay}</div>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <div id="list-a-job-static-role" class="slds-form-element slds-form-element_readonly slds-m-top_small">
+                                <span class="slds-form-element__label">Role</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static">{roleDisplay}</div>
+                                </div>
+                            </div>
+                            <div id="list-a-job-static-phone" class="slds-form-element slds-form-element_readonly slds-m-top_small">
+                                <span class="slds-form-element__label">Phone number</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static">{phoneDisplay}</div>
+                                </div>
+                            </div>
+                            <div id="list-a-job-static-email" class="slds-form-element slds-form-element_readonly slds-m-top_small slds-m-bottom_large">
+                                <span class="slds-form-element__label">Email</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static">{emailDisplay}</div>
+                                </div>
+                            </div>
+
+                            <!-- Vacancy contact ------------------------------------>
+                            <h2 id="list-a-job-vacancy-contact-heading" class="slds-text-heading_medium slds-m-bottom_xx-small">
+                                Vacancy contact <span class="slds-text-body_regular slds-text-color_weak">(optional)</span>
+                            </h2>
+                            <p class="slds-m-bottom_small">
+                                You can add a separate contact person for the management of this listing.
+                            </p>
+                            <!-- The one editable region on this screen.
+                                 Everything above is MSD's record, shown back for
+                                 confirmation. A vacancy contact is new
+                                 information the employer supplies, so these are
+                                 real inputs.
+
+                                 The button swaps rather than sitting alongside:
+                                 add reveals the fields and becomes remove. -->
+                            <lightning-button
+                                lwc:if={showVacancyContact}
+                                id="list-a-job-remove-vacancy-contact"
+                                label="Remove vacancy contact"
+                                icon-name="utility:close"
+                                onclick={handleRemoveVacancyContact}
+                                class="slds-m-bottom_medium"
+                            ></lightning-button>
+                            <lightning-button
+                                lwc:else
+                                id="list-a-job-add-vacancy-contact"
+                                label="Add vacancy contact"
+                                icon-name="utility:add"
+                                onclick={handleAddVacancyContact}
+                                class="slds-m-bottom_large"
+                            ></lightning-button>
+
+                            <div lwc:if={showVacancyContact} id="list-a-job-vacancy-contact-fields" class="slds-m-bottom_large">
+                                <lightning-layout multiple-rows pull-to-boundary="small">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
+                                        <lightning-input
+                                            id="list-a-job-vc-first-name"
+                                            data-field="first_name"
+                                            label="First name (optional)"
+                                            value={vacancyContact.first_name}
+                                            onchange={handleVacancyContactChange}
+                                        ></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
+                                        <lightning-input
+                                            id="list-a-job-vc-last-name"
+                                            data-field="last_name"
+                                            label="Last name"
+                                            required
+                                            value={vacancyContact.last_name}
+                                            onchange={handleVacancyContactChange}
+                                        ></lightning-input>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                                <lightning-combobox
+                                    id="list-a-job-vc-role"
+                                    data-field="role"
+                                    label="Role (optional)"
+                                    options={roles}
+                                    value={vacancyContact.role}
+                                    onchange={handleVacancyContactChange}
+                                    class="slds-m-top_small"
+                                ></lightning-combobox>
+                                <lightning-input
+                                    id="list-a-job-vc-phone"
+                                    data-field="phone"
+                                    type="tel"
+                                    label="Phone number"
+                                    value={vacancyContact.phone}
+                                    onchange={handleVacancyContactChange}
+                                    class="slds-m-top_small"
+                                ></lightning-input>
+                                <lightning-input
+                                    id="list-a-job-vc-email"
+                                    data-field="email"
+                                    type="email"
+                                    label="Email"
+                                    required
+                                    value={vacancyContact.email}
+                                    onchange={handleVacancyContactChange}
+                                    class="slds-m-top_small"
+                                ></lightning-input>
+                            </div>
+
+                            <!-- Privacy declaration -------------------------------->
+                            <h2 id="list-a-job-privacy-heading" class="slds-text-heading_medium slds-m-bottom_xx-small">
+                                Privacy declaration
+                            </h2>
+                            <p id="list-a-job-privacy-text" class="slds-m-bottom_large">
+                                By clicking <strong>Next</strong>, you agree with the Ministry of
+                                Social Development's
+                                <a href="https://www.msd.govt.nz/privacy-notice" target="_blank" rel="noopener">
+                                    privacy notice
+                                    <lightning-icon
+                                        icon-name="utility:new_window"
+                                        size="xx-small"
+                                        alternative-text="Opens in a new window"
+                                        class="slds-m-left_xx-small"
+                                    ></lightning-icon>
+                                </a>
+                                and understand how personal information will be used.
+                            </p>
+
+                            <!-- MOCKUP ONLY — this is not reCAPTCHA.
+                                 No verification happens, no token is issued and
+                                 nothing is sent to Google. It is a real checkbox
+                                 dressed in the widget's proportions so the step
+                                 reads correctly in the prototype. Wiring the
+                                 real thing needs Google's script and a site key,
+                                 and neither belongs in a static build.
+
+                                 The wordmark is set as text, not Google's logo:
+                                 shipping their brand asset in a mock would be
+                                 passing this off as the real control. -->
+                            <div id="list-a-job-captcha" class="list-a-job__captcha slds-m-bottom_large">
+                                <lightning-input
+                                    id="list-a-job-captcha-check"
+                                    type="checkbox"
+                                    label="I'm not a robot"
+                                    checked={captchaChecked}
+                                    onchange={handleCaptchaChange}
+                                ></lightning-input>
+                                <div class="list-a-job__captcha-brand" aria-hidden="true">
+                                    <lightning-icon
+                                        icon-name="utility:refresh"
+                                        size="small"
+                                    ></lightning-icon>
+                                    <span class="list-a-job__captcha-name">reCAPTCHA</span>
+                                    <span class="list-a-job__captcha-legal">Privacy · Terms</span>
+                                </div>
+                            </div>
+
+                            <div id="list-a-job-actions" class="slds-text-align_right slds-m-bottom_x-large">
+                                <lightning-button
+                                    id="list-a-job-next"
+                                    variant="brand"
+                                    label="Next"
+                                ></lightning-button>
+                            </div>
+                        </lightning-layout-item>
+
+                        <!-- Side note, as the design places it beside the form. -->
+                        <lightning-layout-item size="12" large-device-size="4" padding="horizontal-small">
+                            <!-- No icon, and therefore no media object: with
+                                 nothing in the figure slot the wrapper would be
+                                 an empty flex column beside the text. -->
+                            <div
+                                id="list-a-job-contact-note"
+                                class="slds-scoped-notification sep-scoped-notification"
+                            >
+                                <p>
+                                    Employer and vacancy contact information tells us who we
+                                    should talk to about the employer or the job listing.
+                                </p>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+        </main>
+    </div>
+
+    <ui-site-footer></ui-site-footer>
 </template>

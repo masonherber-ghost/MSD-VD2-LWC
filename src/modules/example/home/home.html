@@ -34,7 +34,7 @@
                                     </div>
                             
                                 </div>
-                                <div class="slds-page-header__col-actions">
+                                <!-- <div class="slds-page-header__col-actions">
                                     <div class="slds-page-header__controls">
                                         <div class="slds-page-header__control">
                                             <a href="/list-a-job">
@@ -45,37 +45,23 @@
                                             </a>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
 
-                        <!-- Welcome and next step. The page header greets them; this
-                             says what to do with the place. Only shown once the
-                             vacancies are known — see hasVacancies.
+                            <!-- Orientation. Replaces the "Welcome back" scoped
+                             notification that sat here: both answer "what is
+                             this place for", and two of them would compete.
 
-                             Now SEP's Info Panel rather than a bare paragraph. The copy
-                             is unchanged, only split at the sentence it already had:
-                             "Welcome back." was doing the job of a heading, so it
-                             becomes one. -->
-                        <div
-                            lwc:if={hasVacancies}
-                            id="home-welcome"
-                            class="slds-scoped-notification sep-scoped-notification slds-m-bottom_medium"
-                        >
-                            <div class="sep-scoped-notification__header">
-                                <lightning-icon
-                                    icon-name="utility:info"
-                                    size="small"
-                                    alternative-text="Information"
-                                ></lightning-icon>
-                                <p class="sep-scoped-notification__title">Welcome back</p>
-                            </div>
-                            <p class="sep-scoped-notification__body">
-                                Your next step is to manage your vacancies &mdash; review
-                                applicants, update the details and close the roles you have
-                                filled.
-                            </p>
-                        </div>
+                             Not gated on hasVacancies, unlike the panel it
+                             replaces — an employer with no vacancies yet is
+                             exactly who needs orienting, and the panel used to
+                             hide from them. -->
+                        <ui-welcome-mat
+                            heading="Welcome to the Employer Portal"
+                            description="Easily list and manage your vacancies in one place. Head to My Jobs to see your active listings. Applicant screening and candidate recommendations remain a direct, collaborative process with your relationship manager."
+                            tiles={welcomeTiles}
+                        ></ui-welcome-mat>
 
                         <template lwc:if={hasNoVacancies}>
                             <ui-vacancy-empty-state></ui-vacancy-empty-state>
@@ -87,10 +73,10 @@
                                 medium-device-size={vacancyCardSize}
                                 padding="around-small"
                             >
-                                <ui-vacancy-summary-card
+                                <!-- <ui-vacancy-summary-card
                                     count={jobCount}
                                     active-count={activeCount}
-                                ></ui-vacancy-summary-card>
+                                ></ui-vacancy-summary-card> -->
                             </lightning-layout-item>
 
                             <!-- Applicants and Next steps landed in 1.2; the Vacancies

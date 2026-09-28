@@ -56,6 +56,10 @@ CREATE TABLE IF NOT EXISTS accounts (
   secondary_contact_id  INTEGER REFERENCES contacts(id) ON DELETE SET NULL,
   company_name          TEXT,
   industry              TEXT,
+  -- The sub-industry under `industry`, shown as "Industry > Detail". MSD's
+  -- record like the rest of the classification, so it is read-only in the
+  -- portal: deliberately absent from ACCOUNT_UPDATABLE.
+  industry_detail       TEXT,
   company_type          TEXT,
   company_address       TEXT,
   workplace_address     TEXT,

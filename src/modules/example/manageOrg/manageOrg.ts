@@ -1,5 +1,6 @@
 import { LightningElement } from 'lwc';
 import api, { ApiError, type Row } from 'data/api';
+import { COMPANY_TYPES, labelFor } from 'data/reference';
 import { currentUser, type SessionUser } from 'data/session';
 import {
     currentRelease,
@@ -8,14 +9,6 @@ import {
     type Release
 } from 'data/release';
 
-/** Free text in the data, so these are suggestions rather than a closed set. */
-const COMPANY_TYPES = [
-    { label: 'Registered company', value: 'registered_company' },
-    { label: 'Sole trader', value: 'sole_trader' },
-    { label: 'Partnership', value: 'partnership' },
-    { label: 'Trust', value: 'trust' },
-    { label: 'Other', value: 'other' }
-];
 
 /**
  * The account columns this form edits.
@@ -257,7 +250,7 @@ export default class ManageOrg extends LightningElement {
     /** The stored value is a slug, so show the option's label. */
     get orgTypeDisplay(): string {
         const value = String(this.account?.company_type ?? '');
-        return COMPANY_TYPES.find((t) => t.value === value)?.label ?? this.displayOr(value);
+        return value ? labelFor(COMPANY_TYPES, value) : this.displayOr(value);
     }
 
     get lockIrdNumber(): boolean {

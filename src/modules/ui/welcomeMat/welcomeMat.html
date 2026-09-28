@@ -1,0 +1,58 @@
+<template lwc:render-mode="light">
+    <!-- SLDS welcome mat, `info-only` variant.
+         There is no `lightning-welcome-mat` — the library does not ship one —
+         so this is the SLDS blueprint, which is the sanctioned way to build a
+         structure the components do not cover.
+
+         `info-only` is the right variant for this content: the base mat pairs
+         each tile with a completion tick and a progress bar for an onboarding
+         checklist, and these three are orientation, not steps to tick off. -->
+    <div id="welcome-mat" class="slds-welcome-mat slds-welcome-mat_info-only sep-welcome-mat slds-m-bottom_medium">
+        <div class="slds-welcome-mat__content slds-grid slds-wrap">
+            <!-- Info half. In stock SLDS this carries a background
+                 illustration, but the package ships no images at all — see the
+                 note in site.css, which also gives the one supported way to put
+                 a real one back. Text only for now: the Einstein glyph that
+                 stood in for the illustration has been removed. -->
+            <div id="welcome-mat-info" class="slds-welcome-mat__info slds-size_1-of-1 slds-medium-size_1-of-2">
+                <div class="slds-welcome-mat__info-content">
+                    <h2 id="welcome-mat-title" class="slds-welcome-mat__info-title">{heading}</h2>
+                    <div class="slds-welcome-mat__info-description slds-text-longform">
+                        <p>{description}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tiles half. -->
+            <div
+                id="welcome-mat-tiles"
+                class="slds-welcome-mat__tiles slds-welcome-mat__tiles_info-only slds-size_1-of-1 slds-medium-size_1-of-2"
+            >
+                <ul role="list">
+                    <template for:each={tiles} for:item="tile">
+                        <li
+                            key={tile.key}
+                            class="slds-welcome-mat__tile slds-welcome-mat__tile_info-only"
+                        >
+                            <a href={tile.href} class="slds-box slds-media">
+                                <div class="slds-media__figure slds-welcome-mat__tile-figure">
+                                    <span class="slds-icon_container slds-welcome-mat__tile-icon-container">
+                                        <lightning-icon
+                                            icon-name={tile.icon}
+                                            size="small"
+                                            alternative-text=""
+                                        ></lightning-icon>
+                                    </span>
+                                </div>
+                                <div class="slds-media__body slds-welcome-mat__tile-body">
+                                    <h3 class="slds-welcome-mat__tile-title">{tile.title}</h3>
+                                    <p class="slds-welcome-mat__tile-description">{tile.description}</p>
+                                </div>
+                            </a>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
