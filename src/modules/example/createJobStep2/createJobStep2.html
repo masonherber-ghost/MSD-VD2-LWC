@@ -1,0 +1,199 @@
+<template lwc:render-mode="light">
+    <ui-site-header current="create-job"></ui-site-header>
+
+    <div class="site__body">
+        <main class="site__main" id="create-job-step2-main">
+            <lightning-layout horizontal-align="center">
+                <lightning-layout-item id="create-job-step2-col-main" size="12" large-device-size="10">
+                    <ui-vacancy-stepper current-step="2"></ui-vacancy-stepper>
+
+                    <h1 id="create-job-step2-title" class="slds-text-heading_large slds-m-bottom_x-small">
+                        Now, tell us about the job you are listing.
+                    </h1>
+                    <p id="create-job-step2-intro" class="slds-m-bottom_large">
+                        This information will be shown on your job listing and will be used to
+                        match you with the best candidates.
+                    </p>
+
+                    <lightning-layout multiple-rows pull-to-boundary="small">
+                        <lightning-layout-item size="12" large-device-size="8" padding="horizontal-small">
+                            <!-- Job details ------------------------------------->
+                            <h2 id="create-job-step2-details-heading" class="slds-text-heading_medium slds-m-bottom_small">
+                                Job details
+                            </h2>
+                            <lightning-input
+                                id="create-job-step2-title-field"
+                                data-field="title"
+                                label="Job title"
+                                field-level-help="Add a short and simple title for the job."
+                                placeholder="e.g. Warehouse Forklift Driver"
+                                value={draft.title}
+                                onchange={handleFieldChange}
+                                class="slds-m-bottom_medium"
+                            ></lightning-input>
+                            <lightning-input
+                                id="create-job-step2-occupation"
+                                data-field="occupation_id"
+                                type="search"
+                                label="Occupation ID"
+                                field-level-help="Choose a occupation ID that best fits the role."
+                                placeholder="Search occupations"
+                                value={draft.occupation_id}
+                                onchange={handleFieldChange}
+                                class="slds-m-bottom_large"
+                            ></lightning-input>
+
+                            <!-- Experience, study and training -------------------->
+                            <h2 id="create-job-step2-experience-heading" class="slds-text-heading_medium slds-m-bottom_small">
+                                Experience, study and training
+                            </h2>
+                            <!-- `lightning-radio-group` has NO `field-level-help`
+                                 attribute (checked: 0 hits in its source), so the
+                                 design's helper line is our own paragraph above
+                                 the control rather than an invented attribute. -->
+                            <p id="create-job-step2-experience-help" class="slds-text-body_small slds-m-bottom_xx-small">
+                                Choose the minimum level of experience required for this role.
+                            </p>
+                            <lightning-radio-group
+                                id="create-job-step2-experience"
+                                class="create-job-step2__cards slds-m-bottom_large"
+                                label="Years of experience"
+                                options={experienceLevels}
+                                value={draft.experience_level}
+                                data-field="experience_level"
+                                onchange={handleFieldChange}
+                                required
+                            ></lightning-radio-group>
+
+                            <lightning-combobox
+                                id="create-job-step2-education"
+                                data-field="education_required"
+                                label="Education level (optional)"
+                                field-level-help="Choose the minimum level of education required for this role"
+                                options={educationLevels}
+                                value={draft.education_required}
+                                onchange={handleFieldChange}
+                                class="slds-m-bottom_medium"
+                            ></lightning-combobox>
+                            <lightning-input
+                                id="create-job-step2-certification"
+                                data-field="certification"
+                                label="Study, training or certification required (optional)"
+                                field-level-help="Add any additional study, training or certification required for this role."
+                                placeholder="Start typing"
+                                value={draft.certification}
+                                onchange={handleFieldChange}
+                                class="slds-m-bottom_large"
+                            ></lightning-input>
+
+                            <!-- Driver Licence ------------------------------------>
+                            <h2 id="create-job-step2-licence-heading" class="slds-text-heading_medium slds-m-bottom_xx-small">
+                                Driver Licence
+                            </h2>
+                            <p class="slds-m-bottom_small">
+                                Add any driver licences needed for this job (optional).
+                            </p>
+
+                            <!-- The design groups classes and endorsements in one
+                                 bordered panel, so the panel is `slds-box` and the
+                                 two halves are a layout inside it. -->
+                            <div id="create-job-step2-licence-panel" class="slds-box slds-m-bottom_large">
+                                <lightning-layout multiple-rows pull-to-boundary="small">
+                                    <lightning-layout-item
+                                        id="create-job-step2-col-licences"
+                                        size="12"
+                                        medium-device-size="7"
+                                        padding="horizontal-small"
+                                    >
+                                        <!-- Each class EXPANDS rather than
+                                             toggling: a class is not a yes/no,
+                                             it carries a stage — which is what
+                                             `job_driver_licences.stage` is for.
+                                             So this is an accordion, not a
+                                             checkbox group.
+
+                                             `allow-multiple-sections-open`
+                                             because a job can need more than one
+                                             class, and the default accordion
+                                             closes the previous section. -->
+                                        <lightning-accordion
+                                            id="create-job-step2-licences"
+                                            class="create-job-step2__licences"
+                                            allow-multiple-sections-open
+                                        >
+                                            <template for:each={licenceSections} for:item="cls">
+                                                <lightning-accordion-section
+                                                    key={cls.value}
+                                                    name={cls.value}
+                                                    label={cls.label}
+                                                >
+                                                    <lightning-combobox
+                                                        data-class={cls.value}
+                                                        label="Licence Type"
+                                                        options={licenceStages}
+                                                        value={cls.stage}
+                                                        onchange={handleLicenceStageChange}
+                                                    ></lightning-combobox>
+                                                </lightning-accordion-section>
+                                            </template>
+                                        </lightning-accordion>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item
+                                        id="create-job-step2-col-endorsements"
+                                        size="12"
+                                        medium-device-size="5"
+                                        padding="horizontal-small"
+                                    >
+                                        <!-- Same: no `field-level-help` on
+                                             `lightning-checkbox-group` either. -->
+                                        <p id="create-job-step2-endorsements-help" class="slds-text-body_small slds-m-bottom_xx-small">
+                                            Select all that apply (optional)
+                                        </p>
+                                        <lightning-checkbox-group
+                                            id="create-job-step2-endorsements"
+                                            label="Endorsements"
+                                            options={endorsements}
+                                            value={selectedEndorsements}
+                                            onchange={handleEndorsementChange}
+                                        ></lightning-checkbox-group>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </div>
+
+                            <div id="create-job-step2-actions" class="slds-grid slds-grid_align-end slds-m-bottom_x-large">
+                                <a href="/create-job/step1">
+                                    <lightning-button
+                                        id="create-job-step2-previous"
+                                        label="Previous"
+                                    ></lightning-button>
+                                </a>
+                                <lightning-button
+                                    id="create-job-step2-next"
+                                    variant="brand"
+                                    label="Next"
+                                    class="slds-m-left_x-small"
+                                ></lightning-button>
+                            </div>
+                        </lightning-layout-item>
+
+                        <!-- "What is this for?" — the design's side note. -->
+                        <lightning-layout-item size="12" large-device-size="4" padding="horizontal-small">
+                            <div
+                                id="create-job-step2-help-note"
+                                class="slds-scoped-notification sep-scoped-notification"
+                            >
+                                <p class="sep-scoped-notification__title">What is this for?</p>
+                                <p class="sep-scoped-notification__body">
+                                    Experience, study and training information help us match your
+                                    role with candidates who have the skills and experience you need.
+                                </p>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+        </main>
+    </div>
+
+    <ui-site-footer></ui-site-footer>
+</template>

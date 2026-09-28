@@ -1,0 +1,72 @@
+/* Years of experience, as full-width bordered rows with the control on the right.
+ *
+ * WHY THIS IS NOT A GATE. `lightning-radio-group` renders standard SLDS radios
+ * — a small circle, label beside it, no box — which is not what the design
+ * draws. But it EXPOSES EIGHT PARTS (`input-radio-group`, `legend`, `required`,
+ * `options`, `radio`, `input-radio`, `indicator`, `label`) and SLDS publishes
+ * six `--slds-c-radio-*` hooks with NO private ones. Everything below styles a
+ * declared part directly; nothing reaches past one into the shadow DOM, which
+ * is the line that would make this unsupported.
+ *
+ * The structural catch: the per-row wrapper is `<span class="slds-radio">` and
+ * it has NO part, so the box cannot go there. `part="input-radio"` is the
+ * <label>, which wraps both the indicator and the text — so the LABEL becomes
+ * the bordered row, and making `part="options"` a column is what stretches each
+ * row to full width.
+ *
+ * `order` puts the circle on the right. The indicator comes first in the DOM;
+ * both it and the text are declared parts, so each is reordered on its own
+ * rather than by selecting through the label. */
+.create-job-step2__cards::part(options) {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--slds-g-spacing-3);
+}
+
+.create-job-step2__cards::part(input-radio) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--slds-g-spacing-4);
+    border: var(--slds-g-sizing-border-1) solid var(--slds-g-color-border-1);
+    border-radius: var(--site-radius-mid);
+    background: var(--slds-g-color-surface-1);
+}
+
+.create-job-step2__cards::part(label) {
+    order: 1;
+}
+
+.create-job-step2__cards::part(indicator) {
+    order: 2;
+}
+
+/* Licence classes, as the design's full-width blue pills.
+ *
+ * NOT A GATE. `lightning-accordion-section` declares TWO parts —
+ * `accordion-section` and `button` (the header, which holds both the chevron
+ * and the label) — and SLDS publishes nine `--slds-c-accordion-*` hooks with NO
+ * private ones. Everything below styles a declared part; nothing reaches past
+ * one into the shadow DOM.
+ *
+ * The chevron and the label span are NOT separate parts, so they cannot be
+ * targeted individually. They do not need to be: the label inherits `color`
+ * from the button, and the chevron is an SLDS button icon whose fill is
+ * `var(--slds-c-icon-color-foreground, currentColor)` — so one colour on the
+ * part turns both white. */
+.create-job-step2__licences lightning-accordion-section::part(button) {
+    justify-content: flex-start;
+    inline-size: 100%;
+    padding: var(--slds-g-spacing-3) var(--slds-g-spacing-4);
+    border-radius: var(--site-radius-pill);
+    background: var(--site-bg-accent-primary);
+    color: var(--slds-g-color-on-accent-1);
+}
+
+/* Sections stack with a gap and no divider — the pills are the separation, so
+ * the blueprint's hairline between sections would read as a stray line. */
+.create-job-step2__licences lightning-accordion-section::part(accordion-section) {
+    --slds-c-accordion-section-color-border: transparent;
+    --slds-c-accordion-section-spacing-block-end: var(--slds-g-spacing-3);
+}

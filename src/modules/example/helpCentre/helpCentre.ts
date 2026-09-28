@@ -19,7 +19,7 @@ const HERO = {
     heading: 'Grow your team with the right talent',
     body: 'We help you find the best people for your needs and industry — simple, smart and free.',
     ctaLabel: 'List a job',
-    ctaHref: '/list-a-job',
+    ctaHref: '/create-job/step1',
     iconName: 'standard:people'
 };
 

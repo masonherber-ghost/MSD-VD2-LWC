@@ -5,23 +5,6 @@ import { COMPANY_TYPES, CONTACT_ROLES, labelFor } from 'data/reference';
 
 const DEV_ACCOUNT_ID = 1;
 
-/**
- * Step 1 of the create-a-vacancy flow: company details.
- *
- * PLACEHOLDER — the design supplies one of seven steps, so the labels for
- * steps 2-7 are stand-ins. `lightning-progress-indicator type="base"` shows a
- * step's label only in its tooltip, so these are low-visibility, but they are
- * still guesses and must be replaced with the real flow's names.
- */
-const STEPS = [
-    { value: '1', label: 'Company details' },
-    { value: '2', label: 'Step 2' },
-    { value: '3', label: 'Step 3' },
-    { value: '4', label: 'Step 4' },
-    { value: '5', label: 'Step 5' },
-    { value: '6', label: 'Step 6' },
-    { value: '7', label: 'Step 7' }
-];
 
 
 
@@ -35,11 +18,9 @@ const EM_DASH = '—';
  * draft and no payload: the page fetches, formats and renders static output,
  * the same way `example/manageOrg` renders a locked field.
  */
-export default class ListAJob extends LightningElement {
+export default class CreateJobStep1 extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
 
-    steps = STEPS;
-    currentStep = '1';
 
     account: Row | null = null;
     primaryContact: Row | null = null;
@@ -93,9 +74,6 @@ export default class ListAJob extends LightningElement {
         return !this.loading && this.error !== '';
     }
 
-    get currentStepLabel(): string {
-        return STEPS.find((s) => s.value === this.currentStep)?.label ?? '';
-    }
 
     // -- Company information ------------------------------------------------
 

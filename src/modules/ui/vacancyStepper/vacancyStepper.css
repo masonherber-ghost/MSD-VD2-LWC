@@ -1,0 +1,40 @@
+/* The caption row under the rail.
+ *
+ * `lightning-progress-indicator type="base"` shows a step's label nowhere on
+ * screen — the shipped step template emits only `data-label` and assistive
+ * text — so the visible caption is ours, and it has to be positioned to match
+ * the dots rather than simply centred under the whole rail.
+ *
+ * The two values here MIRROR SLDS's own, so the cells line up with the markers:
+ *
+ *   max-inline-size: 70%   `.slds-progress` is `max-width: 70%; margin: auto`
+ *   space-between          `.slds-progress__list` distributes its markers with
+ *                          `display: flex; justify-content: space-between`
+ *
+ * They are literals because they are copied from a shipped rule, not drawn from
+ * this project's scale — there is no token for "whatever SLDS set the progress
+ * rail to". If a future SLDS release changes either, this row drifts and these
+ * are the two numbers to re-check. */
+.vacancy-stepper__labels {
+    display: flex;
+    justify-content: space-between;
+    max-inline-size: 70%;
+    margin-inline: auto;
+}
+
+/* Each cell is a zero-width point at its dot, with the text centred on it and
+ * allowed to overflow. Giving the cells real width would push the first and
+ * last captions inward, away from the dots they belong to. */
+.vacancy-stepper__label {
+    display: flex;
+    justify-content: center;
+    inline-size: 0;
+    white-space: nowrap;
+    font-size: var(--site-font-body-sm);
+    color: var(--slds-g-color-on-surface-2);
+}
+
+/* `visibility`, never `display: none` — see the getter's comment. */
+.vacancy-stepper__label_hidden {
+    visibility: hidden;
+}

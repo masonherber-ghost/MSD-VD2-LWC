@@ -1,0 +1,27 @@
+<template lwc:render-mode="light">
+    <!-- The create-a-vacancy step rail, shared by every step route.
+         `type="base"` is the dotted rail the design draws; the path variant is
+         the record-page lifecycle and is a different thing.
+
+         The shipped step renders NO visible label — `lightning-progress-step`'s
+         base template emits only a `data-label` attribute and assistive text —
+         so the caption row below is ours. One cell per step, positioned to line
+         up with the dots, with every cell but the current one hidden. -->
+    <div id="vacancy-stepper" class="slds-m-top_large slds-m-bottom_medium">
+        <lightning-progress-indicator type="base" current-step={currentStep} variant="base">
+            <template for:each={steps} for:item="step">
+                <lightning-progress-step
+                    key={step.value}
+                    label={step.label}
+                    value={step.value}
+                ></lightning-progress-step>
+            </template>
+        </lightning-progress-indicator>
+
+        <div id="vacancy-stepper-labels" class="vacancy-stepper__labels slds-m-top_x-small">
+            <template for:each={labelCells} for:item="cell">
+                <span key={cell.value} class={cell.className}>{cell.label}</span>
+            </template>
+        </div>
+    </div>
+</template>

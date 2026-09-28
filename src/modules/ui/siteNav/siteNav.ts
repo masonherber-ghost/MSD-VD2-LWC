@@ -71,7 +71,7 @@ export default class SiteNav extends LightningElement {
     }
 
     get firstSlotHref(): string {
-        return this.noVacancies ? '/list-a-job' : '/jobs';
+        return this.noVacancies ? '/create-job/step1' : '/jobs';
     }
 
     get firstSlotIcon(): string {
@@ -80,7 +80,7 @@ export default class SiteNav extends LightningElement {
 
     get firstSlotClass(): string {
         const active = this.noVacancies
-            ? this.current === 'list-a-job'
+            ? this.current === 'create-job'
             : this.current === 'jobs';
         return active ? LINK_ACTIVE : LINK;
     }
@@ -98,7 +98,7 @@ export default class SiteNav extends LightningElement {
     }
 
     get listYourJobClass(): string {
-        return this.current === 'list-a-job' ? LINK_ACTIVE : LINK;
+        return this.current === 'create-job' ? LINK_ACTIVE : LINK;
     }
 
     get recruitingMenuClass(): string {

@@ -34,7 +34,7 @@
             </template>
 
             <template lwc:else>
-                <lightning-menu-item href="/list-a-job" label="List your job" prefix-icon-name="utility:new"></lightning-menu-item>
+                <lightning-menu-item href="/create-job/step1" label="List your job" prefix-icon-name="utility:new"></lightning-menu-item>
                 <lightning-menu-subheader label="Recruiting with MSD"></lightning-menu-subheader>
                 <lightning-menu-item href="/why-recruit-with-msd" label="Why recruit with MSD"></lightning-menu-item>
                 <lightning-menu-item href="/supporting-employees" label="Supporting employees"></lightning-menu-item>
@@ -78,7 +78,7 @@
             </template>
 
             <template lwc:else>
-                <a href="/list-a-job" class={listYourJobClass}>List your job</a>
+                <a href="/create-job/step1" class={listYourJobClass}>List your job</a>
                 <lightning-button-menu
                     class={recruitingMenuClass}
                     label="Recruiting with MSD"
