@@ -73,6 +73,12 @@
       "layoutTemplate": "$layoutsDir/main.njk"
     },
     {
+      "id": "createJobStep6",
+      "path": "/create-job/step6",
+      "rootComponent": "example/createJobStep6",
+      "layoutTemplate": "$layoutsDir/main.njk"
+    },
+    {
       "id": "helpCentre",
       "path": "/help-centre",
       "rootComponent": "example/helpCentre",

@@ -9,6 +9,9 @@ export const BLUEPRINTS = [
         "name": "accordion",
         "root": "slds-accordion",
         "tag": "lightning-accordion",
+        "coveredBy": [
+            "lightning-accordion"
+        ],
         "classes": [
             "slds-accordion",
             "slds-accordion__content",
@@ -48,6 +51,7 @@ export const BLUEPRINTS = [
         "name": "activityTimeline",
         "root": "slds-timeline",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-timeline__actions",
             "slds-timeline__actions_inline",
@@ -81,6 +85,9 @@ export const BLUEPRINTS = [
         "name": "alert",
         "root": "slds-alert",
         "tag": "lightning-alert",
+        "coveredBy": [
+            "lightning-alert"
+        ],
         "classes": [
             "slds-alert_error",
             "slds-alert_offline",
@@ -116,6 +123,7 @@ export const BLUEPRINTS = [
         "name": "appLauncher",
         "root": "slds-app-launcher",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-app-launcher",
             "slds-app-launcher__content",
@@ -148,6 +156,9 @@ export const BLUEPRINTS = [
         "name": "avatar",
         "root": "slds-avatar",
         "tag": "lightning-avatar",
+        "coveredBy": [
+            "lightning-avatar"
+        ],
         "classes": [
             "slds-avatar",
             "slds-avatar__initials",
@@ -193,6 +204,7 @@ export const BLUEPRINTS = [
         "name": "avatarGroup",
         "root": "slds-avatar-grouped",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-avatar-grouped",
             "slds-avatar-grouped__icon",
@@ -223,6 +235,10 @@ export const BLUEPRINTS = [
         "name": "badge",
         "root": "slds-badge",
         "tag": "lightning-badge",
+        "coveredBy": [
+            "lightning-badge",
+            "lightning-vertical-navigation-item-badge"
+        ],
         "classes": [
             "slds-badge",
             "slds-badge__icon",
@@ -262,6 +278,7 @@ export const BLUEPRINTS = [
         "name": "brandBand",
         "root": "slds-brand-band",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-brand-band",
             "slds-brand-band_blank",
@@ -298,6 +315,9 @@ export const BLUEPRINTS = [
         "name": "breadcrumbs",
         "root": "slds-breadcrumb",
         "tag": "lightning-breadcrumbs",
+        "coveredBy": [
+            "lightning-breadcrumbs"
+        ],
         "classes": [
             "slds-breadcrumb",
             "slds-breadcrumb__item"
@@ -321,6 +341,7 @@ export const BLUEPRINTS = [
         "name": "builderHeader",
         "root": "slds-builder-header",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-builder-header",
             "slds-builder-header__item",
@@ -354,6 +375,31 @@ export const BLUEPRINTS = [
         "name": "button",
         "root": "slds-button",
         "tag": "lightning-button",
+        "coveredBy": [
+            "lightning-accordion-section",
+            "lightning-alert",
+            "lightning-barcode-scanner",
+            "lightning-button",
+            "lightning-button-icon",
+            "lightning-button-icon-stateful",
+            "lightning-button-menu",
+            "lightning-button-stateful",
+            "lightning-carousel",
+            "lightning-combobox",
+            "lightning-confirm",
+            "lightning-dynamic-icon",
+            "lightning-grouped-combobox",
+            "lightning-input",
+            "lightning-lookup-address",
+            "lightning-modal",
+            "lightning-multi-column-sorting-modal",
+            "lightning-pill-container",
+            "lightning-prompt",
+            "lightning-radio-group",
+            "lightning-stacked-tab",
+            "lightning-tree",
+            "lightning-vertical-navigation-overflow"
+        ],
         "classes": [
             "slds-button",
             "slds-button__icon",
@@ -467,6 +513,31 @@ export const BLUEPRINTS = [
         "name": "buttonDualStateful",
         "root": "slds-button",
         "tag": "",
+        "coveredBy": [
+            "lightning-accordion-section",
+            "lightning-alert",
+            "lightning-barcode-scanner",
+            "lightning-button",
+            "lightning-button-icon",
+            "lightning-button-icon-stateful",
+            "lightning-button-menu",
+            "lightning-button-stateful",
+            "lightning-carousel",
+            "lightning-combobox",
+            "lightning-confirm",
+            "lightning-dynamic-icon",
+            "lightning-grouped-combobox",
+            "lightning-input",
+            "lightning-lookup-address",
+            "lightning-modal",
+            "lightning-multi-column-sorting-modal",
+            "lightning-pill-container",
+            "lightning-prompt",
+            "lightning-radio-group",
+            "lightning-stacked-tab",
+            "lightning-tree",
+            "lightning-vertical-navigation-overflow"
+        ],
         "classes": [
             "slds-button_dual-stateful"
         ],
@@ -504,6 +575,32 @@ export const BLUEPRINTS = [
         "name": "buttonGroup",
         "root": "slds-button",
         "tag": "lightning-button-group",
+        "coveredBy": [
+            "lightning-accordion-section",
+            "lightning-alert",
+            "lightning-barcode-scanner",
+            "lightning-button",
+            "lightning-button-group",
+            "lightning-button-icon",
+            "lightning-button-icon-stateful",
+            "lightning-button-menu",
+            "lightning-button-stateful",
+            "lightning-carousel",
+            "lightning-combobox",
+            "lightning-confirm",
+            "lightning-dynamic-icon",
+            "lightning-grouped-combobox",
+            "lightning-input",
+            "lightning-lookup-address",
+            "lightning-modal",
+            "lightning-multi-column-sorting-modal",
+            "lightning-pill-container",
+            "lightning-prompt",
+            "lightning-radio-group",
+            "lightning-stacked-tab",
+            "lightning-tree",
+            "lightning-vertical-navigation-overflow"
+        ],
         "classes": [
             "slds-button",
             "slds-button_brand",
@@ -551,6 +648,31 @@ export const BLUEPRINTS = [
         "name": "buttonIcon",
         "root": "slds-button",
         "tag": "lightning-button-icon",
+        "coveredBy": [
+            "lightning-accordion-section",
+            "lightning-alert",
+            "lightning-barcode-scanner",
+            "lightning-button",
+            "lightning-button-icon",
+            "lightning-button-icon-stateful",
+            "lightning-button-menu",
+            "lightning-button-stateful",
+            "lightning-carousel",
+            "lightning-combobox",
+            "lightning-confirm",
+            "lightning-dynamic-icon",
+            "lightning-grouped-combobox",
+            "lightning-input",
+            "lightning-lookup-address",
+            "lightning-modal",
+            "lightning-multi-column-sorting-modal",
+            "lightning-pill-container",
+            "lightning-prompt",
+            "lightning-radio-group",
+            "lightning-stacked-tab",
+            "lightning-tree",
+            "lightning-vertical-navigation-overflow"
+        ],
         "classes": [
             "slds-button",
             "slds-button__icon",
@@ -616,6 +738,31 @@ export const BLUEPRINTS = [
         "name": "buttonStateful",
         "root": "slds-button",
         "tag": "lightning-button-stateful",
+        "coveredBy": [
+            "lightning-accordion-section",
+            "lightning-alert",
+            "lightning-barcode-scanner",
+            "lightning-button",
+            "lightning-button-icon",
+            "lightning-button-icon-stateful",
+            "lightning-button-menu",
+            "lightning-button-stateful",
+            "lightning-carousel",
+            "lightning-combobox",
+            "lightning-confirm",
+            "lightning-dynamic-icon",
+            "lightning-grouped-combobox",
+            "lightning-input",
+            "lightning-lookup-address",
+            "lightning-modal",
+            "lightning-multi-column-sorting-modal",
+            "lightning-pill-container",
+            "lightning-prompt",
+            "lightning-radio-group",
+            "lightning-stacked-tab",
+            "lightning-tree",
+            "lightning-vertical-navigation-overflow"
+        ],
         "classes": [
             "slds-button_inverse",
             "slds-button_neutral",
@@ -660,6 +807,9 @@ export const BLUEPRINTS = [
         "name": "card",
         "root": "slds-card",
         "tag": "lightning-card",
+        "coveredBy": [
+            "lightning-card"
+        ],
         "classes": [
             "slds-card",
             "slds-card__body",
@@ -741,6 +891,9 @@ export const BLUEPRINTS = [
         "name": "carousel",
         "root": "slds-carousel",
         "tag": "lightning-carousel",
+        "coveredBy": [
+            "lightning-carousel"
+        ],
         "classes": [
             "slds-carousel",
             "slds-carousel__autoplay",
@@ -774,6 +927,7 @@ export const BLUEPRINTS = [
         "name": "chat",
         "root": "slds-chat-message",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-chat-message",
             "slds-chat-message__action",
@@ -834,6 +988,10 @@ export const BLUEPRINTS = [
         "name": "checkbox",
         "root": "slds-checkbox",
         "tag": "",
+        "coveredBy": [
+            "lightning-checkbox-group",
+            "lightning-input"
+        ],
         "classes": [
             "slds-checkbox",
             "slds-checkbox__label",
@@ -877,6 +1035,9 @@ export const BLUEPRINTS = [
         "name": "checkboxButton",
         "root": "slds-checkbox-button",
         "tag": "",
+        "coveredBy": [
+            "lightning-input"
+        ],
         "classes": [
             "slds-checkbox-button",
             "slds-checkbox-button_is-checked",
@@ -910,6 +1071,10 @@ export const BLUEPRINTS = [
         "name": "checkboxButtonGroup",
         "root": "slds-checkbox",
         "tag": "",
+        "coveredBy": [
+            "lightning-checkbox-group",
+            "lightning-input"
+        ],
         "classes": [
             "slds-checkbox_button",
             "slds-checkbox_button-group",
@@ -939,6 +1104,10 @@ export const BLUEPRINTS = [
         "name": "checkboxToggle",
         "root": "slds-checkbox",
         "tag": "",
+        "coveredBy": [
+            "lightning-checkbox-group",
+            "lightning-input"
+        ],
         "classes": [
             "slds-checkbox_faux",
             "slds-checkbox_faux_container",
@@ -973,6 +1142,9 @@ export const BLUEPRINTS = [
         "name": "colorPicker",
         "root": "slds-color-picker",
         "tag": "",
+        "coveredBy": [
+            "lightning-input"
+        ],
         "classes": [
             "slds-color-picker",
             "slds-color-picker__custom",
@@ -1019,6 +1191,14 @@ export const BLUEPRINTS = [
         "name": "combobox",
         "root": "slds-listbox",
         "tag": "lightning-combobox",
+        "coveredBy": [
+            "lightning-combobox",
+            "lightning-dual-listbox",
+            "lightning-grouped-combobox",
+            "lightning-input",
+            "lightning-lookup-address",
+            "lightning-pill-container"
+        ],
         "classes": [
             "slds-listbox",
             "slds-listbox__icon-selected",
@@ -1107,6 +1287,13 @@ export const BLUEPRINTS = [
         "name": "counter",
         "root": "slds-input",
         "tag": "",
+        "coveredBy": [
+            "lightning-combobox",
+            "lightning-grouped-combobox",
+            "lightning-input",
+            "lightning-lookup-address",
+            "lightning-prompt"
+        ],
         "classes": [
             "slds-input__button_decrement",
             "slds-input__button_increment",
@@ -1125,6 +1312,9 @@ export const BLUEPRINTS = [
         "name": "dataTable",
         "root": "slds-table",
         "tag": "",
+        "coveredBy": [
+            "lightning-datatable"
+        ],
         "classes": [
             "slds-table",
             "slds-table_bordered",
@@ -1226,6 +1416,9 @@ export const BLUEPRINTS = [
         "name": "datepicker",
         "root": "slds-datepicker",
         "tag": "",
+        "coveredBy": [
+            "lightning-input"
+        ],
         "classes": [
             "slds-datepicker",
             "slds-datepicker__filter",
@@ -1262,6 +1455,20 @@ export const BLUEPRINTS = [
         "name": "datetimePicker",
         "root": "slds-form-element",
         "tag": "",
+        "coveredBy": [
+            "lightning-checkbox-group",
+            "lightning-combobox",
+            "lightning-dual-listbox",
+            "lightning-grouped-combobox",
+            "lightning-input",
+            "lightning-input-address",
+            "lightning-input-location",
+            "lightning-input-name",
+            "lightning-radio-group",
+            "lightning-select",
+            "lightning-slider",
+            "lightning-textarea"
+        ],
         "classes": [
             "slds-form-element__icon"
         ],
@@ -1280,6 +1487,7 @@ export const BLUEPRINTS = [
         "name": "dockedComposer",
         "root": "slds-docked-composer",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-docked-composer",
             "slds-docked-composer__actions",
@@ -1329,6 +1537,7 @@ export const BLUEPRINTS = [
         "name": "dockedFormFooter",
         "root": "slds-docked-form-footer",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-docked-form-footer"
         ],
@@ -1347,6 +1556,7 @@ export const BLUEPRINTS = [
         "name": "dockedUtilityBar",
         "root": "slds-utility-bar",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-utility-bar",
             "slds-utility-bar__action",
@@ -1393,6 +1603,7 @@ export const BLUEPRINTS = [
         "name": "dropZone",
         "root": "slds-drop-zone",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-drop-zone",
             "slds-drop-zone__actions",
@@ -1419,6 +1630,9 @@ export const BLUEPRINTS = [
         "name": "duelingPicklist",
         "root": "slds-dueling-list",
         "tag": "",
+        "coveredBy": [
+            "lightning-dual-listbox"
+        ],
         "classes": [
             "slds-dueling-list",
             "slds-dueling-list__column",
@@ -1444,6 +1658,7 @@ export const BLUEPRINTS = [
         "name": "dynamicIcons",
         "root": "slds-icon-help",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-icon-help",
             "slds-icon-help_focus",
@@ -1488,6 +1703,27 @@ export const BLUEPRINTS = [
         "name": "dynamicMenu",
         "root": "slds-popover",
         "tag": "",
+        "coveredBy": [
+            "lightning-alert",
+            "lightning-button-icon",
+            "lightning-button-icon-stateful",
+            "lightning-button-menu",
+            "lightning-confirm",
+            "lightning-dialog",
+            "lightning-input",
+            "lightning-modal",
+            "lightning-modal-body",
+            "lightning-modal-footer",
+            "lightning-modal-header",
+            "lightning-overlay",
+            "lightning-popup",
+            "lightning-progress-indicator",
+            "lightning-progress-step",
+            "lightning-prompt",
+            "lightning-tab",
+            "lightning-toast",
+            "lightning-toast-container"
+        ],
         "classes": [
             "slds-popover__body",
             "slds-popover__footer"
@@ -1509,6 +1745,7 @@ export const BLUEPRINTS = [
         "name": "expandableSection",
         "root": "slds-section",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-section",
             "slds-section__content",
@@ -1537,6 +1774,7 @@ export const BLUEPRINTS = [
         "name": "expression",
         "root": "slds-expression",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-expression__buttons",
             "slds-expression__custom-logic",
@@ -1577,6 +1815,7 @@ export const BLUEPRINTS = [
         "name": "feed",
         "root": "slds-post",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-post",
             "slds-post__content",
@@ -1613,6 +1852,7 @@ export const BLUEPRINTS = [
         "name": "file",
         "root": "slds-file",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-file",
             "slds-file__actions-menu",
@@ -1672,6 +1912,9 @@ export const BLUEPRINTS = [
         "name": "fileSelector",
         "root": "slds-file-selector",
         "tag": "",
+        "coveredBy": [
+            "lightning-input"
+        ],
         "classes": [
             "slds-file-selector",
             "slds-file-selector__body",
@@ -1707,6 +1950,20 @@ export const BLUEPRINTS = [
         "name": "form-element",
         "root": "slds-form-element",
         "tag": "",
+        "coveredBy": [
+            "lightning-checkbox-group",
+            "lightning-combobox",
+            "lightning-dual-listbox",
+            "lightning-grouped-combobox",
+            "lightning-input",
+            "lightning-input-address",
+            "lightning-input-location",
+            "lightning-input-name",
+            "lightning-radio-group",
+            "lightning-select",
+            "lightning-slider",
+            "lightning-textarea"
+        ],
         "classes": [
             "slds-form-element",
             "slds-form-element_1-col",
@@ -1770,7 +2027,8 @@ export const BLUEPRINTS = [
             "src/modules/example/manageOrg/manageOrg.html",
             "src/modules/example/profile/profile.html",
             "src/modules/ui/jobDetailsForm/jobDetailsForm.html",
-            "src/modules/ui/radioBoxGroup/radioBoxGroup.html"
+            "src/modules/ui/radioBoxGroup/radioBoxGroup.html",
+            "src/modules/ui/radioBoxGroup/radioBoxGroup.ts"
         ],
         "missing": [],
         "bundled": true,
@@ -1781,6 +2039,7 @@ export const BLUEPRINTS = [
         "name": "globalHeader",
         "root": "slds-global-actions",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-global-actions",
             "slds-global-actions__avatar",
@@ -1851,6 +2110,7 @@ export const BLUEPRINTS = [
         "name": "globalNavigation",
         "root": "slds-context-bar",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-context-bar",
             "slds-context-bar__app-name",
@@ -1937,6 +2197,30 @@ export const BLUEPRINTS = [
         "name": "icon",
         "root": "slds-icon",
         "tag": "lightning-icon",
+        "coveredBy": [
+            "lightning-accordion-section",
+            "lightning-avatar",
+            "lightning-badge",
+            "lightning-button",
+            "lightning-button-icon",
+            "lightning-button-icon-stateful",
+            "lightning-button-menu",
+            "lightning-button-stateful",
+            "lightning-carousel",
+            "lightning-combobox",
+            "lightning-formatted-email",
+            "lightning-grouped-combobox",
+            "lightning-helptext",
+            "lightning-icon",
+            "lightning-input",
+            "lightning-lookup-address",
+            "lightning-menu-item",
+            "lightning-pill",
+            "lightning-progress-ring",
+            "lightning-progress-step",
+            "lightning-tree",
+            "lightning-vertical-navigation-overflow"
+        ],
         "classes": [
             "slds-icon",
             "slds-icon_container",
@@ -1987,6 +2271,7 @@ export const BLUEPRINTS = [
         "name": "illustration",
         "root": "slds-illustration",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-illustration",
             "slds-illustration__fill-primary",
@@ -2013,6 +2298,13 @@ export const BLUEPRINTS = [
         "name": "input",
         "root": "slds-input",
         "tag": "lightning-input",
+        "coveredBy": [
+            "lightning-combobox",
+            "lightning-grouped-combobox",
+            "lightning-input",
+            "lightning-lookup-address",
+            "lightning-prompt"
+        ],
         "classes": [
             "slds-input",
             "slds-input__icon",
@@ -2074,6 +2366,7 @@ export const BLUEPRINTS = [
         "name": "lookup",
         "root": null,
         "tag": "",
+        "coveredBy": [],
         "classes": [],
         "borrowed": [],
         "hooks": [],
@@ -2088,6 +2381,7 @@ export const BLUEPRINTS = [
         "name": "map",
         "root": "slds-coordinates",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-coordinates",
             "slds-coordinates__header",
@@ -2115,6 +2409,7 @@ export const BLUEPRINTS = [
         "name": "markdown",
         "root": "slds-markdown",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-markdown"
         ],
@@ -2131,6 +2426,13 @@ export const BLUEPRINTS = [
         "name": "menu",
         "root": "slds-dropdown",
         "tag": "",
+        "coveredBy": [
+            "lightning-button-menu",
+            "lightning-combobox",
+            "lightning-grouped-combobox",
+            "lightning-input",
+            "lightning-lookup-address"
+        ],
         "classes": [
             "slds-dropdown",
             "slds-dropdown__header",
@@ -2190,6 +2492,30 @@ export const BLUEPRINTS = [
         "name": "modal",
         "root": "slds-modal",
         "tag": "lightning-modal",
+        "coveredBy": [
+            "lightning-alert",
+            "lightning-button-icon",
+            "lightning-button-icon-stateful",
+            "lightning-button-menu",
+            "lightning-combobox",
+            "lightning-confirm",
+            "lightning-datatable",
+            "lightning-dialog",
+            "lightning-grouped-combobox",
+            "lightning-input",
+            "lightning-lookup-address",
+            "lightning-modal",
+            "lightning-modal-body",
+            "lightning-modal-footer",
+            "lightning-modal-header",
+            "lightning-overlay",
+            "lightning-popup",
+            "lightning-progress-step",
+            "lightning-prompt",
+            "lightning-tab",
+            "lightning-toast",
+            "lightning-toast-container"
+        ],
         "classes": [
             "slds-modal",
             "slds-modal__close",
@@ -2264,6 +2590,7 @@ export const BLUEPRINTS = [
         "name": "notifications",
         "root": "slds-notification",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-notification",
             "slds-notification__close",
@@ -2290,6 +2617,7 @@ export const BLUEPRINTS = [
         "name": "pageHeader",
         "root": "slds-page-header",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-page-header",
             "slds-page-header__col-actions",
@@ -2357,6 +2685,7 @@ export const BLUEPRINTS = [
         "name": "panel",
         "root": "slds-panel",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-panel",
             "slds-panel__actions",
@@ -2395,6 +2724,9 @@ export const BLUEPRINTS = [
         "name": "path",
         "root": "slds-path",
         "tag": "",
+        "coveredBy": [
+            "lightning-progress-indicator"
+        ],
         "classes": [
             "slds-path",
             "slds-path__action",
@@ -2468,6 +2800,7 @@ export const BLUEPRINTS = [
         "name": "pathSimple",
         "root": null,
         "tag": "",
+        "coveredBy": [],
         "classes": [],
         "borrowed": [],
         "hooks": [],
@@ -2482,6 +2815,9 @@ export const BLUEPRINTS = [
         "name": "picklist",
         "root": null,
         "tag": "lightning-picklist",
+        "coveredBy": [
+            "lightning-picklist"
+        ],
         "classes": [],
         "borrowed": [],
         "hooks": [],
@@ -2496,6 +2832,9 @@ export const BLUEPRINTS = [
         "name": "pill",
         "root": "slds-pill",
         "tag": "lightning-pill",
+        "coveredBy": [
+            "lightning-pill"
+        ],
         "classes": [
             "slds-pill",
             "slds-pill__action",
@@ -2551,6 +2890,27 @@ export const BLUEPRINTS = [
         "name": "popover",
         "root": "slds-popover",
         "tag": "",
+        "coveredBy": [
+            "lightning-alert",
+            "lightning-button-icon",
+            "lightning-button-icon-stateful",
+            "lightning-button-menu",
+            "lightning-confirm",
+            "lightning-dialog",
+            "lightning-input",
+            "lightning-modal",
+            "lightning-modal-body",
+            "lightning-modal-footer",
+            "lightning-modal-header",
+            "lightning-overlay",
+            "lightning-popup",
+            "lightning-progress-indicator",
+            "lightning-progress-step",
+            "lightning-prompt",
+            "lightning-tab",
+            "lightning-toast",
+            "lightning-toast-container"
+        ],
         "classes": [
             "slds-popover",
             "slds-popover__body",
@@ -2672,6 +3032,9 @@ export const BLUEPRINTS = [
         "name": "progressBar",
         "root": "slds-progress-bar",
         "tag": "lightning-progress-bar",
+        "coveredBy": [
+            "lightning-progress-bar"
+        ],
         "classes": [
             "slds-progress-bar",
             "slds-progress-bar__value",
@@ -2696,6 +3059,9 @@ export const BLUEPRINTS = [
         "name": "progressIndicator",
         "root": "slds-progress",
         "tag": "lightning-progress-indicator",
+        "coveredBy": [
+            "lightning-progress-indicator"
+        ],
         "classes": [
             "slds-progress",
             "slds-progress__item",
@@ -2731,6 +3097,9 @@ export const BLUEPRINTS = [
         "name": "progressRing",
         "root": "slds-progress-ring",
         "tag": "lightning-progress-ring",
+        "coveredBy": [
+            "lightning-progress-ring"
+        ],
         "classes": [
             "slds-progress-ring",
             "slds-progress-ring__content",
@@ -2759,6 +3128,30 @@ export const BLUEPRINTS = [
         "name": "prompt",
         "root": "slds-modal",
         "tag": "lightning-prompt",
+        "coveredBy": [
+            "lightning-alert",
+            "lightning-button-icon",
+            "lightning-button-icon-stateful",
+            "lightning-button-menu",
+            "lightning-combobox",
+            "lightning-confirm",
+            "lightning-datatable",
+            "lightning-dialog",
+            "lightning-grouped-combobox",
+            "lightning-input",
+            "lightning-lookup-address",
+            "lightning-modal",
+            "lightning-modal-body",
+            "lightning-modal-footer",
+            "lightning-modal-header",
+            "lightning-overlay",
+            "lightning-popup",
+            "lightning-progress-step",
+            "lightning-prompt",
+            "lightning-tab",
+            "lightning-toast",
+            "lightning-toast-container"
+        ],
         "classes": [
             "slds-modal__content",
             "slds-modal__footer",
@@ -2787,6 +3180,7 @@ export const BLUEPRINTS = [
         "name": "publisher",
         "root": "slds-publisher",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-publisher",
             "slds-publisher__actions",
@@ -2814,6 +3208,11 @@ export const BLUEPRINTS = [
         "name": "radioButtonGroup",
         "root": "slds-radio",
         "tag": "",
+        "coveredBy": [
+            "lightning-input",
+            "lightning-multi-column-sorting-modal",
+            "lightning-radio-group"
+        ],
         "classes": [
             "slds-radio_button",
             "slds-radio_button-group",
@@ -2844,6 +3243,11 @@ export const BLUEPRINTS = [
         "name": "radioGroup",
         "root": "slds-radio",
         "tag": "lightning-radio-group",
+        "coveredBy": [
+            "lightning-input",
+            "lightning-multi-column-sorting-modal",
+            "lightning-radio-group"
+        ],
         "classes": [
             "slds-radio",
             "slds-radio__label",
@@ -2884,6 +3288,7 @@ export const BLUEPRINTS = [
         "name": "regions",
         "root": "slds-region",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-region",
             "slds-region__pinned-left",
@@ -2903,6 +3308,7 @@ export const BLUEPRINTS = [
         "name": "richTextEditor",
         "root": "slds-rich-text-editor",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-rich-text-editor",
             "slds-rich-text-editor__col",
@@ -2951,6 +3357,7 @@ export const BLUEPRINTS = [
         "name": "scopedNotifications",
         "root": "slds-scoped-notification",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-scoped-notification",
             "slds-scoped-notification_dark",
@@ -2970,6 +3377,7 @@ export const BLUEPRINTS = [
             "src/modules/example/createJobStep2/createJobStep2.html",
             "src/modules/example/createJobStep3/createJobStep3.html",
             "src/modules/example/createJobStep4/createJobStep4.html",
+            "src/modules/example/createJobStep6/createJobStep6.html",
             "src/modules/ui/blueprintBrowser/blueprintBrowser.html",
             "src/modules/ui/readOnlyNotice/readOnlyNotice.html",
             "src/modules/ui/vacancyCard/vacancyCard.html"
@@ -2983,6 +3391,9 @@ export const BLUEPRINTS = [
         "name": "select",
         "root": "slds-select",
         "tag": "lightning-select",
+        "coveredBy": [
+            "lightning-select"
+        ],
         "classes": [
             "slds-select",
             "slds-select_container"
@@ -3025,6 +3436,7 @@ export const BLUEPRINTS = [
         "name": "setupAssistant",
         "root": "slds-setup-assistant",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-setup-assistant",
             "slds-setup-assistant__item",
@@ -3053,6 +3465,9 @@ export const BLUEPRINTS = [
         "name": "slider",
         "root": "slds-slider",
         "tag": "lightning-slider",
+        "coveredBy": [
+            "lightning-slider"
+        ],
         "classes": [
             "slds-slider",
             "slds-slider__range",
@@ -3085,6 +3500,13 @@ export const BLUEPRINTS = [
         "name": "spinner",
         "root": "slds-spinner",
         "tag": "lightning-spinner",
+        "coveredBy": [
+            "lightning-combobox",
+            "lightning-grouped-combobox",
+            "lightning-input",
+            "lightning-lookup-address",
+            "lightning-spinner"
+        ],
         "classes": [
             "slds-spinner",
             "slds-spinner__dot-a",
@@ -3113,6 +3535,7 @@ export const BLUEPRINTS = [
         "name": "splitView",
         "root": "slds-split-view",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-split-view",
             "slds-split-view__header",
@@ -3141,6 +3564,7 @@ export const BLUEPRINTS = [
         "name": "summaryDetail",
         "root": "slds-summary-detail",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-summary-detail",
             "slds-summary-detail__action-icon",
@@ -3161,6 +3585,9 @@ export const BLUEPRINTS = [
         "name": "tabs",
         "root": "slds-tabs",
         "tag": "",
+        "coveredBy": [
+            "lightning-tabset"
+        ],
         "classes": [
             "slds-tabs__item_overflow",
             "slds-tabs__left-icon",
@@ -3273,6 +3700,7 @@ export const BLUEPRINTS = [
         "name": "template",
         "root": "slds-template",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-template__container",
             "slds-template__content",
@@ -3301,6 +3729,9 @@ export const BLUEPRINTS = [
         "name": "textarea",
         "root": "slds-textarea",
         "tag": "lightning-textarea",
+        "coveredBy": [
+            "lightning-textarea"
+        ],
         "classes": [
             "slds-textarea"
         ],
@@ -3346,6 +3777,9 @@ export const BLUEPRINTS = [
         "name": "tile",
         "root": "slds-tile",
         "tag": "lightning-tile",
+        "coveredBy": [
+            "lightning-tile"
+        ],
         "classes": [
             "slds-tile",
             "slds-tile__detail",
@@ -3368,6 +3802,9 @@ export const BLUEPRINTS = [
         "name": "toast",
         "root": "slds-notify",
         "tag": "lightning-toast",
+        "coveredBy": [
+            "lightning-toast"
+        ],
         "classes": [
             "slds-notify__close",
             "slds-notify__content",
@@ -3402,6 +3839,27 @@ export const BLUEPRINTS = [
         "name": "tooltip",
         "root": "slds-popover",
         "tag": "",
+        "coveredBy": [
+            "lightning-alert",
+            "lightning-button-icon",
+            "lightning-button-icon-stateful",
+            "lightning-button-menu",
+            "lightning-confirm",
+            "lightning-dialog",
+            "lightning-input",
+            "lightning-modal",
+            "lightning-modal-body",
+            "lightning-modal-footer",
+            "lightning-modal-header",
+            "lightning-overlay",
+            "lightning-popup",
+            "lightning-progress-indicator",
+            "lightning-progress-step",
+            "lightning-prompt",
+            "lightning-tab",
+            "lightning-toast",
+            "lightning-toast-container"
+        ],
         "classes": [
             "slds-popover__body",
             "slds-popover_tooltip"
@@ -3436,6 +3894,9 @@ export const BLUEPRINTS = [
         "name": "treeGrid",
         "root": "slds-th",
         "tag": "lightning-tree-grid",
+        "coveredBy": [
+            "lightning-tree-grid"
+        ],
         "classes": [
             "slds-th__action-button"
         ],
@@ -3460,6 +3921,10 @@ export const BLUEPRINTS = [
         "name": "trees",
         "root": "slds-tree",
         "tag": "",
+        "coveredBy": [
+            "lightning-datatable",
+            "lightning-tree"
+        ],
         "classes": [
             "slds-tree",
             "slds-tree__group-header",
@@ -3491,6 +3956,13 @@ export const BLUEPRINTS = [
         "name": "trialBar",
         "root": "slds-dropdown",
         "tag": "",
+        "coveredBy": [
+            "lightning-button-menu",
+            "lightning-combobox",
+            "lightning-grouped-combobox",
+            "lightning-input",
+            "lightning-lookup-address"
+        ],
         "classes": [
             "slds-dropdown",
             "slds-dropdown__item",
@@ -3516,6 +3988,7 @@ export const BLUEPRINTS = [
         "name": "utilities",
         "root": "slds-align",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-align_absolute-center"
         ],
@@ -3536,6 +4009,9 @@ export const BLUEPRINTS = [
         "name": "verticalNavigation",
         "root": "slds-nav-vertical",
         "tag": "lightning-vertical-navigation",
+        "coveredBy": [
+            "lightning-vertical-navigation"
+        ],
         "classes": [
             "slds-nav-vertical",
             "slds-nav-vertical__action",
@@ -3571,6 +4047,7 @@ export const BLUEPRINTS = [
         "name": "visualPicker",
         "root": "slds-visual-picker",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-visual-picker",
             "slds-visual-picker__body",
@@ -3607,6 +4084,7 @@ export const BLUEPRINTS = [
         "name": "welcomeMat",
         "root": "slds-welcome-mat",
         "tag": "",
+        "coveredBy": [],
         "classes": [
             "slds-welcome-mat",
             "slds-welcome-mat__content",
@@ -3658,6 +4136,7 @@ export const BLUEPRINTS = [
         "name": "wizard",
         "root": null,
         "tag": "",
+        "coveredBy": [],
         "classes": [],
         "borrowed": [],
         "hooks": [],

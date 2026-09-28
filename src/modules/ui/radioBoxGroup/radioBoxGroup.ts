@@ -33,12 +33,36 @@ export default class RadioBoxGroup extends LightningElement {
      *  groups as one and selecting in either clears the other. */
     @api name = 'radio-box-group';
 
+    /**
+     * `stack` (the default) puts one box per row; `row` lays them side by side
+     * from the medium breakpoint up. Both are SLDS grid utilities — this stays
+     * a component with no stylesheet.
+     */
+    @api layout: 'stack' | 'row' = 'stack';
+
     @api legend = '';
     @api helpText = '';
     @api required = false;
 
-    get marked(): (Option & { checked: boolean })[] {
-        return this.options.map((o) => ({ ...o, checked: o.value === this.value }));
+    get isRow(): boolean {
+        return this.layout === 'row';
+    }
+
+    get controlClass(): string {
+        return this.isRow
+            ? 'slds-form-element__control slds-grid slds-wrap slds-gutters_x-small'
+            : 'slds-form-element__control';
+    }
+
+    get marked(): (Option & { checked: boolean; wrapperClass: string })[] {
+        const wrapperClass = this.isRow
+            ? 'slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small'
+            : 'slds-m-bottom_small';
+        return this.options.map((o) => ({
+            ...o,
+            checked: o.value === this.value,
+            wrapperClass
+        }));
     }
 
     handleChange(event: Event): void {

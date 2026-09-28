@@ -1,0 +1,124 @@
+<template lwc:render-mode="light">
+    <ui-site-header current="create-job"></ui-site-header>
+
+    <div class="site__body">
+        <main class="site__main" id="create-job-step6-main">
+            <lightning-layout horizontal-align="center">
+                <lightning-layout-item id="create-job-step6-col-main" size="12" large-device-size="10">
+                    <ui-vacancy-stepper current-step="6"></ui-vacancy-stepper>
+
+                    <lightning-layout multiple-rows pull-to-boundary="small">
+                        <lightning-layout-item id="create-job-step6-col-form" size="12" large-device-size="8" padding="horizontal-small">
+                            <h1 id="create-job-step6-title" class="slds-text-heading_large slds-m-bottom_medium">
+                                Manage your listing
+                            </h1>
+
+                            <!-- Publish timing ----------------------------------
+                                 `layout="row"` is the boxes side by side, from
+                                 SLDS grid utilities. -->
+                            <p id="create-job-step6-publish-help" class="slds-m-bottom_small">
+                                Listings are reviewed by our staff before being publically listed
+                                for candidates. We aim to get listings up as soon as possible. If
+                                crucial information is missing we get in touch within one working day.
+                            </p>
+
+                            <ui-radio-box-group
+                                id="create-job-step6-publish-timing"
+                                name="publish-timing"
+                                legend="When would you like the listing to be published?"
+                                layout="row"
+                                options={timingOptions}
+                                value={publishTiming}
+                                onchange={handleTimingChange}
+                                class="slds-m-bottom_small"
+                            ></ui-radio-box-group>
+
+                            <!-- Not in the design, but "Set date" has to ask for
+                                 one: it is what puts a value in
+                                 `jobs.posted_date`. -->
+                            <lightning-input
+                                lwc:if={showPublishDate}
+                                id="create-job-step6-publish-date"
+                                type="date"
+                                label="Publish date"
+                                value={publishDate}
+                                onchange={handlePublishDate}
+                                class="slds-m-bottom_large"
+                            ></lightning-input>
+
+                            <!-- Positions ---------------------------------------->
+                            <h2 id="create-job-step6-positions-heading" class="slds-text-heading_medium slds-m-top_large slds-m-bottom_xx-small">
+                                Positions
+                            </h2>
+                            <lightning-input
+                                id="create-job-step6-positions"
+                                type="number"
+                                min="1"
+                                label="How many positions are available for the role you are listing?"
+                                value={positions}
+                                onchange={handlePositions}
+                                class="slds-m-bottom_large"
+                            ></lightning-input>
+
+                            <!-- Shortlisting ------------------------------------->
+                            <h2 id="create-job-step6-shortlisting-heading" class="slds-text-heading_medium slds-m-bottom_xx-small">
+                                Shortlisting
+                            </h2>
+                            <lightning-input
+                                id="create-job-step6-max-shortlist"
+                                type="number"
+                                min="1"
+                                label="What is the maximum number of candidates you would like shortlisted for this listing?"
+                                value={maxShortlist}
+                                onchange={handleMaxShortlist}
+                                class="slds-m-bottom_large"
+                            ></lightning-input>
+
+                            <!-- Interview options -------------------------------->
+                            <h2 id="create-job-step6-interview-heading" class="slds-text-heading_medium slds-m-bottom_xx-small">
+                                Interview options (optional)
+                            </h2>
+                            <p id="create-job-step6-interview-help" class="slds-m-bottom_x-small">
+                                What interview options do you offer?<br />Select all that apply
+                            </p>
+                            <lightning-checkbox-group
+                                id="create-job-step6-interview-options"
+                                label="What interview options do you offer?"
+                                variant="label-hidden"
+                                options={interviewOptions}
+                                value={selectedInterviewOptions}
+                                onchange={handleInterviewChange}
+                                class="slds-m-bottom_large"
+                            ></lightning-checkbox-group>
+
+                            <div id="create-job-step6-actions" class="slds-grid slds-grid_align-end slds-m-bottom_x-large">
+                                <a href="/create-job/step5">
+                                    <lightning-button id="create-job-step6-previous" label="Previous"></lightning-button>
+                                </a>
+                                <lightning-button
+                                    id="create-job-step6-review"
+                                    variant="brand"
+                                    label="Review job"
+                                    class="slds-m-left_x-small"
+                                ></lightning-button>
+                            </div>
+                        </lightning-layout-item>
+
+                        <!-- No icon on this one, as the design draws it. -->
+                        <lightning-layout-item id="create-job-step6-col-note" size="12" large-device-size="4" padding="horizontal-small">
+                            <div id="create-job-step6-note-visibility" class="slds-scoped-notification sep-scoped-notification">
+                                <p class="sep-scoped-notification__title">Who can see this?</p>
+                                <p class="sep-scoped-notification__body">
+                                    The information in this section is only used by MSD staff to
+                                    help manage your listing and refer candidates.
+                                </p>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+        </main>
+    </div>
+
+    <ui-site-footer></ui-site-footer>
+</template>

@@ -10,12 +10,22 @@
  *
  *   npm run blueprints
  *
- * Deliberately NOT generated: a mapping from blueprint to "the lightning-*
- * component that covers it". Only 30 of the 89 blueprints have a tag of the
- * same name, and matching the rest by resemblance produces confident nonsense
- * (dataTable -> lightning-tab). So an exact tag match is reported and nothing
- * else is guessed -- a blank means no tag of that NAME, not that no component
- * covers the pattern. The Components tab is the authority for that question.
+ * COVERAGE is computed, not guessed. The question that matters -- "do I have to
+ * write this blueprint by hand, or does a component already render it?" --
+ * cannot be answered by comparing names: only 30 of the 89 blueprints have a
+ * tag of the same name, and matching the rest by resemblance produces confident
+ * nonsense (dataTable -> lightning-tab).
+ *
+ * So coverage is read off what the components actually EMIT. Every folder in
+ * lightning-base-components is scanned for the SLDS classes its markup writes;
+ * a blueprint is covered when some component writes its main class. Private
+ * components count through their public consumers, resolved by following the
+ * import graph upward -- `slds-tabs_default` is written by `tabBar`, which is
+ * private, and reached only from `lightning-tabset`, which is not.
+ *
+ * An exact tag match is taken as coverage too, for the handful a component
+ * renders through different markup than the blueprint (`lightning-tree-grid`
+ * builds on the datatable, `lightning-alert` on the modal).
  */
 
 import fs from 'node:fs';
@@ -46,6 +56,47 @@ const bundledClasses = new Set(
 );
 
 const kebab = (s) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+const isPublic = (folder) => shippedTags.has(`lightning-${kebab(folder)}`);
+
+// -- What does each shipped component actually render? ----------------------
+
+const LBC = path.resolve('node_modules/lightning-base-components/src/lightning');
+
+/** class -> the component folders whose markup writes it. */
+const emitters = new Map();
+/** folder -> the folders that use it, public or not. */
+const consumers = new Map();
+
+for (const entry of fs.readdirSync(LBC, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const dir = path.join(LBC, entry.name);
+    let text = '';
+    for (const file of fs.readdirSync(dir)) {
+        if (/\.(html|js)$/.test(file)) text += fs.readFileSync(path.join(dir, file), 'utf8');
+    }
+    for (const m of text.matchAll(/slds-[a-z0-9]+(?:[-_]{1,2}[a-z0-9]+)*/g)) {
+        if (!emitters.has(m[0])) emitters.set(m[0], new Set());
+        emitters.get(m[0]).add(entry.name);
+    }
+    // Both ways a component reaches another: the JS import and the tag.
+    for (const m of text.matchAll(/["']lightning\/([a-zA-Z0-9]+)["']/g)) {
+        if (!consumers.has(m[1])) consumers.set(m[1], new Set());
+        consumers.get(m[1]).add(entry.name);
+    }
+    for (const m of text.matchAll(/<lightning-([a-z-]+)/g)) {
+        const camel = m[1].replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+        if (!consumers.has(camel)) consumers.set(camel, new Set());
+        consumers.get(camel).add(entry.name);
+    }
+}
+
+/** Walk up from a folder to the public components that can reach it. */
+function publicOwners(folder, seen = new Set()) {
+    if (seen.has(folder)) return [];
+    seen.add(folder);
+    if (isPublic(folder)) return [folder];
+    return [...(consumers.get(folder) ?? [])].flatMap((p) => publicOwners(p, seen));
+}
 
 // -- Where do WE use SLDS classes? ------------------------------------------
 // One pass over our source builds class -> files, so the per-blueprint lookup
@@ -149,11 +200,24 @@ const blueprints = fs
         const missing = own.filter((c) => !bundledClasses.has(c));
 
         const tag = `lightning-${kebab(name)}`;
+        const hasOwnTag = shippedTags.has(tag);
+
+        const coveredBy = [
+            ...new Set([
+                ...(root ? [...(emitters.get(root) ?? [])] : []).flatMap((f) =>
+                    publicOwners(f)
+                ),
+                ...(hasOwnTag ? [name] : [])
+            ])
+        ]
+            .map((f) => `lightning-${kebab(f)}`)
+            .sort();
 
         return {
             name,
             root,
-            tag: shippedTags.has(tag) ? tag : '',
+            tag: hasOwnTag ? tag : '',
+            coveredBy,
             classes: own,
             borrowed,
             hooks,
@@ -181,11 +245,11 @@ export const BLUEPRINTS = ${JSON.stringify(blueprints, null, 4)};
 
 const used = blueprints.filter((b) => b.usedIn.length).length;
 const gaps = blueprints.reduce((n, b) => n + b.missing.length, 0);
-const withTag = blueprints.filter((b) => b.tag).length;
+const uncovered = blueprints.filter((b) => !b.coveredBy.length).length;
 const classCount = blueprints.reduce((n, b) => n + b.classes.length, 0);
 console.log(
     `blueprints: ${blueprints.length} from SLDS ${version}, ${classCount} classes, ` +
-        `${withTag} with a lightning-* tag of the same name, ${used} used in this project, ` +
+        `${uncovered} not rendered by any shipped component, ${used} used in this project, ` +
         `${gaps} classes absent from the bundled stylesheet`
 );
 console.log(`wrote ${path.relative(process.cwd(), OUT)}`);

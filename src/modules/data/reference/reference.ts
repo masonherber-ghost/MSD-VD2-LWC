@@ -272,3 +272,26 @@ export const TRAINING_LEVELS = [
             'Full training for the job is given. This is usually for starting-out roles.'
     }
 ] as const;
+
+/**
+ * When the listing goes live — step 6.
+ *
+ * `asap` is not stored: choosing it means `jobs.posted_date` is left for MSD
+ * to set when the listing clears review. `scheduled` is what puts a date in it.
+ */
+export const PUBLISH_TIMING = [
+    { value: 'asap', label: 'As soon as possible' },
+    { value: 'scheduled', label: 'Set date' }
+] as const;
+
+/**
+ * `jobs.interview_options`, a JSON array.
+ *
+ * The slugs are the ones the table already holds — see `rules-app-logic.md`:
+ * job and account use the same three so the two stay consistent.
+ */
+export const INTERVIEW_OPTIONS = [
+    { value: 'online', label: 'Online interviews' },
+    { value: 'phone', label: 'Phone interviews' },
+    { value: 'in-person', label: 'In-person interviews' }
+] as const;

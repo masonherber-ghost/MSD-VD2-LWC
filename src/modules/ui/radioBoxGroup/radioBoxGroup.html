@@ -12,9 +12,14 @@
             {legend}
         </legend>
         <p lwc:if={helpText} class="slds-text-body_small slds-m-bottom_small">{helpText}</p>
-        <div class="slds-form-element__control">
+        <!-- `layout="row"` lays the boxes out side by side using SLDS grid
+             utilities alone. The gutter class pads `.slds-col`, so the box has
+             to sit INSIDE the column rather than being it, or the padding eats
+             the border. -->
+        <div class={controlClass}>
             <template for:each={marked} for:item="opt">
-                <div key={opt.value} class="slds-box slds-m-bottom_small">
+                <div key={opt.value} class={opt.wrapperClass}>
+                <div class="slds-box">
                     <lightning-input
                         type="radio"
                         name={name}
@@ -29,6 +34,7 @@
                     >
                         {opt.description}
                     </p>
+                </div>
                 </div>
             </template>
         </div>

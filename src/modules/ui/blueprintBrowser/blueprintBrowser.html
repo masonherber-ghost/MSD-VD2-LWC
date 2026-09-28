@@ -4,6 +4,20 @@
             {summary}
         </p>
 
+        <!-- Asked often enough to belong on the page: there are no rendered
+             previews here, and there cannot be without inventing them. -->
+        <div id="blueprint-browser-no-previews" class="slds-scoped-notification sep-scoped-notification slds-m-bottom_medium">
+            <p class="sep-scoped-notification__title">Why there are no previews here</p>
+            <p class="sep-scoped-notification__body">
+                The Components tab renders live examples because
+                <code>lightning-base-components</code> ships them. SLDS 2 ships its
+                blueprints as <strong>stylesheets only</strong> — 134 CSS files and, across
+                all 89 blueprints, exactly one HTML file. There is no markup to render, so
+                any preview on this page would be markup we wrote, presented as the
+                design system's. The classes below are the real contract.
+            </p>
+        </div>
+
         <lightning-layout multiple-rows pull-to-boundary="small">
             <!-- The rail. `lightning-vertical-navigation` is the shipped list;
                  the badge item carries the class count. -->
@@ -18,12 +32,19 @@
                     onchange={handleSearch}
                 ></lightning-input>
                 <lightning-input
+                    id="blueprint-browser-show-covered"
+                    type="checkbox"
+                    label="Also show the ones a component renders"
+                    checked={showCovered}
+                    onchange={handleShowCovered}
+                    class="slds-m-top_x-small"
+                ></lightning-input>
+                <lightning-input
                     id="blueprint-browser-used-only"
                     type="checkbox"
                     label="Only the ones this site uses"
                     checked={usedOnly}
                     onchange={handleUsedOnly}
-                    class="slds-m-top_x-small"
                 ></lightning-input>
                 <p id="blueprint-browser-count" class="slds-text-body_small slds-text-color_weak slds-m-vertical_x-small">
                     {matchCount}
@@ -59,8 +80,15 @@
                             <dd id="blueprint-browser-root" class="slds-item_detail slds-truncate">
                                 <code>{current.root}</code>
                             </dd>
-                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Component</dt>
-                            <dd id="blueprint-browser-tag" class="slds-item_detail slds-truncate">{tagLabel}</dd>
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Rendered by</dt>
+                            <dd id="blueprint-browser-covered" class="slds-item_detail">
+                                <template lwc:if={isCovered}>
+                                    <template for:each={coveredList} for:item="t">
+                                        <span key={t.key}><code>{t.name}</code> </span>
+                                    </template>
+                                </template>
+                                <span lwc:else>Nothing ships this — write the markup yourself</span>
+                            </dd>
                             <dt class="slds-item_label slds-text-color_weak slds-truncate">Stylesheet</dt>
                             <dd id="blueprint-browser-size" class="slds-item_detail slds-truncate">{sizeLabel}</dd>
                         </dl>

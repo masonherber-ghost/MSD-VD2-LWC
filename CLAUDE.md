@@ -94,7 +94,7 @@ from this project's own source. Nothing on that page is hand-maintained.
 | Tab | Shows | Regenerate |
 |---|---|---|
 | **Components** | Every shipped `lightning-*` example, rendered live | `npm run catalog` |
-| **Blueprints** | Every SLDS 2 blueprint: the classes it declares, whether they are in the stylesheet we actually load, the hooks you may set, the private ones you may not, and where this site uses it | `npm run blueprints` |
+| **Blueprints** | The 37 blueprints **no shipped component renders** — the ones you write by hand. Classes declared, whether they are in the stylesheet we actually load, hooks you may set, private ones you may not, and where this site uses each. A checkbox reveals the other 52 | `npm run blueprints` |
 | **Compositions** | Every wrapper in `src/modules/ui/`, ordered by how much CSS it needed, with what that CSS touches — plus the `sep-` classes in `site.css` | `npm run compositions` |
 | **Tokens** | Every design token with its resolved value: this project's `--site-*` and the SLDS globals by family | `npm run tokens` |
 | **Component hooks** | The `--slds-c-*` hooks you may set, grouped by component | `npm run tokens` |
