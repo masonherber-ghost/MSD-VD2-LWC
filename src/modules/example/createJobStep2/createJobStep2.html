@@ -56,7 +56,7 @@
                             </p>
                             <lightning-radio-group
                                 id="create-job-step2-experience"
-                                class="create-job-step2__cards slds-m-bottom_large"
+                                class="slds-m-bottom_large"
                                 label="Years of experience"
                                 options={experienceLevels}
                                 value={draft.experience_level}
@@ -167,12 +167,13 @@
                                         label="Previous"
                                     ></lightning-button>
                                 </a>
-                                <lightning-button
-                                    id="create-job-step2-next"
-                                    variant="brand"
-                                    label="Next"
-                                    class="slds-m-left_x-small"
-                                ></lightning-button>
+                                <a href="/create-job/step3" class="slds-m-left_x-small">
+                                    <lightning-button
+                                        id="create-job-step2-next"
+                                        variant="brand"
+                                        label="Next"
+                                    ></lightning-button>
+                                </a>
                             </div>
                         </lightning-layout-item>
 

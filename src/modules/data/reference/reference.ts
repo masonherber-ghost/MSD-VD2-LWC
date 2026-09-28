@@ -56,7 +56,7 @@ export function labelFor(
 export const VACANCY_STEPS = [
     { value: '1', label: 'Company details' },
     { value: '2', label: 'Job details' },
-    { value: '3', label: 'Step 3' },
+    { value: '3', label: 'Location, terms and pay' },
     { value: '4', label: 'Step 4' },
     { value: '5', label: 'Step 5' },
     { value: '6', label: 'Step 6' },
@@ -130,4 +130,67 @@ export const LICENCE_STAGES = [
     { value: 'learners', label: 'Learners' },
     { value: 'restricted', label: 'Restricted' },
     { value: 'full', label: 'Full' }
+] as const;
+
+// --- Step 3: location, terms and pay -----------------------------------------
+//
+// NOTE on data support. `jobs` covers some of this and not the rest:
+//   location, contract_type, start_date, hours_description, pay   EXIST
+//   job_schedule.schedule_type                                    EXISTS
+//   job_pre_employment_checks.content                             EXISTS
+//   workplace arrangement, pay type, pay from/to, hours per week,
+//   "show pay in listing"                                         NO COLUMN
+// The last group has nowhere to be stored today — see the handover.
+
+/** Where the work happens. No column yet. */
+export const WORKPLACE_ARRANGEMENTS = [
+    { value: 'on_site', label: 'On-site', description: 'Work at an office or worksite, all of the time.' },
+    { value: 'hybrid', label: 'Hybrid', description: 'Flexibility to work from home, some of the time.' },
+    { value: 'wfh', label: 'Work from home', description: 'Work from home or anywhere, all of the time.' }
+] as const;
+
+/** `jobs.contract_type`. */
+export const EMPLOYMENT_TYPES = [
+    { value: 'permanent', label: 'Permanent', description: 'Ongoing, no set end date' },
+    { value: 'fixed_term', label: 'Fixed-Term', description: 'For a specific period with an agreed end date' },
+    { value: 'seasonal', label: 'Seasonal', description: 'For a particular time of year or season' },
+    { value: 'casual', label: 'Casual', description: 'No fixed hours, often on an as-needed basis' }
+] as const;
+
+/** Drives `jobs.start_date` — "Set date" reveals a date field. */
+export const START_OPTIONS = [
+    { value: 'immediate', label: 'Immediate start' },
+    { value: 'negotiable', label: 'Negotiable' },
+    { value: 'set_date', label: 'Set date' }
+] as const;
+
+/** Feeds `jobs.hours_description`. */
+export const WORK_HOURS = [
+    { value: 'full_time', label: 'Full-time', description: '30 hours or more' },
+    { value: 'part_time', label: 'Part-time', description: 'Less than 30 hours' }
+] as const;
+
+/** `job_schedule.schedule_type`. */
+export const WORK_SCHEDULES = [
+    { value: 'set', label: 'Set schedule', description: 'Consistent hours and days' },
+    { value: 'flexible', label: 'Flexible schedule', description: 'Varied hours and days' }
+] as const;
+
+/** Feeds `jobs.pay` (free text). No column of its own. */
+export const PAY_TYPES = [
+    { value: 'hourly', label: 'Hourly rate' },
+    { value: 'salary', label: 'Annual Salary' }
+] as const;
+
+/** No column yet. */
+export const SHOW_PAY_OPTIONS = [
+    { value: 'yes', label: 'Yes', description: 'Show pay on job listing' },
+    { value: 'no', label: 'No', description: 'Hide pay on job listing' }
+] as const;
+
+/** `job_pre_employment_checks.content`. Copy is the design's, verbatim. */
+export const PRE_EMPLOYMENT_CHECKS = [
+    { value: 'drug_test', label: "Drug test (Detects drugs in a candidate's urine or saliva sample.)" },
+    { value: 'moj_check', label: 'Ministry of Justice check (Checks for official criminal convictions recorded in New Zealand)' },
+    { value: 'childrens_worker', label: "Children's Worker Safety Check (Safety check and police vetting for individuals working with children (under 18) as per the Children's Act 2014 and Vulnerable Children Act 2014)" }
 ] as const;

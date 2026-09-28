@@ -1,0 +1,330 @@
+<template lwc:render-mode="light">
+    <ui-site-header current="create-job"></ui-site-header>
+
+    <div class="site__body">
+        <main class="site__main" id="create-job-step3-main">
+            <lightning-layout horizontal-align="center">
+                <lightning-layout-item id="create-job-step3-col-main" size="12" large-device-size="10">
+                    <ui-vacancy-stepper current-step="3"></ui-vacancy-stepper>
+
+                    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_large">
+                        <h1 id="create-job-step3-title" class="slds-text-heading_large">
+                            Location, terms and pay
+                        </h1>
+                        <div class="slds-grid slds-no-flex">
+                            <a href="/create-job/step2">
+                                <lightning-button id="create-job-step3-previous-top" label="Previous"></lightning-button>
+                            </a>
+                            <lightning-button
+                                id="create-job-step3-next-top"
+                                variant="brand"
+                                label="Next"
+                                class="slds-m-left_x-small"
+                            ></lightning-button>
+                        </div>
+                    </div>
+
+                    <lightning-layout multiple-rows pull-to-boundary="small">
+                        <lightning-layout-item size="12" large-device-size="8" padding="horizontal-small">
+                            <!-- Location ----------------------------------------->
+                            <h2 id="create-job-step3-location-heading" class="slds-text-heading_medium slds-m-bottom_small">
+                                Location
+                            </h2>
+                            <fieldset id="create-job-step3-workplace" class="slds-form-element slds-m-bottom_large">
+                                <legend class="slds-form-element__label">
+                                    <abbr class="slds-required" title="required">*</abbr>
+                                    Workplace arrangement
+                                </legend>
+                                <p class="slds-text-body_small slds-m-bottom_small">Where will the employee be expected to work most of the time?</p>
+                                <div class="slds-form-element__control">
+                                    <template for:each={workplaceOptions} for:item="opt">
+                                        <div key={opt.value} class="slds-box slds-m-bottom_small">
+                                            <lightning-input
+                                                type="radio"
+                                                name="workplace-arrangement"
+                                                data-field="workplace_arrangement"
+                                                label={opt.label}
+                                                value={opt.value}
+                                                checked={opt.checked}
+                                                onchange={handleRadioChange}
+                                            ></lightning-input>
+                                            <p lwc:if={opt.description} class="slds-text-body_small slds-text-color_weak slds-m-left_large">
+                                                {opt.description}
+                                            </p>
+                                        </div>
+                                    </template>
+                                </div>
+                            </fieldset>
+
+                            <!-- Employment terms --------------------------------->
+                            <h2 id="create-job-step3-terms-heading" class="slds-text-heading_medium slds-m-bottom_small">
+                                Employment terms
+                            </h2>
+                            <fieldset id="create-job-step3-employment-type" class="slds-form-element slds-m-bottom_large">
+                                <legend class="slds-form-element__label">
+                                    Employment type
+                                </legend>
+                                <p class="slds-text-body_small slds-m-bottom_small">What is the nature of the employment agreement?</p>
+                                <div class="slds-form-element__control">
+                                    <template for:each={employmentTypeOptions} for:item="opt">
+                                        <div key={opt.value} class="slds-box slds-m-bottom_small">
+                                            <lightning-input
+                                                type="radio"
+                                                name="employment-type"
+                                                data-field="contract_type"
+                                                label={opt.label}
+                                                value={opt.value}
+                                                checked={opt.checked}
+                                                onchange={handleRadioChange}
+                                            ></lightning-input>
+                                            <p lwc:if={opt.description} class="slds-text-body_small slds-text-color_weak slds-m-left_large">
+                                                {opt.description}
+                                            </p>
+                                        </div>
+                                    </template>
+                                </div>
+                            </fieldset>
+
+                            <fieldset id="create-job-step3-start" class="slds-form-element slds-m-bottom_large">
+                                <legend class="slds-form-element__label">
+                                    <abbr class="slds-required" title="required">*</abbr>
+                                    When is the role expected to begin?
+                                </legend>
+                                <div class="slds-form-element__control">
+                                    <template for:each={startOptionList} for:item="opt">
+                                        <div key={opt.value} class="slds-box slds-m-bottom_small">
+                                            <lightning-input
+                                                type="radio"
+                                                name="start-option"
+                                                data-field="start_option"
+                                                label={opt.label}
+                                                value={opt.value}
+                                                checked={opt.checked}
+                                                onchange={handleRadioChange}
+                                            ></lightning-input>
+                                            <p lwc:if={opt.description} class="slds-text-body_small slds-text-color_weak slds-m-left_large">
+                                                {opt.description}
+                                            </p>
+                                        </div>
+                                    </template>
+                                </div>
+                            </fieldset>
+                            <lightning-input
+                                lwc:if={showStartDate}
+                                id="create-job-step3-start-date"
+                                data-field="start_date"
+                                type="date"
+                                label="Start date"
+                                value={draft.start_date}
+                                onchange={handleInputChange}
+                                class="slds-m-bottom_large"
+                            ></lightning-input>
+
+                            <fieldset id="create-job-step3-work-hours" class="slds-form-element slds-m-bottom_large">
+                                <legend class="slds-form-element__label">
+                                    Work hours
+                                </legend>
+                                <p class="slds-text-body_small slds-m-bottom_small">Is this a full-time or part-time role?</p>
+                                <div class="slds-form-element__control">
+                                    <template for:each={workHoursOptions} for:item="opt">
+                                        <div key={opt.value} class="slds-box slds-m-bottom_small">
+                                            <lightning-input
+                                                type="radio"
+                                                name="work-hours"
+                                                data-field="work_hours"
+                                                label={opt.label}
+                                                value={opt.value}
+                                                checked={opt.checked}
+                                                onchange={handleRadioChange}
+                                            ></lightning-input>
+                                            <p lwc:if={opt.description} class="slds-text-body_small slds-text-color_weak slds-m-left_large">
+                                                {opt.description}
+                                            </p>
+                                        </div>
+                                    </template>
+                                </div>
+                            </fieldset>
+
+                            <lightning-input
+                                id="create-job-step3-hours-per-week"
+                                data-field="hours_per_week"
+                                type="number"
+                                label="Hours per week"
+                                field-level-help="Approximately how many hours per week will this role require?"
+                                value={draft.hours_per_week}
+                                onchange={handleInputChange}
+                                class="slds-m-bottom_large"
+                            ></lightning-input>
+
+                            <fieldset id="create-job-step3-schedule" class="slds-form-element slds-m-bottom_large">
+                                <legend class="slds-form-element__label">
+                                    <abbr class="slds-required" title="required">*</abbr>
+                                    Work schedule
+                                </legend>
+                                <p class="slds-text-body_small slds-m-bottom_small">What is the expected work schedule for this role?</p>
+                                <div class="slds-form-element__control">
+                                    <template for:each={workScheduleOptions} for:item="opt">
+                                        <div key={opt.value} class="slds-box slds-m-bottom_small">
+                                            <lightning-input
+                                                type="radio"
+                                                name="work-schedule"
+                                                data-field="schedule_type"
+                                                label={opt.label}
+                                                value={opt.value}
+                                                checked={opt.checked}
+                                                onchange={handleRadioChange}
+                                            ></lightning-input>
+                                            <p lwc:if={opt.description} class="slds-text-body_small slds-text-color_weak slds-m-left_large">
+                                                {opt.description}
+                                            </p>
+                                        </div>
+                                    </template>
+                                </div>
+                            </fieldset>
+
+                            <!-- Pay ---------------------------------------------->
+                            <h2 id="create-job-step3-pay-heading" class="slds-text-heading_medium slds-m-bottom_small">
+                                Pay
+                            </h2>
+                            <fieldset id="create-job-step3-pay-type" class="slds-form-element slds-m-bottom_large">
+                                <legend class="slds-form-element__label">
+                                    Pay type
+                                </legend>
+                                <div class="slds-form-element__control">
+                                    <template for:each={payTypeOptions} for:item="opt">
+                                        <div key={opt.value} class="slds-box slds-m-bottom_small">
+                                            <lightning-input
+                                                type="radio"
+                                                name="pay-type"
+                                                data-field="pay_type"
+                                                label={opt.label}
+                                                value={opt.value}
+                                                checked={opt.checked}
+                                                onchange={handleRadioChange}
+                                            ></lightning-input>
+                                            <p lwc:if={opt.description} class="slds-text-body_small slds-text-color_weak slds-m-left_large">
+                                                {opt.description}
+                                            </p>
+                                        </div>
+                                    </template>
+                                </div>
+                            </fieldset>
+
+                            <p id="create-job-step3-pay-range-label" class="slds-form-element__label">
+                                Pay range
+                            </p>
+                            <p class="slds-text-body_small slds-m-bottom_small">
+                                Enter the pay range being offered for this role. If pay is exact
+                                amount, enter the amount once in the form field
+                            </p>
+                            <lightning-layout multiple-rows pull-to-boundary="small" class="slds-m-bottom_large">
+                                <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
+                                    <lightning-input
+                                        id="create-job-step3-pay-from"
+                                        data-field="pay_from"
+                                        label={payFromLabel}
+                                        required
+                                        value={draft.pay_from}
+                                        onchange={handleInputChange}
+                                    ></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
+                                    <lightning-input
+                                        id="create-job-step3-pay-to"
+                                        data-field="pay_to"
+                                        label="To (Optional)"
+                                        value={draft.pay_to}
+                                        onchange={handleInputChange}
+                                    ></lightning-input>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <fieldset id="create-job-step3-show-pay" class="slds-form-element slds-m-bottom_large">
+                                <legend class="slds-form-element__label">
+                                    Show pay range in job listing?
+                                </legend>
+                                <div class="slds-form-element__control">
+                                    <template for:each={showPayChoices} for:item="opt">
+                                        <div key={opt.value} class="slds-box slds-m-bottom_small">
+                                            <lightning-input
+                                                type="radio"
+                                                name="show-pay"
+                                                data-field="show_pay"
+                                                label={opt.label}
+                                                value={opt.value}
+                                                checked={opt.checked}
+                                                onchange={handleRadioChange}
+                                            ></lightning-input>
+                                            <p lwc:if={opt.description} class="slds-text-body_small slds-text-color_weak slds-m-left_large">
+                                                {opt.description}
+                                            </p>
+                                        </div>
+                                    </template>
+                                </div>
+                            </fieldset>
+
+                            <!-- Pre-employment checks ---------------------------->
+                            <h2 id="create-job-step3-checks-heading" class="slds-text-heading_medium slds-m-bottom_xx-small">
+                                Pre-employment checks
+                            </h2>
+                            <p class="slds-m-bottom_small">
+                                Please note, pre-employment checks are the responsibility of the
+                                company to organise with the candidate.
+                            </p>
+                            <p id="create-job-step3-checks-help" class="slds-text-body_small slds-m-bottom_xx-small">
+                                Select all that apply.
+                            </p>
+                            <lightning-checkbox-group
+                                id="create-job-step3-checks"
+                                label="What pre-employment checks are required by your company for this role? (Optional)"
+                                options={preEmploymentChecks}
+                                value={selectedChecks}
+                                onchange={handleChecksChange}
+                                class="slds-m-bottom_large"
+                            ></lightning-checkbox-group>
+
+                            <div id="create-job-step3-actions" class="slds-grid slds-grid_align-end slds-m-bottom_x-large">
+                                <a href="/create-job/step2">
+                                    <lightning-button id="create-job-step3-previous" label="Previous"></lightning-button>
+                                </a>
+                                <lightning-button
+                                    id="create-job-step3-next"
+                                    variant="brand"
+                                    label="Next"
+                                    class="slds-m-left_x-small"
+                                ></lightning-button>
+                            </div>
+                        </lightning-layout-item>
+
+                        <!-- The three "Why is this needed?" notes. -->
+                        <lightning-layout-item size="12" large-device-size="4" padding="horizontal-small">
+                            <div id="create-job-step3-note-terms" class="slds-scoped-notification sep-scoped-notification slds-m-bottom_medium">
+                                <p class="sep-scoped-notification__title">Why is this needed?</p>
+                                <p class="sep-scoped-notification__body">
+                                    Employment terms provides candidates with information about the
+                                    required commitment to help them judge if it fits their availability.
+                                </p>
+                            </div>
+                            <div id="create-job-step3-note-pay" class="slds-scoped-notification sep-scoped-notification slds-m-bottom_medium">
+                                <p class="sep-scoped-notification__title">Why is this needed?</p>
+                                <p class="sep-scoped-notification__body">
+                                    Pay information provides transparency about the compensation
+                                    offered, helping candidates assess if the opportunity meets their needs.
+                                </p>
+                            </div>
+                            <div id="create-job-step3-note-checks" class="slds-scoped-notification sep-scoped-notification">
+                                <p class="sep-scoped-notification__title">Why is this needed?</p>
+                                <p class="sep-scoped-notification__body">
+                                    Information about pre-employment checks help match candidates
+                                    with suitable roles and ensures they meet the position's requirements.
+                                </p>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+        </main>
+    </div>
+
+    <ui-site-footer></ui-site-footer>
+</template>
