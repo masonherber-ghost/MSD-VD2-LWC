@@ -904,7 +904,7 @@ export const COMPOSITIONS = [
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 93
+        "htmlLines": 91
     },
     {
         "name": "tokenBrowser",
@@ -962,9 +962,12 @@ export const COMPOSITIONS = [
         "wraps": [],
         "blueprints": [
             "badge",
+            "icon",
             "scopedNotifications"
         ],
-        "sepClasses": [],
+        "sepClasses": [
+            "sep-scoped-notification_warning"
+        ],
         "hasCss": true,
         "css": {
             "lines": 218,
@@ -1024,7 +1027,7 @@ export const COMPOSITIONS = [
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 164
+        "htmlLines": 168
     },
     {
         "name": "vacancyEmptyState",
@@ -1224,7 +1227,21 @@ export const SEP_CLASSES = [
             "src/modules/example/createJobStep6/createJobStep6.html",
             "src/modules/example/createJobStep7/createJobStep7.html",
             "src/modules/ui/blueprintBrowser/blueprintBrowser.html",
-            "src/modules/ui/readOnlyNotice/readOnlyNotice.html"
+            "src/modules/ui/readOnlyNotice/readOnlyNotice.html",
+            "src/modules/ui/vacancyCard/vacancyCard.html"
+        ]
+    },
+    {
+        "name": "sep-scoped-notification_warning",
+        "note": "The warning variant of the shipped scoped notification. `slds-theme_warning` does the container: the bare blueprint has no background or border of its own — they come from the `_light` / `_dark` variants we do not use — and SLDS carries a dedicated `.slds-scoped-notification.slds-theme_warning` rule for this pairing. So there is no skin to write here, only the one thing the theme cannot reach. SLDS colours the icon with `.slds-theme_warning .slds-icon { fill: … }`, which dies at a `lightning-icon`: the svg is two shadow roots down, inside `lightning-primitive-icon`. A custom property crosses that boundary where a descendant selector does not, so the published hook below is step 1 of the sep- order, genuinely available where it was not for the panel above. Setting `variant=\"warning\"` on the icon instead would fill it with the warning ACCENT — amber on an amber container. Opt in per use, alongside the theme class: `class=\"slds-scoped-notification slds-theme_warning sep-scoped-notification_warning\"`",
+        "rules": [
+            {
+                "selector": ".sep-scoped-notification_warning",
+                "body": "--slds-c-icon-color-foreground-default: var(--slds-g-color-on-warning-1);"
+            }
+        ],
+        "usedIn": [
+            "src/modules/ui/vacancyCard/vacancyCard.html"
         ]
     },
     {

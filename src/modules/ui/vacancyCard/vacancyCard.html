@@ -57,17 +57,28 @@
             ></lightning-badge>
 
             <!-- In review carries a standing notice in the design. `role=status`
-                 rather than `alert`: it is not urgent and should not interrupt. -->
+                 rather than `alert`: it is not urgent and should not interrupt.
+
+                 `slds-theme_warning` is how a scoped notification is themed —
+                 the blueprint ships no `_warning` modifier of its own, only
+                 `_light` and `_dark`, and SLDS carries a dedicated
+                 `.slds-scoped-notification.slds-theme_warning` rule for exactly
+                 this pairing.
+
+                 `sep-scoped-notification_warning` carries the one thing the
+                 theme cannot: the icon's colour. See `site.css` — the hook
+                 crosses the shadow boundary that SLDS's own
+                 `.slds-theme_warning .slds-icon` rule does not. -->
             <div
                 lwc:if={card.isInReview}
-                class="slds-scoped-notification slds-media slds-media_center slds-m-horizontal_medium slds-m-bottom_small"
+                class="slds-scoped-notification slds-theme_warning sep-scoped-notification_warning slds-media slds-media_center slds-m-horizontal_medium slds-m-bottom_small"
                 role="status"
             >
                 <div class="slds-media__figure">
                     <lightning-icon
-                        icon-name="utility:info"
+                        icon-name="utility:warning"
                         size="x-small"
-                        alternative-text="Information"
+                        alternative-text="Warning"
                     ></lightning-icon>
                 </div>
                 <div class="slds-media__body">
@@ -135,35 +146,31 @@
                          static id would repeat. `data-action` is the handle, per
                          `rules-lwc-layout.md` § Every landmark element gets an id.
 
-                         The actions are deliberately unwired, matching
-                         `example/jobDetail`'s header actions. What each one does
-                         — and which statuses it should appear for — is a product
-                         decision that has not been taken. -->
+                         WHICH actions appear is the vacancy's lifecycle state,
+                         not a fixed set — `STATUS_ACTIONS` in `example/jobs`
+                         owns that mapping, so this stays presentational. A state
+                         with no action available (`in_review`, which is with
+                         MSD) renders no buttons; the column is kept so the
+                         metadata lines up down a stack of cards.
+
+                         What each one DOES is still unwired, matching
+                         `example/jobDetail`'s header actions. -->
                     <lightning-layout-item
                         size="12"
                         medium-device-size="3"
                         large-device-size="2"
                         padding="horizontal-small"
                     >
-                        <div class="vacancy-card__actions">
-                            <lightning-button
-                                variant="base"
-                                icon-name="utility:edit"
-                                label="Edit"
-                                data-action="edit"
-                            ></lightning-button>
-                            <lightning-button
-                                variant="base"
-                                icon-name="utility:delete"
-                                label="Delete"
-                                data-action="delete"
-                            ></lightning-button>
-                            <lightning-button
-                                variant="base"
-                                icon-name="utility:upload"
-                                label="Submit"
-                                data-action="submit"
-                            ></lightning-button>
+                        <div lwc:if={card.hasActions} class="vacancy-card__actions">
+                            <template for:each={card.actions} for:item="action">
+                                <lightning-button
+                                    key={action.key}
+                                    variant="base"
+                                    icon-name={action.icon}
+                                    label={action.label}
+                                    data-action={action.key}
+                                ></lightning-button>
+                            </template>
                         </div>
                     </lightning-layout-item>
                 </lightning-layout>

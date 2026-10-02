@@ -16,7 +16,6 @@
             menu-alignment="right"
         >
             <template lwc:if={isSignedIn}>
-                <lightning-menu-item href="/" label="Home" prefix-icon-name="utility:home"></lightning-menu-item>
                 <lightning-menu-item
                     href={firstSlotHref}
                     label={firstSlotLabel}
@@ -51,7 +50,6 @@
     <template lwc:else>
         <nav lwc:if={showNav} class="site-nav slds-show_medium">
             <template lwc:if={isSignedIn}>
-                <a href="/" class={homeClass}>Home</a>
                 <!-- One slot, two labels: an employer with nothing listed is sent
                      to create their first vacancy; once anything exists — a draft
                      counts — it becomes the way back to the list. -->

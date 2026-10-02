@@ -59,6 +59,64 @@ function statusClass(status: string): string {
     return `vacancy-card__status vacancy-card__status_${mod}`;
 }
 
+interface CardAction {
+    key: string;
+    label: string;
+    icon: string;
+}
+
+/**
+ * The vacancy actions this app offers, named once.
+ *
+ * The verbs are `example/jobDetail`'s own header menu — Edit, Clone, Close —
+ * plus Submit, the draft -> in_review transition the create flow's last step
+ * performs. Discard is jobDetail's Delete under the label this list uses: on a
+ * card the thing being thrown away is the employer's own listing, and
+ * "Discard" says that without reading as a database operation.
+ */
+const EDIT: CardAction = { key: 'edit', label: 'Edit', icon: 'utility:edit' };
+const SUBMIT: CardAction = { key: 'submit', label: 'Submit', icon: 'utility:upload' };
+const DISCARD: CardAction = { key: 'discard', label: 'Discard', icon: 'utility:delete' };
+const CLOSE: CardAction = { key: 'close', label: 'Close', icon: 'utility:close' };
+const CLONE: CardAction = { key: 'clone', label: 'Clone', icon: 'utility:copy' };
+
+/**
+ * What an employer may do to a vacancy, by lifecycle state and release.
+ *
+ * `draft` -> `in_review` -> `active` -> `closed` (`rules-app-logic.md`
+ * § Vacancy lifecycle).
+ *
+ * `in_review` has none on purpose: the vacancy is with MSD, the card already
+ * says so, and withdrawing it is a transition neither the lifecycle nor the
+ * data models. An empty set renders no buttons rather than disabled ones.
+ *
+ * Two are release-gated, so the set is a function of both and not a lookup.
+ * `release` is passed in rather than read from the module — the caller holds it
+ * in a field, which is what makes the toggle re-render the list. See
+ * `rules-app-logic.md` § The reactivity rule.
+ *
+ * Still unwired, as `example/jobDetail`'s own header actions are — this decides
+ * WHICH actions a state offers, not what they do.
+ */
+function actionsFor(status: string, release: Release): CardAction[] {
+    switch (status) {
+        case 'draft':
+            return [EDIT, SUBMIT, DISCARD];
+        case 'in_review':
+            return [];
+        case 'active':
+            return isEnabled('jobs.editActive', release) ? [EDIT, CLOSE] : [CLOSE];
+        // Re-listing a finished vacancy is a clone, not an edit: the closed
+        // record stays as the account's history of it.
+        case 'closed':
+            return isEnabled('jobs.cloneClosed', release) ? [CLONE, DISCARD] : [DISCARD];
+        // A state the lifecycle does not name is one whose transitions are
+        // unknown, so it offers nothing rather than a draft's set.
+        default:
+            return [];
+    }
+}
+
 interface MetaItem {
     key: string;
     icon: string;
@@ -80,6 +138,8 @@ interface JobCard {
     applicants: string;
     newApplicants: string;
     hasNew: boolean;
+    actions: CardAction[];
+    hasActions: boolean;
 }
 
 /** The account's vacancies as a card grid — the object home for /jobs. */
@@ -215,6 +275,8 @@ export default class Jobs extends LightningElement {
             push('pay', 'utility:moneybag', 'Pay', j.pay);
             push('contract', 'utility:contract', 'Contract', j.contract_type);
 
+            const actions = actionsFor(status, this.release);
+
             return {
                 id: Number(j.id),
                 title: String(j.title ?? 'Untitled vacancy'),
@@ -228,7 +290,9 @@ export default class Jobs extends LightningElement {
                 meta,
                 applicants: count === 1 ? '1 applicant' : `${count} applicants`,
                 newApplicants: `${fresh} new`,
-                hasNew: fresh > 0
+                hasNew: fresh > 0,
+                actions,
+                hasActions: actions.length > 0
             };
         });
     }

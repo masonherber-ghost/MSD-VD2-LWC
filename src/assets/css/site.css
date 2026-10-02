@@ -504,6 +504,28 @@ lightning-button[variant='brand']::part(button):disabled {
     --slds-c-icon-color-foreground-default: var(--site-color-brand-navy);
 }
 
+/* The warning variant of the shipped scoped notification.
+ *
+ * `slds-theme_warning` does the container: the bare blueprint has no
+ * background or border of its own — they come from the `_light` / `_dark`
+ * variants we do not use — and SLDS carries a dedicated
+ * `.slds-scoped-notification.slds-theme_warning` rule for this pairing. So
+ * there is no skin to write here, only the one thing the theme cannot reach.
+ *
+ * SLDS colours the icon with `.slds-theme_warning .slds-icon { fill: … }`,
+ * which dies at a `lightning-icon`: the svg is two shadow roots down, inside
+ * `lightning-primitive-icon`. A custom property crosses that boundary where a
+ * descendant selector does not, so the published hook below is step 1 of the
+ * sep- order, genuinely available where it was not for the panel above.
+ * Setting `variant="warning"` on the icon instead would fill it with the
+ * warning ACCENT — amber on an amber container.
+ *
+ * Opt in per use, alongside the theme class:
+ * `class="slds-scoped-notification slds-theme_warning sep-scoped-notification_warning"` */
+.sep-scoped-notification_warning {
+    --slds-c-icon-color-foreground-default: var(--slds-g-color-on-warning-1);
+}
+
 /* Header row: icon beside the title, with the description below it.
  *
  * The design stacks a header over a description, which the `slds-media` object

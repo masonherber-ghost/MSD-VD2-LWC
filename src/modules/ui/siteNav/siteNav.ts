@@ -85,10 +85,6 @@ export default class SiteNav extends LightningElement {
         return active ? LINK_ACTIVE : LINK;
     }
 
-    get homeClass(): string {
-        return this.current === 'home' ? LINK_ACTIVE : LINK;
-    }
-
     get contactUsClass(): string {
         return this.current === 'contact-us' ? LINK_ACTIVE : LINK;
     }
