@@ -330,39 +330,99 @@
 
 
 /* -----------------------------------------------------------------------------
- * Mapping the SEP scale onto SLDS
+ * Mapping the SEP scale onto SLDS — component hooks and the body size only
  *
- * Only three steps are remapped, and the reason is consumer count. Each SLDS
- * step is read by a different number of declarations in the shipped stylesheet:
+ * The SLDS GLOBAL heading steps are no longer remapped. This block used to set
+ * --slds-g-font-scale-4 and -6 to SEP sizes so `.slds-text-heading_medium` and
+ * `_large` would grow — but a global step is read far beyond those two
+ * classes, so the remap resized other Lightning UI too, and SLDS 2 reserves
+ * its global hooks for theming tools. The heading classes now run at SLDS's
+ * own sizes (scale-4 1.25rem, scale-6 1.75rem). The SEP heading scale lives in
+ * the --dxp block below, where Experience Cloud puts it.
  *
- *   scale-base    6 consumers   the body size            -> remapped
- *   scale-4       7 consumers   .slds-text-heading_medium -> remapped
- *   scale-6       5 consumers   .slds-text-heading_large  -> remapped
- *   scale-2      25 consumers   .slds-text-heading_small, card titles, …
- *   scale-1      23 consumers   page header titles, labels, …
- *   scale-neg-1  62 consumers   help text, badges, assistive chrome
+ * What stays:
  *
- * The bottom three carry Lightning's UI chrome, not page content. Pushing
- * SEP's content sizes through them would resize every label, badge and helper
- * on the site — a different change from applying a type scale, and not this
- * one. Our own headings can reach the full scale through the --site-* tokens
- * above; that is what they are for.
+ *   --slds-g-font-scale-base   The body size. Still a global remap — kept
+ *       because the page copy depends on it; a candidate for the same fix.
+ *   --slds-c-card-heading-font-size, --slds-s-pageheader-title-font-size
+ *       Component hooks, scoped to one component each, now fed from the
+ *       --dxp heading levels so the Theme panel would drive them too.
  * -------------------------------------------------------------------------- */
 
 :root {
     --slds-g-font-scale-base: var(--site-font-page-base);
-    --slds-g-font-scale-4: var(--site-font-heading-md);
-    --slds-g-font-scale-6: var(--site-font-heading-lg);
     --slds-g-font-line-height-base: var(--site-lineheight-body);
 
     /* A card title is a heading, and the reset leaves a bare <h2> at 1em.
-       This is the public hook `.slds-card__header-title` reads. */
-    --slds-c-card-heading-font-size: var(--site-font-heading-xs);
+       This is the public hook `.slds-card__header-title` reads. Heading 6. */
+    --slds-c-card-heading-font-size: var(--dxp-s-text-heading-extra-extra-small-font-size);
 
     /* The page title — the H1 on every list and record page — takes the top
-       step of the scale. SLDS sets this hook to 1.125rem in `@layer shared`;
-       this file is unlayered, so it wins. */
-    --slds-s-pageheader-title-font-size: var(--site-font-heading-2xl);
+       step of the scale. Heading 1. */
+    --slds-s-pageheader-title-font-size: var(--dxp-s-text-heading-extra-large-font-size);
+}
+
+/* -----------------------------------------------------------------------------
+ * Experience Cloud heading styles — a STAND-IN for the Theme panel
+ *
+ * In a real Experience Cloud LWR site these hooks are set by an admin in
+ * Experience Builder's Theme panel (Text tab, Heading 1–6), and the platform
+ * serves them. This prototype has no Theme panel and loads no DXP stylesheet,
+ * so they are declared here. ON LIFT, DELETE THIS BLOCK and enter the same
+ * values in the Theme panel — components that read these hooks then follow
+ * the site's branding unchanged.
+ *
+ * Source of the names: Salesforce's "Experience Cloud LWR Sites" guide (Brand
+ * Your LWR Site → Text --dxp Styling Hooks): "Heading 1 … Heading 6 … You can
+ * configure each of these text styles declaratively in the Theme panel or
+ * programmatically via --dxp styling hooks." The guide names
+ * `--dxp-s-text-heading-<level>-color` for all six levels and
+ * `-font-size` / `-font-family` with them; `--dxp-g-root-font-family` and
+ * `--dxp-g-heading-font-family` are from the platform's own
+ * dxp-styling-hooks.min.css. Weight and line-height hooks exist in the Theme
+ * panel too but their names are unconfirmed, so they are NOT declared — the
+ * heading weight and line-heights stay in site.css and the --site-* tokens.
+ *
+ * Heading N maps to SEP's six sizes, largest first:
+ *
+ *   Heading 1  extra-large        --site-font-heading-2xl  40px
+ *   Heading 2  large              --site-font-heading-xl   36px
+ *   Heading 3  medium             --site-font-heading-lg   32px
+ *   Heading 4  small              --site-font-heading-md   24px
+ *   Heading 5  extra-small        --site-font-heading-sm   20px
+ *   Heading 6  extra-extra-small  --site-font-heading-xs   18px
+ *
+ * Every value points at a --site-* or SLDS token, so this block holds no
+ * numbers of its own and cannot drift from the SEP scale.
+ * -------------------------------------------------------------------------- */
+
+:root {
+    --dxp-g-root-font-family: var(--slds-g-font-family-base);
+    --dxp-g-heading-font-family: var(--slds-g-font-family-base);
+
+    --dxp-s-text-heading-extra-large-font-size: var(--site-font-heading-2xl);
+    --dxp-s-text-heading-extra-large-font-family: var(--dxp-g-heading-font-family);
+    --dxp-s-text-heading-extra-large-color: var(--site-color-brand-navy);
+
+    --dxp-s-text-heading-large-font-size: var(--site-font-heading-xl);
+    --dxp-s-text-heading-large-font-family: var(--dxp-g-heading-font-family);
+    --dxp-s-text-heading-large-color: var(--site-color-brand-navy);
+
+    --dxp-s-text-heading-medium-font-size: var(--site-font-heading-lg);
+    --dxp-s-text-heading-medium-font-family: var(--dxp-g-heading-font-family);
+    --dxp-s-text-heading-medium-color: var(--site-color-brand-navy);
+
+    --dxp-s-text-heading-small-font-size: var(--site-font-heading-md);
+    --dxp-s-text-heading-small-font-family: var(--dxp-g-heading-font-family);
+    --dxp-s-text-heading-small-color: var(--site-color-brand-navy);
+
+    --dxp-s-text-heading-extra-small-font-size: var(--site-font-heading-sm);
+    --dxp-s-text-heading-extra-small-font-family: var(--dxp-g-heading-font-family);
+    --dxp-s-text-heading-extra-small-color: var(--site-color-brand-navy);
+
+    --dxp-s-text-heading-extra-extra-small-font-size: var(--site-font-heading-xs);
+    --dxp-s-text-heading-extra-extra-small-font-family: var(--dxp-g-heading-font-family);
+    --dxp-s-text-heading-extra-extra-small-color: var(--site-color-brand-navy);
 }
 
 /* =============================================================================

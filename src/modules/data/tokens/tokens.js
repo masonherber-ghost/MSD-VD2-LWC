@@ -3106,82 +3106,52 @@ export const PROJECT_TOKENS = [
     {
         "name": "--site-font-heading-2xl",
         "value": "2.5rem",
-        "steps": [
-            "3rem",
-            "3.75rem"
-        ]
+        "steps": []
     },
     {
         "name": "--site-font-heading-xl",
         "value": "2.25rem",
-        "steps": [
-            "2.5rem",
-            "3rem"
-        ]
+        "steps": []
     },
     {
         "name": "--site-font-heading-lg",
         "value": "2rem",
-        "steps": [
-            "2.25rem",
-            "2.5rem"
-        ]
+        "steps": []
     },
     {
         "name": "--site-font-heading-md",
         "value": "1.5rem",
-        "steps": [
-            "1.75rem",
-            "2rem"
-        ]
+        "steps": []
     },
     {
         "name": "--site-font-heading-sm",
         "value": "1.25rem",
-        "steps": [
-            "1.375rem",
-            "1.5rem"
-        ]
+        "steps": []
     },
     {
         "name": "--site-font-heading-xs",
         "value": "1.125rem",
-        "steps": [
-            "1.1875rem",
-            "1.25rem"
-        ]
+        "steps": []
     },
     {
         "name": "--site-font-subtitle",
         "value": "1.5rem",
-        "steps": [
-            "1.75rem",
-            "2rem"
-        ]
+        "steps": []
     },
     {
         "name": "--site-font-strap-lg",
         "value": "1.75rem",
-        "steps": [
-            "1.875rem",
-            "2rem"
-        ]
+        "steps": []
     },
     {
         "name": "--site-font-strap",
         "value": "1.25rem",
-        "steps": [
-            "1.375rem",
-            "1.5rem"
-        ]
+        "steps": []
     },
     {
         "name": "--site-font-strap-sm",
         "value": "0.875rem",
-        "steps": [
-            "0.9375rem",
-            "1rem"
-        ]
+        "steps": []
     },
     {
         "name": "--site-font-body-lg",
@@ -3200,7 +3170,7 @@ export const PROJECT_TOKENS = [
     },
     {
         "name": "--site-font-page-base",
-        "value": "0.9375rem",
+        "value": "0.875rem",
         "steps": []
     },
     {

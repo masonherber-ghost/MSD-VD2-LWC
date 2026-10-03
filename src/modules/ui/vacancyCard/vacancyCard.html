@@ -1,5 +1,27 @@
 <template lwc:render-mode="light">
     <div class="vacancy-card">
+        <!-- In review carries a standing notice, ABOVE the card rather than
+             inside it, full width with 8px (`x-small`) between it and the card.
+             Default styling: the blueprint's light variant with the info icon,
+             no theme and no `sep-` skin. `role="status"` rather than `alert`:
+             it is not urgent and should not interrupt. -->
+        <div
+            lwc:if={card.isInReview}
+            class="slds-scoped-notification slds-scoped-notification_light slds-media slds-media_center slds-m-bottom_x-small"
+            role="status"
+        >
+            <div class="slds-media__figure">
+                <lightning-icon
+                    icon-name="utility:info"
+                    size="x-small"
+                    alternative-text="Information"
+                ></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+                <p>{card.reviewNotice}</p>
+            </div>
+        </div>
+
         <!-- No `icon-name`.
              `lightning-card` renders its icon as a <lightning-icon> inside its
              own shadow root, in a figure with no slot, so custom artwork cannot
@@ -72,29 +94,6 @@
                 </span>
             </h2>
 
-
-            <!-- In review carries a standing notice, first in the card body,
-                 under the title. Default styling: the blueprint's light variant
-                 with the info icon, no theme and no `sep-` skin.
-                 `role="status"` rather than `alert`: it is not urgent and should
-                 not interrupt. 16px either side and below (`_medium`), none
-                 above — the card header already spaces it from the title. -->
-            <div
-                lwc:if={card.isInReview}
-                class="slds-scoped-notification slds-scoped-notification_light slds-media slds-media_center slds-m-horizontal_medium slds-m-bottom_medium"
-                role="status"
-            >
-                <div class="slds-media__figure">
-                    <lightning-icon
-                        icon-name="utility:info"
-                        size="x-small"
-                        alternative-text="Information"
-                    ></lightning-icon>
-                </div>
-                <div class="slds-media__body">
-                    <p>{card.reviewNotice}</p>
-                </div>
-            </div>
 
             <!-- Body: metadata left, actions right.
                  The design puts the action column at 86% across a 912px card,

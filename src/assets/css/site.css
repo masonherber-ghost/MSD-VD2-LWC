@@ -602,12 +602,10 @@ lightning-button[variant='brand']::part(button):disabled {
  *
  * What the site takes instead, read off the shipped stylesheet:
  *
- *   slds-text-heading_large   font-size --slds-g-font-scale-6. NOTE: this is
- *       one design-tokens.css already remaps to --site-font-heading-lg, so the
- *       SIZE is unchanged at 2rem — the removed rule was restating a value the
- *       token layer had already set. What DOES change is an <h1> with that
- *       class, which drops from 2.5rem to 2rem, and the colour, which was navy
- *       and is now simply inherited (the shipped rule sets no colour).
+ *   slds-text-heading_large   font-size --slds-g-font-scale-6, SLDS's own
+ *       1.75rem. design-tokens.css no longer remaps that global step (it
+ *       resized more than headings), so the class runs at the shipped size.
+ *       The SEP heading scale is the --dxp heading hooks in design-tokens.css.
  *
  *   page header title         font-size --slds-s-pageheader-title-font-size,
  *       which SLDS itself declares as 1.125rem — so the title goes from 2rem to
