@@ -1,14 +1,15 @@
 <template lwc:render-mode="light">
-    <header class="slds-global-header_container">
+    <header id="site-header" class="slds-global-header_container">
         <div class="slds-global-header slds-grid">
             <!-- The bar stays full-bleed; this inner row carries the content cap
                  so the wordmark lines up with the page below. See site.css. -->
-            <div class="site-header__inner slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
-                <div class="slds-global-header__item site-header__brand">
+            <div id="site-header-inner" class="site-header__inner slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                <div id="site-header-brand" class="slds-global-header__item site-header__brand">
                     <!-- Logo first, nav after, as the wireframe has it. -->
                     <div class="slds-global-header__logo site-header__logo">
-                        <a href="/" class="site-header__wordmark">
+                        <a id="site-header-home-link" href="/" class="site-header__wordmark">
                             <img
+                                id="site-header-logo"
                                 src="/public/assets/logo-employer-portal.svg"
                                 alt="myMSD — Employers"
                                 class="site-header__logo-image"
@@ -17,6 +18,7 @@
                     </div>
 
                     <ui-site-nav
+                        id="site-header-nav-links"
                         region="links"
                         signed-in={isSignedIn}
                         current={current}
@@ -26,12 +28,13 @@
                 </div>
 
                 <div class="slds-global-header__item">
-                    <ul class="slds-global-actions slds-grid slds-grid_vertical-align-center">
+                    <ul id="site-header-actions" class="slds-global-actions slds-grid slds-grid_vertical-align-center">
                         <template lwc:if={isSignedIn}>
                             <!-- Desktop only: the wireframe's phone bar carries
                                  the avatar and the menu, nothing else. -->
                             <li lwc:if={showNotifications} class="slds-global-actions__item slds-show_medium">
                                 <lightning-button-icon
+                                    id="site-header-notifications-button"
                                     icon-name="utility:notification"
                                     variant="bare"
                                     alternative-text="Notifications"
@@ -39,12 +42,14 @@
                             </li>
                             <li class="slds-global-actions__item slds-p-left_x-small site-header__profile">
                                 <lightning-avatar
+                                    id="site-header-avatar"
                                     fallback-icon-name="standard:user"
                                     alternative-text={userName}
                                     size="small"
                                     variant="circle"
                                 ></lightning-avatar>
                                 <lightning-button-menu
+                                    id="site-header-account-menu"
                                     icon-name="utility:down"
                                     icon-size="x-small"
                                     variant="bare"
@@ -53,16 +58,19 @@
                                     onselect={handleProfileSelect}
                                 >
                                     <lightning-menu-item
+                                        id="site-header-account-profile"
                                         value="/profile"
                                         label="My profile"
                                         prefix-icon-name="utility:user"
                                     ></lightning-menu-item>
                                     <lightning-menu-item
+                                        id="site-header-account-manage-org"
                                         value="/manage-org"
                                         label="Manage org"
                                         prefix-icon-name="utility:settings"
                                     ></lightning-menu-item>
                                     <lightning-menu-item
+                                        id="site-header-account-log-out"
                                         value="sign-out"
                                         label="Log out"
                                         prefix-icon-name="utility:logout"
@@ -75,13 +83,14 @@
                              On a phone it moves inside the menu instead, so the
                              bar is just the logo and one control — see ui/siteNav. -->
                         <li lwc:else class="slds-global-actions__item slds-show_medium">
-                            <a href="/login" class={loginClass}>Login</a>
+                            <a id="site-header-login-link" href="/login" class={loginClass}>Login</a>
                         </li>
 
                         <!-- The phone trigger sits last in the actions row, to the
                              right of the avatar, as the wireframe has it. -->
                         <li class="slds-global-actions__item slds-p-left_xx-small">
                             <ui-site-nav
+                                id="site-header-nav-menu"
                                 region="menu"
                                 signed-in={isSignedIn}
                                 current={current}

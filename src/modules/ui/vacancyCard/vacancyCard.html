@@ -48,41 +48,51 @@
                         {card.subtitle}
                     </span>
                 </span>
+
+                <!-- The status pill, as the heading row's last item rather than
+                     in the card's `actions` slot.
+
+                     `lightning-card` wraps its header below 42.688em — its
+                     resize-reflow rule for 200-400% zoom — so anything in the
+                     actions slot drops under the title on a phone. That rule
+                     lives on the card's own header part; turning it off would be
+                     restyling the card's internals. In the title slot the pill
+                     is in a row we own, so it stays top right at every width.
+
+                     `slds-align-top` pins it to the top of the row while the
+                     icon and title stay centred. The figure classes give it the
+                     icon's no-shrink, no-margin treatment; the heading's gap
+                     spaces it. It is inside the heading, so the status is read
+                     with the title. -->
+                <span class="slds-media__figure vacancy-card__figure slds-align-top">
+                    <lightning-badge
+                        label={card.statusLabel}
+                        class={card.statusClass}
+                    ></lightning-badge>
+                </span>
             </h2>
 
-            <lightning-badge
-                slot="actions"
-                label={card.statusLabel}
-                class={card.statusClass}
-            ></lightning-badge>
 
-            <!-- In review carries a standing notice in the design. `role=status`
-                 rather than `alert`: it is not urgent and should not interrupt.
-
-                 `slds-theme_warning` is how a scoped notification is themed —
-                 the blueprint ships no `_warning` modifier of its own, only
-                 `_light` and `_dark`, and SLDS carries a dedicated
-                 `.slds-scoped-notification.slds-theme_warning` rule for exactly
-                 this pairing.
-
-                 `sep-scoped-notification_warning` carries the one thing the
-                 theme cannot: the icon's colour. See `site.css` — the hook
-                 crosses the shadow boundary that SLDS's own
-                 `.slds-theme_warning .slds-icon` rule does not. -->
+            <!-- In review carries a standing notice, first in the card body,
+                 under the title. Default styling: the blueprint's light variant
+                 with the info icon, no theme and no `sep-` skin.
+                 `role="status"` rather than `alert`: it is not urgent and should
+                 not interrupt. 16px either side and below (`_medium`), none
+                 above — the card header already spaces it from the title. -->
             <div
                 lwc:if={card.isInReview}
-                class="slds-scoped-notification slds-theme_warning sep-scoped-notification_warning slds-media slds-media_center slds-m-horizontal_medium slds-m-bottom_small"
+                class="slds-scoped-notification slds-scoped-notification_light slds-media slds-media_center slds-m-horizontal_medium slds-m-bottom_medium"
                 role="status"
             >
                 <div class="slds-media__figure">
                     <lightning-icon
-                        icon-name="utility:warning"
+                        icon-name="utility:info"
                         size="x-small"
-                        alternative-text="Warning"
+                        alternative-text="Information"
                     ></lightning-icon>
                 </div>
                 <div class="slds-media__body">
-                    <p class="slds-text-body_small">{card.reviewNotice}</p>
+                    <p>{card.reviewNotice}</p>
                 </div>
             </div>
 
@@ -135,42 +145,58 @@
                         </div>
                     </lightning-layout-item>
 
-                    <!-- The action column.
-                         `variant="base"` is the shipped borderless button: its
-                         label takes --slds-g-color-accent-1, which this project
-                         already points at #0071bb — the design's accent colour —
-                         so no colour is set here.
+                    <!-- The action column: one row-action menu.
+                         `lightning-button-menu` at its defaults — the bordered
+                         icon trigger with `utility:down` — is the shipped
+                         `slds-dropdown-trigger`, so the opening, keyboard
+                         handling and focus return are Salesforce's. It replaced a
+                         stack of base buttons and the CSS that tightened them.
+
+                         `auto-right` aligns the menu's right edge to the trigger
+                         and flips it upward when there is no room below — a card
+                         near the foot of the viewport would otherwise open its
+                         menu off-screen.
 
                          No `id` on anything in this component: the card renders
                          once per row inside a `for:each` in `example/jobs`, and a
                          static id would repeat. `data-action` is the handle, per
                          `rules-lwc-layout.md` § Every landmark element gets an id.
 
-                         WHICH actions appear is the vacancy's lifecycle state,
-                         not a fixed set — `STATUS_ACTIONS` in `example/jobs`
-                         owns that mapping, so this stays presentational. A state
-                         with no action available (`in_review`, which is with
-                         MSD) renders no buttons; the column is kept so the
-                         metadata lines up down a stack of cards.
+                         WHICH items appear is the vacancy's lifecycle state —
+                         `data/vacancyRules` owns that, so this stays
+                         presentational. A state with nothing to offer
+                         (`in_review`, which is with MSD) gets one disabled line
+                         saying why, rather than an empty menu.
 
-                         What each one DOES is still unwired, matching
+                         What each item DOES is still unwired, matching
                          `example/jobDetail`'s header actions. -->
+                    <!-- Bottom right of its cell: `slds-align-bottom` overrides the
+                         row's `vertical-align="center"` for this item alone, and
+                         `slds-grid_align-end` inside it pushes the trigger right.
+                         Stacked on a phone, it is simply the right of its row. -->
                     <lightning-layout-item
                         size="12"
                         medium-device-size="3"
                         large-device-size="2"
                         padding="horizontal-small"
+                        class="slds-align-bottom"
                     >
-                        <div lwc:if={card.hasActions} class="vacancy-card__actions">
-                            <template for:each={card.actions} for:item="action">
-                                <lightning-button
-                                    key={action.key}
-                                    variant="base"
-                                    icon-name={action.icon}
-                                    label={action.label}
-                                    data-action={action.key}
-                                ></lightning-button>
-                            </template>
+                        <div class="slds-grid slds-grid_align-end">
+                            <lightning-button-menu
+                                alternative-text={actionsLabel}
+                                menu-alignment="auto-right"
+                            >
+                                <template for:each={card.actions} for:item="action">
+                                    <lightning-menu-item
+                                        key={action.key}
+                                        value={action.key}
+                                        label={action.label}
+                                        prefix-icon-name={action.icon}
+                                        disabled={action.disabled}
+                                        data-action={action.key}
+                                    ></lightning-menu-item>
+                                </template>
+                            </lightning-button-menu>
                         </div>
                     </lightning-layout-item>
                 </lightning-layout>

@@ -581,10 +581,8 @@ export const COMPOSITIONS = [
     {
         "name": "jobListingPreview",
         "tag": "ui-job-listing-preview",
-        "doc": "One vacancy rendered as the candidate would see it.\n\nUsed twice, which is the whole point of it being here rather than inside a\npage: the last step of the create-a-vacancy flow previews the listing before\nit is submitted, and `/jobs/job-detail` shows the same thing for a vacancy\nthat already exists. `editable` is the only difference — the flow puts an\nEdit control on each section, the record page does not.\n\nPresentational only. The page fetches and passes `job` down whole; this\nshapes it for display and dispatches `edit` when one of those controls is\npressed. See `rules-lwc-layout.md` § The modular component rule.\n\nTWO REGIONS THE DATA CANNOT FILL, both already known:\n\n- **Important strengths.** There is no job strengths table. `job_skills`,\n`job_languages` and the rest all exist; strengths exist only on\n`candidate_strengths`, which is the other side of the match.\n- **On-the-job training.** No column holds it. The create flow collects it\non step 5 and passes it in through `training-level`; a saved vacancy has\nnowhere to have kept it, so the record page shows the empty state.\n\nNeither is filled with a plausible value. Both render the same \"Nothing\nadded\" state a genuinely empty section gets.",
+        "doc": "Composed in `aboutSections` from `idPrefix` — see `ids`.",
         "composes": [
-            "lightning-accordion",
-            "lightning-accordion-section",
             "lightning-badge",
             "lightning-button",
             "lightning-card",
@@ -594,12 +592,69 @@ export const COMPOSITIONS = [
         ],
         "wraps": [],
         "blueprints": [],
-        "sepClasses": [
-            "sep-listing-chip"
+        "sepClasses": [],
+        "hasCss": true,
+        "css": {
+            "lines": 9,
+            "text": "/* The \"About the job\" card's header: 16px above the title rather than the\n * card's default 12px (--slds-g-spacing-3).\n *\n * The header is inside `lightning-card`'s shadow root, so its padding is set\n * through the card's own public hook, not a class. Scoped to this card by the\n * class on its host; every other card keeps the default. */\n.job-listing-preview__about-card {\n    --slds-c-card-header-spacing-block-start: var(--slds-g-spacing-4);\n}",
+            "selectors": [
+                ".job-listing-preview__about-card"
+            ],
+            "hooks": [
+                "--slds-c-card-header-spacing-block-start"
+            ],
+            "tokens": [
+                "--slds-g-spacing-4"
+            ],
+            "siteTokens": [],
+            "parts": [],
+            "privateHooks": [],
+            "rawColors": [],
+            "important": 0
+        },
+        "htmlLines": 306
+    },
+    {
+        "name": "jobManageHeader",
+        "tag": "ui-job-manage-header",
+        "doc": "Labels this header words differently from the shared action set.",
+        "composes": [
+            "lightning-badge",
+            "lightning-button",
+            "lightning-button-group",
+            "lightning-button-menu",
+            "lightning-icon",
+            "lightning-layout",
+            "lightning-layout-item",
+            "lightning-menu-item"
         ],
-        "hasCss": false,
-        "css": null,
-        "htmlLines": 244
+        "wraps": [],
+        "blueprints": [
+            "pageHeader"
+        ],
+        "sepClasses": [
+            "sep-page-header",
+            "sep-page-header_spaced",
+            "sep-status-tag"
+        ],
+        "hasCss": true,
+        "css": {
+            "lines": 22,
+            "text": "/* Who and when — one per line on a phone, inline from the medium breakpoint.\n *\n * SLDS ships no responsive auto width: its `slds-medium-size_*` classes are\n * fractions, which spread the items across the row in equal columns instead of\n * letting each take its own width as the design does. Nor does it ship a gap\n * utility. So the direction switch and the gap are here, on this component's\n * own class — no SLDS class is restyled.\n *\n * 48em is the SLDS medium breakpoint, the one `lightning-layout`'s\n * `medium-device-size` and `slds-show_medium` use, so it switches with the\n * rest of the header. */\n.job-manage-header__meta {\n    display: flex;\n    flex-direction: column;\n}\n\n@media (min-width: 48em) {\n    .job-manage-header__meta {\n        flex-direction: row;\n        flex-wrap: wrap;\n        column-gap: var(--slds-g-spacing-5);\n    }\n}",
+            "selectors": [
+                ".job-manage-header__meta"
+            ],
+            "hooks": [],
+            "tokens": [
+                "--slds-g-spacing-5"
+            ],
+            "siteTokens": [],
+            "parts": [],
+            "privateHooks": [],
+            "rawColors": [],
+            "important": 0
+        },
+        "htmlLines": 150
     },
     {
         "name": "kitchenSink",
@@ -837,7 +892,7 @@ export const COMPOSITIONS = [
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 51
+        "htmlLines": 57
     },
     {
         "name": "siteHeader",
@@ -858,7 +913,7 @@ export const COMPOSITIONS = [
         "sepClasses": [],
         "hasCss": false,
         "css": null,
-        "htmlLines": 93
+        "htmlLines": 102
     },
     {
         "name": "siteNav",
@@ -904,7 +959,7 @@ export const COMPOSITIONS = [
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 91
+        "htmlLines": 99
     },
     {
         "name": "tokenBrowser",
@@ -953,27 +1008,25 @@ export const COMPOSITIONS = [
         "doc": "One vacancy, as a full-width card for the /jobs list.\n\nPresentational only: the page fetches and shapes the data, this renders it.\nThat keeps it liftable into a DX project and droppable into an App Builder\nregion — see `rules-lwc-layout.md` § The modular component rule.",
         "composes": [
             "lightning-badge",
-            "lightning-button",
+            "lightning-button-menu",
             "lightning-card",
             "lightning-icon",
             "lightning-layout",
-            "lightning-layout-item"
+            "lightning-layout-item",
+            "lightning-menu-item"
         ],
         "wraps": [],
         "blueprints": [
             "badge",
-            "icon",
             "scopedNotifications"
         ],
-        "sepClasses": [
-            "sep-scoped-notification_warning"
-        ],
+        "sepClasses": [],
         "hasCss": true,
         "css": {
-            "lines": 218,
-            "text": "/* The card root.\n *\n * No `position: relative` here any more. It existed only to be the containing\n * block for a stretched ::after that made the whole card one click target; that\n * went when the card gained its action column, because an overlay covering the\n * card also covers the actions. The title anchor below is now the only link,\n * which is what Lightning does on a card that carries actions. */\n\n/* The title link. */\n.vacancy-card__link {\n    text-decoration: none;\n}\n\n.vacancy-card__link:hover {\n    text-decoration: underline;\n}\n\n/* The card header, rebuilt as a media object.\n *\n * `lightning-card` renders its icon inside a shadow-root figure with no slot,\n * so showing the vacancy's own artwork means dropping `icon-name` and composing\n * the figure here, in the title slot. Nothing shipped is restyled — this is our\n * markup in a public slot, which is the difference between composing and\n * reaching in.\n *\n * Two properties are pinned rather than left to the blueprint, because SLDS 2\n * does not settle them the way SLDS 1 did:\n *\n *   align-items   `slds-media_center` is the class that used to centre a figure\n *       against a multi-line body, and it has NO bare rule at all in the SLDS 2\n *       bundle — 0 hits as a standalone selector. `.slds-media` then declares\n *       `align-items` five times across layers, centre twice and flex-start\n *       once, so which one lands is not worth depending on.\n *\n *   gap           `.slds-media__figure` declares `margin-inline-end` in twelve\n *       separate rules, from spacing-1 to spacing-5. One value stated here\n *       beats guessing which of them wins, so the figure's own margin is\n *       zeroed below and the gap owns the spacing. */\n.vacancy-card__heading {\n    align-items: center;\n    gap: var(--slds-g-spacing-3);\n}\n\n/* The title is the flexible half; the icon never shrinks to make room. */\n.vacancy-card__figure {\n    flex: none;\n    margin-inline-end: 0;\n}\n\n/* The category icon.\n *\n * A size is not spacing, so this is a literal rather than a spacing token — and\n * a value used by one component is a value, not a token, per\n * `rules-lwc-layout.md`. 2.75rem is the 44px the artwork is drawn at on the\n * live site; the file's own 56x56 viewBox scales into it.\n *\n * `display: block` removes the inline baseline gap, which would otherwise sit\n * the icon a few pixels low against the title. */\n.vacancy-card__icon {\n    display: block;\n    width: 2.75rem;\n    height: 2.75rem;\n}\n\n/* The subtitle sits under the title rather than inline with it. */\n.vacancy-card__subtitle {\n    display: block;\n    font-weight: var(--slds-g-font-weight-4);\n}\n\n/* Icon + value pairs, one per line.\n *\n * A wrapping row read as a run-on sentence once a card carried five of them —\n * the eye had no column to follow. Stacked, each value starts at the same x and\n * the icons form a scannable rail down the left.\n *\n * Padding comes from `slds-p-around_medium` on the element, not from here: the\n * spacing rules want the utility where one exists. SLDS 2 ships no gap utility,\n * so the row gap is the token in custom CSS. */\n.vacancy-card__meta {\n    display: flex;\n    flex-direction: column;\n    row-gap: var(--slds-g-spacing-1);\n}\n\n.vacancy-card__meta-item {\n    display: inline-flex;\n    align-items: center;\n    gap: var(--slds-g-spacing-2);\n    min-width: 0;\n}\n\n/* A utility icon is filled by its own hook, not by `color`.\n *\n * `variant=\"bare\"` looked like the way to make it inherit currentColor; it is\n * not — the icons rendered with real path data and were simply invisible\n * against the card. --slds-c-icon-color-foreground-default is the public hook\n * the default variant actually reads. */\n.vacancy-card__meta-icon {\n    --slds-c-icon-color-foreground-default: var(--site-color-brand-navy);\n    flex: none;\n    \n}\n\n.vacancy-card__meta-value {\n    color: var(--slds-g-color-on-surface-1);\n    min-width: 0;\n    /* font-size: var(--site-font-body-sm); */\n}\n\n/* The action column — Edit, Delete, Submit stacked.\n *\n * Written as flex here rather than with `slds-grid_vertical`, for two reasons.\n * It matches `.vacancy-card__meta` directly above, which solves the same problem\n * the same way; and in a vertical grid the SLDS cross-axis class names invert\n * (`slds-grid_align-*` sets justify-content, which is the vertical axis once the\n * direction is column), so the class that reads as \"left align\" does not do it.\n *\n * SLDS ships no gap utility, so the 4px row gap the design specifies is the\n * token in custom CSS — the same exception `.vacancy-card__meta` takes.\n *\n * `align-items: flex-start` keeps each button at its label's width. Without it\n * the default `stretch` widens every button to the column, which puts a wide\n * invisible hit area to the right of \"Edit\".\n *\n * Nothing sets the label colour: `variant=\"base\"` reads\n * --slds-g-color-accent-1, which `design-tokens.css` already points at\n * #0071bb — the design's accent. */\n.vacancy-card__actions {\n    display: flex;\n    flex-direction: column;\n    align-items: flex-start;\n    row-gap: var(--slds-g-spacing-1);\n\n    /* Tighten the buttons themselves. The row-gap above was never the problem.\n     *\n     * A UTILITY CANNOT DO THIS. `slds-p-vertical_none` ships, but the padding\n     * sits on the <button> inside `lightning-button`'s shadow root, and a class\n     * on the host does not reach it. Hooks are the only lever, and these two are\n     * published shared-tier ones, so this is the component's API rather than an\n     * override.\n     *\n     * `design-tokens.css` sets both at `:root` for the site's pill CTAs —\n     * spacing-block 12px, spacing-inline 20px. That is right for a standing\n     * button and much too loose for a stacked list of link-style actions: it\n     * made each row ~48px against the design's 32px. Redeclaring them here wins\n     * for these buttons alone, because a custom property resolves from the\n     * nearest ancestor that sets it.\n     *\n     * The arithmetic, read off the stylesheets rather than guessed:\n     *   font-size   --slds-s-button-font-size      17px\n     *   line-height --slds-s-button-font-lineheight 1.33  -> ~22.6px line box\n     *   border                                      1px top + 1px bottom\n     *   + 4px block padding each side               -> ~32px, the design's row\n     *\n     * (Those two font hooks are live here. `lightning-button` sets\n     * `data-render-mode=\"shadow\"` on itself, which is what activates\n     * `button.slds.css` — unlike `lightning-badge`, which never sets it and\n     * whose equivalent hook is inert. See the status-tag note below.)\n     *\n     * Inline padding goes to zero so the icons line up with the column's left\n     * edge; 20px of it indented every row away from the metadata rail. */\n    --slds-s-button-spacing-block: var(--slds-g-spacing-1);\n    --slds-s-button-spacing-inline: 0;\n}\n\n/* Status tag — SEP's four states.\n *\n * All of it is tier-4 hooks. `lightning-badge` exposes twelve public\n * `--slds-c-badge-*` hooks and, unusually, NO private ones — so nothing here\n * bends anything it shouldn't.\n *\n * The shipped geometry already matches the design: `.slds-badge` uses\n * padding-block 4px + padding-inline 8px, so at the 14px text below the tag is\n * 24px tall and 8px padded — the design's numbers exactly. Only the radius,\n * the size and the three colours per state need setting.\n *\n * Two of the four are filled with white text, two are tinted with a matching\n * border. That is a real distinction in the design, not decoration: filled\n * means terminal (Active, Closed), outlined means in progress (In review,\n * Draft). Keep it if you add a state. */\n\n.vacancy-card__status {\n    --slds-c-badge-font-size: var(--site-font-body-sm);\n    --slds-c-badge-radius-border: var(--site-radius-pill);\n\n}\n\n/* The tag's height.\n *\n * SEP's Tag specifies line-height 1. The badge's default is `normal`, which in\n * Atkinson gives an 18px line box at 14px, making the tag 28px against the\n * design's 24.\n *\n * This has to go on the PART, and the route there is worth recording because\n * two plausible levers do nothing:\n *\n *   --slds-c-badge-font-lineheight   declared in the component's own\n *       `badge.slds.css`, but every rule in that file is scoped to\n *       `:host([data-render-mode=\"shadow\"])`, and `lightning-badge` — unlike\n *       `lightning-button` — never sets that attribute. The file is inert; the\n *       badge is styled entirely by the global `.slds-badge` rule on its host.\n *       Setting the hook is measurably a no-op.\n *\n *   line-height on the host   does not reach the label, which lives in the\n *       shadow span and keeps its own `normal`.\n *\n * Verified by reading the computed line-height off both elements. */\n.vacancy-card__status::part(badge) {\n    line-height: 1;\n}\n\n/* Active — filled navy. */\n.vacancy-card__status_active {\n    --slds-c-badge-color-background: var(--site-bg-accent-secondary);\n    --slds-c-badge-color-border: var(--site-bg-accent-secondary);\n    --slds-c-badge-text-color: var(--site-text-inverse-primary);\n}\n\n/* In review — tinted, with a warning-orange border and text. */\n.vacancy-card__status_in-review {\n    --slds-c-badge-color-background: var(--site-color-red-05);\n    --slds-c-badge-color-border: var(--site-bg-warning);\n    --slds-c-badge-text-color: var(--site-bg-warning);\n}\n\n/* Draft — tinted, with a purple border and text. */\n.vacancy-card__status_draft {\n    --slds-c-badge-color-background: var(--site-bg-secondary);\n    --slds-c-badge-color-border: var(--site-color-brand-purple);\n    --slds-c-badge-text-color: var(--site-color-brand-purple);\n}\n\n/* Closed — filled, in the disabled blue-grey. */\n.vacancy-card__status_closed {\n    --slds-c-badge-color-background: var(--site-bg-disabled);\n    --slds-c-badge-color-border: var(--site-bg-disabled);\n    --slds-c-badge-text-color: var(--site-text-inverse-primary);\n}",
+            "lines": 118,
+            "text": "/* The card root.\n *\n * No `position: relative` here any more. It existed only to be the containing\n * block for a stretched ::after that made the whole card one click target; that\n * went when the card gained its action column, because an overlay covering the\n * card also covers the actions. The title anchor below is now the only link,\n * which is what Lightning does on a card that carries actions. */\n\n/* The card's frame: a heavy top edge in the link colour, 2px elsewhere, 8px\n * corners.\n *\n * All three go through `lightning-card`'s PUBLIC hooks — the border is drawn\n * on the <article> inside its shadow root, out of reach of a class. Set on the\n * wrapper, they inherit into the card. `--slds-c-card-sizing-border` feeds\n * `border-width` directly, so it takes the four-value shorthand.\n *\n *   colour  --site-text-accent-primary — the value design-tokens.css gives\n *           --slds-s-link-color. Read from the project token rather than from\n *           --slds-s-link-color itself, which the SLDS Linter lists as private.\n *   width   SLDS's border scale stops at 4px (--slds-g-sizing-border-4), so\n *           the 8px top edge is twice that rather than a literal.\n *   radius  --slds-g-radius-border-3 is 0.5rem, 8px. */\n.vacancy-card {\n    --slds-c-card-color-border: var(--site-text-accent-primary);\n    --slds-c-card-sizing-border: calc(var(--slds-g-sizing-border-4) * 2)\n        var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2);\n    --slds-c-card-radius-border: var(--slds-g-radius-border-3);\n}\n\n/* The title link. */\n.vacancy-card__link {\n    text-decoration: none;\n}\n\n.vacancy-card__link:hover {\n    text-decoration: underline;\n}\n\n/* The card header, rebuilt as a media object.\n *\n * `lightning-card` renders its icon inside a shadow-root figure with no slot,\n * so showing the vacancy's own artwork means dropping `icon-name` and composing\n * the figure here, in the title slot. Nothing shipped is restyled — this is our\n * markup in a public slot, which is the difference between composing and\n * reaching in.\n *\n * Two properties are pinned rather than left to the blueprint, because SLDS 2\n * does not settle them the way SLDS 1 did:\n *\n *   align-items   `slds-media_center` is the class that used to centre a figure\n *       against a multi-line body, and it has NO bare rule at all in the SLDS 2\n *       bundle — 0 hits as a standalone selector. `.slds-media` then declares\n *       `align-items` five times across layers, centre twice and flex-start\n *       once, so which one lands is not worth depending on.\n *\n *   gap           `.slds-media__figure` declares `margin-inline-end` in twelve\n *       separate rules, from spacing-1 to spacing-5. One value stated here\n *       beats guessing which of them wins, so the figure's own margin is\n *       zeroed below and the gap owns the spacing. */\n.vacancy-card__heading {\n    align-items: center;\n    gap: var(--slds-g-spacing-3);\n}\n\n/* The title is the flexible half; the icon never shrinks to make room. */\n.vacancy-card__figure {\n    flex: none;\n    margin-inline-end: 0;\n}\n\n/* The category icon.\n *\n * A size is not spacing, so this is a literal rather than a spacing token — and\n * a value used by one component is a value, not a token, per\n * `rules-lwc-layout.md`. 2.75rem is the 44px the artwork is drawn at on the\n * live site; the file's own 56x56 viewBox scales into it.\n *\n * `display: block` removes the inline baseline gap, which would otherwise sit\n * the icon a few pixels low against the title. */\n.vacancy-card__icon {\n    display: block;\n    width: 2rem;\n    height: 2rem;\n}\n\n/* The subtitle sits under the title rather than inline with it. */\n.vacancy-card__subtitle {\n    display: block;\n    font-weight: var(--slds-g-font-weight-4);\n}\n\n/* Icon + value pairs, one per line.\n *\n * A wrapping row read as a run-on sentence once a card carried five of them —\n * the eye had no column to follow. Stacked, each value starts at the same x and\n * the icons form a scannable rail down the left.\n *\n * Padding comes from `slds-p-around_medium` on the element, not from here: the\n * spacing rules want the utility where one exists. SLDS 2 ships no gap utility,\n * so the row gap is the token in custom CSS. */\n.vacancy-card__meta {\n    display: flex;\n    flex-direction: column;\n    row-gap: var(--slds-g-spacing-1);\n}\n\n.vacancy-card__meta-item {\n    display: inline-flex;\n    align-items: center;\n    gap: var(--slds-g-spacing-2);\n    min-width: 0;\n}\n\n/* A utility icon is filled by its own hook, not by `color`.\n *\n * `variant=\"bare\"` looked like the way to make it inherit currentColor; it is\n * not — the icons rendered with real path data and were simply invisible\n * against the card. --slds-c-icon-color-foreground-default is the public hook\n * the default variant actually reads. */\n.vacancy-card__meta-icon {\n    --slds-c-icon-color-foreground-default: var(--site-color-brand-navy);\n    flex: none;\n    \n}\n\n.vacancy-card__meta-value {\n    color: var(--slds-g-color-on-surface-1);\n    min-width: 0;\n    /* font-size: var(--site-font-body-sm); */\n}",
             "selectors": [
-                ".vacancy-card__actions",
+                ".vacancy-card",
                 ".vacancy-card__figure",
                 ".vacancy-card__heading",
                 ".vacancy-card__icon",
@@ -983,51 +1036,34 @@ export const COMPOSITIONS = [
                 ".vacancy-card__meta-icon",
                 ".vacancy-card__meta-item",
                 ".vacancy-card__meta-value",
-                ".vacancy-card__status",
-                ".vacancy-card__status::part(badge)",
-                ".vacancy-card__status_active",
-                ".vacancy-card__status_closed",
-                ".vacancy-card__status_draft",
-                ".vacancy-card__status_in-review",
                 ".vacancy-card__subtitle"
             ],
             "hooks": [
-                "--slds-c-badge-color-background",
-                "--slds-c-badge-color-border",
-                "--slds-c-badge-font-size",
-                "--slds-c-badge-radius-border",
-                "--slds-c-badge-text-color",
-                "--slds-c-icon-color-foreground-default",
-                "--slds-s-button-spacing-block",
-                "--slds-s-button-spacing-inline"
+                "--slds-c-card-color-border",
+                "--slds-c-card-radius-border",
+                "--slds-c-card-sizing-border",
+                "--slds-c-icon-color-foreground-default"
             ],
             "tokens": [
                 "--slds-g-color-on-surface-1",
                 "--slds-g-font-weight-4",
+                "--slds-g-radius-border-3",
+                "--slds-g-sizing-border-2",
+                "--slds-g-sizing-border-4",
                 "--slds-g-spacing-1",
                 "--slds-g-spacing-2",
                 "--slds-g-spacing-3"
             ],
             "siteTokens": [
-                "--site-bg-accent-secondary",
-                "--site-bg-disabled",
-                "--site-bg-secondary",
-                "--site-bg-warning",
                 "--site-color-brand-navy",
-                "--site-color-brand-purple",
-                "--site-color-red-05",
-                "--site-font-body-sm",
-                "--site-radius-pill",
-                "--site-text-inverse-primary"
+                "--site-text-accent-primary"
             ],
-            "parts": [
-                "badge"
-            ],
+            "parts": [],
             "privateHooks": [],
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 168
+        "htmlLines": 191
     },
     {
         "name": "vacancyEmptyState",
@@ -1159,6 +1195,10 @@ export const SEP_CLASSES = [
                 "body": "--slds-s-pageheader-sizing-border: 0;\n    --slds-s-pageheader-shadow: none;\n    padding: 0;"
             },
             {
+                "selector": ".sep-page-header .slds-page-header__title",
+                "body": "color: var(--site-color-brand-navy);"
+            },
+            {
                 "selector": ".sep-page-header .slds-page-header__row_gutters",
                 "body": "margin-inline: 0;"
             },
@@ -1172,11 +1212,12 @@ export const SEP_CLASSES = [
             "src/modules/example/designSystem/designSystem.html",
             "src/modules/example/emails/emails.html",
             "src/modules/example/home/home.html",
-            "src/modules/example/jobDetail/jobDetail.html",
             "src/modules/example/jobs/jobs.html",
+            "src/modules/example/jobs2/jobs2.html",
             "src/modules/example/manageOrg/manageOrg.html",
             "src/modules/example/profile/profile.html",
             "src/modules/example/vacancies/vacancies.html",
+            "src/modules/ui/jobManageHeader/jobManageHeader.html",
             "src/modules/ui/pagePlaceholder/pagePlaceholder.html"
         ]
     },
@@ -1192,10 +1233,11 @@ export const SEP_CLASSES = [
         "usedIn": [
             "src/modules/example/emails/emails.html",
             "src/modules/example/home/home.html",
-            "src/modules/example/jobDetail/jobDetail.html",
             "src/modules/example/jobs/jobs.html",
+            "src/modules/example/jobs2/jobs2.html",
             "src/modules/example/manageOrg/manageOrg.html",
-            "src/modules/example/profile/profile.html"
+            "src/modules/example/profile/profile.html",
+            "src/modules/ui/jobManageHeader/jobManageHeader.html"
         ]
     },
     {
@@ -1227,8 +1269,7 @@ export const SEP_CLASSES = [
             "src/modules/example/createJobStep6/createJobStep6.html",
             "src/modules/example/createJobStep7/createJobStep7.html",
             "src/modules/ui/blueprintBrowser/blueprintBrowser.html",
-            "src/modules/ui/readOnlyNotice/readOnlyNotice.html",
-            "src/modules/ui/vacancyCard/vacancyCard.html"
+            "src/modules/ui/readOnlyNotice/readOnlyNotice.html"
         ]
     },
     {
@@ -1240,9 +1281,7 @@ export const SEP_CLASSES = [
                 "body": "--slds-c-icon-color-foreground-default: var(--slds-g-color-on-warning-1);"
             }
         ],
-        "usedIn": [
-            "src/modules/ui/vacancyCard/vacancyCard.html"
-        ]
+        "usedIn": []
     },
     {
         "name": "sep-listing-chip",
@@ -1253,9 +1292,7 @@ export const SEP_CLASSES = [
                 "body": "--slds-c-badge-color-background: var(--slds-g-color-accent-container-1);\n    --slds-c-badge-color-border: var(--slds-g-color-accent-container-1);\n    --slds-c-badge-text-color: var(--slds-g-color-on-accent-1);\n    --slds-c-badge-radius-border: var(--site-radius-pill);"
             }
         ],
-        "usedIn": [
-            "src/modules/ui/jobListingPreview/jobListingPreview.html"
-        ]
+        "usedIn": []
     },
     {
         "name": "sep-text-primary",
@@ -1352,6 +1389,68 @@ export const SEP_CLASSES = [
             {
                 "selector": ".sep-text-success",
                 "body": "color: var(--site-text-success);"
+            }
+        ],
+        "usedIn": []
+    },
+    {
+        "name": "sep-status-tag",
+        "note": "The tag's height. SEP's Tag specifies line-height 1. The badge's default is `normal`, which in Atkinson gives an 18px line box at 14px, making the tag 28px against the design's 24. This has to go on the PART, and the route there is worth recording because two plausible levers do nothing: --slds-c-badge-font-lineheight   declared in the component's own `badge.slds.css`, but every rule in that file is scoped to `:host([data-render-mode=\"shadow\"])`, and `lightning-badge` — unlike `lightning-button` — never sets that attribute. The file is inert; the badge is styled entirely by the global `.slds-badge` rule on its host. Setting the hook is measurably a no-op. line-height on the host   does not reach the label, which lives in the shadow span and keeps its own `normal`. Verified by reading the computed line-height off both elements.",
+        "rules": [
+            {
+                "selector": ".sep-status-tag",
+                "body": "--slds-c-badge-font-size: var(--site-font-body-sm);\n    --slds-c-badge-radius-border: var(--site-radius-pill);"
+            },
+            {
+                "selector": ".sep-status-tag::part(badge)",
+                "body": "line-height: 1;"
+            }
+        ],
+        "usedIn": [
+            "src/modules/data/vacancyRules/vacancyRules.ts",
+            "src/modules/ui/jobManageHeader/jobManageHeader.html"
+        ]
+    },
+    {
+        "name": "sep-status-tag_active",
+        "note": "Active — filled navy.",
+        "rules": [
+            {
+                "selector": ".sep-status-tag_active",
+                "body": "--slds-c-badge-color-background: var(--site-bg-accent-secondary);\n    --slds-c-badge-color-border: var(--site-bg-accent-secondary);\n    --slds-c-badge-text-color: var(--site-text-inverse-primary);"
+            }
+        ],
+        "usedIn": []
+    },
+    {
+        "name": "sep-status-tag_in-review",
+        "note": "In review — tinted, with a warning-orange border and text.",
+        "rules": [
+            {
+                "selector": ".sep-status-tag_in-review",
+                "body": "--slds-c-badge-color-background: var(--site-color-red-05);\n    --slds-c-badge-color-border: var(--site-bg-warning);\n    --slds-c-badge-text-color: var(--site-bg-warning);"
+            }
+        ],
+        "usedIn": []
+    },
+    {
+        "name": "sep-status-tag_draft",
+        "note": "Draft — tinted, with a purple border and text.",
+        "rules": [
+            {
+                "selector": ".sep-status-tag_draft",
+                "body": "--slds-c-badge-color-background: var(--site-bg-secondary);\n    --slds-c-badge-color-border: var(--site-color-brand-purple);\n    --slds-c-badge-text-color: var(--site-color-brand-purple);"
+            }
+        ],
+        "usedIn": []
+    },
+    {
+        "name": "sep-status-tag_closed",
+        "note": "Closed — filled, in the disabled blue-grey.",
+        "rules": [
+            {
+                "selector": ".sep-status-tag_closed",
+                "body": "--slds-c-badge-color-background: var(--site-bg-disabled);\n    --slds-c-badge-color-border: var(--site-bg-disabled);\n    --slds-c-badge-text-color: var(--site-text-inverse-primary);"
             }
         ],
         "usedIn": []

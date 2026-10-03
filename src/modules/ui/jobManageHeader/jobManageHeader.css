@@ -1,0 +1,23 @@
+/* Who and when — one per line on a phone, inline from the medium breakpoint.
+ *
+ * SLDS ships no responsive auto width: its `slds-medium-size_*` classes are
+ * fractions, which spread the items across the row in equal columns instead of
+ * letting each take its own width as the design does. Nor does it ship a gap
+ * utility. So the direction switch and the gap are here, on this component's
+ * own class — no SLDS class is restyled.
+ *
+ * 48em is the SLDS medium breakpoint, the one `lightning-layout`'s
+ * `medium-device-size` and `slds-show_medium` use, so it switches with the
+ * rest of the header. */
+.job-manage-header__meta {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 48em) {
+    .job-manage-header__meta {
+        flex-direction: row;
+        flex-wrap: wrap;
+        column-gap: var(--slds-g-spacing-5);
+    }
+}

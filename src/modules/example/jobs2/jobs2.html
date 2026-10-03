@@ -1,0 +1,101 @@
+<template lwc:render-mode="light">
+    <ui-site-header current="jobs"></ui-site-header>
+
+    <div class="site__body" id="jobs2-body">
+        <main class="site__main" id="jobs2-main">
+            <!-- The same object home as /jobs, drawn as a list view: one row per
+                 vacancy in a `lightning-datatable` instead of one card each.
+                 Full content width rather than /jobs's centred 10-of-12 — a
+                 table of eight columns needs the room the cards do not. -->
+
+            <!-- Object home header ---------------------------------------------->
+            <div
+                id="jobs2-header"
+                class="slds-page-header sep-page-header sep-page-header_spaced slds-m-bottom_medium"
+            >
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1 id="jobs2-title" class="slds-page-header__title slds-truncate">My jobs</h1>
+                            </div>
+                        </div>
+                        <p id="jobs2-item-count" class="slds-page-header__name-meta">{itemCount}</p>
+                    </div>
+                    <div class="slds-page-header__col-actions">
+                        <div class="slds-page-header__controls">
+                            <div class="slds-page-header__control">
+                                <a href="/create-job/step1">
+                                    <lightning-button
+                                        id="jobs2-list-job-button"
+                                        variant="brand"
+                                        label="List a job"
+                                    ></lightning-button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The same filter bar, fed by the same state, as /jobs. -->
+            <ui-job-filter-bar
+                id="jobs2-filter-bar"
+                options={filterOptions}
+                value={filter}
+                search-term={search}
+                onfilterchange={handleFilterChange}
+                onsearchchange={handleSearchChange}
+            ></ui-job-filter-bar>
+
+            <div lwc:if={hasError} id="jobs2-error" class="slds-box slds-theme_default">
+                <lightning-icon icon-name="utility:info" size="small" class="slds-m-right_x-small"></lightning-icon>
+                <span>{error}</span>
+                <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
+                    The data API runs under <code>npm run dev</code> only.
+                </p>
+            </div>
+
+            <div lwc:elseif={isEmpty} id="jobs2-empty" class="slds-box slds-theme_default">
+                <p>No vacancies for this account.</p>
+            </div>
+
+            <!-- "Nothing matches" is a different state from "nothing exists",
+                 and only the first one is worth offering a way out of. -->
+            <div lwc:elseif={hasNoMatches} id="jobs2-no-matches" class="slds-box slds-theme_default">
+                <p>No vacancies match these filters.</p>
+                <div class="slds-m-top_x-small">
+                    <lightning-button
+                        id="jobs2-clear-filters-button"
+                        variant="base"
+                        label="Clear filters"
+                        onclick={handleClearFilters}
+                    ></lightning-button>
+                </div>
+            </div>
+
+            <!-- Loading is the table's own: `is-loading` draws the shipped
+                 spinner inside it, so there is no separate loading box.
+
+                 Sorting is the table's native header control. It reports the
+                 column and direction through `onsort`; the rows are re-ordered
+                 here, because `lightning-datatable` never sorts its own data. -->
+            <div lwc:else class="slds-box slds-box_x-small slds-theme_default">
+                <lightning-datatable
+                    id="jobs2-table"
+                    key-field="id"
+                    columns={columns}
+                    data={rows}
+                    hide-checkbox-column
+                    is-loading={loading}
+                    sorted-by={sortedBy}
+                    sorted-direction={sortedDirection}
+                    default-sort-direction="asc"
+                    onsort={handleSort}
+                ></lightning-datatable>
+            </div>
+        </main>
+    </div>
+
+    <ui-site-footer></ui-site-footer>
+</template>

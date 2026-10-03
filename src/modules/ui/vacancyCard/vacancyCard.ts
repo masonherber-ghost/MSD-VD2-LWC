@@ -20,4 +20,14 @@ export default class VacancyCard extends LightningElement {
      * § The reactivity rule.
      */
     @api showApplicants = false;
+
+    /**
+     * The menu trigger is an icon with no visible text, so its accessible name
+     * carries the vacancy — "Actions for General Labourer" — or a screen reader
+     * would hear a list of identical "Actions" buttons.
+     */
+    get actionsLabel(): string {
+        const title = String(this.card.title ?? '').trim();
+        return title ? `Actions for ${title}` : 'Actions';
+    }
 }

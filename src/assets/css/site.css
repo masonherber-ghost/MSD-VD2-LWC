@@ -377,6 +377,18 @@ lightning-button[variant='brand']::part(button):disabled {
     padding: 0;
 }
 
+/* The page title, navy like every other heading.
+ *
+ * The site-wide `h1`…`h6` rule cannot do this one: `.slds-page-header__title`
+ * sets its own colour (--slds-g-color-on-surface-3) on the same element, and
+ * that SLDS rule is unlayered, so its class selector outranks an element
+ * selector. There is no title-colour hook — the shipped rule reads the GLOBAL
+ * token directly, and redefining that would recolour far more than titles.
+ * Scoped to the opt-in class, so a stock page header keeps the stock colour. */
+.sep-page-header .slds-page-header__title {
+    color: var(--site-color-brand-navy);
+}
+
 /* Removing the header's padding has a consequence two of its own rows depend on.
  *
  * SLDS builds `__row_gutters` and `__detail-row` to BLEED to the header's
@@ -563,7 +575,7 @@ lightning-button[variant='brand']::part(button):disabled {
     line-height: var(--site-lineheight-body);
 }
 
-/* NOTHING HERE ON PURPOSE — headings run at SLDS's own sizes.
+/* Headings run at SLDS's own sizes. (Their colour is the rule after this note.)
  *
  * Four heading customisations were removed to see the stock Lightning
  * treatment. If they are wanted back, they were:
@@ -606,6 +618,58 @@ lightning-button[variant='brand']::part(button):disabled {
  * `ui/pageHero`'s h1 carries `slds-text-heading_large` as well as its own
  * class, so it falls back to the shipped size rather than losing one — its own
  * stylesheet only sets a max-width. */
+
+/* Heading colour and weight — navy and bold, site-wide. SIZES are still
+ * SLDS's own (above).
+ *
+ * Weight: SLDS resets h1-h6 to `font-weight: inherit` and its
+ * `slds-text-heading_*` classes set size only, so headings were body weight.
+ * `--slds-g-font-weight-7` (700) is the SLDS token for it; there is no
+ * heading-weight hook to set instead. The same limits as the colour apply: a
+ * class that sets its own weight on the heading wins, and a `lightning-card`'s
+ * own title (drawn in its shadow root) is out of reach — that one has a public
+ * hook, `--slds-c-card-heading-font-weight`, not set here.
+ *
+ * An element rule, and the only one that could do this: SLDS sets NO colour on
+ * h1-h6 (its reset leaves them inheriting), and there is no heading-colour
+ * token or hook to set instead. So this overrides nothing SLDS declares on a
+ * heading element — it gives headings a colour where they had none.
+ *
+ * What it does NOT beat: an SLDS class that sets a colour on the heading
+ * itself. `.slds-page-header__title` sets `--slds-g-color-on-surface-3`, and
+ * that rule is UNLAYERED in this build — SLDS's `@layer component` block
+ * spans only a handful of rules near the top of the bundle; the page header is
+ * outside it. Unlayered class beats unlayered element on specificity, so page
+ * titles get their navy from `.sep-page-header .slds-page-header__title`
+ * instead (with the page header rules below).
+ *
+ * What it does not reach, by design:
+ *   - text in a child that sets its own colour — a link stays a link, and the
+ *     `slds-text-color_weak` "(optional)" in a create-flow heading stays weak;
+ *   - a heading with its own colour class, which outranks an element selector
+ *     (`.email__heading`, already navy via --site-text-accent-secondary);
+ *   - headings inside a `lightning-*` shadow root, such as a `lightning-card`
+ *     given a string `title`. The rule cannot cross that boundary.
+ */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--site-color-brand-navy);
+    font-weight: var(--slds-g-font-weight-7);
+}
+
+/* A `lightning-card`'s own title — the `title="…"` string form — is an <h2>
+ * inside the card's shadow root, so the heading rule above never reaches it.
+ *
+ * The card exposes the region as `part="title"`, and nothing inside the shadow
+ * sets the heading's colour (its own stylesheet sets only the weight, through
+ * `--slds-c-card-heading-font-weight`, already 700), so the <h2> inherits what
+ * the part is given. There is no card heading-colour hook; `--slds-c-card-
+ * text-color` would recolour the whole card.
+ *
+ * A title passed through the `title` slot is our own markup and already takes
+ * the heading rule; a link inside it keeps its link colour either way. */
+lightning-card::part(title) {
+    color: var(--site-color-brand-navy);
+}
 
 /* The job listing's chips.
  *
@@ -680,3 +744,83 @@ lightning-button[variant='brand']::part(button):disabled {
 .sep-text-disabled { color: var(--site-text-disabled); }
 .sep-text-error { color: var(--site-text-error); }
 .sep-text-success { color: var(--site-text-success); }
+
+/* Status tag — SEP's four states.
+ *
+ * All of it is tier-4 hooks. `lightning-badge` exposes twelve public
+ * `--slds-c-badge-*` hooks and, unusually, NO private ones — so nothing here
+ * bends anything it shouldn't.
+ *
+ * The shipped geometry already matches the design: `.slds-badge` uses
+ * padding-block 4px + padding-inline 8px, so at the 14px text below the tag is
+ * 24px tall and 8px padded — the design's numbers exactly. Only the radius,
+ * the size and the three colours per state need setting.
+ *
+ * Two of the four are filled with white text, two are tinted with a matching
+ * border. That is a real distinction in the design, not decoration: filled
+ * means terminal (Active, Closed), outlined means in progress (In review,
+ * Draft). Keep it if you add a state.
+ *
+ * A `sep-` class rather than the vacancy card's own, because more than one
+ * screen shows a vacancy's status: the /jobs cards and the job detail header.
+ * `statusTagClass()` in `data/vacancyRules` names the classes for a status, so
+ * no screen spells them itself.
+ *
+ * Opt in per use: `class={statusTagClass}` on a `lightning-badge`. */
+
+.sep-status-tag {
+    --slds-c-badge-font-size: var(--site-font-body-sm);
+    --slds-c-badge-radius-border: var(--site-radius-pill);
+}
+
+/* The tag's height.
+ *
+ * SEP's Tag specifies line-height 1. The badge's default is `normal`, which in
+ * Atkinson gives an 18px line box at 14px, making the tag 28px against the
+ * design's 24.
+ *
+ * This has to go on the PART, and the route there is worth recording because
+ * two plausible levers do nothing:
+ *
+ *   --slds-c-badge-font-lineheight   declared in the component's own
+ *       `badge.slds.css`, but every rule in that file is scoped to
+ *       `:host([data-render-mode="shadow"])`, and `lightning-badge` — unlike
+ *       `lightning-button` — never sets that attribute. The file is inert; the
+ *       badge is styled entirely by the global `.slds-badge` rule on its host.
+ *       Setting the hook is measurably a no-op.
+ *
+ *   line-height on the host   does not reach the label, which lives in the
+ *       shadow span and keeps its own `normal`.
+ *
+ * Verified by reading the computed line-height off both elements. */
+.sep-status-tag::part(badge) {
+    line-height: 1;
+}
+
+/* Active — filled navy. */
+.sep-status-tag_active {
+    --slds-c-badge-color-background: var(--site-bg-accent-secondary);
+    --slds-c-badge-color-border: var(--site-bg-accent-secondary);
+    --slds-c-badge-text-color: var(--site-text-inverse-primary);
+}
+
+/* In review — tinted, with a warning-orange border and text. */
+.sep-status-tag_in-review {
+    --slds-c-badge-color-background: var(--site-color-red-05);
+    --slds-c-badge-color-border: var(--site-bg-warning);
+    --slds-c-badge-text-color: var(--site-bg-warning);
+}
+
+/* Draft — tinted, with a purple border and text. */
+.sep-status-tag_draft {
+    --slds-c-badge-color-background: var(--site-bg-secondary);
+    --slds-c-badge-color-border: var(--site-color-brand-purple);
+    --slds-c-badge-text-color: var(--site-color-brand-purple);
+}
+
+/* Closed — filled, in the disabled blue-grey. */
+.sep-status-tag_closed {
+    --slds-c-badge-color-background: var(--site-bg-disabled);
+    --slds-c-badge-color-border: var(--site-bg-disabled);
+    --slds-c-badge-text-color: var(--site-text-inverse-primary);
+}

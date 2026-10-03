@@ -18,13 +18,6 @@ const PATH_STEPS = [
     { value: 'closed', label: 'Closed' }
 ];
 
-const JOB_STATUS_LABELS: Record<string, string> = {
-    draft: 'Draft',
-    in_review: 'In review',
-    active: 'Active',
-    closed: 'Closed'
-};
-
 /** Pipeline order, which is also the order the sidebar widget lists them in. */
 const CANDIDATE_STATUSES = [
     { value: 'applied', label: 'Applied' },
@@ -133,23 +126,6 @@ export default class JobDetail extends LightningElement {
         this.counts = counts;
     }
 
-    async handleRecordSwitch(event: CustomEvent): Promise<void> {
-        const id = Number((event.detail as { value?: string })?.value);
-        if (!id || id === Number(this.job?.id)) {
-            return;
-        }
-        this.loading = true;
-        try {
-            await this.loadJob(id);
-            // Keep the URL addressable so a switched-to record can be linked.
-            window.history.pushState({}, '', `/jobs/job-detail?id=${id}`);
-        } catch (e) {
-            this.error = e instanceof ApiError ? e.message : 'Could not load that vacancy.';
-        } finally {
-            this.loading = false;
-        }
-    }
-
     /**
      * Edit: seed the create flow from this vacancy, then open it at step 1.
      *
@@ -182,24 +158,19 @@ export default class JobDetail extends LightningElement {
 
     // -- highlights panel --------------------------------------------------
 
-    get recordOptions(): { value: string; label: string; checked: boolean }[] {
-        return this.jobs.map((j) => ({
-            value: String(j.id),
-            label: String(j.title ?? 'Untitled vacancy'),
-            checked: Number(j.id) === Number(this.job?.id)
-        }));
-    }
-
-    get statusLabel(): string {
-        const status = String(this.job?.status ?? '');
-        return JOB_STATUS_LABELS[status] ?? titleCase(status);
+    /**
+     * The creator's name for the header. `api.job()` does not join it;
+     * `api.jobs()` does, and that list is already loaded for this account.
+     */
+    get creatorName(): string {
+        const row = this.jobs.find((j) => Number(j.id) === Number(this.job?.id));
+        return String(row?.creator_name ?? '');
     }
 
     get candidateCount(): number {
         return this.candidates.length;
     }
 
-    /** The switcher label is the record name, as it is on a Lightning record page. */
     /**
      * The vacancy's category icon. '' when the job type has no artwork yet, in
      * which case the header keeps the shipped `standard:job_profile` icon —

@@ -1,0 +1,155 @@
+<template lwc:render-mode="light">
+    <!-- The Manage job header: the vacancy's page header on its record page.
+
+         Still the `slds-page-header` blueprint for the container and the type
+         (`__name`, `__title`), with the project's `sep-page-header` skin. What
+         changed is the GRID: the blueprint's `__row` / `__col-*` classes never
+         wrap — SLDS 2 ships no media query for the page header at all — so on a
+         phone the title was squeezed to an ellipsis beside a full-width button
+         group. Each row is now a `lightning-layout`, whose items go full width
+         below the medium breakpoint and stack. Nothing here is restyled. -->
+    <div id="job-header" class="slds-page-header sep-page-header sep-page-header_spaced">
+        <!-- Title and actions ------------------------------------------------
+             8 + 4 from medium up; each 12, so stacked, below it. `around-small`
+             padding with the matching `pull-to-boundary` keeps the outer edges
+             flush with the page, and gives the stacked rows their gap. -->
+        <lightning-layout id="job-header-title-row" multiple-rows vertical-align="center" pull-to-boundary="small">
+            <lightning-layout-item
+                id="job-header-col-title"
+                size="12"
+                medium-device-size="8"
+                padding="around-small"
+            >
+                <div class="slds-page-header__name">
+                    <div class="slds-page-header__name-title">
+                        <h1 id="job-header-title" class="slds-page-header__title">Manage job</h1>
+                    </div>
+                    <div class="slds-grid slds-grid_vertical-align-center slds-m-left_small">
+                        <!-- The SEP status tag, the same one the /jobs cards
+                             carry — `sep-status-tag` in `site.css`. -->
+                        <!-- <lightning-badge
+                            id="job-header-status"
+                            label={statusLabel}
+                            class={statusTagClass}
+                        ></lightning-badge> -->
+                    </div>
+                </div>
+            </lightning-layout-item>
+
+            <lightning-layout-item
+                id="job-header-col-actions"
+                size="12"
+                medium-device-size="4"
+                padding="around-small"
+            >
+                <div class="slds-grid slds-grid_align-end slds-grid_vertical-align-center">
+                    <lightning-button
+                        lwc:if={showApplicants}
+                        id="job-header-view-applicants-button"
+                        variant="brand"
+                        label="View applicants"
+                        class="slds-m-right_small"
+                    ></lightning-button>
+                    <!-- The lead action and the rest, as one button group: the
+                         Lightning record-page pattern. The lead button is
+                         `primaryAction` — "Set job outcome" on a live vacancy,
+                         Edit otherwise, absent when neither applies — and the
+                         menu holds every other action, from `data/vacancyRules`
+                         plus this page's own. Only Edit is wired; the rest are
+                         unwired, as the card actions are.
+
+                         The trigger's height is matched to the button beside it
+                         by the `lightning-button-group lightning-button-menu`
+                         rule in `site.css`. -->
+                    <lightning-button-group id="job-header-actions">
+                        <lightning-button
+                            lwc:if={primaryAction}
+                            id="job-header-primary-action-button"
+                            label={primaryAction.label}
+                            onclick={handlePrimary}
+                        ></lightning-button>
+                        <lightning-button-menu
+                            id="job-header-actions-menu"
+                            alternative-text="More actions"
+                            menu-alignment="auto-right"
+                            onselect={handleAction}
+                        >
+                            <template for:each={menuItems} for:item="item">
+                                <lightning-menu-item
+                                    key={item.key}
+                                    value={item.key}
+                                    label={item.label}
+                                    prefix-icon-name={item.icon}
+                                    disabled={item.disabled}
+                                ></lightning-menu-item>
+                            </template>
+                        </lightning-button-menu>
+                    </lightning-button-group>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+
+        <!-- Who and when ------------------------------------------------------
+             Inline at their own width from medium up, one per line below it —
+             the design's two frames. SLDS's responsive sizes are fractions
+             only (no `slds-medium-size_auto`), so the switch is a few lines in
+             this component's own stylesheet, on its own class. The list grows;
+             Edit holds the right edge. -->
+        <lightning-layout id="job-header-details-row" vertical-align="start" class="slds-m-top_small">
+            <lightning-layout-item flexibility="auto">
+                <ul id="job-header-meta" class="job-manage-header__meta">
+                    <template for:each={metaItems} for:item="item">
+                        <li
+                            key={item.key}
+                            class="slds-grid slds-grid_vertical-align-center slds-m-bottom_x-small"
+                        >
+                            <lightning-icon
+                                icon-name={item.icon}
+                                size="x-small"
+                                class="slds-m-right_x-small"
+                            ></lightning-icon>
+                            <span>{item.text}</span>
+                        </li>
+                    </template>
+                </ul>
+            </lightning-layout-item>
+            <lightning-layout-item lwc:if={canEdit}>
+                <lightning-button
+                    id="job-header-edit-details-button"
+                    variant="base"
+                    icon-name="utility:edit"
+                    label="Edit"
+                    onclick={handleEdit}
+                ></lightning-button>
+            </lightning-layout-item>
+        </lightning-layout>
+
+        <!-- How the vacancy is run --------------------------------------------
+             Plain badges, wrapping. The design's first tag, the application
+             management mode ("Self managed application"), is not here: the
+             column holds slugs (`employer-manages`, …) and nothing in the
+             project defines their labels. Raised in the build report. -->
+        <lightning-layout id="job-header-settings-row" vertical-align="start" class="slds-m-top_x-small">
+            <lightning-layout-item flexibility="auto">
+                <div id="job-header-tags" class="slds-grid slds-wrap">
+                    <template for:each={tags} for:item="tag">
+                        <lightning-badge
+                            key={tag.key}
+                            label={tag.label}
+                            class="slds-m-right_x-small slds-m-bottom_x-small"
+                        ></lightning-badge>
+                    </template>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item lwc:if={canEdit}>
+                <lightning-button
+                    id="job-header-edit-settings-button"
+                    variant="base"
+                    icon-name="utility:edit"
+                    label="Edit"
+                    onclick={handleEdit}
+                ></lightning-button>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

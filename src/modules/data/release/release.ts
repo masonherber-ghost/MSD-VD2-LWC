@@ -83,6 +83,12 @@ const FEATURES: Record<string, Release> = {
     'jobs.editActive': '2+',
     'jobs.cloneClosed': '2+',
 
+    // Recording how a vacancy ended (filled, not filled, …) from the job
+    // detail header. Part of the first release; a placeholder for now — the
+    // action is listed, nothing behind it yet, and the data has no outcome
+    // column to write to.
+    'jobDetail.setOutcome': '1.1',
+
     // Not shipped yet — the bell is dressing until there is something behind it.
     'siteHeader.notifications': '2+'
 };

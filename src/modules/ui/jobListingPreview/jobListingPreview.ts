@@ -1,5 +1,7 @@
 import { LightningElement, api } from 'lwc';
+import Toast from 'lightning/toast';
 import { TRAINING_LEVELS } from 'data/reference';
+import { JOB_STATUS_LABELS, statusTagClass } from 'data/vacancyRules';
 
 type Row = Record<string, unknown>;
 
@@ -24,6 +26,11 @@ interface AboutSection {
     boxes: Box[];
     isEmpty: boolean;
     emptyText: string;
+    /** Composed in `aboutSections` from `idPrefix` — see `ids`. */
+    id?: string;
+    editId?: string;
+    /** Every section but the first has a rule above it. */
+    showDivider?: boolean;
 }
 
 const text = (value: unknown): string => String(value ?? '').trim();
@@ -71,7 +78,87 @@ export default class JobListingPreview extends LightningElement {
      */
     @api trainingLevel = '';
 
+    /**
+     * Prefixes every `id` this component renders, so the page that places it
+     * names them: `job-detail-listing` on the record page,
+     * `create-job-step7-listing` in the create flow. The component renders on
+     * both, so a fixed id here could not stay unique across the site's ids —
+     * and the page prefix keeps them readable in a diff, per
+     * `rules-lwc-layout.md` § Every landmark element gets an `id`.
+     */
+    @api idPrefix = 'job-listing';
+
+    /**
+     * The "Job preview" heading and status tag above the title. The record
+     * page turns it on; the create flow's last step has its own "Preview your
+     * job listing" heading, so it leaves this off.
+     */
+    @api showPreviewHeading = false;
+
+    /**
+     * Every static landmark's id, from `idPrefix`. Keyed in camelCase because
+     * a template expression cannot hold a hyphen (`ids.col-main` would parse
+     * as a subtraction); the ids themselves are kebab-case.
+     */
+    get ids(): Record<string, string> {
+        const p = this.idPrefix || 'job-listing';
+        const names = [
+            'root', 'layout', 'col-main', 'col-about',
+            'title', 'title-edit-button', 'subtitle',
+            'location', 'location-icon', 'location-edit-button',
+            'facts',
+            'description-heading', 'description-edit-button', 'description', 'description-empty',
+            'selling-points-heading', 'selling-points-edit-button', 'selling-points', 'selling-points-empty',
+            'training-heading', 'training-edit-button', 'training', 'training-empty',
+            'checks-heading', 'checks-edit-button', 'checks', 'checks-empty',
+            'schedule-heading', 'schedule-edit-button', 'schedule', 'schedule-empty',
+            'about-card', 'about-heading',
+            'preview-heading', 'status-group', 'status-label', 'status',
+            'job-id', 'job-id-heading', 'job-id-value', 'job-id-copy-button'
+        ];
+        return Object.fromEntries(
+            names.map((n) => [n.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase()), `${p}-${n}`])
+        );
+    }
+
     // -- header --------------------------------------------------------------
+
+    get statusLabel(): string {
+        const status = text(this.job.status);
+        return JOB_STATUS_LABELS[status] ?? status;
+    }
+
+    /** The SEP status tag, the one the /jobs cards and the page header carry. */
+    get statusBadgeClass(): string {
+        return `${statusTagClass(text(this.job.status))} slds-m-left_x-small`;
+    }
+
+    /**
+     * `jobs.external_job_id` — the stable business key, and the number an
+     * employer quotes to MSD. The section is left out when the record has none
+     * (a draft in the create flow, before it is saved).
+     */
+    get jobId(): string {
+        return text(this.job.external_job_id);
+    }
+
+    /**
+     * Copy the job ID. `lightning/toast` confirms either way: it builds its own
+     * overlay container, so it needs no host app (`rules-architecture.md`
+     * § Version pinning). The clipboard API needs a secure context; where it is
+     * missing or refused, say so rather than fail silently.
+     */
+    async handleCopyJobId(): Promise<void> {
+        try {
+            await navigator.clipboard.writeText(this.jobId);
+            Toast.show({ label: 'Job ID copied', message: this.jobId, variant: 'success' }, this);
+        } catch {
+            Toast.show(
+                { label: 'Could not copy the job ID', message: 'Select it and copy it instead.', variant: 'error' },
+                this
+            );
+        }
+    }
 
     get title(): string {
         return text(this.job.title);
@@ -181,7 +268,18 @@ export default class JobListingPreview extends LightningElement {
      * of near-identical markup: the sections only differ in whether they hold
      * chips or boxes of chips, and the template branches on that.
      */
+    /** The about card's sections, each with its own id and its Edit button's. */
     get aboutSections(): AboutSection[] {
+        const p = this.idPrefix || 'job-listing';
+        return this.buildAboutSections().map((section, i) => ({
+            ...section,
+            showDivider: i > 0,
+            id: `${p}-about-${section.key}`,
+            editId: `${p}-about-${section.key}-edit-button`
+        }));
+    }
+
+    private buildAboutSections(): AboutSection[] {
         const languages = ((this.job.languages as Row[]) ?? []).map((l, i) => ({
             key: `lang-${i}`,
             title: text(l.language_name),

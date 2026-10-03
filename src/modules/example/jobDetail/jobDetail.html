@@ -1,291 +1,233 @@
 <template lwc:render-mode="light">
     <ui-site-header current="jobs"></ui-site-header>
 
-    <div class="site__body">
-        <main class="site__main">
-            <div lwc:if={loading} class="slds-is-relative job-detail__loading slds-box slds-theme_default">
-                <lightning-spinner alternative-text="Loading vacancies" size="small"></lightning-spinner>
-            </div>
+    <div class="site__body" id="job-detail-body">
+        <main class="site__main" id="job-detail-main">
+            <!-- One measure for the whole page, as on /jobs: full width
+                 below the large breakpoint, 10 of 12 columns from it up. The
+                 item carries no padding, so the header, the rule and the body
+                 below keep the page's own left edge. -->
+            <lightning-layout id="job-detail-page-layout" horizontal-align="center">
+                <lightning-layout-item id="job-detail-page-column" size="12" large-device-size="10">
+                    <div lwc:if={loading} id="job-detail-loading" class="slds-is-relative job-detail__loading slds-box slds-theme_default">
+                        <lightning-spinner id="job-detail-spinner" alternative-text="Loading vacancies" size="small"></lightning-spinner>
+                    </div>
 
-            <div lwc:elseif={hasError} class="slds-box slds-theme_default">
-                <lightning-icon icon-name="utility:info" size="small" class="slds-m-right_x-small"></lightning-icon>
-                <span>{error}</span>
-                <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
-                    The data API runs under <code>npm run dev</code> only.
-                </p>
-            </div>
+                    <div lwc:elseif={hasError} id="job-detail-error" class="slds-box slds-theme_default">
+                        <lightning-icon icon-name="utility:info" size="small" class="slds-m-right_x-small"></lightning-icon>
+                        <span>{error}</span>
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
+                            The data API runs under <code>npm run dev</code> only.
+                        </p>
+                    </div>
 
-            <template lwc:elseif={hasJob}>
-                <lightning-breadcrumbs class="slds-m-bottom_x-small">
-                    <lightning-breadcrumb label="My jobs" href="/jobs"></lightning-breadcrumb>
-                    <lightning-breadcrumb
-                        label={recordTitle}
-                        href={recordHref}
-                    ></lightning-breadcrumb>
-                </lightning-breadcrumbs>
+                    <template lwc:elseif={hasJob}>
+                        <lightning-breadcrumbs id="job-detail-breadcrumbs" class="slds-m-bottom_x-small">
+                            <lightning-breadcrumb id="job-detail-breadcrumb-jobs" label="My jobs" href="/jobs"></lightning-breadcrumb>
+                            <lightning-breadcrumb
+                                id="job-detail-breadcrumb-record"
+                                label={recordTitle}
+                                href={recordHref}
+                            ></lightning-breadcrumb>
+                        </lightning-breadcrumbs>
 
-                <!-- Highlights panel ---------------------------------------->
-                <div class="slds-page-header sep-page-header sep-page-header_spaced">
-                    <div class="slds-page-header__row">
-                        <div class="slds-page-header__col-title">
-                            <div class="slds-media__body">
-                                <div class="slds-page-header__name">
-                                        <div class="slds-page-header__name-title">
-                                            <h1>
-                                                <span class="slds-page-header__title slds-truncate">
-                                                    {recordTitle}
-                                                </span>
-                                            </h1>
-                                        </div>
-                                        <div class="slds-page-header__name-switcher">
-                                            <lightning-button-menu
-                                                icon-name="utility:down"
-                                                icon-size="x-small"
-                                                variant="bare"
-                                                alternative-text="Switch vacancy"
-                                                menu-alignment="left"
-                                                onselect={handleRecordSwitch}
-                                            >
-                                                <template for:each={recordOptions} for:item="option">
-                                                    <lightning-menu-item
-                                                        key={option.value}
-                                                        value={option.value}
-                                                        label={option.label}
-                                                        checked={option.checked}
-                                                    ></lightning-menu-item>
+                        <!-- The Manage job header. A region of its own, so it is a
+                             component of its own; the page owns the data. -->
+                        <ui-job-manage-header
+                            id="job-detail-header"
+                            job={job}
+                            creator-name={creatorName}
+                            release={release}
+                            onedit={handleEdit}
+                        ></ui-job-manage-header>
+
+                        <!-- The rule between the header and the record body, as the
+                             design draws it. A plain hr: SLDS styles the element, and
+                             no lightning-* component renders a separator. -->
+                        <hr />
+
+                        <!-- Path ------------------------------------------------------>
+                        <!-- <div class="slds-m-vertical_medium">
+                            <lightning-progress-indicator
+                                type="path"
+                                variant="base"
+                                current-step={job.status}
+                            >
+                                <template for:each={pathSteps} for:item="step">
+                                    <lightning-progress-step
+                                        key={step.value}
+                                        label={step.label}
+                                        value={step.value}
+                                    ></lightning-progress-step>
+                                </template>
+                            </lightning-progress-indicator>
+                        </div> -->
+
+                        <!-- Split content body: 2:1 ---------------------------------->
+                        <lightning-layout id="job-detail-body-layout" multiple-rows pull-to-boundary="small">
+                            <lightning-layout-item
+                                id="job-detail-col-main"
+                                size="12"
+                                large-device-size={mainColumnSize}
+                                padding="around-small"
+                            >
+                                <!-- From 1.2 the record has a second tab, so the tabset earns
+                                     its place. Before that it would be a bar with one tab in
+                                     it, so the whole tabset goes and the details render on
+                                     their own — same component either way. -->
+                                <lightning-tabset lwc:if={showTabs} id="job-detail-tabset" variant="scoped">
+                                    <lightning-tab id="job-detail-tab-details" label="Details">
+                                        <!-- The listing as a candidate sees it. The same
+                                             component the create flow's last step uses
+                                             to preview a vacancy before it is submitted;
+                                             `editable` is left off here. -->
+                                        <ui-job-listing-preview
+                                            id="job-detail-listing-tabbed"
+                                            id-prefix="job-detail-listing"
+                                            show-preview-heading
+                                            job={job}
+                                        ></ui-job-listing-preview>
+                                    </lightning-tab>
+
+                                    <lightning-tab lwc:if={showApplicants} id="job-detail-tab-applicants" label={relatedLabel}>
+                                        <template lwc:if={hasCandidates}>
+                                            <lightning-datatable
+                                                id="job-detail-applicants-table"
+                                                key-field="id"
+                                                columns={candidateColumns}
+                                                data={candidateRows}
+                                                hide-checkbox-column
+                                            ></lightning-datatable>
+                                        </template>
+                                        <p lwc:else id="job-detail-applicants-empty" class="slds-text-color_weak slds-p-around_medium">
+                                            No applicants for this vacancy yet.
+                                        </p>
+                                    </lightning-tab>
+                                </lightning-tabset>
+
+                                <!-- Before 1.2: no tabset, the listing on its own. The same
+                                     id prefix as the tabbed one — only one of the two
+                                     branches ever renders. -->
+                                <ui-job-listing-preview
+                                    lwc:else
+                                    id="job-detail-listing-untabbed"
+                                    id-prefix="job-detail-listing"
+                                    show-preview-heading
+                                    job={job}
+                                ></ui-job-listing-preview>
+                            </lightning-layout-item>
+
+                            <!-- Sidebar region ------------------------------------->
+                            <lightning-layout-item
+                                lwc:if={hasSidebar}
+                                id="job-detail-col-sidebar"
+                                size="12"
+                                large-device-size="4"
+                                padding="around-small"
+                            >
+                                <lightning-card
+                                    lwc:if={showApplicants}
+                                    id="job-detail-pipeline-card"
+                                    title="Applicant pipeline"
+                                    icon-name="standard:groups"
+                                    class="slds-m-bottom_medium"
+                                >
+                                    <div class="slds-p-horizontal_medium">
+                                        <template lwc:if={hasPipeline}>
+                                            <ul id="job-detail-pipeline-list" class="slds-has-dividers_bottom-space">
+                                                <template for:each={pipeline} for:item="stage">
+                                                    <li key={stage.key} class="slds-item slds-grid slds-grid_align-spread">
+                                                        <span>{stage.label}</span>
+                                                        <span class="slds-text-title_bold">{stage.count}</span>
+                                                    </li>
                                                 </template>
-                                            </lightning-button-menu>
+                                            </ul>
+                                            <div class="slds-m-top_medium">
+                                                <lightning-progress-bar
+                                                    id="job-detail-shortlist-progress"
+                                                    value={shortlistProgress}
+                                                    size="large"
+                                                ></lightning-progress-bar>
+                                                <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                                                    {shortlistCaption}
+                                                </p>
+                                            </div>
+                                        </template>
+                                        <p lwc:else id="job-detail-pipeline-empty" class="slds-text-color_weak">No applicants yet.</p>
+                                    </div>
+                                </lightning-card>
+
+                                <lightning-card
+                                    lwc:if={showActivity}
+                                    id="job-detail-activity-card"
+                                    title="Activity"
+                                    icon-name="standard:task"
+                                    class="slds-m-bottom_medium"
+                                >
+                                    <div class="slds-p-horizontal_medium">
+                                        <template lwc:if={hasTimeline}>
+                                            <ul id="job-detail-activity-list" class="slds-has-dividers_bottom-space">
+                                                <template for:each={timeline} for:item="event">
+                                                    <li key={event.key} class="slds-item">
+                                                        <div class="slds-media">
+                                                            <div class="slds-media__figure">
+                                                                <lightning-icon
+                                                                    icon-name="standard:contact"
+                                                                    size="small"
+                                                                ></lightning-icon>
+                                                            </div>
+                                                            <div class="slds-media__body">
+                                                                <p class="slds-truncate" title={event.title}>
+                                                                    {event.title}
+                                                                </p>
+                                                                <p class="slds-text-body_small slds-text-color_weak">
+                                                                    {event.meta}
+                                                                </p>
+                                                                <p class="slds-text-body_small slds-text-color_weak">
+                                                                    {event.date}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </template>
+                                            </ul>
+                                        </template>
+                                        <p lwc:else id="job-detail-activity-empty" class="slds-text-color_weak">Nothing logged yet.</p>
+                                    </div>
+                                </lightning-card>
+
+                                <lightning-card lwc:if={hasContact} id="job-detail-contact-card" title="Vacancy contact" icon-name="standard:user">
+                                    <div class="slds-p-horizontal_medium">
+                                        <div class="slds-media">
+                                            <div class="slds-media__figure">
+                                                <lightning-avatar
+                                                    id="job-detail-contact-avatar"
+                                                    fallback-icon-name="standard:user"
+                                                    alternative-text={contactName}
+                                                ></lightning-avatar>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <p id="job-detail-contact-name" class="slds-text-title_bold">{contactName}</p>
+                                                <p class="slds-text-body_small slds-text-color_weak">
+                                                    {vacancyContact.job_title}
+                                                </p>
+                                                <lightning-formatted-phone
+                                                    id="job-detail-contact-phone"
+                                                    value={vacancyContact.phone}
+                                                ></lightning-formatted-phone>
+                                            </div>
                                         </div>
                                     </div>
-                                <p class="slds-page-header__name-meta">
-                                    Vacancy &bull; {job.subtitle}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="slds-page-header__col-actions">
-                            <div class="slds-page-header__controls">
-                                <div class="slds-page-header__control">
-                                    <lightning-button-group>
-                                        <lightning-button
-                                            label="Edit"
-                                            onclick={handleEdit}
-                                        ></lightning-button>
-                                        <lightning-button
-                                            lwc:if={showApplicants}
-                                            label="View applicants"
-                                        ></lightning-button>
-                                        <lightning-button-menu
-                                            icon-name="utility:down"
-                                            alternative-text="More actions"
-                                            menu-alignment="right"
-                                        >
-                                            <lightning-menu-item
-                                                value="clone"
-                                                label="Clone vacancy"
-                                            ></lightning-menu-item>
-                                            <lightning-menu-item
-                                                value="close"
-                                                label="Close vacancy"
-                                            ></lightning-menu-item>
-                                            <lightning-menu-item
-                                                value="delete"
-                                                label="Delete"
-                                            ></lightning-menu-item>
-                                        </lightning-button-menu>
-                                    </lightning-button-group>
-                                </div>
-                            </div>
-                        </div>
+                                </lightning-card>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </template>
+
+                    <div lwc:else id="job-detail-empty" class="slds-box slds-theme_default">
+                        <p>No vacancies for this account.</p>
                     </div>
-
-                    <div class="slds-page-header__row slds-page-header__row_gutters">
-                        <div class="slds-page-header__col-details">
-                            <ul class="slds-page-header__detail-row">
-                                <li class="slds-page-header__detail-block">
-                                    <div class="slds-text-title slds-truncate">Status</div>
-                                    <div class="slds-truncate">
-                                        <lightning-badge label={statusLabel}></lightning-badge>
-                                    </div>
-                                </li>
-                                <li class="slds-page-header__detail-block">
-                                    <div class="slds-text-title slds-truncate">Location</div>
-                                    <div class="slds-truncate" title={job.location}>{job.location}</div>
-                                </li>
-                                <li class="slds-page-header__detail-block">
-                                    <div class="slds-text-title slds-truncate">Pay</div>
-                                    <div class="slds-truncate" title={job.pay}>{job.pay}</div>
-                                </li>
-                                <li lwc:if={showApplicants} class="slds-page-header__detail-block">
-                                    <div class="slds-text-title slds-truncate">Applicants</div>
-                                    <div class="slds-truncate">{candidateCount}</div>
-                                </li>
-                                <li class="slds-page-header__detail-block">
-                                    <div class="slds-text-title slds-truncate">Closes</div>
-                                    <div class="slds-truncate">{job.closing_date}</div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Path ------------------------------------------------------>
-                <!-- <div class="slds-m-vertical_medium">
-                    <lightning-progress-indicator
-                        type="path"
-                        variant="base"
-                        current-step={job.status}
-                    >
-                        <template for:each={pathSteps} for:item="step">
-                            <lightning-progress-step
-                                key={step.value}
-                                label={step.label}
-                                value={step.value}
-                            ></lightning-progress-step>
-                        </template>
-                    </lightning-progress-indicator>
-                </div> -->
-
-                <!-- Split content body: 2:1 ---------------------------------->
-                <lightning-layout multiple-rows pull-to-boundary="small">
-                    <lightning-layout-item
-                        size="12"
-                        large-device-size={mainColumnSize}
-                        padding="around-small"
-                    >
-                        <!-- From 1.2 the record has a second tab, so the tabset earns
-                             its place. Before that it would be a bar with one tab in
-                             it, so the whole tabset goes and the details render on
-                             their own — same component either way. -->
-                        <lightning-tabset lwc:if={showTabs} variant="scoped">
-                            <lightning-tab label="Details">
-                                <!-- The listing as a candidate sees it. The same
-                                     component the create flow's last step uses
-                                     to preview a vacancy before it is submitted;
-                                     `editable` is left off here. -->
-                                <ui-job-listing-preview job={job}></ui-job-listing-preview>
-                            </lightning-tab>
-
-                            <lightning-tab lwc:if={showApplicants} label={relatedLabel}>
-                                <template lwc:if={hasCandidates}>
-                                    <lightning-datatable
-                                        key-field="id"
-                                        columns={candidateColumns}
-                                        data={candidateRows}
-                                        hide-checkbox-column
-                                    ></lightning-datatable>
-                                </template>
-                                <p lwc:else class="slds-text-color_weak slds-p-around_medium">
-                                    No applicants for this vacancy yet.
-                                </p>
-                            </lightning-tab>
-                        </lightning-tabset>
-
-                        <ui-job-listing-preview lwc:else job={job}></ui-job-listing-preview>
-                    </lightning-layout-item>
-
-                    <!-- Sidebar region ------------------------------------->
-                    <lightning-layout-item
-                        lwc:if={hasSidebar}
-                        size="12"
-                        large-device-size="4"
-                        padding="around-small"
-                    >
-                        <lightning-card
-                            lwc:if={showApplicants}
-                            title="Applicant pipeline"
-                            icon-name="standard:groups"
-                            class="slds-m-bottom_medium"
-                        >
-                            <div class="slds-p-horizontal_medium">
-                                <template lwc:if={hasPipeline}>
-                                    <ul class="slds-has-dividers_bottom-space">
-                                        <template for:each={pipeline} for:item="stage">
-                                            <li key={stage.key} class="slds-item slds-grid slds-grid_align-spread">
-                                                <span>{stage.label}</span>
-                                                <span class="slds-text-title_bold">{stage.count}</span>
-                                            </li>
-                                        </template>
-                                    </ul>
-                                    <div class="slds-m-top_medium">
-                                        <lightning-progress-bar
-                                            value={shortlistProgress}
-                                            size="large"
-                                        ></lightning-progress-bar>
-                                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
-                                            {shortlistCaption}
-                                        </p>
-                                    </div>
-                                </template>
-                                <p lwc:else class="slds-text-color_weak">No applicants yet.</p>
-                            </div>
-                        </lightning-card>
-
-                        <lightning-card
-                            lwc:if={showActivity}
-                            title="Activity"
-                            icon-name="standard:task"
-                            class="slds-m-bottom_medium"
-                        >
-                            <div class="slds-p-horizontal_medium">
-                                <template lwc:if={hasTimeline}>
-                                    <ul class="slds-has-dividers_bottom-space">
-                                        <template for:each={timeline} for:item="event">
-                                            <li key={event.key} class="slds-item">
-                                                <div class="slds-media">
-                                                    <div class="slds-media__figure">
-                                                        <lightning-icon
-                                                            icon-name="standard:contact"
-                                                            size="small"
-                                                        ></lightning-icon>
-                                                    </div>
-                                                    <div class="slds-media__body">
-                                                        <p class="slds-truncate" title={event.title}>
-                                                            {event.title}
-                                                        </p>
-                                                        <p class="slds-text-body_small slds-text-color_weak">
-                                                            {event.meta}
-                                                        </p>
-                                                        <p class="slds-text-body_small slds-text-color_weak">
-                                                            {event.date}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </template>
-                                    </ul>
-                                </template>
-                                <p lwc:else class="slds-text-color_weak">Nothing logged yet.</p>
-                            </div>
-                        </lightning-card>
-
-                        <lightning-card lwc:if={hasContact} title="Vacancy contact" icon-name="standard:user">
-                            <div class="slds-p-horizontal_medium">
-                                <div class="slds-media">
-                                    <div class="slds-media__figure">
-                                        <lightning-avatar
-                                            fallback-icon-name="standard:user"
-                                            alternative-text={contactName}
-                                        ></lightning-avatar>
-                                    </div>
-                                    <div class="slds-media__body">
-                                        <p class="slds-text-title_bold">{contactName}</p>
-                                        <p class="slds-text-body_small slds-text-color_weak">
-                                            {vacancyContact.job_title}
-                                        </p>
-                                        <lightning-formatted-phone
-                                            value={vacancyContact.phone}
-                                        ></lightning-formatted-phone>
-                                    </div>
-                                </div>
-                            </div>
-                        </lightning-card>
-                    </lightning-layout-item>
-                </lightning-layout>
-            </template>
-
-            <div lwc:else class="slds-box slds-theme_default">
-                <p>No vacancies for this account.</p>
-            </div>
+                </lightning-layout-item>
+            </lightning-layout>
         </main>
     </div>
 

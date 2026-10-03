@@ -1,34 +1,56 @@
 <template lwc:render-mode="light">
-    <!-- No `id` anywhere in here.
-         This component renders on two routes and could render twice on one, so
-         a static id would not stay unique. `data-section` is the handle, per
-         `rules-lwc-layout.md` § Every landmark element gets an `id`. -->
-    <div class="job-listing-preview">
-        <lightning-layout multiple-rows pull-to-boundary="small">
+    <!-- Every `id` here is built from `id-prefix`, which the page sets
+         (`job-detail-listing`, `create-job-step7-listing`). This component
+         renders on two routes, so a fixed id could not stay unique; see `ids`
+         in the .ts. `data-section` stays as the Edit buttons' handle — an id
+         is for identity, not for lookup. -->
+    <div id={ids.root} class="job-listing-preview">
+        <lightning-layout id={ids.layout} multiple-rows pull-to-boundary="small">
             <!-- The listing itself ------------------------------------------->
             <lightning-layout-item
+                id={ids.colMain}
                 size="12"
                 medium-device-size="7"
                 large-device-size="8"
                 padding="horizontal-small"
             >
+                <!-- "Job preview" on the left; "Status:" and the status tag
+                     on the right, as the design has it. Record page only
+                     (`show-preview-heading`). -->
+                <div
+                    lwc:if={showPreviewHeading}
+                    class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_x-small"
+                >
+                    <h2 id={ids.previewHeading} class="slds-text-heading_medium">Job preview</h2>
+                    <div id={ids.statusGroup} class="slds-grid slds-grid_vertical-align-center">
+                        <span id={ids.statusLabel}>Status:</span>
+                        <lightning-badge
+                            id={ids.status}
+                            label={statusLabel}
+                            class={statusBadgeClass}
+                        ></lightning-badge>
+                    </div>
+                </div>
+
                 <div class="slds-grid slds-grid_align-spread">
-                    <h2 class="slds-text-heading_medium">{title}</h2>
+                    <h2 id={ids.title} class="slds-text-heading_large">{title}</h2>
                     <lightning-button
                         lwc:if={editable}
                         variant="base"
                         icon-name="utility:edit"
                         label="Edit"
+                        id={ids.titleEditButton}
                         data-section="title"
                         onclick={handleEdit}
                     ></lightning-button>
                 </div>
-                <p lwc:if={subtitle} class="slds-text-body_regular slds-m-bottom_small">{subtitle}</p>
+                <p lwc:if={subtitle} id={ids.subtitle} class="slds-text-body_regular slds-m-bottom_small">{subtitle}</p>
 
-                <div lwc:if={location} class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                <div lwc:if={location} id={ids.location} class="slds-grid slds-grid_align-spread slds-m-bottom_small">
                     <div class="slds-media slds-media_center">
                         <div class="slds-media__figure">
                             <lightning-icon
+                                id={ids.locationIcon}
                                 icon-name="utility:location"
                                 size="x-small"
                                 alternative-text="Location"
@@ -41,29 +63,14 @@
                         variant="base"
                         icon-name="utility:edit"
                         label="Edit"
+                        id={ids.locationEditButton}
                         data-section="location"
                         onclick={handleEdit}
                     ></lightning-button>
                 </div>
 
-                <!-- The design draws this as a pill that opens.
-                     `lightning-accordion` is the shipped disclosure, and its
-                     chevron sits left of the label as the design's does. -->
-                <lightning-accordion class="slds-m-bottom_medium">
-                    <lightning-accordion-section
-                        name="address"
-                        label="Why is the exact address not shown?"
-                    >
-                        <p class="slds-text-body_small">
-                            A listing shows the suburb and city rather than the street
-                            address, so the workplace is not published to everyone who
-                            reads the advert. MSD staff hold the full address.
-                        </p>
-                    </lightning-accordion-section>
-                </lightning-accordion>
-
                 <!-- Facts. Only the rows the record holds. -->
-                <ul class="slds-m-bottom_large">
+                <ul id={ids.facts}>
                     <template for:each={facts} for:item="fact">
                         <li key={fact.key} class="slds-media slds-media_center slds-m-bottom_x-small">
                             <div class="slds-media__figure">
@@ -79,89 +86,132 @@
                 </ul>
 
                 <!-- Job description ------------------------------------------>
-                <div class="slds-grid slds-grid_align-spread slds-border_bottom slds-m-bottom_small">
-                    <h3 class="slds-text-heading_small">Job description</h3>
+                <!-- Job ID ----------------------------------------------------
+                     The business key an employer quotes to MSD. Left out when
+                     the record has none. -->
+                <template lwc:if={jobId}>
+                    <hr />
+                    <div id={ids.jobId}>
+                        <h3 id={ids.jobIdHeading} class="slds-text-heading_medium slds-m-bottom_x-small">Job ID</h3>
+                        <div class="slds-grid slds-grid_vertical-align-center">
+                            <span id={ids.jobIdValue} class="slds-text-heading_small">{jobId}</span>
+                            <span class="slds-text-color_weak slds-m-horizontal_small" aria-hidden="true">&bull;</span>
+                            <lightning-button
+                                id={ids.jobIdCopyButton}
+                                variant="base"
+                                icon-name="utility:copy"
+                                label="Copy Job ID"
+                                onclick={handleCopyJobId}
+                            ></lightning-button>
+                        </div>
+                    </div>
+                </template>
+
+                <hr />
+
+                <!-- Each section heading sits in a flex row only so the create
+                     flow's Edit button (`editable`) lands on its right. On the
+                     record page the row holds the heading alone.
+
+                     Sections are separated by a plain `hr`, as the design draws
+                     them. No `lightning-*` component renders a separator
+                     (`lightning-menu-divider` is for menus only); SLDS styles
+                     the element itself — a 1px --slds-g-color-border-1 rule with
+                     --slds-g-spacing-6 above and below. That margin owns the
+                     spacing between sections, so the blocks carry no bottom
+                     margin of their own. -->
+                <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                    <h3 id={ids.descriptionHeading} class="slds-text-heading_small">Job description</h3>
                     <lightning-button
                         lwc:if={editable}
                         variant="base"
                         icon-name="utility:edit"
                         label="Edit"
+                        id={ids.descriptionEditButton}
                         data-section="description"
                         onclick={handleEdit}
                     ></lightning-button>
                 </div>
-                <p lwc:if={hasDescription} class="slds-m-bottom_large">{description}</p>
-                <p lwc:else class="slds-text-color_weak slds-m-bottom_large">Nothing added.</p>
+                <p lwc:if={hasDescription} id={ids.description}>{description}</p>
+                <p lwc:else id={ids.descriptionEmpty} class="slds-text-color_weak">Nothing added.</p>
 
                 <!-- What makes this job great -------------------------------->
-                <div class="slds-grid slds-grid_align-spread slds-border_bottom slds-m-bottom_small">
-                    <h3 class="slds-text-heading_small">What makes this job great</h3>
+                <hr />
+                <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                    <h3 id={ids.sellingPointsHeading} class="slds-text-heading_small">What makes this job great</h3>
                     <lightning-button
                         lwc:if={editable}
                         variant="base"
                         icon-name="utility:edit"
                         label="Edit"
+                        id={ids.sellingPointsEditButton}
                         data-section="selling-points"
                         onclick={handleEdit}
                     ></lightning-button>
                 </div>
-                <ul lwc:if={hasSellingPoints} class="slds-list_dotted slds-m-bottom_large">
+                <ul lwc:if={hasSellingPoints} id={ids.sellingPoints} class="slds-list_dotted">
                     <template for:each={sellingPoints} for:item="point">
                         <li key={point.key}>{point.label}</li>
                     </template>
                 </ul>
-                <p lwc:else class="slds-text-color_weak slds-m-bottom_large">Nothing added.</p>
+                <p lwc:else id={ids.sellingPointsEmpty} class="slds-text-color_weak">Nothing added.</p>
 
                 <!-- On-the-job training. No column holds this — see the docblock. -->
-                <div class="slds-grid slds-grid_align-spread slds-border_bottom slds-m-bottom_small">
-                    <h3 class="slds-text-heading_small">On-the-job training</h3>
+                <hr />
+                <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                    <h3 id={ids.trainingHeading} class="slds-text-heading_small">On-the-job training</h3>
                     <lightning-button
                         lwc:if={editable}
                         variant="base"
                         icon-name="utility:edit"
                         label="Edit"
+                        id={ids.trainingEditButton}
                         data-section="training"
                         onclick={handleEdit}
                     ></lightning-button>
                 </div>
-                <p lwc:if={hasTraining} class="slds-m-bottom_large">
+                <p lwc:if={hasTraining} id={ids.training}>
                     <strong>{training.label}</strong> — {training.description}
                 </p>
-                <p lwc:else class="slds-text-color_weak slds-m-bottom_large">Nothing added.</p>
+                <p lwc:else id={ids.trainingEmpty} class="slds-text-color_weak">Nothing added.</p>
 
                 <!-- Pre-employment checks ------------------------------------>
-                <div class="slds-grid slds-grid_align-spread slds-border_bottom slds-m-bottom_small">
-                    <h3 class="slds-text-heading_small">Pre-employment checks</h3>
+                <hr />
+                <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                    <h3 id={ids.checksHeading} class="slds-text-heading_small">Pre-employment checks</h3>
                     <lightning-button
                         lwc:if={editable}
                         variant="base"
                         icon-name="utility:edit"
                         label="Edit"
+                        id={ids.checksEditButton}
                         data-section="pre-employment-checks"
                         onclick={handleEdit}
                     ></lightning-button>
                 </div>
-                <ul lwc:if={hasPreEmploymentChecks} class="slds-list_dotted slds-m-bottom_large">
+                <ul lwc:if={hasPreEmploymentChecks} id={ids.checks} class="slds-list_dotted">
                     <template for:each={preEmploymentChecks} for:item="check">
                         <li key={check.key}>{check.label}</li>
                     </template>
                 </ul>
-                <p lwc:else class="slds-text-color_weak slds-m-bottom_large">Nothing added.</p>
+                <p lwc:else id={ids.checksEmpty} class="slds-text-color_weak">Nothing added.</p>
 
                 <!-- Work schedule -------------------------------------------->
-                <div class="slds-grid slds-grid_align-spread slds-border_bottom slds-m-bottom_small">
-                    <h3 class="slds-text-heading_small">Work schedule</h3>
+                <hr />
+                <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                    <h3 id={ids.scheduleHeading} class="slds-text-heading_small">Work schedule</h3>
                     <lightning-button
                         lwc:if={editable}
                         variant="base"
                         icon-name="utility:edit"
                         label="Edit"
+                        id={ids.scheduleEditButton}
                         data-section="schedule"
                         onclick={handleEdit}
                     ></lightning-button>
                 </div>
                 <template lwc:if={hasSchedule}>
-                    <dl class="slds-m-bottom_large">
+                    <dl id={ids.schedule}>
                         <template lwc:if={scheduleType}>
                             <dt class="slds-text-title_bold">Schedule type</dt>
                             <dd class="slds-m-bottom_small">{scheduleType}</dd>
@@ -173,7 +223,7 @@
                                     <lightning-badge
                                         key={day.key}
                                         label={day.label}
-                                        class="sep-listing-chip slds-m-right_xx-small"
+                                        class="slds-m-right_xx-small"
                                     ></lightning-badge>
                                 </template>
                             </dd>
@@ -188,20 +238,34 @@
                         </template>
                     </dl>
                 </template>
-                <p lwc:else class="slds-text-color_weak slds-m-bottom_large">Nothing added.</p>
+                <p lwc:else id={ids.scheduleEmpty} class="slds-text-color_weak">Nothing added.</p>
             </lightning-layout-item>
 
             <!-- About the job ------------------------------------------------>
             <lightning-layout-item
+                id={ids.colAbout}
                 size="12"
                 medium-device-size="5"
                 large-device-size="4"
                 padding="horizontal-small"
             >
-                <lightning-card title="About the job">
-                    <div class="slds-p-horizontal_medium">
+                <lightning-card id={ids.aboutCard} class="job-listing-preview__about-card">
+                    <!-- The title through the slot rather than `title="…"`, so it
+                         can carry `slds-text-heading_medium`: a string title is
+                         drawn inside the card's shadow root, out of reach of a
+                         class. A span, not a heading — the card already wraps
+                         the slot in its own <h2>, so this stays a heading
+                         without nesting one in another. -->
+                    <span slot="title" id={ids.aboutHeading} class="slds-text-heading_medium">About the job</span>
+                    <!-- 16px left, right and bottom; none on top — the card
+                         header above supplies that (see the .css). -->
+                    <div class="slds-p-horizontal_medium slds-p-bottom_medium">
                         <template for:each={aboutSections} for:item="section">
-                            <div key={section.key} class="slds-m-bottom_medium">
+                            <div key={section.key} id={section.id}>
+                                <!-- A rule between sections, as the design has
+                                     it; not above the first. Medium margins —
+                                     the card is denser than the page. -->
+                                <hr lwc:if={section.showDivider} class="slds-m-vertical_medium" />
                                 <div class="slds-grid slds-grid_align-spread">
                                     <h3 class="slds-text-heading_small">{section.heading}</h3>
                                     <lightning-button
@@ -209,6 +273,7 @@
                                         variant="base"
                                         icon-name="utility:edit"
                                         label="Edit"
+                                        id={section.editId}
                                         data-section={section.section}
                                         onclick={handleEdit}
                                     ></lightning-button>
@@ -225,7 +290,7 @@
                                         <lightning-badge
                                             key={chip.key}
                                             label={chip.label}
-                                            class="sep-listing-chip slds-m-right_xx-small slds-m-bottom_xx-small"
+                                            class="slds-m-right_xx-small slds-m-bottom_xx-small"
                                         ></lightning-badge>
                                     </template>
                                 </div>
@@ -240,7 +305,7 @@
                                                 <lightning-badge
                                                     key={chip.key}
                                                     label={chip.label}
-                                                    class="sep-listing-chip slds-m-right_xx-small"
+                                                    class="slds-m-right_xx-small"
                                                 ></lightning-badge>
                                             </template>
                                         </div>

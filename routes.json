@@ -37,6 +37,12 @@
       "layoutTemplate": "$layoutsDir/main.njk"
     },
     {
+      "id": "jobs2",
+      "path": "/jobs2",
+      "rootComponent": "example/jobs2",
+      "layoutTemplate": "$layoutsDir/main.njk"
+    },
+    {
       "id": "jobDetail",
       "path": "/jobs/job-detail",
       "rootComponent": "example/jobDetail",

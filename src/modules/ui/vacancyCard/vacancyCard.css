@@ -6,6 +6,27 @@
  * card also covers the actions. The title anchor below is now the only link,
  * which is what Lightning does on a card that carries actions. */
 
+/* The card's frame: a heavy top edge in the link colour, 2px elsewhere, 8px
+ * corners.
+ *
+ * All three go through `lightning-card`'s PUBLIC hooks — the border is drawn
+ * on the <article> inside its shadow root, out of reach of a class. Set on the
+ * wrapper, they inherit into the card. `--slds-c-card-sizing-border` feeds
+ * `border-width` directly, so it takes the four-value shorthand.
+ *
+ *   colour  --site-text-accent-primary — the value design-tokens.css gives
+ *           --slds-s-link-color. Read from the project token rather than from
+ *           --slds-s-link-color itself, which the SLDS Linter lists as private.
+ *   width   SLDS's border scale stops at 4px (--slds-g-sizing-border-4), so
+ *           the 8px top edge is twice that rather than a literal.
+ *   radius  --slds-g-radius-border-3 is 0.5rem, 8px. */
+.vacancy-card {
+    --slds-c-card-color-border: var(--site-text-accent-primary);
+    --slds-c-card-sizing-border: calc(var(--slds-g-sizing-border-4) * 2)
+        var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2);
+    --slds-c-card-radius-border: var(--slds-g-radius-border-3);
+}
+
 /* The title link. */
 .vacancy-card__link {
     text-decoration: none;
@@ -58,8 +79,8 @@
  * the icon a few pixels low against the title. */
 .vacancy-card__icon {
     display: block;
-    width: 2.75rem;
-    height: 2.75rem;
+    width: 2rem;
+    height: 2rem;
 }
 
 /* The subtitle sits under the title rather than inline with it. */
@@ -106,134 +127,4 @@
     color: var(--slds-g-color-on-surface-1);
     min-width: 0;
     /* font-size: var(--site-font-body-sm); */
-}
-
-/* The action column — Edit, Delete, Submit stacked.
- *
- * Written as flex here rather than with `slds-grid_vertical`, for two reasons.
- * It matches `.vacancy-card__meta` directly above, which solves the same problem
- * the same way; and in a vertical grid the SLDS cross-axis class names invert
- * (`slds-grid_align-*` sets justify-content, which is the vertical axis once the
- * direction is column), so the class that reads as "left align" does not do it.
- *
- * SLDS ships no gap utility, so the 4px row gap the design specifies is the
- * token in custom CSS — the same exception `.vacancy-card__meta` takes.
- *
- * `align-items: flex-start` keeps each button at its label's width. Without it
- * the default `stretch` widens every button to the column, which puts a wide
- * invisible hit area to the right of "Edit".
- *
- * Nothing sets the label colour: `variant="base"` reads
- * --slds-g-color-accent-1, which `design-tokens.css` already points at
- * #0071bb — the design's accent. */
-.vacancy-card__actions {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    row-gap: var(--slds-g-spacing-1);
-
-    /* Tighten the buttons themselves. The row-gap above was never the problem.
-     *
-     * A UTILITY CANNOT DO THIS. `slds-p-vertical_none` ships, but the padding
-     * sits on the <button> inside `lightning-button`'s shadow root, and a class
-     * on the host does not reach it. Hooks are the only lever, and these two are
-     * published shared-tier ones, so this is the component's API rather than an
-     * override.
-     *
-     * `design-tokens.css` sets both at `:root` for the site's pill CTAs —
-     * spacing-block 12px, spacing-inline 20px. That is right for a standing
-     * button and much too loose for a stacked list of link-style actions: it
-     * made each row ~48px against the design's 32px. Redeclaring them here wins
-     * for these buttons alone, because a custom property resolves from the
-     * nearest ancestor that sets it.
-     *
-     * The arithmetic, read off the stylesheets rather than guessed:
-     *   font-size   --slds-s-button-font-size      17px
-     *   line-height --slds-s-button-font-lineheight 1.33  -> ~22.6px line box
-     *   border                                      1px top + 1px bottom
-     *   + 4px block padding each side               -> ~32px, the design's row
-     *
-     * (Those two font hooks are live here. `lightning-button` sets
-     * `data-render-mode="shadow"` on itself, which is what activates
-     * `button.slds.css` — unlike `lightning-badge`, which never sets it and
-     * whose equivalent hook is inert. See the status-tag note below.)
-     *
-     * Inline padding goes to zero so the icons line up with the column's left
-     * edge; 20px of it indented every row away from the metadata rail. */
-    --slds-s-button-spacing-block: var(--slds-g-spacing-1);
-    --slds-s-button-spacing-inline: 0;
-}
-
-/* Status tag — SEP's four states.
- *
- * All of it is tier-4 hooks. `lightning-badge` exposes twelve public
- * `--slds-c-badge-*` hooks and, unusually, NO private ones — so nothing here
- * bends anything it shouldn't.
- *
- * The shipped geometry already matches the design: `.slds-badge` uses
- * padding-block 4px + padding-inline 8px, so at the 14px text below the tag is
- * 24px tall and 8px padded — the design's numbers exactly. Only the radius,
- * the size and the three colours per state need setting.
- *
- * Two of the four are filled with white text, two are tinted with a matching
- * border. That is a real distinction in the design, not decoration: filled
- * means terminal (Active, Closed), outlined means in progress (In review,
- * Draft). Keep it if you add a state. */
-
-.vacancy-card__status {
-    --slds-c-badge-font-size: var(--site-font-body-sm);
-    --slds-c-badge-radius-border: var(--site-radius-pill);
-
-}
-
-/* The tag's height.
- *
- * SEP's Tag specifies line-height 1. The badge's default is `normal`, which in
- * Atkinson gives an 18px line box at 14px, making the tag 28px against the
- * design's 24.
- *
- * This has to go on the PART, and the route there is worth recording because
- * two plausible levers do nothing:
- *
- *   --slds-c-badge-font-lineheight   declared in the component's own
- *       `badge.slds.css`, but every rule in that file is scoped to
- *       `:host([data-render-mode="shadow"])`, and `lightning-badge` — unlike
- *       `lightning-button` — never sets that attribute. The file is inert; the
- *       badge is styled entirely by the global `.slds-badge` rule on its host.
- *       Setting the hook is measurably a no-op.
- *
- *   line-height on the host   does not reach the label, which lives in the
- *       shadow span and keeps its own `normal`.
- *
- * Verified by reading the computed line-height off both elements. */
-.vacancy-card__status::part(badge) {
-    line-height: 1;
-}
-
-/* Active — filled navy. */
-.vacancy-card__status_active {
-    --slds-c-badge-color-background: var(--site-bg-accent-secondary);
-    --slds-c-badge-color-border: var(--site-bg-accent-secondary);
-    --slds-c-badge-text-color: var(--site-text-inverse-primary);
-}
-
-/* In review — tinted, with a warning-orange border and text. */
-.vacancy-card__status_in-review {
-    --slds-c-badge-color-background: var(--site-color-red-05);
-    --slds-c-badge-color-border: var(--site-bg-warning);
-    --slds-c-badge-text-color: var(--site-bg-warning);
-}
-
-/* Draft — tinted, with a purple border and text. */
-.vacancy-card__status_draft {
-    --slds-c-badge-color-background: var(--site-bg-secondary);
-    --slds-c-badge-color-border: var(--site-color-brand-purple);
-    --slds-c-badge-text-color: var(--site-color-brand-purple);
-}
-
-/* Closed — filled, in the disabled blue-grey. */
-.vacancy-card__status_closed {
-    --slds-c-badge-color-background: var(--site-bg-disabled);
-    --slds-c-badge-color-border: var(--site-bg-disabled);
-    --slds-c-badge-text-color: var(--site-text-inverse-primary);
 }

@@ -1,8 +1,9 @@
 <template lwc:render-mode="light">
-    <footer class="site-footer">
-        <div class="site-footer__inner slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+    <footer id="site-footer" class="site-footer">
+        <div id="site-footer-inner" class="site-footer__inner slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
             <div class="slds-grid slds-grid_vertical-align-center">
                 <lightning-button-menu
+                    id="site-footer-app-launcher"
                     icon-name="utility:apps"
                     icon-size="small"
                     variant="bare"
@@ -11,21 +12,25 @@
                     onselect={handleAppSelect}
                 >
                     <lightning-menu-item
+                        id="site-footer-app-employer-portal"
                         value="/"
                         label="Employer portal"
                         prefix-icon-name="utility:company"
                     ></lightning-menu-item>
                     <lightning-menu-item
+                        id="site-footer-app-design-system"
                         value="/design-system"
                         label="Design system"
                         prefix-icon-name="utility:palette"
                     ></lightning-menu-item>
                     <lightning-menu-item
+                        id="site-footer-app-data-browser"
                         value="/data"
                         label="Data browser"
                         prefix-icon-name="utility:database"
                     ></lightning-menu-item>
                     <lightning-menu-item
+                        id="site-footer-app-email-browser"
                         value="/emails"
                         label="Email browser"
                         prefix-icon-name="utility:email"
@@ -36,9 +41,10 @@
                 </span>
             </div>
 
-            <div class="site-footer__toggle slds-grid slds-grid_vertical-align-center">
+            <div id="site-footer-release" class="site-footer__toggle slds-grid slds-grid_vertical-align-center">
                 <span class="slds-text-body_small slds-m-right_x-small">Viewing release</span>
                 <lightning-radio-group
+                    id="site-footer-release-toggle"
                     label="Release"
                     variant="label-hidden"
                     type="button"

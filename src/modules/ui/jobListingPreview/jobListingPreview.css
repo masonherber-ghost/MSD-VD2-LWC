@@ -1,0 +1,9 @@
+/* The "About the job" card's header: 16px above the title rather than the
+ * card's default 12px (--slds-g-spacing-3).
+ *
+ * The header is inside `lightning-card`'s shadow root, so its padding is set
+ * through the card's own public hook, not a class. Scoped to this card by the
+ * class on its host; every other card keeps the default. */
+.job-listing-preview__about-card {
+    --slds-c-card-header-spacing-block-start: var(--slds-g-spacing-4);
+}
