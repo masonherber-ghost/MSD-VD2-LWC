@@ -41,6 +41,7 @@ specific one wins.
 @.claude/rules/rules-architecture.md
 @.claude/rules/rules-lwc-components.md
 @.claude/rules/rules-lwc-layout.md
+@.claude/rules/rules-skinning.md
 @.claude/rules/rules-database.md
 @.claude/rules/rules-app-logic.md
 
@@ -49,6 +50,7 @@ specific one wins.
 | [`rules-architecture.md`](.claude/rules/rules-architecture.md) | LWR config, module resolution, routing, light DOM, the static build, version pinning |
 | [`rules-lwc-components.md`](.claude/rules/rules-lwc-components.md) | **Which components exist and how to verify it.** The gate for building anything custom |
 | [`rules-lwc-layout.md`](.claude/rules/rules-lwc-layout.md) | Lightning page anatomy, spacing, styling hooks, the modular-component rule |
+| [`rules-skinning.md`](.claude/rules/rules-skinning.md) | Skinning a shipped component: the lever ladder, where a skin lives, the never list |
 | [`rules-database.md`](.claude/rules/rules-database.md) | Schema → repository → route → client. Allow-lists, WAL, seed scripts |
 | [`rules-app-logic.md`](.claude/rules/rules-app-logic.md) | Business rules: auth, account scoping, locked fields, primary contact |
 
@@ -63,6 +65,11 @@ already ships, build it out of that, and report what you could not match. Match 
 order, states and behaviour; leave the skin as Lightning ships it. **Never build a new custom
 component and never customise a shipped one to chase the picture** — get as close as the Salesforce
 lego allows and say where it falls short.
+
+### Skin a component to a design
+**Use the `component-from-design` skill** for one component (a Figma frame or an HTML page): it finds
+the shipped match, skins it with only the levers `rules-skinning.md` allows, and updates the design
+system. A whole page still goes through `build-from-wireframe`.
 
 ### Build or change a page
 1. `rules-lwc-components.md` — find the components that already exist. **Do not invent tags.**

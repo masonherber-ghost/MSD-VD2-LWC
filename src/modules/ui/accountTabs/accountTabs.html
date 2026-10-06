@@ -15,7 +15,7 @@
          stylesheet: not one tabs rule is scoped to `[role=tab]` — the look comes
          entirely from the classes, so the underline, the active weight and the
          hover all still apply. -->
-    <nav class="slds-tabs_default slds-m-bottom_medium" aria-label="Account pages">
+    <nav id="account-tabs-nav" class="slds-tabs_default slds-m-bottom_medium" aria-label="Account pages">
         <ul class="slds-tabs_default__nav" role="list">
             <li id="account-tabs-profile" class={profileItemClass}>
                 <a
@@ -25,6 +25,7 @@
                     aria-current={profileCurrent}
                 >
                     <lightning-icon
+                    id="account-tabs-profile-icon"
                         icon-name="utility:user"
                         size="x-small"
                         class="slds-m-right_x-small account-tabs__icon"
@@ -40,6 +41,7 @@
                     aria-current={orgCurrent}
                 >
                     <lightning-icon
+                    id="account-tabs-manage-org-icon"
                         icon-name="utility:people"
                         size="x-small"
                         class="slds-m-right_x-small account-tabs__icon"

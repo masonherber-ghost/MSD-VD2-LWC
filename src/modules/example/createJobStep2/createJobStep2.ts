@@ -6,13 +6,19 @@ import {
     LICENCE_ENDORSEMENTS,
     LICENCE_STAGES
 } from 'data/reference';
-import { current as currentDraft, patch as patchDraft } from 'data/jobDraft';
+import {
+    current as currentDraft,
+    patch as patchDraft,
+    startBlank,
+    editingJobId
+} from 'data/jobDraft';
 
 /**
- * Step 2 of the create-a-vacancy flow: job details.
+ * Step 2 of the create-a-vacancy flow: job details — and, since step 1 (the
+ * read-only company details) was removed, the flow's FIRST step. So it is
+ * where a draft is started or resumed; see `resolveDraft`.
  *
- * Unlike step 1, which shows back MSD's record read-only, everything here is
- * new information the employer supplies. It is held in `data/jobDraft`, which
+ * Everything here is new information the employer supplies. It is held in `data/jobDraft`, which
  * carries it across the other step routes and is what "Edit" on a vacancy
  * seeds. Nothing is persisted: the flow has no save until its last step, and
  * `jobs` rows are created by the repository, not from here.
@@ -41,8 +47,12 @@ export default class CreateJobStep2 extends LightningElement {
         certification: ''
     };
 
+    /** Set when the flow was entered from a vacancy's Edit action. */
+    editingTitle = '';
+
     /** Hydrate from the shared draft — populated when editing a vacancy. */
     connectedCallback(): void {
+        this.resolveDraft();
         const d = currentDraft();
         this.draft = {
             title: d.title,
@@ -53,6 +63,48 @@ export default class CreateJobStep2 extends LightningElement {
         };
         this.licenceStageByClass = { ...d.driver_licence_stages };
         this.selectedEndorsements = [...d.licence_endorsements];
+    }
+
+    /**
+     * The flow's entry point decides whether this is an edit or a new vacancy.
+     *
+     * This step is BOTH the entry point and where step 3's Previous lands, so
+     * it must not start blank on every visit — that would wipe the employer's
+     * answers when they step back. Three cases:
+     *
+     *   ?edit=<id> matching the draft   "Edit" on a vacancy seeded the draft
+     *                                    (`startFromJob`) — keep it.
+     *   ?start=new, or a stale ?edit=    a fresh vacancy — start blank, so a
+     *                                    draft abandoned earlier in this tab
+     *                                    cannot leak into it. Every "List a
+     *                                    job" entry link carries ?start=new.
+     *   no parameter                     returning within the flow — keep
+     *                                    whatever the draft holds.
+     *
+     * The editing notice follows the draft, not the URL, so it still shows
+     * after stepping back. Moved here from the removed step 1, which started
+     * blank on every visit without ?edit.
+     */
+    private resolveDraft(): void {
+        if (typeof window === 'undefined') {
+            return;
+        }
+        const params = new URLSearchParams(window.location.search);
+        const wanted = Number(params.get('edit'));
+        const isMatchingEdit =
+            Number.isInteger(wanted) && wanted > 0 && editingJobId() === wanted;
+        if (!isMatchingEdit && (params.has('edit') || params.get('start') === 'new')) {
+            startBlank();
+        }
+        this.editingTitle = editingJobId() !== null ? currentDraft().title : '';
+    }
+
+    get isEditing(): boolean {
+        return this.editingTitle !== '';
+    }
+
+    get editingNotice(): string {
+        return `You are editing “${this.editingTitle}”. Your answers are filled in from the vacancy — change what you need and carry on.`;
     }
 
     licenceStages = LICENCE_STAGES;

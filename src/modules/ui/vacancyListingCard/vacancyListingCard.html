@@ -1,0 +1,116 @@
+<template lwc:render-mode="light">
+    <!-- In review carries a standing notice ABOVE the card, as `ui/vacancyCard`
+         does. It is outside the card, so the card's own anatomy is untouched. -->
+    <div
+        lwc:if={card.isInReview}
+        class="slds-scoped-notification slds-scoped-notification_light slds-media slds-media_center slds-m-bottom_x-small"
+        role="status"
+    >
+        <div class="slds-media__figure">
+            <lightning-icon
+                icon-name="utility:info"
+                size="x-small"
+                alternative-text="Information"
+            ></lightning-icon>
+        </div>
+        <div class="slds-media__body">
+            <p>{card.reviewNotice}</p>
+        </div>
+    </div>
+
+    <!-- `lightning-card` exactly as it ships: title, actions, body. Every
+         region is filled through the card's own attribute or slot.
+
+         No `icon-name`, so no header icon. The card's icon can only be an SLDS
+         icon name — it renders `<lightning-icon icon-name>` in its shadow root
+         and never passes `src` on, so the vacancy's own artwork cannot go there.
+         Leaving the attribute off makes `hasIcon` false and the card drops the
+         figure itself.
+
+         `sep-vacancy-listing` sets card hooks only — the frame and the padding.
+         See site.css. -->
+    <lightning-card class="sep-vacancy-listing">
+        <!-- The title is the card's link, as on `ui/vacancyCard`. -->
+        <a slot="title" href={card.href} title={card.title}>{card.title}</a>
+
+        <!-- The status in the card's actions region, as a stock `lightning-badge`
+             with no `sep-status-tag` skin. Below 42.688em the card's own
+             resize-reflow rule drops this under the title; that is the shipped
+             behaviour and is left alone. -->
+        <lightning-badge slot="actions" label={card.statusLabel}></lightning-badge>
+
+        <!-- Body: metadata left, row menu bottom right, the same 10/2 and 9/3
+             split `ui/vacancyCard` uses. The body already carries the card's
+             inline padding, so no padding utility wraps this. -->
+        <lightning-layout multiple-rows pull-to-boundary="small" vertical-align="center">
+            <lightning-layout-item
+                size="12"
+                medium-device-size="9"
+                large-device-size="10"
+                padding="horizontal-small"
+            >
+                <!-- One icon + value pair per line, as SLDS media objects.
+                     `slds-media_small` gives the 8px icon gap; each row after
+                     the first carries `slds-m-top_xx-small` for the 4px rhythm. -->
+                <ul>
+                    <template for:each={card.meta} for:item="item">
+                        <li key={item.key} class={item.rowClass}>
+                            <div class="slds-media__figure">
+                                <lightning-icon icon-name={item.icon} size="xx-small"></lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <span lwc:if={item.label} class="slds-assistive-text">{item.label}</span>
+                                {item.value}
+                            </div>
+                        </li>
+                    </template>
+
+                    <li
+                        lwc:if={showApplicants}
+                        class="slds-media slds-media_center slds-media_small slds-m-top_xx-small"
+                    >
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name="utility:groups" size="xx-small"></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            {card.applicants}
+                            <lightning-badge
+                                lwc:if={card.hasNew}
+                                label={card.newApplicants}
+                                class="slds-badge_inverse slds-m-left_xx-small"
+                            ></lightning-badge>
+                        </div>
+                    </li>
+                </ul>
+            </lightning-layout-item>
+
+            <!-- The row menu, bottom right of its cell. No `id`: this renders once
+                 per row inside a `for:each`, so `data-action` is the handle. -->
+            <lightning-layout-item
+                size="12"
+                medium-device-size="3"
+                large-device-size="2"
+                padding="horizontal-small"
+                class="slds-align-bottom"
+            >
+                <div class="slds-grid slds-grid_align-end">
+                    <lightning-button-menu
+                        alternative-text={actionsLabel}
+                        menu-alignment="auto-right"
+                    >
+                        <template for:each={card.actions} for:item="action">
+                            <lightning-menu-item
+                                key={action.key}
+                                value={action.key}
+                                label={action.label}
+                                prefix-icon-name={action.icon}
+                                disabled={action.disabled}
+                                data-action={action.key}
+                            ></lightning-menu-item>
+                        </template>
+                    </lightning-button-menu>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+</template>

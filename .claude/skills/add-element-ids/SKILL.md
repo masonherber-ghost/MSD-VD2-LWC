@@ -20,11 +20,14 @@ components that render more than once, loops, and the template-expression trap.
 | Route component (`example/*`) | Once, on its own page | The page: `job-detail-`, `profile-` | Static `id="…"` in the template |
 | Singleton shell (`ui/siteHeader`, `ui/siteFooter`) | Once on every page | Its own: `site-header-`, `site-footer-` | Static `id="…"` |
 | Region used by one page (`ui/jobManageHeader`) | Once, on one page | Its own: `job-header-` | Static `id="…"` |
-| **Shared component** (`ui/jobListingPreview`) | On more than one route | **Set by the page** | `@api idPrefix` + an `ids` getter — see §3 |
+| Shared, but once per page by nature (`ui/accountTabs`) | On several routes, never twice on one | Its own: `account-tabs-` | Static `id="…"` |
+| **Shared, could appear twice on a page** (`ui/jobListingPreview`, `ui/readOnlyNotice`) | Anywhere, any number of times | **Set by the page** | `@api idPrefix` + an `ids` getter — see §3 |
 | A component placed twice with a mode (`ui/siteNav`, `region=`) | Twice per page, one branch each | Per branch: `site-nav-links-`, `site-nav-menu-` | Static, one prefix per branch |
 
-The test for "shared": would a fixed id collide anywhere — two routes, or two instances on one
-page? If yes, the page names it.
+The test: **could two of these ever be in the same document?** An id only has to be unique within
+a page, so a component used on several routes but never twice on one (a tab strip, a page header)
+keeps a static prefix. One that a page could reasonably place twice — a notice, a preview — takes
+`idPrefix`, and the page passes its own host id as the prefix (`org-readonly-notice`).
 
 ## 2. Walk the template and tag each landmark
 

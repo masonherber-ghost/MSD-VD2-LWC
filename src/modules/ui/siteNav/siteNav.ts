@@ -71,7 +71,7 @@ export default class SiteNav extends LightningElement {
     }
 
     get firstSlotHref(): string {
-        return this.noVacancies ? '/create-job/step1' : '/jobs';
+        return this.noVacancies ? '/create-job/step2?start=new' : '/jobs';
     }
 
     get firstSlotIcon(): string {

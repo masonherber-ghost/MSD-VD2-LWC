@@ -21,14 +21,17 @@
  *           the 8px top edge is twice that rather than a literal.
  *   radius  --slds-g-radius-border-3 is 0.5rem, 8px. */
 .vacancy-card {
-    --slds-c-card-color-border: var(--site-text-accent-primary);
+    --slds-c-card-color-border: var(--site-color-brand-blue);
     --slds-c-card-sizing-border: calc(var(--slds-g-sizing-border-4) * 2)
         var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2);
     --slds-c-card-radius-border: var(--slds-g-radius-border-3);
 }
 
-/* The title link. */
+/* The title link. The card title is an <h4> — Heading 4's size from the
+ * site-wide tag rule — and its text is this link, so the link carries the
+ * colour: MSD blue rather than the default link accent. */
 .vacancy-card__link {
+    color: var(--site-color-brand-navy);
     text-decoration: none;
 }
 

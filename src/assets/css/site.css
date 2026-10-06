@@ -114,15 +114,19 @@ body {
  *
  * The padding has to be restored explicitly: the label lives in the shadow
  * root, so the host has no light-DOM children and matches `.slds-badge:empty`,
- * whose rule zeroes the padding the base class had set. */
-lightning-badge::part(badge) {
+ * whose rule zeroes the padding the base class had set.
+ *
+ * One exception: every badge inside a /jobs3 card (`.sep-vacancy-listing
+ * lightning-badge`) is deliberately left exactly as the component ships, so
+ * both rules skip it — that card's content carries no project CSS. */
+lightning-badge:not(.sep-vacancy-listing lightning-badge)::part(badge) {
     background: none;
     border: none;
     border-radius: 0;
     padding: 0;
 }
 
-lightning-badge.slds-badge:empty {
+lightning-badge.slds-badge:empty:not(.sep-vacancy-listing lightning-badge) {
     padding-block: var(--slds-g-spacing-1);
     padding-inline: var(--slds-g-spacing-2);
 }
@@ -617,8 +621,7 @@ lightning-button[variant='brand']::part(button):disabled {
  * class, so it falls back to the shipped size rather than losing one — its own
  * stylesheet only sets a max-width. */
 
-/* Heading colour and weight — navy and bold, site-wide. SIZES are still
- * SLDS's own (above).
+/* Headings — weight for all, then size, family and colour per tag.
  *
  * Weight: SLDS resets h1-h6 to `font-weight: inherit` and its
  * `slds-text-heading_*` classes set size only, so headings were body weight.
@@ -650,8 +653,55 @@ lightning-button[variant='brand']::part(button):disabled {
  *     given a string `title`. The rule cannot cross that boundary.
  */
 h1, h2, h3, h4, h5, h6 {
-    color: var(--site-color-brand-navy);
     font-weight: var(--slds-g-font-weight-7);
+}
+
+/* Size, family and colour BY TAG: <h1> is Heading 1, through <h6> Heading 6,
+ * as Experience Cloud ties its Theme panel heading styles to tags. Each reads
+ * the --dxp heading hooks, which design-tokens.css declares as a stand-in for
+ * the Theme panel — so on lift these rules read the real Theme panel values.
+ * Line-height has no confirmed --dxp hook, so it stays on the SEP tokens.
+ *
+ * SLDS's `slds-text-heading_*` size classes are deliberately NOT on headings:
+ * a class outranks a tag selector, so one would override the level. Pick a
+ * heading's size by choosing its tag — and choose the tag for the document
+ * outline first; a heading that must look smaller than its level is the
+ * exception to raise, not to patch with a class. */
+h1 {
+    font-family: var(--dxp-s-text-heading-extra-large-font-family);
+    font-size: var(--dxp-s-text-heading-extra-large-font-size);
+    line-height: var(--site-lineheight-heading-2xl);
+    color: var(--dxp-s-text-heading-extra-large-color);
+}
+h2 {
+    font-family: var(--dxp-s-text-heading-large-font-family);
+    font-size: var(--dxp-s-text-heading-large-font-size);
+    line-height: var(--site-lineheight-heading-xl);
+    color: var(--dxp-s-text-heading-large-color);
+}
+h3 {
+    font-family: var(--dxp-s-text-heading-medium-font-family);
+    font-size: var(--dxp-s-text-heading-medium-font-size);
+    line-height: var(--site-lineheight-heading-lg);
+    color: var(--dxp-s-text-heading-medium-color);
+}
+h4 {
+    font-family: var(--dxp-s-text-heading-small-font-family);
+    font-size: var(--dxp-s-text-heading-small-font-size);
+    line-height: var(--site-lineheight-heading-md);
+    color: var(--dxp-s-text-heading-small-color);
+}
+h5 {
+    font-family: var(--dxp-s-text-heading-extra-small-font-family);
+    font-size: var(--dxp-s-text-heading-extra-small-font-size);
+    line-height: var(--site-lineheight-heading-sm);
+    color: var(--dxp-s-text-heading-extra-small-color);
+}
+h6 {
+    font-family: var(--dxp-s-text-heading-extra-extra-small-font-family);
+    font-size: var(--dxp-s-text-heading-extra-extra-small-font-size);
+    line-height: var(--site-lineheight-heading-xs);
+    color: var(--dxp-s-text-heading-extra-extra-small-color);
 }
 
 /* A `lightning-card`'s own title — the `title="…"` string form — is an <h2>
@@ -821,4 +871,108 @@ lightning-card::part(title) {
     --slds-c-badge-color-background: var(--site-bg-disabled);
     --slds-c-badge-color-border: var(--site-bg-disabled);
     --slds-c-badge-text-color: var(--site-text-inverse-primary);
+}
+
+/* Vacancy listing — the out-of-the-box card on /jobs3.
+ *
+ * HOOKS ONLY, no real property. Source: `ui/vacancyCard`'s frame, so the stock
+ * `lightning-card` in `ui/vacancyListingCard` gets the same edge without a
+ * stylesheet of its own: 8px top in MSD blue, 2px elsewhere, 8px corners.
+ *
+ *   --slds-c-card-sizing-border   feeds `border-width`, so it takes the
+ *       four-value shorthand. SLDS's border scale stops at 4px, hence x2.
+ *
+ * CARD HOOKS ONLY. Nothing here is inherited by the card's content: the body
+ * is laid out with SLDS blueprint classes and utilities alone, so its icons,
+ * text and badges render as shipped.
+ *
+ * Padding: 1rem inside the border on every side, all through card hooks.
+ * The card's body hooks have NO default — its shadow rule is
+ * `padding-inline-start: var(--slds-c-card-body-spacing-inlinestart)` with no
+ * fallback — so an unset body sits flush against the border. The header's
+ * block-end hook feeds both its padding AND its margin, so it is zeroed and the
+ * header-to-body gap comes from the body's block-start alone (0.75rem, the
+ * card's own default rhythm).
+ *
+ * Not reached: the custom category artwork (the card has no header icon at
+ * all — see `ui/vacancyListingCard`), the navy title link, and the
+ * status pill staying top right on a phone — see `ui/vacancyListingCard`. */
+.sep-vacancy-listing {
+    --slds-c-card-color-border: var(--site-color-brand-blue);
+    --slds-c-card-sizing-border: calc(var(--slds-g-sizing-border-4) * 2)
+        var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2);
+    --slds-c-card-radius-border: var(--slds-g-radius-border-3);
+
+    --slds-c-card-header-spacing-block-start: var(--slds-g-spacing-4);
+    --slds-c-card-header-spacing-block-end: 0;
+    --slds-c-card-header-spacing-inline-start: var(--slds-g-spacing-4);
+    --slds-c-card-header-spacing-inline-end: var(--slds-g-spacing-4);
+    --slds-c-card-body-spacing-block-start: var(--slds-g-spacing-3);
+    --slds-c-card-body-spacing-block-end: var(--slds-g-spacing-4);
+    --slds-c-card-body-spacing-inline-start: var(--slds-g-spacing-4);
+    --slds-c-card-body-spacing-inline-end: var(--slds-g-spacing-4);
+}
+
+/* =============================================================================
+ * COMPONENT SKINS
+ *
+ * Every instance on the site of one SHIPPED component, selected by its tag and
+ * skinned only through the levers `.claude/rules/rules-skinning.md` allows —
+ * attributes where they are used, then hooks. Each block names its design
+ * source and says which states it could not reach. Made with the
+ * `component-from-design` skill.
+ * ========================================================================== */
+
+/* SEP Combobox → `lightning-grouped-combobox`.
+ *
+ * Design: Figma "SEP – Foundations UI Library", node 141:726 (field states)
+ * and 141:782 (in use — the typeahead dropdown). The grouped combobox, not
+ * `lightning-combobox`: the design types to search, and only this one takes
+ * typed text and grouped suggestion items.
+ *
+ * Hooks: the component's own `--slds-c-inputtext-*` set (read by its private
+ * child `lightning/baseCombobox`), all public. Values are the design's tokens:
+ * Stroke/Primary, Corner radius/Mid, Input stroke 2, Text/Primary,
+ * Text/Secondary (placeholder), Icon/Primary, Stroke/Status/Error.
+ *
+ * States REACHED:
+ *   default   border, weight, radius, height, fill, text, placeholder, label,
+ *             icon colour                                  — rung 4, hooks
+ *   error     border                                       — rung 5: the
+ *             component sets its own border hook to the GLOBAL
+ *             `--slds-g-color-border-error-1` under [invalid], so that token,
+ *             scoped to this host, is the only public way to the state
+ *   focus     border                                       — already blue, but
+ *             ONLY via `--slds-s-input-color-border-focus` set at :root in
+ *             design-tokens.css: a private hook (existing debt, not added here).
+ *             The component reads no public focus-border hook.
+ *
+ * States NOT reached — no public hook; internal CSS states:
+ *   hover (blue border), filled (navy border), disabled / limit reached (blue
+ *   fill, grey stroke). Not faked from script.
+ *
+ * Anatomy NOT available as attributes: the right-aligned "Optional" tag, the
+ * "N characters remaining" counter (`input-maxlength` limits but shows no
+ * count), and the clear (×) button while typing. The dropdown's Elevation-2
+ * shadow is reachable only through `::part(dropdown)` — on the line, so not
+ * applied.
+ *
+ * Unverified: no computed values were read in a browser. A compiled hook can
+ * be a no-op — check each state before relying on it. */
+lightning-grouped-combobox {
+    --slds-c-inputtext-color-border: var(--site-stroke-primary);
+    --slds-c-inputtext-sizing-border: var(--slds-g-sizing-border-2);
+    --slds-c-inputtext-radius-border: var(--site-radius-mid);
+    --slds-c-inputtext-sizing-height: var(--slds-g-sizing-10);
+    --slds-c-inputtext-color-background: var(--site-bg-primary);
+    --slds-c-inputtext-color-background-focus: var(--site-bg-primary);
+    --slds-c-inputtext-text-color: var(--site-text-primary);
+    --slds-c-inputtext-text-color-placeholder: var(--site-text-secondary);
+    /* The site's field size, matched to the buttons — as every other input.
+       SEP's Input text style says 20px; see the Form inputs note in
+       design-tokens.css for why fields run at --site-font-body. */
+    --slds-c-inputtext-font-size: var(--site-font-body);
+    --slds-c-inputtext-label-color: var(--site-text-primary);
+    --slds-c-inputtext-icon-color-foreground: var(--site-icon-primary);
+    --slds-g-color-border-error-1: var(--site-stroke-error);
 }

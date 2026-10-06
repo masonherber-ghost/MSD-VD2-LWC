@@ -1,5 +1,5 @@
 <template lwc:render-mode="light">
-    <ui-site-header current="manage-org"></ui-site-header>
+    <ui-site-header id="org-site-header" current="manage-org"></ui-site-header>
 
     <div class="site__body" id="org-body">
         <main class="site__main" id="org-main">
@@ -12,11 +12,11 @@
                     <div class="slds-p-around_large slds-align_absolute-center slds-text-align_center">
                         <div>
                             <lightning-icon id="org-signed-out-icon" icon-name="utility:lock" size="small"></lightning-icon>
-                            <h1 class="slds-text-heading_medium slds-m-top_x-small">
+                            <h1 id="org-signed-out-title" class="slds-m-top_x-small">
                                 Log in to manage your organisation
                             </h1>
                             <div class="slds-m-top_medium">
-                                <a href="/login">
+                                <a id="org-signed-out-login-link" href="/login">
                                     <lightning-button id="org-signed-out-login-button" variant="brand" label="Log in"></lightning-button>
                                 </a>
                             </div>
@@ -67,6 +67,7 @@
 
                         <ui-read-only-notice
                             id="org-readonly-notice"
+                            id-prefix="org-readonly-notice"
                             message="Some of these organisation details are MSD's record and cannot be changed here."
                         ></ui-read-only-notice>
 
@@ -85,7 +86,7 @@
                             class="slds-m-bottom_medium"
                         >
                             <div class="slds-p-horizontal_medium slds-p-bottom_medium">
-                                <lightning-layout multiple-rows pull-to-boundary="small">
+                                <lightning-layout id="org-relationship-manager-fields" multiple-rows pull-to-boundary="small">
                                     <lightning-layout-item
                                         id="org-col-relationship-manager"
                                         size="12"
@@ -134,7 +135,7 @@
 
                         <lightning-card id="org-company-card" title="Company" icon-name="standard:account" class="slds-m-bottom_medium">
                             <div class="slds-p-horizontal_medium slds-p-bottom_medium">
-                                <lightning-layout multiple-rows pull-to-boundary="small">
+                                <lightning-layout id="org-company-fields" multiple-rows pull-to-boundary="small">
                                     <lightning-layout-item
                                         id="org-col-company-name"
                                         size="12"
@@ -294,7 +295,7 @@
 
                         <lightning-card id="org-registration-card" title="Registration" icon-name="standard:record">
                             <div class="slds-p-horizontal_medium slds-p-bottom_medium">
-                                <lightning-layout multiple-rows pull-to-boundary="small">
+                                <lightning-layout id="org-registration-fields" multiple-rows pull-to-boundary="small">
                                     <lightning-layout-item
                                         id="org-col-ird-number"
                                         size="12"
@@ -422,5 +423,5 @@
         </main>
     </div>
 
-    <ui-site-footer></ui-site-footer>
+    <ui-site-footer id="org-site-footer"></ui-site-footer>
 </template>

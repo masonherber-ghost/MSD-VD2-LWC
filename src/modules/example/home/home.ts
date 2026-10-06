@@ -28,7 +28,7 @@ const WELCOME_TILES = [
         title: 'New job listing',
         description:
             'Begin drafting and submitting a new vacancy directly through the Employer Portal.',
-        href: '/create-job/step1'
+        href: '/create-job/step2?start=new'
     },
     {
         key: 'manage-jobs',

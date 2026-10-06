@@ -1,5 +1,5 @@
 <template lwc:render-mode="light">
-    <ui-site-header current="profile"></ui-site-header>
+    <ui-site-header id="profile-site-header" current="profile"></ui-site-header>
 
     <div class="site__body" id="profile-body">
         <main class="site__main" id="profile-main">
@@ -27,7 +27,7 @@
                             ></lightning-icon>
                             <h1
                                 id="profile-signed-out-title"
-                                class="slds-text-heading_medium slds-m-top_x-small"
+                                class="slds-m-top_x-small"
                             >
                                 Log in to see your profile
                             </h1>
@@ -35,7 +35,7 @@
                                 Your profile details live on your account.
                             </p>
                             <div class="slds-m-top_medium">
-                                <a href="/login">
+                                <a id="profile-signed-out-login-link" href="/login">
                                     <lightning-button
                                         id="profile-signed-out-login-button"
                                         variant="brand"
@@ -74,6 +74,7 @@
                      organisation on the right. -->
                 <ui-read-only-notice
                     id="profile-readonly-notice"
+                    id-prefix="profile-readonly-notice"
                     message="Your sign-in email, organisation and role cannot be changed here."
                 ></ui-read-only-notice>
 
@@ -274,5 +275,5 @@
         </main>
     </div>
 
-    <ui-site-footer></ui-site-footer>
+    <ui-site-footer id="profile-site-footer"></ui-site-footer>
 </template>

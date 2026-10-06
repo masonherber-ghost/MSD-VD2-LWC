@@ -9,7 +9,7 @@
 
                     <lightning-layout multiple-rows pull-to-boundary="small">
                         <lightning-layout-item id="create-job-step6-col-form" size="12" large-device-size="8" padding="horizontal-small">
-                            <h1 id="create-job-step6-title" class="slds-text-heading_large slds-m-bottom_medium">
+                            <h1 id="create-job-step6-title" class="slds-m-bottom_medium">
                                 Manage your listing
                             </h1>
 
@@ -47,7 +47,7 @@
                             ></lightning-input>
 
                             <!-- Positions ---------------------------------------->
-                            <h2 id="create-job-step6-positions-heading" class="slds-text-heading_medium slds-m-top_large slds-m-bottom_xx-small">
+                            <h2 id="create-job-step6-positions-heading" class="slds-m-top_large slds-m-bottom_xx-small">
                                 Positions
                             </h2>
                             <lightning-input
@@ -61,7 +61,7 @@
                             ></lightning-input>
 
                             <!-- Shortlisting ------------------------------------->
-                            <h2 id="create-job-step6-shortlisting-heading" class="slds-text-heading_medium slds-m-bottom_xx-small">
+                            <h2 id="create-job-step6-shortlisting-heading" class="slds-m-bottom_xx-small">
                                 Shortlisting
                             </h2>
                             <lightning-input
@@ -75,7 +75,7 @@
                             ></lightning-input>
 
                             <!-- Interview options -------------------------------->
-                            <h2 id="create-job-step6-interview-heading" class="slds-text-heading_medium slds-m-bottom_xx-small">
+                            <h2 id="create-job-step6-interview-heading" class="slds-m-bottom_xx-small">
                                 Interview options (optional)
                             </h2>
                             <p id="create-job-step6-interview-help" class="slds-m-bottom_x-small">
@@ -90,6 +90,86 @@
                                 onchange={handleInterviewChange}
                                 class="slds-m-bottom_large"
                             ></lightning-checkbox-group>
+
+                            <!-- Vacancy contact ------------------------------------
+                                 Moved here, to the bottom of the step, from the
+                                 removed step 1. Optional: the button swaps
+                                 rather than sitting alongside — add reveals the
+                                 fields and becomes remove. -->
+                            <h2 id="create-job-step6-vacancy-contact-heading" class="slds-m-bottom_xx-small">
+                                Vacancy contact <span class="slds-text-body_regular slds-text-color_weak">(optional)</span>
+                            </h2>
+                            <p id="create-job-step6-vacancy-contact-help" class="slds-m-bottom_small">
+                                You can add a separate contact person for the management of this listing.
+                            </p>
+                            <lightning-button
+                                lwc:if={showVacancyContact}
+                                id="create-job-step6-remove-vacancy-contact"
+                                label="Remove vacancy contact"
+                                icon-name="utility:close"
+                                onclick={handleRemoveVacancyContact}
+                                class="slds-m-bottom_medium"
+                            ></lightning-button>
+                            <lightning-button
+                                lwc:else
+                                id="create-job-step6-add-vacancy-contact"
+                                label="Add vacancy contact"
+                                icon-name="utility:add"
+                                onclick={handleAddVacancyContact}
+                                class="slds-m-bottom_large"
+                            ></lightning-button>
+
+                            <div lwc:if={showVacancyContact} id="create-job-step6-vacancy-contact-fields" class="slds-m-bottom_large">
+                                <lightning-layout id="create-job-step6-vacancy-contact-name-row" multiple-rows pull-to-boundary="small">
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
+                                        <lightning-input
+                                            id="create-job-step6-vc-first-name"
+                                            data-field="first_name"
+                                            label="First name (optional)"
+                                            value={vacancyContact.first_name}
+                                            onchange={handleVacancyContactChange}
+                                        ></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" medium-device-size="6" padding="horizontal-small">
+                                        <lightning-input
+                                            id="create-job-step6-vc-last-name"
+                                            data-field="last_name"
+                                            label="Last name"
+                                            required
+                                            value={vacancyContact.last_name}
+                                            onchange={handleVacancyContactChange}
+                                        ></lightning-input>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                                <lightning-combobox
+                                    id="create-job-step6-vc-role"
+                                    data-field="role"
+                                    label="Role (optional)"
+                                    options={roles}
+                                    value={vacancyContact.role}
+                                    onchange={handleVacancyContactChange}
+                                    class="slds-m-top_small"
+                                ></lightning-combobox>
+                                <lightning-input
+                                    id="create-job-step6-vc-phone"
+                                    data-field="phone"
+                                    type="tel"
+                                    label="Phone number"
+                                    value={vacancyContact.phone}
+                                    onchange={handleVacancyContactChange}
+                                    class="slds-m-top_small"
+                                ></lightning-input>
+                                <lightning-input
+                                    id="create-job-step6-vc-email"
+                                    data-field="email"
+                                    type="email"
+                                    label="Email"
+                                    required
+                                    value={vacancyContact.email}
+                                    onchange={handleVacancyContactChange}
+                                    class="slds-m-top_small"
+                                ></lightning-input>
+                            </div>
 
                             <div id="create-job-step6-actions" class="slds-grid slds-grid_align-end slds-m-bottom_x-large">
                                 <a href="/create-job/step5">

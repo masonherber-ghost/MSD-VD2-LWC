@@ -54,7 +54,9 @@ export function labelFor(
  * tooltip only, so these are low-visibility, but they are still guesses.
  */
 export const VACANCY_STEPS = [
-    { value: '1', label: 'Company details' },
+    // Step 1 (company details, read-only) was removed from the flow; the
+    // vacancy contact it collected moved to step 6. The remaining steps keep
+    // their numbers so the /create-job/stepN routes and links stay stable.
     { value: '2', label: 'Job details' },
     { value: '3', label: 'Location, terms and pay' },
     { value: '4', label: 'Skills' },

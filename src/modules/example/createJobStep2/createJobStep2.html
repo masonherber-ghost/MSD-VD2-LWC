@@ -7,7 +7,19 @@
                 <lightning-layout-item id="create-job-step2-col-main" size="12" large-device-size="10">
                     <ui-vacancy-stepper current-step="2"></ui-vacancy-stepper>
 
-                    <h1 id="create-job-step2-title" class="slds-text-heading_large slds-m-bottom_x-small">
+                    <!-- Only when the flow was entered from a vacancy's Edit
+                         action. Otherwise a pre-filled form gives no clue which
+                         record it came from. -->
+                    <div
+                        lwc:if={isEditing}
+                        id="create-job-step2-editing-notice"
+                        class="slds-scoped-notification sep-scoped-notification slds-m-bottom_medium"
+                    >
+                        <p class="sep-scoped-notification__title">Editing an existing vacancy</p>
+                        <p class="sep-scoped-notification__body">{editingNotice}</p>
+                    </div>
+
+                    <h1 id="create-job-step2-title" class="slds-m-bottom_x-small">
                         Now, tell us about the job you are listing.
                     </h1>
                     <p id="create-job-step2-intro" class="slds-m-bottom_large">
@@ -18,7 +30,7 @@
                     <lightning-layout multiple-rows pull-to-boundary="small">
                         <lightning-layout-item size="12" large-device-size="8" padding="horizontal-small">
                             <!-- Job details ------------------------------------->
-                            <h2 id="create-job-step2-details-heading" class="slds-text-heading_medium slds-m-bottom_small">
+                            <h2 id="create-job-step2-details-heading" class="slds-m-bottom_small">
                                 Job details
                             </h2>
                             <lightning-input
@@ -44,7 +56,7 @@
                             ></lightning-input>
 
                             <!-- Experience, study and training -------------------->
-                            <h2 id="create-job-step2-experience-heading" class="slds-text-heading_medium slds-m-bottom_small">
+                            <h2 id="create-job-step2-experience-heading" class="slds-m-bottom_small">
                                 Experience, study and training
                             </h2>
                             <!-- `lightning-radio-group` has NO `field-level-help`
@@ -87,7 +99,7 @@
                             ></lightning-input>
 
                             <!-- Driver Licence ------------------------------------>
-                            <h2 id="create-job-step2-licence-heading" class="slds-text-heading_medium slds-m-bottom_xx-small">
+                            <h2 id="create-job-step2-licence-heading" class="slds-m-bottom_xx-small">
                                 Driver Licence
                             </h2>
                             <p class="slds-m-bottom_small">
@@ -161,13 +173,8 @@
                             </div>
 
                             <div id="create-job-step2-actions" class="slds-grid slds-grid_align-end slds-m-bottom_x-large">
-                                <a href="/create-job/step1">
-                                    <lightning-button
-                                        id="create-job-step2-previous"
-                                        label="Previous"
-                                    ></lightning-button>
-                                </a>
-                                <a href="/create-job/step3" class="slds-m-left_x-small">
+                                <!-- No Previous: this is the flow's first step. -->
+                                <a href="/create-job/step3">
                                     <lightning-button
                                         id="create-job-step2-next"
                                         variant="brand"

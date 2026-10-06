@@ -22,7 +22,7 @@
             >
                 <div class="slds-page-header__name">
                     <div class="slds-page-header__name-title">
-                        <h1 id="job-header-title" class="slds-page-header__title">Manage job</h1>
+                        <h2 id="job-header-title" class="slds-page-header__title">Manage job</h2>
                     </div>
                     <div class="slds-grid slds-grid_vertical-align-center slds-m-left_small">
                         <!-- The SEP status tag, the same one the /jobs cards
@@ -93,8 +93,9 @@
              Inline at their own width from medium up, one per line below it —
              the design's two frames. SLDS's responsive sizes are fractions
              only (no `slds-medium-size_auto`), so the switch is a few lines in
-             this component's own stylesheet, on its own class. The list grows;
-             Edit holds the right edge. -->
+             this component's own stylesheet, on its own class. No inline Edit
+             here or on the tags row: editing is only through the header's
+             action group above. -->
         <lightning-layout id="job-header-details-row" vertical-align="start" class="slds-m-top_small">
             <lightning-layout-item flexibility="auto">
                 <ul id="job-header-meta" class="job-manage-header__meta">
@@ -112,15 +113,6 @@
                         </li>
                     </template>
                 </ul>
-            </lightning-layout-item>
-            <lightning-layout-item lwc:if={canEdit}>
-                <lightning-button
-                    id="job-header-edit-details-button"
-                    variant="base"
-                    icon-name="utility:edit"
-                    label="Edit"
-                    onclick={handleEdit}
-                ></lightning-button>
             </lightning-layout-item>
         </lightning-layout>
 
@@ -140,15 +132,6 @@
                         ></lightning-badge>
                     </template>
                 </div>
-            </lightning-layout-item>
-            <lightning-layout-item lwc:if={canEdit}>
-                <lightning-button
-                    id="job-header-edit-settings-button"
-                    variant="base"
-                    icon-name="utility:edit"
-                    label="Edit"
-                    onclick={handleEdit}
-                ></lightning-button>
             </lightning-layout-item>
         </lightning-layout>
     </div>

@@ -29,7 +29,7 @@ export const COMPOSITIONS = [
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 50
+        "htmlLines": 52
     },
     {
         "name": "blueprintBrowser",
@@ -654,7 +654,7 @@ export const COMPOSITIONS = [
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 150
+        "htmlLines": 133
     },
     {
         "name": "kitchenSink",
@@ -797,7 +797,7 @@ export const COMPOSITIONS = [
         ],
         "hasCss": false,
         "css": null,
-        "htmlLines": 52
+        "htmlLines": 54
     },
     {
         "name": "realmeLoginModal",
@@ -1023,8 +1023,8 @@ export const COMPOSITIONS = [
         "sepClasses": [],
         "hasCss": true,
         "css": {
-            "lines": 118,
-            "text": "/* The card root.\n *\n * No `position: relative` here any more. It existed only to be the containing\n * block for a stretched ::after that made the whole card one click target; that\n * went when the card gained its action column, because an overlay covering the\n * card also covers the actions. The title anchor below is now the only link,\n * which is what Lightning does on a card that carries actions. */\n\n/* The card's frame: a heavy top edge in the link colour, 2px elsewhere, 8px\n * corners.\n *\n * All three go through `lightning-card`'s PUBLIC hooks — the border is drawn\n * on the <article> inside its shadow root, out of reach of a class. Set on the\n * wrapper, they inherit into the card. `--slds-c-card-sizing-border` feeds\n * `border-width` directly, so it takes the four-value shorthand.\n *\n *   colour  --site-text-accent-primary — the value design-tokens.css gives\n *           --slds-s-link-color. Read from the project token rather than from\n *           --slds-s-link-color itself, which the SLDS Linter lists as private.\n *   width   SLDS's border scale stops at 4px (--slds-g-sizing-border-4), so\n *           the 8px top edge is twice that rather than a literal.\n *   radius  --slds-g-radius-border-3 is 0.5rem, 8px. */\n.vacancy-card {\n    --slds-c-card-color-border: var(--site-text-accent-primary);\n    --slds-c-card-sizing-border: calc(var(--slds-g-sizing-border-4) * 2)\n        var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2);\n    --slds-c-card-radius-border: var(--slds-g-radius-border-3);\n}\n\n/* The title link. */\n.vacancy-card__link {\n    text-decoration: none;\n}\n\n.vacancy-card__link:hover {\n    text-decoration: underline;\n}\n\n/* The card header, rebuilt as a media object.\n *\n * `lightning-card` renders its icon inside a shadow-root figure with no slot,\n * so showing the vacancy's own artwork means dropping `icon-name` and composing\n * the figure here, in the title slot. Nothing shipped is restyled — this is our\n * markup in a public slot, which is the difference between composing and\n * reaching in.\n *\n * Two properties are pinned rather than left to the blueprint, because SLDS 2\n * does not settle them the way SLDS 1 did:\n *\n *   align-items   `slds-media_center` is the class that used to centre a figure\n *       against a multi-line body, and it has NO bare rule at all in the SLDS 2\n *       bundle — 0 hits as a standalone selector. `.slds-media` then declares\n *       `align-items` five times across layers, centre twice and flex-start\n *       once, so which one lands is not worth depending on.\n *\n *   gap           `.slds-media__figure` declares `margin-inline-end` in twelve\n *       separate rules, from spacing-1 to spacing-5. One value stated here\n *       beats guessing which of them wins, so the figure's own margin is\n *       zeroed below and the gap owns the spacing. */\n.vacancy-card__heading {\n    align-items: center;\n    gap: var(--slds-g-spacing-3);\n}\n\n/* The title is the flexible half; the icon never shrinks to make room. */\n.vacancy-card__figure {\n    flex: none;\n    margin-inline-end: 0;\n}\n\n/* The category icon.\n *\n * A size is not spacing, so this is a literal rather than a spacing token — and\n * a value used by one component is a value, not a token, per\n * `rules-lwc-layout.md`. 2.75rem is the 44px the artwork is drawn at on the\n * live site; the file's own 56x56 viewBox scales into it.\n *\n * `display: block` removes the inline baseline gap, which would otherwise sit\n * the icon a few pixels low against the title. */\n.vacancy-card__icon {\n    display: block;\n    width: 2rem;\n    height: 2rem;\n}\n\n/* The subtitle sits under the title rather than inline with it. */\n.vacancy-card__subtitle {\n    display: block;\n    font-weight: var(--slds-g-font-weight-4);\n}\n\n/* Icon + value pairs, one per line.\n *\n * A wrapping row read as a run-on sentence once a card carried five of them —\n * the eye had no column to follow. Stacked, each value starts at the same x and\n * the icons form a scannable rail down the left.\n *\n * Padding comes from `slds-p-around_medium` on the element, not from here: the\n * spacing rules want the utility where one exists. SLDS 2 ships no gap utility,\n * so the row gap is the token in custom CSS. */\n.vacancy-card__meta {\n    display: flex;\n    flex-direction: column;\n    row-gap: var(--slds-g-spacing-1);\n}\n\n.vacancy-card__meta-item {\n    display: inline-flex;\n    align-items: center;\n    gap: var(--slds-g-spacing-2);\n    min-width: 0;\n}\n\n/* A utility icon is filled by its own hook, not by `color`.\n *\n * `variant=\"bare\"` looked like the way to make it inherit currentColor; it is\n * not — the icons rendered with real path data and were simply invisible\n * against the card. --slds-c-icon-color-foreground-default is the public hook\n * the default variant actually reads. */\n.vacancy-card__meta-icon {\n    --slds-c-icon-color-foreground-default: var(--site-color-brand-navy);\n    flex: none;\n    \n}\n\n.vacancy-card__meta-value {\n    color: var(--slds-g-color-on-surface-1);\n    min-width: 0;\n    /* font-size: var(--site-font-body-sm); */\n}",
+            "lines": 121,
+            "text": "/* The card root.\n *\n * No `position: relative` here any more. It existed only to be the containing\n * block for a stretched ::after that made the whole card one click target; that\n * went when the card gained its action column, because an overlay covering the\n * card also covers the actions. The title anchor below is now the only link,\n * which is what Lightning does on a card that carries actions. */\n\n/* The card's frame: a heavy top edge in the link colour, 2px elsewhere, 8px\n * corners.\n *\n * All three go through `lightning-card`'s PUBLIC hooks — the border is drawn\n * on the <article> inside its shadow root, out of reach of a class. Set on the\n * wrapper, they inherit into the card. `--slds-c-card-sizing-border` feeds\n * `border-width` directly, so it takes the four-value shorthand.\n *\n *   colour  --site-text-accent-primary — the value design-tokens.css gives\n *           --slds-s-link-color. Read from the project token rather than from\n *           --slds-s-link-color itself, which the SLDS Linter lists as private.\n *   width   SLDS's border scale stops at 4px (--slds-g-sizing-border-4), so\n *           the 8px top edge is twice that rather than a literal.\n *   radius  --slds-g-radius-border-3 is 0.5rem, 8px. */\n.vacancy-card {\n    --slds-c-card-color-border: var(--site-color-brand-blue);\n    --slds-c-card-sizing-border: calc(var(--slds-g-sizing-border-4) * 2)\n        var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2);\n    --slds-c-card-radius-border: var(--slds-g-radius-border-3);\n}\n\n/* The title link. The card title is an <h4> — Heading 4's size from the\n * site-wide tag rule — and its text is this link, so the link carries the\n * colour: MSD blue rather than the default link accent. */\n.vacancy-card__link {\n    color: var(--site-color-brand-navy);\n    text-decoration: none;\n}\n\n.vacancy-card__link:hover {\n    text-decoration: underline;\n}\n\n/* The card header, rebuilt as a media object.\n *\n * `lightning-card` renders its icon inside a shadow-root figure with no slot,\n * so showing the vacancy's own artwork means dropping `icon-name` and composing\n * the figure here, in the title slot. Nothing shipped is restyled — this is our\n * markup in a public slot, which is the difference between composing and\n * reaching in.\n *\n * Two properties are pinned rather than left to the blueprint, because SLDS 2\n * does not settle them the way SLDS 1 did:\n *\n *   align-items   `slds-media_center` is the class that used to centre a figure\n *       against a multi-line body, and it has NO bare rule at all in the SLDS 2\n *       bundle — 0 hits as a standalone selector. `.slds-media` then declares\n *       `align-items` five times across layers, centre twice and flex-start\n *       once, so which one lands is not worth depending on.\n *\n *   gap           `.slds-media__figure` declares `margin-inline-end` in twelve\n *       separate rules, from spacing-1 to spacing-5. One value stated here\n *       beats guessing which of them wins, so the figure's own margin is\n *       zeroed below and the gap owns the spacing. */\n.vacancy-card__heading {\n    align-items: center;\n    gap: var(--slds-g-spacing-3);\n}\n\n/* The title is the flexible half; the icon never shrinks to make room. */\n.vacancy-card__figure {\n    flex: none;\n    margin-inline-end: 0;\n}\n\n/* The category icon.\n *\n * A size is not spacing, so this is a literal rather than a spacing token — and\n * a value used by one component is a value, not a token, per\n * `rules-lwc-layout.md`. 2.75rem is the 44px the artwork is drawn at on the\n * live site; the file's own 56x56 viewBox scales into it.\n *\n * `display: block` removes the inline baseline gap, which would otherwise sit\n * the icon a few pixels low against the title. */\n.vacancy-card__icon {\n    display: block;\n    width: 2rem;\n    height: 2rem;\n}\n\n/* The subtitle sits under the title rather than inline with it. */\n.vacancy-card__subtitle {\n    display: block;\n    font-weight: var(--slds-g-font-weight-4);\n}\n\n/* Icon + value pairs, one per line.\n *\n * A wrapping row read as a run-on sentence once a card carried five of them —\n * the eye had no column to follow. Stacked, each value starts at the same x and\n * the icons form a scannable rail down the left.\n *\n * Padding comes from `slds-p-around_medium` on the element, not from here: the\n * spacing rules want the utility where one exists. SLDS 2 ships no gap utility,\n * so the row gap is the token in custom CSS. */\n.vacancy-card__meta {\n    display: flex;\n    flex-direction: column;\n    row-gap: var(--slds-g-spacing-1);\n}\n\n.vacancy-card__meta-item {\n    display: inline-flex;\n    align-items: center;\n    gap: var(--slds-g-spacing-2);\n    min-width: 0;\n}\n\n/* A utility icon is filled by its own hook, not by `color`.\n *\n * `variant=\"bare\"` looked like the way to make it inherit currentColor; it is\n * not — the icons rendered with real path data and were simply invisible\n * against the card. --slds-c-icon-color-foreground-default is the public hook\n * the default variant actually reads. */\n.vacancy-card__meta-icon {\n    --slds-c-icon-color-foreground-default: var(--site-color-brand-navy);\n    flex: none;\n    \n}\n\n.vacancy-card__meta-value {\n    color: var(--slds-g-color-on-surface-1);\n    min-width: 0;\n    /* font-size: var(--site-font-body-sm); */\n}",
             "selectors": [
                 ".vacancy-card",
                 ".vacancy-card__figure",
@@ -1055,8 +1055,8 @@ export const COMPOSITIONS = [
                 "--slds-g-spacing-3"
             ],
             "siteTokens": [
-                "--site-color-brand-navy",
-                "--site-text-accent-primary"
+                "--site-color-brand-blue",
+                "--site-color-brand-navy"
             ],
             "parts": [],
             "privateHooks": [],
@@ -1081,6 +1081,31 @@ export const COMPOSITIONS = [
         "hasCss": false,
         "css": null,
         "htmlLines": 20
+    },
+    {
+        "name": "vacancyListingCard",
+        "tag": "ui-vacancy-listing-card",
+        "doc": "One vacancy as an out-of-the-box `lightning-card` — the /jobs3 listing.\n\nThe same content and order as `ui/vacancyCard`, built without a stylesheet\nof its own: the card keeps its shipped anatomy (icon, title, actions, body)\nand is skinned only through public hooks, on `.sep-vacancy-listing` in\nsite.css. Where `ui/vacancyCard` rebuilt the header to fit the design, this\naccepts what the card renders — that difference is the point of /jobs3.\n\nPresentational only: the page fetches and shapes the data, this renders it.",
+        "composes": [
+            "lightning-badge",
+            "lightning-button-menu",
+            "lightning-card",
+            "lightning-icon",
+            "lightning-layout",
+            "lightning-layout-item",
+            "lightning-menu-item"
+        ],
+        "wraps": [],
+        "blueprints": [
+            "badge",
+            "scopedNotifications"
+        ],
+        "sepClasses": [
+            "sep-vacancy-listing"
+        ],
+        "hasCss": false,
+        "css": null,
+        "htmlLines": 107
     },
     {
         "name": "vacancyStepper",
@@ -1214,6 +1239,7 @@ export const SEP_CLASSES = [
             "src/modules/example/home/home.html",
             "src/modules/example/jobs/jobs.html",
             "src/modules/example/jobs2/jobs2.html",
+            "src/modules/example/jobs3/jobs3.html",
             "src/modules/example/manageOrg/manageOrg.html",
             "src/modules/example/profile/profile.html",
             "src/modules/example/vacancies/vacancies.html",
@@ -1235,6 +1261,7 @@ export const SEP_CLASSES = [
             "src/modules/example/home/home.html",
             "src/modules/example/jobs/jobs.html",
             "src/modules/example/jobs2/jobs2.html",
+            "src/modules/example/jobs3/jobs3.html",
             "src/modules/example/manageOrg/manageOrg.html",
             "src/modules/example/profile/profile.html",
             "src/modules/ui/jobManageHeader/jobManageHeader.html"
@@ -1262,7 +1289,6 @@ export const SEP_CLASSES = [
             }
         ],
         "usedIn": [
-            "src/modules/example/createJobStep1/createJobStep1.html",
             "src/modules/example/createJobStep2/createJobStep2.html",
             "src/modules/example/createJobStep3/createJobStep3.html",
             "src/modules/example/createJobStep4/createJobStep4.html",
@@ -1454,5 +1480,19 @@ export const SEP_CLASSES = [
             }
         ],
         "usedIn": []
+    },
+    {
+        "name": "sep-vacancy-listing",
+        "note": "Vacancy listing — the out-of-the-box card on /jobs3. HOOKS ONLY, no real property. Source: `ui/vacancyCard`'s frame, so the stock `lightning-card` in `ui/vacancyListingCard` gets the same edge without a stylesheet of its own: 8px top in MSD blue, 2px elsewhere, 8px corners. --slds-c-card-sizing-border   feeds `border-width`, so it takes the four-value shorthand. SLDS's border scale stops at 4px, hence x2. --slds-c-icon-color-foreground-default   read only by utility icons in the default variant — the meta rail. The card's standard header icon reads `--slds-c-icon-color-foreground` and the button-menu trigger is a button icon, so neither picks this up. Not reached: the custom category artwork, the navy title link, and the status pill staying top right on a phone — see `ui/vacancyListingCard`.",
+        "rules": [
+            {
+                "selector": ".sep-vacancy-listing",
+                "body": "--slds-c-card-color-border: var(--site-color-brand-blue);\n    --slds-c-card-sizing-border: calc(var(--slds-g-sizing-border-4) * 2)\n        var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2);\n    --slds-c-card-radius-border: var(--slds-g-radius-border-3);\n    --slds-c-icon-color-foreground-default: var(--site-color-brand-navy);"
+            }
+        ],
+        "usedIn": [
+            "src/modules/ui/vacancyListingCard/vacancyListingCard.html",
+            "src/modules/ui/vacancyListingCard/vacancyListingCard.ts"
+        ]
     }
 ];

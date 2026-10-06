@@ -21,7 +21,7 @@
                     lwc:if={showPreviewHeading}
                     class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_x-small"
                 >
-                    <h2 id={ids.previewHeading} class="slds-text-heading_medium">Job preview</h2>
+                    <h6 id={ids.previewHeading}>Job preview</h6>
                     <div id={ids.statusGroup} class="slds-grid slds-grid_vertical-align-center">
                         <span id={ids.statusLabel}>Status:</span>
                         <lightning-badge
@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="slds-grid slds-grid_align-spread">
-                    <h2 id={ids.title} class="slds-text-heading_large">{title}</h2>
+                    <h1 id={ids.title}>{title}</h1>
                     <lightning-button
                         lwc:if={editable}
                         variant="base"
@@ -92,7 +92,7 @@
                 <template lwc:if={jobId}>
                     <hr />
                     <div id={ids.jobId}>
-                        <h3 id={ids.jobIdHeading} class="slds-text-heading_medium slds-m-bottom_x-small">Job ID</h3>
+                        <h4 id={ids.jobIdHeading} class="slds-m-bottom_x-small">Job ID</h4>
                         <div class="slds-grid slds-grid_vertical-align-center">
                             <span id={ids.jobIdValue} class="slds-text-heading_small">{jobId}</span>
                             <span class="slds-text-color_weak slds-m-horizontal_small" aria-hidden="true">&bull;</span>
@@ -121,7 +121,7 @@
                      spacing between sections, so the blocks carry no bottom
                      margin of their own. -->
                 <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
-                    <h3 id={ids.descriptionHeading} class="slds-text-heading_small">Job description</h3>
+                    <h4 id={ids.descriptionHeading}>Job description</h4>
                     <lightning-button
                         lwc:if={editable}
                         variant="base"
@@ -138,7 +138,7 @@
                 <!-- What makes this job great -------------------------------->
                 <hr />
                 <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
-                    <h3 id={ids.sellingPointsHeading} class="slds-text-heading_small">What makes this job great</h3>
+                    <h6 id={ids.sellingPointsHeading}>What makes this job great</h6>
                     <lightning-button
                         lwc:if={editable}
                         variant="base"
@@ -159,7 +159,7 @@
                 <!-- On-the-job training. No column holds this — see the docblock. -->
                 <hr />
                 <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
-                    <h3 id={ids.trainingHeading} class="slds-text-heading_small">On-the-job training</h3>
+                    <h6 id={ids.trainingHeading}>On-the-job training</h6>
                     <lightning-button
                         lwc:if={editable}
                         variant="base"
@@ -178,7 +178,7 @@
                 <!-- Pre-employment checks ------------------------------------>
                 <hr />
                 <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
-                    <h3 id={ids.checksHeading} class="slds-text-heading_small">Pre-employment checks</h3>
+                    <h6 id={ids.checksHeading}>Pre-employment checks</h6>
                     <lightning-button
                         lwc:if={editable}
                         variant="base"
@@ -199,7 +199,7 @@
                 <!-- Work schedule -------------------------------------------->
                 <hr />
                 <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
-                    <h3 id={ids.scheduleHeading} class="slds-text-heading_small">Work schedule</h3>
+                    <h6 id={ids.scheduleHeading}>Work schedule</h6>
                     <lightning-button
                         lwc:if={editable}
                         variant="base"
@@ -256,7 +256,7 @@
                          class. A span, not a heading — the card already wraps
                          the slot in its own <h2>, so this stays a heading
                          without nesting one in another. -->
-                    <span slot="title" id={ids.aboutHeading} class="slds-text-heading_medium">About the job</span>
+                    <span slot="title" id={ids.aboutHeading} class="slds-text-heading_large">About the job</span>
                     <!-- 16px left, right and bottom; none on top — the card
                          header above supplies that (see the .css). -->
                     <div class="slds-p-horizontal_medium slds-p-bottom_medium">
@@ -267,7 +267,7 @@
                                      the card is denser than the page. -->
                                 <hr lwc:if={section.showDivider} class="slds-m-vertical_medium" />
                                 <div class="slds-grid slds-grid_align-spread">
-                                    <h3 class="slds-text-heading_small">{section.heading}</h3>
+                                    <h6>{section.heading}</h6>
                                     <lightning-button
                                         lwc:if={editable}
                                         variant="base"

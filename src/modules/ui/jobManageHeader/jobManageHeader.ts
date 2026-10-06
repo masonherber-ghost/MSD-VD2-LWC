@@ -115,11 +115,6 @@ export default class JobManageHeader extends LightningElement {
         return tags;
     }
 
-    /** Edit appears only where the lifecycle allows it — the same rule as the cards. */
-    get canEdit(): boolean {
-        return actionsFor(this.status, this.release).some((a) => a.key === 'edit');
-    }
-
     /**
      * Every action this header offers, in menu order: the lifecycle actions
      * from `data/vacancyRules` plus what only this page adds.

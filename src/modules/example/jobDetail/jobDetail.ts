@@ -127,11 +127,11 @@ export default class JobDetail extends LightningElement {
     }
 
     /**
-     * Edit: seed the create flow from this vacancy, then open it at step 1.
+     * Edit: seed the create flow from this vacancy, then open it at its first step (step 2).
      *
      * `this.job` is already the hydrated record — `api.job()` returns every
      * child collection — so there is nothing more to fetch. The id travels in
-     * the URL as well as in the draft so step 1 can tell a real edit from a
+     * the URL as well as in the draft so step 2 can tell a real edit from a
      * stale draft left in this tab. See `data/jobDraft`.
      */
     handleEdit(): void {
@@ -139,7 +139,7 @@ export default class JobDetail extends LightningElement {
             return;
         }
         startFromJob(this.job);
-        window.location.assign(`/create-job/step1?edit=${this.job.id}`);
+        window.location.assign(`/create-job/step2?edit=${this.job.id}`);
     }
 
     // -- state ------------------------------------------------------------

@@ -20,6 +20,25 @@ export default class ReadOnlyNotice extends LightningElement {
     @api message = 'Some of these details are held by MSD and cannot be changed here.';
 
     /**
+     * Prefixes every `id` this renders. The page sets it to the host's own id
+     * (`profile-readonly-notice`, `org-readonly-notice`): a notice is the kind
+     * of thing a page could hold two of, so a fixed id here could collide.
+     */
+    @api idPrefix = 'read-only-notice';
+
+    /** Keyed in camelCase — a template expression cannot hold a hyphen. */
+    get ids(): Record<string, string> {
+        const p = this.idPrefix || 'read-only-notice';
+        const names = [
+            'root', 'header', 'title', 'body', 'icon-stacked', 'contact-link-stacked',
+            'inline', 'icon-inline', 'contact-link-inline'
+        ];
+        return Object.fromEntries(
+            names.map((n) => [n.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase()), `${p}-${n}`])
+        );
+    }
+
+    /**
      * Optional bold heading, as SEP's Info Panel draws it.
      *
      * Named `heading` rather than `title` on purpose: `title` is a global HTML

@@ -1,5 +1,5 @@
 import { LightningElement } from 'lwc';
-import { PUBLISH_TIMING, INTERVIEW_OPTIONS } from 'data/reference';
+import { PUBLISH_TIMING, INTERVIEW_OPTIONS, CONTACT_ROLES } from 'data/reference';
 import { current as currentDraft, patch as patchDraft } from 'data/jobDraft';
 
 /**
@@ -65,5 +65,40 @@ export default class CreateJobStep6 extends LightningElement {
     handleInterviewChange(event: CustomEvent): void {
         this.selectedInterviewOptions = (event.detail as { value: string[] }).value ?? [];
         patchDraft({ interview_options: this.selectedInterviewOptions });
+    }
+
+    // -- Vacancy contact (moved from the removed step 1) -------------------
+
+    roles = CONTACT_ROLES;
+    showVacancyContact = false;
+    vacancyContact: Record<string, string> = {
+        first_name: '',
+        last_name: '',
+        role: '',
+        phone: '',
+        email: ''
+    };
+
+    handleAddVacancyContact(): void {
+        this.showVacancyContact = true;
+    }
+
+    /** Remove clears the fields, so adding again starts empty. */
+    handleRemoveVacancyContact(): void {
+        this.showVacancyContact = false;
+        this.vacancyContact = { first_name: '', last_name: '', role: '', phone: '', email: '' };
+    }
+
+    /**
+     * Held on the page only, exactly as step 1 held it: NOT written to the
+     * draft and not submitted. The draft has no vacancy-contact fields, and
+     * `jobs.vacancy_contact_id` points at an existing contact — creating a new
+     * person from these fields is a data decision that has not been made.
+     */
+    handleVacancyContactChange(event: CustomEvent): void {
+        const field = (event.target as HTMLElement).dataset.field;
+        if (!field) return;
+        const value = (event.target as HTMLInputElement).value ?? '';
+        this.vacancyContact = { ...this.vacancyContact, [field]: value };
     }
 }

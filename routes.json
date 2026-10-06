@@ -43,15 +43,15 @@
       "layoutTemplate": "$layoutsDir/main.njk"
     },
     {
-      "id": "jobDetail",
-      "path": "/jobs/job-detail",
-      "rootComponent": "example/jobDetail",
+      "id": "jobs3",
+      "path": "/jobs3",
+      "rootComponent": "example/jobs3",
       "layoutTemplate": "$layoutsDir/main.njk"
     },
     {
-      "id": "createJobStep1",
-      "path": "/create-job/step1",
-      "rootComponent": "example/createJobStep1",
+      "id": "jobDetail",
+      "path": "/jobs/job-detail",
+      "rootComponent": "example/jobDetail",
       "layoutTemplate": "$layoutsDir/main.njk"
     },
     {

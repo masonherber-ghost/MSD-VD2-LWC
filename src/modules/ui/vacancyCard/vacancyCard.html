@@ -29,7 +29,7 @@
              false and suppresses that figure entirely; the media object below
              rebuilds it in the title slot, which IS ours. -->
         <lightning-card>
-            <h2 slot="title" class="slds-media vacancy-card__heading">
+            <h5 slot="title" class="slds-media vacancy-card__heading">
                 <span class="slds-media__figure vacancy-card__figure">
                     <!-- The vacancy's category icon, chosen from its job type.
                          Decorative: alt is empty so the heading still reads as
@@ -63,12 +63,12 @@
                     <a href={card.href} class="vacancy-card__link" title={card.title}>
                         {card.title}
                     </a>
-                    <span
+                    <!-- <span
                         lwc:if={card.subtitle}
                         class="slds-text-body_small slds-text-color_weak vacancy-card__subtitle"
                     >
                         {card.subtitle}
-                    </span>
+                    </span> -->
                 </span>
 
                 <!-- The status pill, as the heading row's last item rather than
@@ -92,7 +92,7 @@
                         class={card.statusClass}
                     ></lightning-badge>
                 </span>
-            </h2>
+            </h5>
 
 
             <!-- Body: metadata left, actions right.

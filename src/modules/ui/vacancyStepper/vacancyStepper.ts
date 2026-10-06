@@ -11,7 +11,7 @@ export default class VacancyStepper extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
 
     /** The step this route is, as a value from VACANCY_STEPS. */
-    @api currentStep = '1';
+    @api currentStep = '2';
 
     steps = VACANCY_STEPS;
 
