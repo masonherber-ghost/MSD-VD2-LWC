@@ -75,10 +75,7 @@
                      spaces it. It is inside the heading, so the status is read
                      with the title. -->
                 <span class="slds-media__figure vacancy-card__figure slds-align-top">
-                    <lightning-badge
-                        label={card.statusLabel}
-                        class={card.statusClass}
-                    ></lightning-badge>
+                    <span class={card.statusClass}>{card.statusLabel}</span>
                 </span>
             </h5>
 

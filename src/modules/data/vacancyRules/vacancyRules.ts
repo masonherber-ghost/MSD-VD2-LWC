@@ -171,14 +171,22 @@ export function closingText(status: string, value: unknown): string {
  * border rather than one neutral badge, so the colour has to travel with the
  * record. The styles are `sep-status-tag` in `site.css`; this only names them.
  * A state the lifecycle does not name falls back to the draft style.
+ *
+ * Returns the FULL class string for the SLDS badge blueprint
+ * (`<span class="slds-badge …">`), so `slds-badge` is included. The blueprint
+ * reads the same `--slds-c-badge-*` hooks the `sep-status-tag` skin sets.
  */
 export function statusTagClass(status: string): string {
     const mod = JOB_STATUS_ORDER.includes(status) ? status.replace('_', '-') : 'draft';
-    return `sep-status-tag sep-status-tag_${mod}`;
+    return `slds-badge sep-status-tag sep-status-tag_${mod}`;
 }
 
 /**
- * The status badge's SLDS theme class, for the out-of-the-box vacancy card.
+ * The status badge's full class string: the SLDS badge blueprint plus its
+ * Cosmos status theme. Under Cosmos `slds-theme_*` is a pale tinted fill with
+ * coloured text, matching the LDS2 Badge examples (Base / Informational /
+ * Warning / Error / Success). Used wherever a vacancy's status is shown
+ * unskinned: the /jobs card, the job detail header, the listing preview.
  * The design's pills are the SLDS badge themes (Figma "Badge - Informational",
  * "- Success", "- Warning", and the plain badge for Closed), so the class is
  * SLDS's own and no project CSS defines it.
@@ -186,12 +194,12 @@ export function statusTagClass(status: string): string {
 export function statusThemeClass(status: string): string {
     switch (status) {
         case 'draft':
-            return 'slds-theme_info';
+            return 'slds-badge slds-theme_info';
         case 'in_review':
-            return 'slds-theme_warning';
+            return 'slds-badge slds-theme_warning';
         case 'active':
-            return 'slds-theme_success';
+            return 'slds-badge slds-theme_success';
         default:
-            return '';
+            return 'slds-badge';
     }
 }

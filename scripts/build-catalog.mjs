@@ -9,11 +9,20 @@
  *
  * Nothing here is hand-maintained: re-run `npm run catalog` after upgrading
  * lightning-base-components and the whole catalog follows the package.
+ *
+ * PROJECT EXAMPLES. Examples this project writes live in
+ * `src/examples/<component>/<example>/<example>.js|.html`, outside
+ * src/modules so they are only reachable through the registry, exactly like
+ * the shipped ones. They are appended after the package's own, carry
+ * `project: true`, and are labelled "(project)" so the Components tab never
+ * presents our markup as Salesforce's. Re-run `npm run catalog` after adding
+ * one.
  */
 import fs from 'fs';
 import path from 'path';
 
 const LBC_DIR = 'node_modules/lightning-base-components';
+const PROJECT_EXAMPLES_DIR = 'src/examples';
 const LBC = path.resolve(LBC_DIR);
 const SRC = path.join(LBC, 'src/lightning');
 
@@ -145,6 +154,41 @@ function readExamples(componentName, componentDir) {
         .filter(Boolean);
 }
 
+/** Project-authored examples for one component, from src/examples/<component>/. */
+function readProjectExamples(componentName) {
+    const dir = path.resolve(PROJECT_EXAMPLES_DIR, componentName);
+    if (!fs.existsSync(dir)) return [];
+
+    return fs
+        .readdirSync(dir, { withFileTypes: true })
+        .filter((d) => d.isDirectory())
+        .map((d) => d.name)
+        .sort()
+        .map((exampleName) => {
+            const exDir = path.join(dir, exampleName);
+            const entry = path.join(exDir, `${exampleName}.js`);
+            if (!fs.existsSync(entry)) return null;
+
+            const cap = (n) => n.charAt(0).toUpperCase() + n.slice(1);
+            const sources = fs
+                .readdirSync(exDir)
+                .filter((f) => /\.(html|js|css)$/.test(f))
+                .sort()
+                .map((f) => ({ file: f, code: fs.readFileSync(path.join(exDir, f), 'utf8') }));
+
+            return {
+                id: `${componentName}/project-${exampleName}`,
+                name: exampleName,
+                label: `${titleCase(exampleName)} (project)`,
+                module: `examples/${componentName}Project${cap(exampleName)}`,
+                project: true,
+                entry: path.join(PROJECT_EXAMPLES_DIR, componentName, exampleName, `${exampleName}.js`),
+                sources
+            };
+        })
+        .filter(Boolean);
+}
+
 // Read the package once: every component with its examples (sources included).
 const scanned = fs
     .readdirSync(SRC, { withFileTypes: true })
@@ -161,7 +205,7 @@ const scanned = fs
             minVersion: meta.minVersion && meta.minVersion !== '0.0' ? meta.minVersion : null,
             properties: (meta.properties || []).map((p) => p.name).sort(),
             slots: meta.slotNames || [],
-            examples: readExamples(name, path.join(SRC, name))
+            examples: [...readExamples(name, path.join(SRC, name)), ...readProjectExamples(name)]
         };
     });
 
@@ -238,7 +282,9 @@ config.bundleConfig.exclude = [
 fs.writeFileSync(LWR_CONFIG, JSON.stringify(config, null, 4) + '\n');
 
 const withExamples = components.filter((c) => c.examples.length).length;
+const projectCount = allExamples.filter((e) => e.project).length;
 console.log(
     `catalog: ${components.length} components (${withExamples} with examples), ` +
-        `${allExamples.length} examples, ${(JSON.stringify(sourceMap).length / 1024).toFixed(0)}KB of source`
+        `${allExamples.length} examples (${projectCount} project), ` +
+        `${(JSON.stringify(sourceMap).length / 1024).toFixed(0)}KB of source`
 );

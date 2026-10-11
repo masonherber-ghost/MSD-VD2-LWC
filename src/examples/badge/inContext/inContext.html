@@ -1,0 +1,41 @@
+<template lwc:render-mode="light">
+    <div class="slds-m-bottom_large">
+        <p class="slds-m-bottom_small">Beside a heading.</p>
+        <div class="slds-grid slds-grid_vertical-align-center">
+            <h3 class="slds-text-heading_small slds-m-right_x-small">Site Foreperson</h3>
+            <lightning-badge label="Draft"></lightning-badge>
+        </div>
+    </div>
+
+    <div class="slds-m-bottom_large">
+        <p class="slds-m-bottom_small">In a card's <code>actions</code> slot.</p>
+        <lightning-card title="Hammer Hand">
+            <lightning-badge slot="actions" label="Published"></lightning-badge>
+            <p class="slds-p-horizontal_medium">Card body.</p>
+        </lightning-card>
+    </div>
+
+    <div class="slds-m-bottom_large">
+        <p class="slds-m-bottom_small">Inline in a sentence.</p>
+        <p>
+            This vacancy has
+            <lightning-badge label="3 new"></lightning-badge>
+            applicants since you last looked.
+        </p>
+    </div>
+
+    <div>
+        <p class="slds-m-bottom_small">As a count in a list.</p>
+        <ul class="slds-has-dividers_bottom-space">
+            <li class="slds-item slds-grid slds-grid_align-spread">
+                <span>Applied</span><lightning-badge label="12"></lightning-badge>
+            </li>
+            <li class="slds-item slds-grid slds-grid_align-spread">
+                <span>Shortlisted</span><lightning-badge label="4" class="slds-badge_inverse"></lightning-badge>
+            </li>
+            <li class="slds-item slds-grid slds-grid_align-spread">
+                <span>Interview</span><lightning-badge label="1" class="slds-badge_lightest"></lightning-badge>
+            </li>
+        </ul>
+    </div>
+</template>

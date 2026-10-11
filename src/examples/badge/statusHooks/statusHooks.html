@@ -1,0 +1,26 @@
+<template lwc:render-mode="light">
+    <p class="slds-m-bottom_small">
+        Status colours set with the public <code>--slds-c-badge-*</code> hooks, fed by
+        the theme's status tokens.
+    </p>
+    <lightning-badge
+        label="Info"
+        style="--slds-c-badge-color-background: var(--slds-g-color-info-container-1); --slds-c-badge-text-color: var(--slds-g-color-on-info-1);"
+    ></lightning-badge>
+    <lightning-badge
+        label="Success"
+        style="--slds-c-badge-color-background: var(--slds-g-color-success-container-1); --slds-c-badge-text-color: var(--slds-g-color-on-success-1);"
+    ></lightning-badge>
+    <lightning-badge
+        label="Warning"
+        style="--slds-c-badge-color-background: var(--slds-g-color-warning-container-1); --slds-c-badge-text-color: var(--slds-g-color-on-warning-1);"
+    ></lightning-badge>
+    <lightning-badge
+        label="Error"
+        style="--slds-c-badge-color-background: var(--slds-g-color-error-container-1); --slds-c-badge-text-color: var(--slds-g-color-on-error-1);"
+    ></lightning-badge>
+    <lightning-badge
+        label="Outlined"
+        style="--slds-c-badge-color-background: transparent; --slds-c-badge-color-border: var(--slds-g-color-border-2);"
+    ></lightning-badge>
+</template>

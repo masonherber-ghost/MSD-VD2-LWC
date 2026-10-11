@@ -125,11 +125,7 @@
             <lightning-layout-item flexibility="auto">
                 <div id="job-header-tags" class="slds-grid slds-wrap">
                     <template for:each={tags} for:item="tag">
-                        <lightning-badge
-                            key={tag.key}
-                            label={tag.label}
-                            class="slds-m-right_x-small slds-m-bottom_x-small"
-                        ></lightning-badge>
+                        <span class="slds-badge slds-m-right_x-small slds-m-bottom_x-small" key={tag.key}>{tag.label}</span>
                     </template>
                 </div>
             </lightning-layout-item>

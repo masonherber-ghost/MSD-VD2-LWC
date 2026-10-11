@@ -1,0 +1,21 @@
+<template lwc:render-mode="light">
+    <div class="slds-m-bottom_large">
+        <p class="slds-m-bottom_small">
+            The three variants. There is no <code>variant</code> property; the
+            alternatives are classes on the host.
+        </p>
+        <lightning-badge label="Default"></lightning-badge>
+        <lightning-badge label="Inverse" class="slds-badge_inverse"></lightning-badge>
+        <lightning-badge label="Lightest" class="slds-badge_lightest"></lightning-badge>
+    </div>
+
+    <div>
+        <p class="slds-m-bottom_small">
+            Label lengths. A badge never wraps (<code>white-space: nowrap</code>), so
+            a long label grows the badge rather than breaking.
+        </p>
+        <lightning-badge label="1"></lightning-badge>
+        <lightning-badge label="New"></lightning-badge>
+        <lightning-badge label="A much longer badge label"></lightning-badge>
+    </div>
+</template>

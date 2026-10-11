@@ -52,7 +52,6 @@ export const COMPOSITIONS = [
         "tag": "ui-blueprint-browser",
         "doc": "The exact class string on the example's root — shown under it as well.",
         "composes": [
-            "lightning-badge",
             "lightning-card",
             "lightning-icon",
             "lightning-input",
@@ -66,6 +65,7 @@ export const COMPOSITIONS = [
             "ui-alert"
         ],
         "blueprints": [
+            "badge",
             "scopedNotifications"
         ],
         "sepClasses": [
@@ -86,7 +86,7 @@ export const COMPOSITIONS = [
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 225
+        "htmlLines": 245
     },
     {
         "name": "compositionBrowser",
@@ -95,12 +95,14 @@ export const COMPOSITIONS = [
         "composes": [
             "lightning-accordion",
             "lightning-accordion-section",
-            "lightning-badge",
             "lightning-card",
+            "lightning-icon",
             "lightning-input"
         ],
         "wraps": [],
-        "blueprints": [],
+        "blueprints": [
+            "badge"
+        ],
         "sepClasses": [
             "sep-heading"
         ],
@@ -122,7 +124,7 @@ export const COMPOSITIONS = [
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 156
+        "htmlLines": 152
     },
     {
         "name": "contentSection",
@@ -595,7 +597,6 @@ export const COMPOSITIONS = [
         "tag": "ui-job-listing-preview",
         "doc": "Composed in `aboutSections` from `idPrefix` — see `ids`.",
         "composes": [
-            "lightning-badge",
             "lightning-button",
             "lightning-card",
             "lightning-icon",
@@ -603,7 +604,9 @@ export const COMPOSITIONS = [
             "lightning-layout-item"
         ],
         "wraps": [],
-        "blueprints": [],
+        "blueprints": [
+            "badge"
+        ],
         "sepClasses": [],
         "hasCss": true,
         "css": {
@@ -624,7 +627,7 @@ export const COMPOSITIONS = [
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 306
+        "htmlLines": 290
     },
     {
         "name": "jobManageHeader",
@@ -642,6 +645,7 @@ export const COMPOSITIONS = [
         ],
         "wraps": [],
         "blueprints": [
+            "badge",
             "pageHeader"
         ],
         "sepClasses": [
@@ -666,7 +670,7 @@ export const COMPOSITIONS = [
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 133
+        "htmlLines": 129
     },
     {
         "name": "kitchenSink",
@@ -1012,7 +1016,6 @@ export const COMPOSITIONS = [
         "tag": "ui-vacancy-card",
         "doc": "One vacancy, as a full-width card for the /jobs3 list.\n\nPresentational only: the page fetches and shapes the data, this renders it.\nThat keeps it liftable into a DX project and droppable into an App Builder\nregion — see `rules-lwc-layout.md` § The modular component rule.",
         "composes": [
-            "lightning-badge",
             "lightning-button-menu",
             "lightning-card",
             "lightning-icon",
@@ -1069,7 +1072,7 @@ export const COMPOSITIONS = [
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 179
+        "htmlLines": 176
     },
     {
         "name": "vacancyEmptyState",
@@ -1093,7 +1096,6 @@ export const COMPOSITIONS = [
         "tag": "ui-vacancy-listing-card",
         "doc": "One vacancy as an out-of-the-box `lightning-card` — the /jobs listing.\n\nContent, menu and status pills from the vacancy card design (Figma\n445:39792). The card keeps its shipped anatomy (title, actions, body) and\ndefault frame; everything inside is SLDS blueprint classes and utilities.\nThe only styling is the card's public body-spacing hooks (Figma 445:40158),\nin `vacancyListingCard.css`.\nWhere `ui/vacancyCard` (/jobs3) rebuilt the card to fit the design, this\naccepts what the card renders — that difference is the point of the two.\n\nPresentational only: the page fetches and shapes the data, this renders it.",
         "composes": [
-            "lightning-badge",
             "lightning-button-menu",
             "lightning-card",
             "lightning-icon",
@@ -1129,7 +1131,7 @@ export const COMPOSITIONS = [
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 106
+        "htmlLines": 105
     },
     {
         "name": "vacancyStepper",

@@ -112,7 +112,35 @@ const ALERT_EXAMPLES: Record<string, AlertExample[]> = {
     ]
 };
 
-const hasExample = (name: string): boolean => Boolean(EXAMPLES[name] || ALERT_EXAMPLES[name]);
+interface BadgeExample {
+    key: string;
+    label: string;
+    cls: string;
+    icon: string;
+}
+
+/**
+ * The Badge blueprint as the LDS2 "Badge Grab n Go Examples" frame names it
+ * (Figma 17334:5820): Base, Light, Informational, Warning, Error, Success —
+ * plus Inverse and an icon, the blueprint's other two modifiers. Plain
+ * `<span class="slds-badge …">` markup under the Cosmos theme, which is what
+ * the site now writes in place of `lightning-badge`.
+ */
+const BADGE_EXAMPLES: Record<string, BadgeExample[]> = {
+    badge: [
+        { key: 'base', label: 'Base', cls: 'slds-badge', icon: '' },
+        { key: 'light', label: 'Light', cls: 'slds-badge slds-badge_lightest', icon: '' },
+        { key: 'info', label: 'Informational', cls: 'slds-badge slds-theme_info', icon: '' },
+        { key: 'warning', label: 'Warning', cls: 'slds-badge slds-theme_warning', icon: '' },
+        { key: 'error', label: 'Error', cls: 'slds-badge slds-theme_error', icon: '' },
+        { key: 'success', label: 'Success', cls: 'slds-badge slds-theme_success', icon: '' },
+        { key: 'inverse', label: 'Inverse', cls: 'slds-badge slds-badge_inverse', icon: '' },
+        { key: 'icon', label: 'With icon', cls: 'slds-badge', icon: 'utility:check' }
+    ]
+};
+
+const hasExample = (name: string): boolean =>
+    Boolean(EXAMPLES[name] || ALERT_EXAMPLES[name] || BADGE_EXAMPLES[name]);
 
 /**
  * Browses the SLDS 2 blueprints that are installed.
@@ -229,6 +257,14 @@ export default class BlueprintBrowser extends LightningElement {
 
     get hasAlertExamples(): boolean {
         return this.alertExamples.length > 0;
+    }
+
+    get badgeExamples(): (BadgeExample & { hasIcon: boolean })[] {
+        return (BADGE_EXAMPLES[this.current.name] ?? []).map((b) => ({ ...b, hasIcon: Boolean(b.icon) }));
+    }
+
+    get hasBadgeExamples(): boolean {
+        return this.badgeExamples.length > 0;
     }
 
     get hasBorrowed(): boolean {

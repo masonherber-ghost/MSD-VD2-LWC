@@ -143,6 +143,41 @@ export const COMPONENTS = [
                 "name": "icon",
                 "label": "Icon",
                 "module": "examples/badgeIcon"
+            },
+            {
+                "id": "badge/project-icons",
+                "name": "icons",
+                "label": "Icons (project)",
+                "module": "examples/badgeProjectIcons",
+                "project": true
+            },
+            {
+                "id": "badge/project-inContext",
+                "name": "inContext",
+                "label": "In Context (project)",
+                "module": "examples/badgeProjectInContext",
+                "project": true
+            },
+            {
+                "id": "badge/project-statusHooks",
+                "name": "statusHooks",
+                "label": "Status Hooks (project)",
+                "module": "examples/badgeProjectStatusHooks",
+                "project": true
+            },
+            {
+                "id": "badge/project-themeClasses",
+                "name": "themeClasses",
+                "label": "Theme Classes (project)",
+                "module": "examples/badgeProjectThemeClasses",
+                "project": true
+            },
+            {
+                "id": "badge/project-variants",
+                "name": "variants",
+                "label": "Variants (project)",
+                "module": "examples/badgeProjectVariants",
+                "project": true
             }
         ]
     },

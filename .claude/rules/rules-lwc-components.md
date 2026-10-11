@@ -22,7 +22,12 @@ component it records:
 | `slots` | Named slots (`""` is the default slot) |
 | `examples` | Official examples, rendered live at `/design-system` |
 
-Regenerate after upgrading the package: `npm run catalog`. It rewrites the catalog, the example
+Regenerate after upgrading the package: `npm run catalog`.
+
+**Project examples** sit beside the shipped ones: `src/examples/<component>/<name>/<name>.js|.html`
+(light DOM, no project CSS). `npm run catalog` appends them to that component's tabs, labelled
+"(project)", so our markup is never presented as Salesforce's. `badge` has five. Re-run
+`npm run catalog` after adding one, and restart the dev server — it rewrites `lwr.config.json`. It rewrites the catalog, the example
 registry, `src/assets/example-sources.json`, and the `examples/*` module records in
 `lwr.config.json`. It cannot disturb routes: those live in `routes.json` — see
 `rules-architecture.md` § *Routes*.
@@ -135,6 +140,16 @@ This applies to a genuinely new UI *component*. It does not apply to:
 > or keyboard behaviour — that Salesforce would ship as a component?
 
 If yes → ask first. If it is layout, structure or a static blueprint → carry on.
+
+### Sanctioned exception: badges are the blueprint, not `lightning-badge`
+
+By the user's decision, every badge on the site is `<span class="slds-badge …">` blueprint markup.
+`lightning-badge` in this package styles itself in native shadow as a bold full pill, which does
+not match the Cosmos badge (4px radius, regular weight), and a `slds-theme_*` class on its host
+cannot reach the inner pill. On the blueprint the class and the pill are one element, so the
+Cosmos status themes work with no project CSS. Status classes come from `data/vacancyRules`
+(`statusThemeClass`, `statusTagClass` — both return the full string, `slds-badge` included). The
+Components tab still documents `lightning-badge` itself.
 
 ### Antipattern
 

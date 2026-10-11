@@ -6,7 +6,7 @@ import {
     actionsFor,
     closingText,
     noActionsReason,
-    statusTagClass
+    statusThemeClass
 } from 'data/vacancyRules';
 
 interface MetaItem {
@@ -60,7 +60,7 @@ export default class JobManageHeader extends LightningElement {
     }
 
     get statusTagClass(): string {
-        return statusTagClass(this.status);
+        return statusThemeClass(this.status);
     }
 
     /** View applicants arrived with the applicant views, at 1.2. */

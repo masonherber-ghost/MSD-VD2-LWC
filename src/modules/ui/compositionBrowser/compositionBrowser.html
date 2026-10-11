@@ -26,11 +26,7 @@
                      iconAlternativeText and iconPosition are the whole of its
                      API, and SLDS 2 ships no success/warning badge modifier
                      either. So severity is carried by the icon. -->
-                <lightning-badge
-                    slot="actions"
-                    label={row.cssLabel}
-                    icon-name={row.cssIcon}
-                ></lightning-badge>
+                <span class="slds-badge" slot="actions"><span class="slds-badge__icon slds-badge__icon_left"><lightning-icon icon-name={row.cssIcon} size="xx-small"></lightning-icon></span>{row.cssLabel}</span>
 
                 <div class="slds-p-horizontal_medium">
                     <p lwc:if={row.doc} class="slds-text-body_small slds-m-bottom_small composition-browser__doc">{row.doc}</p>
@@ -77,22 +73,22 @@
                         <h3 class="slds-text-title_caps slds-m-bottom_xx-small">What its CSS touches</h3>
                         <ul class="slds-list_horizontal slds-wrap slds-m-bottom_x-small">
                             <li lwc:if={row.hasHooks} class="slds-m-right_xx-small slds-m-bottom_xx-small">
-                                <lightning-badge label="Sets published component hooks" icon-name="utility:success"></lightning-badge>
+                                <span class="slds-badge"><span class="slds-badge__icon slds-badge__icon_left"><lightning-icon icon-name="utility:success" size="xx-small"></lightning-icon></span>Sets published component hooks</span>
                             </li>
                             <li lwc:if={row.hasTokens} class="slds-m-right_xx-small slds-m-bottom_xx-small">
-                                <lightning-badge label="Uses design tokens" icon-name="utility:success"></lightning-badge>
+                                <span class="slds-badge"><span class="slds-badge__icon slds-badge__icon_left"><lightning-icon icon-name="utility:success" size="xx-small"></lightning-icon></span>Uses design tokens</span>
                             </li>
                             <li lwc:if={row.hasParts} class="slds-m-right_xx-small slds-m-bottom_xx-small">
-                                <lightning-badge label="Reaches an exposed ::part()" icon-name="utility:warning"></lightning-badge>
+                                <span class="slds-badge"><span class="slds-badge__icon slds-badge__icon_left"><lightning-icon icon-name="utility:warning" size="xx-small"></lightning-icon></span>Reaches an exposed ::part()</span>
                             </li>
                             <li lwc:if={row.hasRaw} class="slds-m-right_xx-small slds-m-bottom_xx-small">
-                                <lightning-badge label="Has raw colour values" icon-name="utility:warning"></lightning-badge>
+                                <span class="slds-badge"><span class="slds-badge__icon slds-badge__icon_left"><lightning-icon icon-name="utility:warning" size="xx-small"></lightning-icon></span>Has raw colour values</span>
                             </li>
                             <li lwc:if={row.hasImportant} class="slds-m-right_xx-small slds-m-bottom_xx-small">
-                                <lightning-badge label={row.importantLabel} icon-name="utility:warning"></lightning-badge>
+                                <span class="slds-badge"><span class="slds-badge__icon slds-badge__icon_left"><lightning-icon icon-name="utility:warning" size="xx-small"></lightning-icon></span>{row.importantLabel}</span>
                             </li>
                             <li lwc:if={row.hasPrivate} class="slds-m-right_xx-small slds-m-bottom_xx-small">
-                                <lightning-badge label="Sets a private --_slds hook" icon-name="utility:error"></lightning-badge>
+                                <span class="slds-badge"><span class="slds-badge__icon slds-badge__icon_left"><lightning-icon icon-name="utility:error" size="xx-small"></lightning-icon></span>Sets a private --_slds hook</span>
                             </li>
                         </ul>
 
@@ -137,7 +133,7 @@
 
         <template for:each={sepRows} for:item="sep">
             <lightning-card key={sep.key} title={sep.name} class="slds-m-bottom_small">
-                <lightning-badge slot="actions" label={sep.usedLabel}></lightning-badge>
+                <span class="slds-badge" slot="actions">{sep.usedLabel}</span>
                 <div class="slds-p-horizontal_medium">
                     <p lwc:if={sep.note} class="slds-text-body_small slds-m-bottom_small">{sep.note}</p>
                     <lightning-accordion allow-multiple-sections-open>

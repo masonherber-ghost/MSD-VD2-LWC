@@ -1,7 +1,7 @@
 import { LightningElement, api } from 'lwc';
 import Toast from 'lightning/toast';
 import { TRAINING_LEVELS } from 'data/reference';
-import { JOB_STATUS_LABELS, statusTagClass } from 'data/vacancyRules';
+import { JOB_STATUS_LABELS, statusThemeClass } from 'data/vacancyRules';
 
 type Row = Record<string, unknown>;
 
@@ -130,7 +130,7 @@ export default class JobListingPreview extends LightningElement {
 
     /** The SEP status tag, the one the /jobs cards and the page header carry. */
     get statusBadgeClass(): string {
-        return `${statusTagClass(text(this.job.status))} slds-m-left_x-small`;
+        return `${statusThemeClass(text(this.job.status))} slds-m-left_x-small`;
     }
 
     /**

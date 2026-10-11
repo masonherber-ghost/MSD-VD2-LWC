@@ -1,0 +1,34 @@
+<template lwc:render-mode="light">
+    <div class="slds-m-bottom_large">
+        <p class="slds-m-bottom_small">
+            <code>icon-position</code>: <code>start</code> (the default) and <code>end</code>.
+        </p>
+        <lightning-badge label="Start" icon-name="utility:check"></lightning-badge>
+        <lightning-badge label="End" icon-name="utility:chevronright" icon-position="end"></lightning-badge>
+    </div>
+
+    <div class="slds-m-bottom_large">
+        <p class="slds-m-bottom_small">Icon families: utility, standard and custom.</p>
+        <lightning-badge label="Utility" icon-name="utility:clock"></lightning-badge>
+        <lightning-badge label="Standard" icon-name="standard:job_profile"></lightning-badge>
+        <lightning-badge label="Custom" icon-name="custom:custom11"></lightning-badge>
+    </div>
+
+    <div class="slds-m-bottom_large">
+        <p class="slds-m-bottom_small">Icons on each variant.</p>
+        <lightning-badge label="Default" icon-name="utility:info"></lightning-badge>
+        <lightning-badge label="Inverse" icon-name="utility:info" class="slds-badge_inverse"></lightning-badge>
+        <lightning-badge label="Lightest" icon-name="utility:info" class="slds-badge_lightest"></lightning-badge>
+    </div>
+
+    <div>
+        <p class="slds-m-bottom_small">
+            With <code>icon-alternative-text</code>, for an icon that adds meaning.
+        </p>
+        <lightning-badge
+            label="Verified"
+            icon-name="utility:success"
+            icon-alternative-text="Verified organisation"
+        ></lightning-badge>
+    </div>
+</template>

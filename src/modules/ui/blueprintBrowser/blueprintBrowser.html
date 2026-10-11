@@ -15,8 +15,8 @@
                 all 89 blueprints, exactly one HTML file. There is no markup to render, so
                 any preview on this page would be markup we wrote, presented as the
                 design system's. The classes below are the real contract. The one
-                exceptions, on request, are the scoped notification and the alert,
-                whose examples are labelled as ours.
+                exceptions, on request, are the scoped notification, the alert and the
+                badge, whose examples are labelled as ours.
             </p>
         </div>
 
@@ -108,7 +108,7 @@
                             <ul class="slds-list_horizontal slds-wrap slds-m-top_x-small">
                                 <template for:each={missingList} for:item="c">
                                     <li key={c.key} class="slds-m-right_x-small">
-                                        <lightning-badge label={c.name}></lightning-badge>
+                                        <span class="slds-badge">{c.name}</span>
                                     </li>
                                 </template>
                             </ul>
@@ -155,6 +155,27 @@
                             </ul>
                         </template>
 
+                        <!-- The Badge blueprint, as plain markup under Cosmos. -->
+                        <template lwc:if={hasBadgeExamples}>
+                            <h3 class="slds-text-title_caps slds-m-bottom_x-small">Example</h3>
+                            <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                                Markup written by this project, not shipped by SLDS — the same
+                                <code>&lt;span class="slds-badge …"&gt;</code> the site uses in place of
+                                <code>lightning-badge</code>. No project CSS; the Cosmos theme alone.
+                            </p>
+                            <ul id="blueprint-browser-badge-examples" class="slds-m-bottom_medium">
+                                <template for:each={badgeExamples} for:item="ex">
+                                    <li key={ex.key} class="slds-grid slds-grid_vertical-align-center slds-m-bottom_x-small">
+                                        <span class={ex.cls}>
+                                            <span lwc:if={ex.hasIcon} class="slds-badge__icon slds-badge__icon_left">
+                                                <lightning-icon icon-name={ex.icon} size="xx-small"></lightning-icon>
+                                            </span>{ex.label}</span>
+                                        <code class="slds-text-body_small slds-text-color_weak slds-m-left_small">{ex.cls}</code>
+                                    </li>
+                                </template>
+                            </ul>
+                        </template>
+
                         <!-- The Alert blueprint, rendered through `ui/alert`. -->
                         <template lwc:if={hasAlertExamples}>
                             <h3 class="slds-text-title_caps slds-m-bottom_x-small">Example</h3>
@@ -180,7 +201,7 @@
                         <ul id="blueprint-browser-classes" class="slds-list_horizontal slds-wrap slds-m-bottom_medium">
                             <template for:each={ownClasses} for:item="c">
                                 <li key={c.key} class="slds-m-right_xx-small slds-m-bottom_xx-small">
-                                    <lightning-badge label={c.name}></lightning-badge>
+                                    <span class="slds-badge">{c.name}</span>
                                 </li>
                             </template>
                         </ul>
@@ -193,7 +214,7 @@
                             <ul id="blueprint-browser-borrowed" class="slds-list_horizontal slds-wrap slds-m-bottom_medium">
                                 <template for:each={borrowedClasses} for:item="c">
                                     <li key={c.key} class="slds-m-right_xx-small slds-m-bottom_xx-small">
-                                        <lightning-badge label={c.name}></lightning-badge>
+                                        <span class="slds-badge">{c.name}</span>
                                     </li>
                                 </template>
                             </ul>

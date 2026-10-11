@@ -270,6 +270,13 @@ export const BLUEPRINTS = [
         "privateHooks": [],
         "usedIn": [
             "src/assets/css/site.css",
+            "src/modules/data/vacancyRules/vacancyRules.ts",
+            "src/modules/example/manageOrg/manageOrg.html",
+            "src/modules/ui/blueprintBrowser/blueprintBrowser.html",
+            "src/modules/ui/blueprintBrowser/blueprintBrowser.ts",
+            "src/modules/ui/compositionBrowser/compositionBrowser.html",
+            "src/modules/ui/jobListingPreview/jobListingPreview.html",
+            "src/modules/ui/jobManageHeader/jobManageHeader.html",
             "src/modules/ui/vacancyCard/vacancyCard.html",
             "src/modules/ui/vacancyListingCard/vacancyListingCard.html"
         ],

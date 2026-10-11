@@ -52,6 +52,26 @@
                 "path": "node_modules/lightning-base-components/src/lightning/badge/__examples__/icon/icon.js"
             },
             {
+                "name": "examples/badgeProjectIcons",
+                "path": "src/examples/badge/icons/icons.js"
+            },
+            {
+                "name": "examples/badgeProjectInContext",
+                "path": "src/examples/badge/inContext/inContext.js"
+            },
+            {
+                "name": "examples/badgeProjectStatusHooks",
+                "path": "src/examples/badge/statusHooks/statusHooks.js"
+            },
+            {
+                "name": "examples/badgeProjectThemeClasses",
+                "path": "src/examples/badge/themeClasses/themeClasses.js"
+            },
+            {
+                "name": "examples/badgeProjectVariants",
+                "path": "src/examples/badge/variants/variants.js"
+            },
+            {
                 "name": "examples/breadcrumbsBase",
                 "path": "node_modules/lightning-base-components/src/lightning/breadcrumbs/__examples__/base/base.js"
             },
@@ -965,7 +985,9 @@
             }
         ]
     },
-    "hooks": ["$rootDir/scripts/routes-hook.mjs"],
+    "hooks": [
+        "$rootDir/scripts/routes-hook.mjs"
+    ],
     "assets": [
         {
             "alias": "assetsDir",
@@ -998,6 +1020,11 @@
             "examples/avatarVariant",
             "examples/badgeBasic",
             "examples/badgeIcon",
+            "examples/badgeProjectIcons",
+            "examples/badgeProjectInContext",
+            "examples/badgeProjectStatusHooks",
+            "examples/badgeProjectThemeClasses",
+            "examples/badgeProjectVariants",
             "examples/breadcrumbsBase",
             "examples/breadcrumbsWithIteration",
             "examples/breadcrumbsWithOnclick",

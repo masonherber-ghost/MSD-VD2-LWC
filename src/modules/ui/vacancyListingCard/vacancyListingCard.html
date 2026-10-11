@@ -28,12 +28,15 @@
         <a lwc:if={card.isClosed} slot="title" href={card.href} title={card.title} class="slds-text-color_weak"><s>{card.title}</s></a>
         <a lwc:else slot="title" href={card.href} title={card.title}>{card.title}</a>
 
-        <!-- The status in the card's actions region, as a `lightning-badge`
-             carrying SLDS's own `slds-theme_*` class (Draft info, Published
-             success, In review warning, Closed plain). Below 42.688em the
-             card's resize-reflow rule drops this under the title; that is the
-             shipped behaviour and is left alone. -->
-        <lightning-badge slot="actions" label={card.statusLabel} class={card.statusClass}></lightning-badge>
+        <!-- The status in the card's actions region: the SLDS badge BLUEPRINT
+             (`<span class="slds-badge">`), not `lightning-badge`, by decision —
+             the component's own shadow styles are a bold pill that does not
+             match the Cosmos badge. `slds-theme_*` gives the Cosmos status
+             fill (Draft info, Published success, In review warning, Closed
+             plain); see `statusThemeClass`. Below 42.688em the card's
+             resize-reflow rule drops this under the title; that is the shipped
+             behaviour and is left alone. -->
+        <span class={card.statusClass} slot="actions">{card.statusLabel}</span>
 
         <!-- Body: metadata left, row menu bottom right, the same 10/2 and 9/3
              split `ui/vacancyCard` uses. The body already carries the card's
@@ -70,11 +73,7 @@
                         </div>
                         <div class="slds-media__body">
                             {card.applicants}
-                            <lightning-badge
-                                lwc:if={card.hasNew}
-                                label={card.newApplicants}
-                                class="slds-badge_inverse slds-m-left_xx-small"
-                            ></lightning-badge>
+                            <span class="slds-badge slds-badge_inverse slds-m-left_xx-small" lwc:if={card.hasNew}>{card.newApplicants}</span>
                         </div>
                     </li>
                 </ul>
