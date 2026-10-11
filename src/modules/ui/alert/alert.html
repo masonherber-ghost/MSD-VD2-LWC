@@ -1,0 +1,17 @@
+<template lwc:render-mode="light">
+    <!-- SLDS Alert blueprint. The class picks the style; nothing here is ours. -->
+    <div class={alertClass} role={role}>
+        <span class="slds-assistive-text">{assistiveLabel}</span>
+        <!-- lightning-icon puts `slds-icon_container` on its own host. -->
+        <lightning-icon
+            icon-name={iconName}
+            variant={iconVariant}
+            size="x-small"
+            class="slds-m-right_x-small"
+        ></lightning-icon>
+        <!-- The blueprint wraps the text in an <h2>. A <p> here: these alerts sit
+             inside page content (one above each in-review card), where an <h2>
+             per alert would litter the document outline. -->
+        <p>{message}<slot></slot></p>
+    </div>
+</template>

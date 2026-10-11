@@ -59,8 +59,12 @@ interface JobCard {
     actions: MenuItem[];
 }
 
-/** The account's vacancies as a card grid — the object home for /jobs. */
-export default class Jobs extends LightningElement {
+/**
+ * The account's vacancies as a card grid — a third rendering of `/jobs`,
+ * reachable by URL only. `ui/vacancyCard` rebuilds the card to the design;
+ * `/jobs` shows the stock `lightning-card` instead.
+ */
+export default class Jobs3 extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
 
     jobs: Row[] = [];
@@ -177,7 +181,7 @@ export default class Jobs extends LightningElement {
             // Pay and contract type are deliberately not on the card. They are
             // still on the record page and in the /jobs2 table.
 
-            const actions: MenuItem[] = actionsFor(status, this.release).map((a) => ({
+            const actions: MenuItem[] = actionsFor(status).map((a) => ({
                 ...a,
                 disabled: false
             }));

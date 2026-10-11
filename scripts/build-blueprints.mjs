@@ -33,7 +33,7 @@ import path from 'node:path';
 
 const PKG = 'node_modules/@salesforce-ux/design-system-2';
 const COMPONENTS_DIR = path.resolve(PKG, 'dist/components');
-const BUNDLED_CSS = path.resolve(PKG, 'dist/css/bundled/slds2.lightning-blue.css');
+const BUNDLED_CSS = path.resolve(PKG, 'dist/css/bundled/slds2.cosmos.css');
 const CATALOG = path.resolve('src/modules/data/catalog/catalog.js');
 const OUT = path.resolve('src/modules/data/blueprints/blueprints.js');
 

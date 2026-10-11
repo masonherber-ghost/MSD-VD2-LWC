@@ -58,6 +58,9 @@
  * The @font-face declarations are in `fonts.css`, which `main.njk` loads first.
  * -------------------------------------------------------------------------- */
 
+/* [OFF — custom typeface] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 :root {
     --slds-g-font-family-base:
         'Atkinson Hyperlegible Next Variable',
@@ -65,6 +68,7 @@
         'Helvetica Neue', Arial, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
+ * [END OFF — custom typeface] */
 
 /* -----------------------------------------------------------------------------
  * Content width
@@ -167,16 +171,20 @@
  * `--_slds-c-globalheader-*` hooks for it. Height is public, colour is not.
  * -------------------------------------------------------------------------- */
 
+/* [OFF — custom header height] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 :root {
     --slds-s-header-sizing-height: 3.125rem;
 }
 
-/* 64em / 1024px — the same large breakpoint the content cap steps at. */
+/* 64em / 1024px — the same large breakpoint the content cap steps at. *\/
 @media (min-width: 64em) {
     :root {
         --slds-s-header-sizing-height: 5rem;
     }
 }
+ * [END OFF — custom header height] */
 
 /* -----------------------------------------------------------------------------
  * Buttons — the SEP primary button, applied site-wide
@@ -212,8 +220,11 @@
  * `@layer shared`.
  * -------------------------------------------------------------------------- */
 
+/* [OFF — custom button styles] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 :root {
-    /* Geometry, type and elevation — shared, so every button moves together. */
+    /* Geometry, type and elevation — shared, so every button moves together. *\/
     --slds-s-button-radius-border: var(--site-radius-pill);
     --slds-s-button-spacing-block: var(--slds-g-spacing-3);
     --slds-s-button-spacing-inline: 1.25rem;
@@ -223,7 +234,7 @@
 
     /* SLDS ships no block padding for buttons at all — the 32px default height
        is line-height plus the 1px border. The 12px added top and bottom is what
-       takes it to the SEP size. */
+       takes it to the SEP size. *\/
 
     /* Elevation — deliberately NOT set across the board.
      *
@@ -235,34 +246,35 @@
      *
      * -shadow-active stays: it sets `none`, which is what SEP wants on press
      * and is harmless anywhere else. -brand-shadow-hover stays too — its name
-     * scopes it to the brand variants. */
+     * scopes it to the brand variants. *\/
     --slds-s-button-brand-shadow-hover: var(--site-shadow-overlay);
     --slds-s-button-shadow-active: none;
 
     /* Brand, default. The border matches the fill: SEP draws none, but
        --slds-s-button-sizing-border is shared, and zeroing it would erase the
        border a neutral button depends on to be visible at all. Costs 2px of
-       height against the design — see the note in the build report. */
+       height against the design — see the note in the build report. *\/
     --slds-c-button-brand-color-background: var(--site-color-brand-blue);
     --slds-c-button-brand-color-border: var(--site-color-brand-blue);
     --slds-c-button-brand-text-color: var(--slds-g-color-on-accent-1);
 
     /* Brand, hover. The fill is a gradient, which cannot travel through a hook
        feeding `background`/`background-color` — see site.css. This is the flat
-       colour beneath it. */
+       colour beneath it. *\/
     --slds-c-button-brand-color-background-hover: var(--site-color-brand-blue);
     /* Transparent, not navy: the border paints on top of the gradient and a
        navy ring against a blue-to-navy fill reads as an outline the design does
        not have. `.slds-button` clips its background to the border box, so the
-       gradient fills the border area instead. */
+       gradient fills the border area instead. *\/
     --slds-c-button-brand-color-border-hover: transparent;
     --slds-c-button-brand-text-color-hover: var(--slds-g-color-on-accent-1);
 
-    /* Brand, active. */
+    /* Brand, active. *\/
     --slds-c-button-brand-color-background-active: var(--site-color-brand-navy);
     --slds-c-button-brand-color-border-active: var(--site-color-brand-navy);
     --slds-c-button-brand-text-color-active: var(--slds-g-color-on-accent-1);
 }
+ * [END OFF — custom button styles] */
 
 /* -----------------------------------------------------------------------------
  * SEP type scale
@@ -349,18 +361,22 @@
  *       --dxp heading levels so the Theme panel would drive them too.
  * -------------------------------------------------------------------------- */
 
+/* [OFF — custom type scale] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 :root {
     --slds-g-font-scale-base: var(--site-font-page-base);
     --slds-g-font-line-height-base: var(--site-lineheight-body);
 
     /* A card title is a heading, and the reset leaves a bare <h2> at 1em.
-       This is the public hook `.slds-card__header-title` reads. Heading 6. */
+       This is the public hook `.slds-card__header-title` reads. Heading 6. *\/
     --slds-c-card-heading-font-size: var(--dxp-s-text-heading-extra-extra-small-font-size);
 
     /* The page title — the H1 on every list and record page — takes the top
-       step of the scale. Heading 1. */
+       step of the scale. Heading 1. *\/
     --slds-s-pageheader-title-font-size: var(--dxp-s-text-heading-extra-large-font-size);
 }
+ * [END OFF — custom type scale] */
 
 /* -----------------------------------------------------------------------------
  * Experience Cloud heading styles — a STAND-IN for the Theme panel
@@ -396,6 +412,9 @@
  * numbers of its own and cannot drift from the SEP scale.
  * -------------------------------------------------------------------------- */
 
+/* [OFF — Experience Cloud heading hooks] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 :root {
     --dxp-g-root-font-family: var(--slds-g-font-family-base);
     --dxp-g-heading-font-family: var(--slds-g-font-family-base);
@@ -424,6 +443,7 @@
     --dxp-s-text-heading-extra-extra-small-font-family: var(--dxp-g-heading-font-family);
     --dxp-s-text-heading-extra-extra-small-color: var(--site-color-brand-navy);
 }
+ * [END OFF — Experience Cloud heading hooks] */
 
 /* =============================================================================
  * SEP COLOUR — three layers, as the Figma library has them
@@ -562,62 +582,70 @@
  * its primary. Getting that backwards would wash out every body copy on site.
  * -------------------------------------------------------------------------- */
 
+/* [OFF — SEP colour mapping onto SLDS hooks] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 :root {
-    /* Surfaces */
-    --slds-g-color-surface-1: var(--site-bg-primary);              /* 12 */
-    --slds-g-color-surface-2: var(--site-bg-secondary);            /* 13 */
-    --slds-g-color-surface-3: var(--site-bg-tertiary);             /*  1 */
-    --slds-g-color-surface-container-1: var(--site-bg-primary);    /* 127 */
-    --slds-g-color-surface-container-2: var(--site-bg-secondary);  /* 90 */
-    --slds-g-color-surface-container-3: var(--site-bg-tertiary);   /*  7 */
+    /* Surfaces *\/
+    --slds-g-color-surface-1: var(--site-bg-primary);              /* 12 *\/
+    --slds-g-color-surface-2: var(--site-bg-secondary);            /* 13 *\/
+    --slds-g-color-surface-3: var(--site-bg-tertiary);             /*  1 *\/
+    --slds-g-color-surface-container-1: var(--site-bg-primary);    /* 127 *\/
+    --slds-g-color-surface-container-2: var(--site-bg-secondary);  /* 90 *\/
+    --slds-g-color-surface-container-3: var(--site-bg-tertiary);   /*  7 *\/
 
-    /* Text on those surfaces */
-    --slds-g-color-on-surface-1: var(--site-text-secondary);       /* 71 */
-    --slds-g-color-on-surface-2: var(--site-text-primary);         /* 39 */
-    --slds-g-color-on-surface-3: var(--site-text-primary);         /* 56 */
+    /* Text on those surfaces *\/
+    --slds-g-color-on-surface-1: var(--site-text-secondary);       /* 71 *\/
+    --slds-g-color-on-surface-2: var(--site-text-primary);         /* 39 *\/
+    --slds-g-color-on-surface-3: var(--site-text-primary);         /* 56 *\/
 
-    /* Accent — links and brand fills */
-    --slds-g-color-accent-1: var(--site-text-accent-primary);      /* 48 */
-    --slds-g-color-accent-2: var(--site-text-accent-secondary);    /* 49 */
-    --slds-g-color-accent-3: var(--site-text-accent-secondary);    /* 26 */
-    --slds-g-color-accent-container-1: var(--site-bg-accent-primary);   /* 38 */
-    --slds-g-color-accent-container-2: var(--site-bg-accent-secondary); /* 25 */
-    --slds-g-color-accent-container-3: var(--site-bg-accent-secondary); /*  7 */
-    --slds-g-color-on-accent-1: var(--site-text-inverse-primary);  /* 29 */
-    --slds-g-color-on-accent-2: var(--site-text-inverse-primary);  /* 12 */
+    /* Accent — links and brand fills *\/
+    --slds-g-color-accent-1: var(--site-text-accent-primary);      /* 48 *\/
+    --slds-g-color-accent-2: var(--site-text-accent-secondary);    /* 49 *\/
+    --slds-g-color-accent-3: var(--site-text-accent-secondary);    /* 26 *\/
+    --slds-g-color-accent-container-1: var(--site-bg-accent-primary);   /* 38 *\/
+    --slds-g-color-accent-container-2: var(--site-bg-accent-secondary); /* 25 *\/
+    --slds-g-color-accent-container-3: var(--site-bg-accent-secondary); /*  7 *\/
+    --slds-g-color-on-accent-1: var(--site-text-inverse-primary);  /* 29 *\/
+    --slds-g-color-on-accent-2: var(--site-text-inverse-primary);  /* 12 *\/
 
-    /* Borders */
-    --slds-g-color-border-1: var(--site-stroke-secondary);         /* 122 */
-    --slds-g-color-border-2: var(--site-stroke-primary);           /* 36 */
+    /* Borders *\/
+    --slds-g-color-border-1: var(--site-stroke-secondary);         /* 122 *\/
+    --slds-g-color-border-2: var(--site-stroke-primary);           /* 36 *\/
 
-    /* Status */
-    --slds-g-color-error-1: var(--site-text-error);                /* 40 */
-    --slds-g-color-on-error-1: var(--site-text-inverse-primary);   /* 18 */
-    --slds-g-color-success-1: var(--site-bg-success-primary);      /* 19 */
-    --slds-g-color-on-success-1: var(--site-text-inverse-primary); /* 21 */
-    --slds-g-color-warning-1: var(--site-bg-warning);              /*  4 */
+    /* Status *\/
+    --slds-g-color-error-1: var(--site-text-error);                /* 40 *\/
+    --slds-g-color-success-1: var(--site-bg-success-primary);      /* 19 *\/
+    /* NOT mapped under Cosmos: --slds-g-color-on-error-1 / -on-success-1.
+     * Lightning Blue paired them with SOLID fills, so they were white and so
+     * was this mapping. Cosmos pairs them with the pale `-container-1` fills
+     * (`slds-alert_error`, `slds-theme_error`, `slds-theme_success`), where
+     * they are the dark tinted text — forcing white made those unreadable.
+     * Cosmos's own values stand. *\/
+    --slds-g-color-warning-1: var(--site-bg-warning);              /*  4 *\/
 
     /* Links.
      *
      * These need the shared hook set directly, NOT just --slds-g-color-accent-*.
      * `--slds-s-link-color` resolves as
      *   var(--lwc-brandTextLink, var(--slds-g-color-accent-2))
-     * and the Lightning Blue theme defines --lwc-brandTextLink, so the fallback
-     * never runs and remapping accent-2 alone leaves every link on the old
-     * #0176d3. Measured, not assumed. */
+     * and the theme defines --lwc-brandTextLink (Lightning Blue did; Cosmos
+     * sets it with !important to its brand-base-50), so the fallback never runs and remapping accent-2 alone leaves every link on the old
+     * #0176d3. Measured, not assumed. *\/
     --slds-s-link-color: var(--site-text-accent-primary);
     --slds-s-link-color-hover: var(--site-text-accent-secondary);
     --slds-s-link-color-active: var(--site-text-accent-secondary);
     --slds-s-link-color-focus: var(--site-text-accent-secondary);
     --slds-s-link-outline-color: var(--site-stroke-focus);
 
-    /* Disabled */
-    --slds-g-color-disabled-1: var(--site-text-disabled);          /* 16 */
-    --slds-g-color-on-disabled-1: var(--site-text-disabled);       /* 14 */
-    --slds-g-color-on-disabled-2: var(--site-text-disabled);       /* 23 */
-    --slds-g-color-disabled-container-1: var(--site-bg-primary);   /* 14 */
-    --slds-g-color-disabled-container-2: var(--site-bg-disabled);  /* 18 */
+    /* Disabled *\/
+    --slds-g-color-disabled-1: var(--site-text-disabled);          /* 16 *\/
+    --slds-g-color-on-disabled-1: var(--site-text-disabled);       /* 14 *\/
+    --slds-g-color-on-disabled-2: var(--site-text-disabled);       /* 23 *\/
+    --slds-g-color-disabled-container-1: var(--site-bg-primary);   /* 14 *\/
+    --slds-g-color-disabled-container-2: var(--site-bg-disabled);  /* 18 *\/
 }
+ * [END OFF — SEP colour mapping onto SLDS hooks] */
 
 /* -----------------------------------------------------------------------------
  * Form inputs
@@ -651,8 +679,11 @@
  * Verify a change by measuring the control div, not the <input>.
  * -------------------------------------------------------------------------- */
 
+/* [OFF — custom input styles] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 :root {
-    /* Field */
+    /* Field *\/
     --slds-s-input-radius-border: var(--site-radius-mid);
     --slds-s-input-color-background: var(--site-bg-primary);
     --slds-s-input-color-background-disabled: var(--site-bg-tertiary);
@@ -660,34 +691,35 @@
     --slds-s-input-color-disabled: var(--site-text-secondary);
     --slds-s-input-color-invalid: var(--site-text-primary);
 
-    /* Borders, one per state */
+    /* Borders, one per state *\/
     --slds-s-input-color-border: var(--site-stroke-primary);
     --slds-s-input-color-border-hover: var(--site-stroke-accent-primary);
     --slds-s-input-color-border-focus: var(--site-stroke-accent-primary);
     --slds-s-input-color-border-invalid: var(--site-stroke-error);
     --slds-s-input-color-border-disabled: var(--site-stroke-tertiary);
 
-    /* Label — 20px Medium, in the primary text colour. */
-    --slds-s-label-font-size: 15px; /* to do */
-    /* var(--site-font-body-lg); */
+    /* Label — 20px Medium, in the primary text colour. *\/
+    --slds-s-label-font-size: 15px; /* to do *\/
+    /* var(--site-font-body-lg); *\/
     --slds-s-label-font-weight: var(--slds-g-font-weight-5);
     --slds-s-label-color: var(--site-text-primary);
 
-    /* Hint text below the label — 17px, secondary. */
+    /* Hint text below the label — 17px, secondary. *\/
     --slds-s-helptext-font-size: var(--site-font-body);
     --slds-s-helptext-color: var(--site-text-secondary);
 
-    /* Geometry — the component family only. */
+    /* Geometry — the component family only. *\/
     --slds-c-input-radius-border: var(--site-radius-mid);
     --slds-c-input-sizing-border: 2px;
     /* Matched to the button (--slds-s-button-font-size), so a field and a
        button sitting on one row read at the same weight. Smaller than SEP's
-       Input text style, which specifies 20px. */
+       Input text style, which specifies 20px. *\/
     --slds-c-input-font-size: var(--site-font-body);
 
     /* Field height. The default is --slds-g-sizing-9 (2rem / 32px), Lightning's
        dense data-app size. 3rem gives the field the same presence as the SEP
        controls beside it — and is within a pixel of the 48.6px button, so a
-       field and a button on one row line up. */
+       field and a button on one row line up. *\/
     --slds-c-input-sizing-height: 3rem;
 }
+ * [END OFF — custom input styles] */

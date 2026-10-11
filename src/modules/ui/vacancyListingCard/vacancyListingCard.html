@@ -1,21 +1,12 @@
 <template lwc:render-mode="light">
     <!-- In review carries a standing notice ABOVE the card, as `ui/vacancyCard`
-         does. It is outside the card, so the card's own anatomy is untouched. -->
-    <div
-        lwc:if={card.isInReview}
-        class="slds-scoped-notification slds-scoped-notification_light slds-media slds-media_center slds-m-bottom_x-small"
-        role="status"
-    >
-        <div class="slds-media__figure">
-            <lightning-icon
-                icon-name="utility:info"
-                size="x-small"
-                alternative-text="Information"
-            ></lightning-icon>
-        </div>
-        <div class="slds-media__body">
-            <p>{card.reviewNotice}</p>
-        </div>
+         does. It is outside the card, so the card's own anatomy is untouched.
+         The design draws the informational Alert (Figma 445:39915), so this is
+         `ui/alert` — the SLDS blueprint, unskinned. `static-message`: the copy
+         is there on every render, so it is not announced as an update.
+         The wrapper div carries the margin; a custom element is inline. -->
+    <div lwc:if={card.isInReview} class="slds-m-bottom_x-small">
+        <ui-alert variant="info" message={card.reviewNotice} static-message></ui-alert>
     </div>
 
     <!-- `lightning-card` exactly as it ships: title, actions, body. Every
@@ -27,17 +18,22 @@
          Leaving the attribute off makes `hasIcon` false and the card drops the
          figure itself.
 
-         `sep-vacancy-listing` sets card hooks only — the frame and the padding.
-         See site.css. -->
-    <lightning-card class="sep-vacancy-listing">
-        <!-- The title is the card's link, as on `ui/vacancyCard`. -->
-        <a slot="title" href={card.href} title={card.title}>{card.title}</a>
+         Frame and radius are the card's own defaults. The one exception is
+         body spacing (left, right, bottom), set through the card's public
+         body hooks in this wrapper's stylesheet. -->
+    <lightning-card class="vacancy-listing-card__card">
+        <!-- The title is the card's link, as on `ui/vacancyCard`. A closed
+             vacancy is struck through in the weak text colour, as the design
+             draws it — `<s>` and an SLDS utility, not a rule of ours. -->
+        <a lwc:if={card.isClosed} slot="title" href={card.href} title={card.title} class="slds-text-color_weak"><s>{card.title}</s></a>
+        <a lwc:else slot="title" href={card.href} title={card.title}>{card.title}</a>
 
-        <!-- The status in the card's actions region, as a stock `lightning-badge`
-             with no `sep-status-tag` skin. Below 42.688em the card's own
-             resize-reflow rule drops this under the title; that is the shipped
-             behaviour and is left alone. -->
-        <lightning-badge slot="actions" label={card.statusLabel}></lightning-badge>
+        <!-- The status in the card's actions region, as a `lightning-badge`
+             carrying SLDS's own `slds-theme_*` class (Draft info, Published
+             success, In review warning, Closed plain). Below 42.688em the
+             card's resize-reflow rule drops this under the title; that is the
+             shipped behaviour and is left alone. -->
+        <lightning-badge slot="actions" label={card.statusLabel} class={card.statusClass}></lightning-badge>
 
         <!-- Body: metadata left, row menu bottom right, the same 10/2 and 9/3
              split `ui/vacancyCard` uses. The body already carries the card's
@@ -103,6 +99,7 @@
                                 key={action.key}
                                 value={action.key}
                                 label={action.label}
+                                href={action.href}
                                 prefix-icon-name={action.icon}
                                 disabled={action.disabled}
                                 data-action={action.key}

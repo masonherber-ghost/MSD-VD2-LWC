@@ -16,7 +16,7 @@ open-source Lightning base components installed as an npm dependency.
 | Framework | `lwc` | Kept in step with the compiler LWR bundles (see *Version pinning*) |
 | Dev server / SSG | `lwr` | `npm run dev`, `npm run build` |
 | Components | `lightning-base-components` | 84 exposed `lightning-*` components |
-| Styling | `@salesforce-ux/design-system-2` | SLDS 2, Lightning Blue theme |
+| Styling | `@salesforce-ux/design-system-2` | SLDS 2, Cosmos theme |
 | Data (dev only) | `better-sqlite3` | API over `data/msd-vd2.db` |
 
 > `github.com/salesforce/lwc` is the LWC **framework** and ships no `lightning-*`
@@ -244,7 +244,7 @@ sprite to host or configure.
 The SLDS 2 bundle is served as a static asset and linked from a custom layout:
 
 - `lwr.config.json` maps `@salesforce-ux/design-system-2/dist/css/bundled` to `/public/slds`
-- `src/layouts/main.njk` links `slds2.lightning-blue.css` and is set as the route's `layoutTemplate`
+- `src/layouts/main.njk` links `slds2.cosmos.css` and is set as the route's `layoutTemplate`
 
 Swap the stylesheet in that layout to change theme — `slds2.cosmos.css` is the
 other bundled theme, and `dist/css/modular/` has base + theme layers separately.

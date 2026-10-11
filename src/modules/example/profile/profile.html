@@ -92,10 +92,7 @@
                         >
                             <div class="slds-p-horizontal_medium slds-p-bottom_medium">
                                 <div lwc:if={hasError} id="profile-details-error" class="slds-m-bottom_small">
-                                    <div class="slds-notify slds-notify_alert slds-theme_error" role="alert">
-                                        <span class="slds-assistive-text">Error</span>
-                                        <span>{error}</span>
-                                    </div>
+                                    <ui-alert variant="error" message={error}></ui-alert>
                                 </div>
 
                                 <div lwc:if={saved} id="profile-details-saved" class="slds-m-bottom_small">

@@ -14,7 +14,8 @@ import {
     actionsFor,
     closingText,
     filterJobs,
-    noActionsReason
+    noActionsReason,
+    statusThemeClass
 } from 'data/vacancyRules';
 
 /** `creator_name` is already joined in by `job-repository.findByAccount`. */
@@ -22,6 +23,15 @@ function managedBy(name: unknown): string {
     const text = String(name ?? '').trim();
     return text ? `Managed by ${text}` : '';
 }
+
+/** "Showing …" per filter value — `JOB_FILTERS`' values, in plain words. */
+const SHOWING: Record<string, string> = {
+    all: 'Showing all jobs',
+    active: 'Showing published jobs',
+    draft: 'Showing draft jobs',
+    in_review: 'Showing jobs in review',
+    closed: 'Showing closed jobs'
+};
 
 /** A media-object row; every row after the first takes the 4px gap. */
 const META_ROW = 'slds-media slds-media_center slds-media_small';
@@ -39,6 +49,8 @@ interface MenuItem {
     label: string;
     icon: string;
     disabled: boolean;
+    /** Set on Preview only: the one action that goes somewhere today. */
+    href?: string;
 }
 
 interface JobCard {
@@ -46,7 +58,11 @@ interface JobCard {
     title: string;
     href: string;
     statusLabel: string;
+    /** An SLDS `slds-theme_*` class, or '' for the plain badge. */
+    statusClass: string;
     isInReview: boolean;
+    /** Closed reads struck through and weak, per the design. */
+    isClosed: boolean;
     reviewNotice: string;
     meta: MetaItem[];
     applicants: string;
@@ -57,15 +73,15 @@ interface JobCard {
 }
 
 /**
- * The account's vacancies as out-of-the-box `lightning-card`s — a third
- * rendering of `/jobs`, reachable by URL only.
+ * The account's vacancies as out-of-the-box `lightning-card`s — the object
+ * home for /jobs.
  *
- * Same data, filters and lifecycle actions as `/jobs`; the difference is the
+ * Same data, filters and lifecycle actions as `/jobs3`; the difference is the
  * card. `ui/vacancyListingCard` keeps the shipped card anatomy and carries no
  * stylesheet, so this page shows how close the stock component gets to the
  * design `ui/vacancyCard` was built to.
  */
-export default class Jobs3 extends LightningElement {
+export default class Jobs extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
 
     jobs: Row[] = [];
@@ -133,7 +149,7 @@ export default class Jobs3 extends LightningElement {
             const count = Number(j.candidate_count ?? 0);
             const fresh = Number(j.new_candidate_count ?? 0);
 
-            // Only rows the record actually holds, as on /jobs.
+            // Only rows the record actually holds, as on /jobs3.
             const meta: MetaItem[] = [];
             const push = (key: string, icon: string, label: string, value: unknown) => {
                 const text = String(value ?? '').trim();
@@ -141,13 +157,17 @@ export default class Jobs3 extends LightningElement {
                 const rowClass = meta.length ? `${META_ROW} slds-m-top_xx-small` : META_ROW;
                 meta.push({ key, icon, label, value: text, rowClass });
             };
-            push('closes', 'utility:event', '', closingText(status, j.closing_date));
-            push('owner', 'utility:user', '', managedBy(j.creator_name));
-            push('location', 'utility:location', 'Location', j.location);
+            // Icons are the design's: dayview, profile_alt, company.
+            push('closes', 'utility:dayview', '', closingText(status, j.closing_date));
+            push('owner', 'utility:profile_alt', '', managedBy(j.creator_name));
+            push('location', 'utility:company', 'Location', j.location);
 
-            const actions: MenuItem[] = actionsFor(status, this.release).map((a) => ({
+            const href = `/jobs/job-detail?id=${j.id}`;
+
+            const actions: MenuItem[] = actionsFor(status).map((a) => ({
                 ...a,
-                disabled: false
+                disabled: false,
+                href: a.key === 'preview' ? href : undefined
             }));
             if (!actions.length) {
                 actions.push({ key: 'none', label: noActionsReason(status), icon: '', disabled: true });
@@ -156,9 +176,11 @@ export default class Jobs3 extends LightningElement {
             return {
                 id: Number(j.id),
                 title: String(j.title ?? 'Untitled vacancy'),
-                href: `/jobs/job-detail?id=${j.id}`,
+                href,
                 statusLabel: JOB_STATUS_LABELS[status] ?? status,
+                statusClass: statusThemeClass(status),
                 isInReview: status === 'in_review',
+                isClosed: status === 'closed',
                 reviewNotice: IN_REVIEW_NOTICE,
                 meta,
                 applicants: count === 1 ? '1 applicant' : `${count} applicants`,
@@ -183,9 +205,17 @@ export default class Jobs3 extends LightningElement {
         return !this.loading && !this.error && this.jobs.length > 0 && this.filteredJobs.length === 0;
     }
 
-    /** Counts what is on screen, so it tracks the filter rather than the account. */
-    get itemCount(): string {
-        const n = this.filteredJobs.length;
-        return n === 1 ? '1 item' : `${n} items`;
+    /** What the list is showing, worded per filter as the design has it. */
+    get showingText(): string {
+        return SHOWING[this.filter] ?? SHOWING.all;
+    }
+
+    /**
+     * The API returns an account's vacancies newest first
+     * (`job-repository.findByAccount`, `ORDER BY created_at DESC`), so "Latest"
+     * states the order the data already has. There is no sort control yet.
+     */
+    get sortText(): string {
+        return 'Sorted by \u2018Latest\u2019.';
     }
 }

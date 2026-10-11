@@ -23,23 +23,23 @@
 }
 
 .site-nav__link {
-    color: var(--slds-g-color-on-surface-2, #444);
+    /* [OFF — custom nav link colour] color: var(--slds-g-color-on-surface-2, #444); */
     text-decoration: none;
-    font-size: var(--site-font-body);
-    line-height: 1;
+    /* [OFF — custom typography] font-size: var(--site-font-body); line-height: 1; */
     padding: 0.35rem 0;
     white-space: nowrap;
-    border-bottom: 2px solid transparent;
+    /* [OFF — custom nav underline] border-bottom: 2px solid transparent; */
 }
 
 .site-nav__link:hover {
-    color: var(--slds-g-color-accent-container-1, #0176d3);
+    /* [OFF — custom nav link colour] color: var(--slds-g-color-accent-container-1, #0176d3); */
 }
 
 .site-nav__link_active {
+    /* [OFF — custom nav link colour + underline]
     color: var(--slds-g-color-accent-container-1, #0176d3);
-    border-bottom-color: var(--slds-g-color-accent-container-1, #0176d3);
-    font-weight: 600;
+    border-bottom-color: var(--slds-g-color-accent-container-1, #0176d3); */
+    /* [OFF — custom typography] font-weight: 600; */
 }
 
 /* A dropdown nav entry is a lightning-button-menu so it can hold a menu, but it
@@ -48,21 +48,21 @@
    deliberately — the two sit on the same row and any difference shows as a
    misalignment. */
 .site-nav__menu::part(button) {
-    color: var(--slds-g-color-on-surface-2, #444);
-    font-size: var(--site-font-body);
-    line-height: 1;
+    /* [OFF — custom nav link colour] color: var(--slds-g-color-on-surface-2, #444); */
+    /* [OFF — custom typography] font-size: var(--site-font-body); line-height: 1; */
     padding: 0.35rem 0;
     border: 0;
-    border-bottom: 2px solid transparent;
+    /* [OFF — custom nav underline] border-bottom: 2px solid transparent; */
     border-radius: 0;
 }
 
 .site-nav__menu::part(button):hover {
-    color: var(--slds-g-color-accent-container-1, #0176d3);
+    /* [OFF — custom nav link colour] color: var(--slds-g-color-accent-container-1, #0176d3); */
 }
 
 .site-nav__menu_active::part(button) {
+    /* [OFF — custom nav link colour + underline]
     color: var(--slds-g-color-accent-container-1, #0176d3);
-    border-bottom-color: var(--slds-g-color-accent-container-1, #0176d3);
-    font-weight: 600;
+    border-bottom-color: var(--slds-g-color-accent-container-1, #0176d3); */
+    /* [OFF — custom typography] font-weight: 600; */
 }

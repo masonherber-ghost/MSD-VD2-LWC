@@ -32,7 +32,7 @@ export default class JobFilterBar extends LightningElement {
     @api options: FilterOption[] = [];
     @api value = '';
     @api searchTerm = '';
-    @api searchPlaceholder = 'Search by title';
+    @api searchPlaceholder = 'Search by title or job number';
 
     /*
      * Brand for the active filter, neutral for the rest — white on brand blue

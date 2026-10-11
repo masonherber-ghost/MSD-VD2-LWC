@@ -212,7 +212,7 @@ That page is the answer to "what can I change?". Reach for the shell only when y
 script or a diff:
 
 ```bash
-C=node_modules/@salesforce-ux/design-system-2/dist/css/bundled/slds2.lightning-blue.css
+C=node_modules/@salesforce-ux/design-system-2/dist/css/bundled/slds2.cosmos.css
 
 grep -o -- "--slds-g-spacing-[a-z0-9-]*:[^;]*" $C | sort -u     # a global family, with values
 grep -o -- "--slds-c-card-[a-z-]*"             $C | sort -u     # one component's hooks
@@ -334,7 +334,7 @@ Page-header hooks are `--slds-s-pageheader-*`: the **shared** tier, and **no hyp
 like the component has no hooks at all. It has nine. Search both tiers and both spellings:
 
 ```bash
-C=node_modules/@salesforce-ux/design-system-2/dist/css/bundled/slds2.lightning-blue.css
+C=node_modules/@salesforce-ux/design-system-2/dist/css/bundled/slds2.cosmos.css
 grep -o -- "--slds-[sc]-pageheader-[a-z-]*" $C | sort -u
 ```
 

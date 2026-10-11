@@ -84,7 +84,7 @@ Never report "it cannot be done" without checking. The answer is often tier 4 or
 want to paste into a script or a diff, use the shell:
 
 ```bash
-C=node_modules/@salesforce-ux/design-system-2/dist/css/bundled/slds2.lightning-blue.css
+C=node_modules/@salesforce-ux/design-system-2/dist/css/bundled/slds2.cosmos.css
 
 # 4. Public hooks for a component — the things you ARE allowed to set
 grep -rho -- "--slds-c-<name>-[a-z-]*" node_modules/lightning-base-components/src/lightning/<name>/ $C | sort -u

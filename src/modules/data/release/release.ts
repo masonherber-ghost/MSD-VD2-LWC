@@ -76,13 +76,6 @@ const FEATURES: Record<string, Release> = {
     // (jobDetail.applicants, manageOrg.*). At 1.1 it says the one true thing.
     'emails.welcomeFeatureList': '1.2',
 
-    // Vacancy-card actions that are not available yet. Editing a LIVE vacancy
-    // and cloning a closed one are both re-publish paths, which need the
-    // review step to re-run — so they wait. A draft's Edit is unaffected:
-    // nothing has been published, so there is nothing to re-review.
-    'jobs.editActive': '2+',
-    'jobs.cloneClosed': '2+',
-
     // Recording how a vacancy ended (filled, not filled, …) from the job
     // detail header. Part of the first release; a placeholder for now — the
     // action is listed, nothing behind it yet, and the data has no outcome

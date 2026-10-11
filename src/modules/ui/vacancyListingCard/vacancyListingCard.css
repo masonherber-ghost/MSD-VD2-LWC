@@ -1,0 +1,15 @@
+/* Job card body spacing — the card's own public body hooks, nothing else.
+ *
+ * Design: Figma 445:40158 (My jobs), card body 16px left, right and bottom.
+ * The body hooks have NO default: the shadow rule is
+ * `padding-inline-start: var(--slds-c-card-body-spacing-inlinestart)` with no
+ * fallback, so an unset body sits flush against the card border. `block-end`
+ * feeds the body's margin, not its padding — the visible result is the same
+ * space beneath the content. Top is left to the card's header.
+ *
+ * Scoped to this wrapper's class, so no other card on the site moves. */
+.vacancy-listing-card__card {
+    --slds-c-card-body-spacing-inline-start: var(--slds-g-spacing-4);
+    --slds-c-card-body-spacing-inline-end: var(--slds-g-spacing-4);
+    --slds-c-card-body-spacing-block-end: var(--slds-g-spacing-4);
+}

@@ -48,8 +48,8 @@ The full per-component table is in the appendix.
 
 | # | Finding | How many / where | Why it is out | Fix |
 |---|---|---|---|---|
-| 1 | **Private `--slds-s-*` hooks set or read** | 37 names in total: `src/assets/css/design-tokens.css` (31), `src/assets/css/site.css` (8), `src/modules/ui/emailShell/emailShell.css` (6), `src/modules/ui/jobFilterBar/jobFilterBar.css` (4), `src/modules/example/jobs/jobs.css` (4) | SLDS Linter `no-slds-private-var`: *"Private SLDS styling hooks have prefixes --_slds- and --slds-s-."* Unannounced; can change any release | Replace each with the component's `--slds-c-*` hook or a `--dxp-*` hook where one exists. Where none exists, raise it as a gap: it's a decision to accept, not a quiet override. Mostly buttons, inputs, page header, links, labels |
-| 2 | **Dead CSS using private hooks** | `src/modules/example/jobs/jobs.css` — `.jobs__page-header` is not used by its template | Same as #1, with no benefit | Delete the rule |
+| 1 | **Private `--slds-s-*` hooks set or read** | 37 names in total: `src/assets/css/design-tokens.css` (31), `src/assets/css/site.css` (8), `src/modules/ui/emailShell/emailShell.css` (6), `src/modules/ui/jobFilterBar/jobFilterBar.css` (4), `src/modules/example/jobs3/jobs3.css` (4) | SLDS Linter `no-slds-private-var`: *"Private SLDS styling hooks have prefixes --_slds- and --slds-s-."* Unannounced; can change any release | Replace each with the component's `--slds-c-*` hook or a `--dxp-*` hook where one exists. Where none exists, raise it as a gap: it's a decision to accept, not a quiet override. Mostly buttons, inputs, page header, links, labels |
+| 2 | **Dead CSS using private hooks** | `src/modules/example/jobs3/jobs3.css` — `.jobs3__page-header` is not used by its template | Same as #1, with no benefit | Delete the rule |
 | 3 | **Hand-rolled modal** | `src/modules/ui/dataForm/dataForm.html` — `slds-modal` markup by hand, where `lightning/modal` ships | `rules-lwc-components.md` antipattern: rebuilding a shipped control. **Dev tool only** (`/data`) | Re-base on `LightningModal`, as `ui/realmeLoginModal` already does |
 | 4 | **Raw hex outside the token file** | `src/modules/ui/exampleStage/exampleStage.css` (5), `src/modules/ui/kitchenSink/kitchenSink.css` (1) | SLDS Linter `no-hardcoded-values-slds2`. **Dev tools only** | Swap for `--slds-g-color-*` tokens |
 
@@ -81,7 +81,7 @@ Allowed by this project's rules, but flagged by Salesforce's:
 
 ## 6. Recommendations, in order
 
-1. **Delete the dead `.jobs__page-header` rule** in `src/modules/example/jobs/jobs.css`. Four private-hook uses gone, no visible change.
+1. **Delete the dead `.jobs3__page-header` rule** in `src/modules/example/jobs3/jobs3.css`. Four private-hook uses gone, no visible change.
 2. **Map the `--slds-s-*` uses to public hooks**, file by file: `design-tokens.css` first (31 names), then `site.css`, `jobFilterBar.css`, `emailShell.css`. Write down every one with no public equivalent. That list is the honest size of the gap.
 3. **Move the 29 colour and font reassignments into the `--dxp` Theme-panel stand-in.** Model them on what the heading styles already do: declare `--dxp-g-brand` and the root, section and colour hooks; have the site read them; remove the global `--slds-g-*` reassignments. On lift they become Theme panel settings.
 4. **Confirm `::part` support on Experience Cloud** for `lightning-button`'s `button` part. If it isn't confirmed, treat the 16 selectors as an accepted risk, re-checked each release.
@@ -156,7 +156,7 @@ Allowed by this project's rules, but flagged by Salesforce's:
 | `example/emails` | page | T4 | 5 | pageHeader | 4 | — |
 | `example/home` | page | T4 | 5 | pageHeader | 27 | — |
 | `example/jobDetail` | page | T4 | 13 | — | 15 | — |
-| `example/jobs` | page | T4 | 5 | pageHeader | 25 | private --slds-s-* (4) |
+| `example/jobs3` | page | T4 | 5 | pageHeader | 25 | private --slds-s-* (4) |
 | `example/jobs2` | page | T4 | 3 | pageHeader | 0 | — |
 | `example/login` | page | T4 | 2 | — | 34 | ::part (1) — on the line |
 | `example/manageOrg` | page | T4 | 12 | form-element, pageHeader | 4 | — |

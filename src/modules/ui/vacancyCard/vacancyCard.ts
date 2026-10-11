@@ -1,7 +1,7 @@
 import { LightningElement, api } from 'lwc';
 
 /**
- * One vacancy, as a full-width card for the /jobs list.
+ * One vacancy, as a full-width card for the /jobs3 list.
  *
  * Presentational only: the page fetches and shapes the data, this renders it.
  * That keeps it liftable into a DX project and droppable into an App Builder
@@ -10,7 +10,7 @@ import { LightningElement, api } from 'lwc';
 export default class VacancyCard extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
 
-    /** The shaped card from `example/jobs`, not a raw job row. */
+    /** The shaped card from `example/jobs3`, not a raw job row. */
     @api card: Record<string, unknown> = {};
 
     /**

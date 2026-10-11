@@ -195,7 +195,7 @@ export default class Jobs2 extends LightningElement {
 
         const rows = this.filteredJobs.map((j) => {
             const status = String(j.status ?? '');
-            const actions: RowAction[] = actionsFor(status, this.release).map((a) => ({
+            const actions: RowAction[] = actionsFor(status).map((a) => ({
                 label: a.label,
                 name: a.key,
                 iconName: a.icon

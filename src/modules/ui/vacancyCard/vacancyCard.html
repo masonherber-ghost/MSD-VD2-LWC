@@ -2,24 +2,12 @@
     <div class="vacancy-card">
         <!-- In review carries a standing notice, ABOVE the card rather than
              inside it, full width with 8px (`x-small`) between it and the card.
-             Default styling: the blueprint's light variant with the info icon,
-             no theme and no `sep-` skin. `role="status"` rather than `alert`:
-             it is not urgent and should not interrupt. -->
-        <div
-            lwc:if={card.isInReview}
-            class="slds-scoped-notification slds-scoped-notification_light slds-media slds-media_center slds-m-bottom_x-small"
-            role="status"
-        >
-            <div class="slds-media__figure">
-                <lightning-icon
-                    icon-name="utility:info"
-                    size="x-small"
-                    alternative-text="Information"
-                ></lightning-icon>
-            </div>
-            <div class="slds-media__body">
-                <p>{card.reviewNotice}</p>
-            </div>
+             The informational Alert, via `ui/alert` — the SLDS blueprint,
+             unskinned. `static-message`: the copy is there on every render, so
+             it is not announced as an update. The div carries the margin; a
+             custom element is inline. -->
+        <div lwc:if={card.isInReview} class="slds-m-bottom_x-small">
+            <ui-alert variant="info" message={card.reviewNotice} static-message></ui-alert>
         </div>
 
         <!-- No `icon-name`.
@@ -157,7 +145,7 @@
                          menu off-screen.
 
                          No `id` on anything in this component: the card renders
-                         once per row inside a `for:each` in `example/jobs`, and a
+                         once per row inside a `for:each` in `example/jobs3`, and a
                          static id would repeat. `data-action` is the handle, per
                          `rules-lwc-layout.md` § Every landmark element gets an id.
 

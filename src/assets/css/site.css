@@ -2,7 +2,7 @@
 
 body {
     margin: 0;
-    background: var(--site-color-page-background);
+    /* [OFF — custom page background] background: var(--site-color-page-background); */
 }
 
 /* slds-global-header_container is position:fixed, so page content has to be
@@ -81,25 +81,28 @@ body {
 
 
 .site-header__link {
-    color: var(--slds-g-color-on-surface-2, #444);
+    /* [OFF — custom nav link colour] color: var(--slds-g-color-on-surface-2, #444); */
     text-decoration: none;
-    font-size: var(--site-font-body);
-    line-height: 1;
+    /* [OFF — custom typography] font-size: var(--site-font-body); line-height: 1; */
     padding: 0.35rem 0;
     white-space: nowrap;
-    border-bottom: 2px solid transparent;
+    /* [OFF — custom nav underline] border-bottom: 2px solid transparent; */
 }
 
 .site-header__link:hover {
-    color: var(--slds-g-color-accent-container-1, #0176d3);
+    /* [OFF — custom nav link colour] color: var(--slds-g-color-accent-container-1, #0176d3); */
 }
 
 .site-header__link_active {
+    /* [OFF — custom nav link colour + underline]
     color: var(--slds-g-color-accent-container-1, #0176d3);
-    border-bottom-color: var(--slds-g-color-accent-container-1, #0176d3);
-    font-weight: 600;
+    border-bottom-color: var(--slds-g-color-accent-container-1, #0176d3); */
+    /* [OFF — custom typography] font-weight: 600; */
 }
 
+/* [OFF — custom badge rule] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 /* lightning-badge paints itself twice.
  *
  * The component sets `slds-badge` on its own host, which the global SLDS 2
@@ -116,20 +119,22 @@ body {
  * root, so the host has no light-DOM children and matches `.slds-badge:empty`,
  * whose rule zeroes the padding the base class had set.
  *
- * One exception: every badge inside a /jobs3 card (`.sep-vacancy-listing
- * lightning-badge`) is deliberately left exactly as the component ships, so
- * both rules skip it — that card's content carries no project CSS. */
-lightning-badge:not(.sep-vacancy-listing lightning-badge)::part(badge) {
+ * Standing the inner part down is also what lets SLDS's own `slds-theme_*`
+ * classes colour a badge (the /jobs status pills): they set the HOST's
+ * background, which the inner part would otherwise paint over. The label's
+ * colour does not follow — the inner part sets its own text colour. *\/
+lightning-badge::part(badge) {
     background: none;
     border: none;
     border-radius: 0;
     padding: 0;
 }
 
-lightning-badge.slds-badge:empty:not(.sep-vacancy-listing lightning-badge) {
+lightning-badge.slds-badge:empty {
     padding-block: var(--slds-g-spacing-1);
     padding-inline: var(--slds-g-spacing-2);
 }
+ * [END OFF — custom badge rule] */
 
 /* A custom element is display:inline by default and lightning-card sets no
    :host display, so vertical margins on a card are computed but never applied —
@@ -174,12 +179,15 @@ lightning-button-icon::part(button) {
     font-family: inherit;
 }
 
+/* [OFF — custom button styles] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 /* 1b. The primary button's resting shadow.
  *
  * SEP gives the primary button an elevation at rest, but --slds-s-button-shadow
  * is shared by every button on the page, so setting it there put a drop shadow
  * on the header menu trigger and the datatable header buttons. Scoped to brand
- * instead. */
+ * instead. *\/
 lightning-button[variant='brand']::part(button) {
     box-shadow: var(--site-shadow-raised);
 }
@@ -222,7 +230,7 @@ lightning-button[variant='brand']::part(button) {
  *
  * Scoped to a menu INSIDE a group on purpose — a standalone button menu (the
  * App Launcher in the footer) is not sitting next to anything and should keep
- * the shipped 32px. */
+ * the shipped 32px. *\/
 lightning-button-group lightning-button-menu {
     --slds-g-sizing-9: calc(
         var(--slds-s-button-spacing-block) * 2
@@ -237,7 +245,7 @@ lightning-button-group lightning-button-menu {
  * which can carry a gradient. `background-image` is a separate property and
  * paints over the flat colour the hook sets beneath it.
  * `variant` is reflected to an attribute by the component, which is what makes
- * this selector possible. */
+ * this selector possible. *\/
 lightning-button[variant='brand']::part(button):hover {
     background-image: linear-gradient(
         to bottom,
@@ -252,7 +260,7 @@ lightning-button[variant='brand']::part(button):hover {
  * --slds-s-button-shadow-active is set to `none` in design-tokens.css, but it
  * cannot win here: a `::part` rule in the outer tree always beats the shadow
  * tree's own rules, so the resting box-shadow above would otherwise persist
- * through :active. The override has to sit at the same level. */
+ * through :active. The override has to sit at the same level. *\/
 lightning-button[variant='brand']::part(button):active {
     background-image: none;
     box-shadow: none;
@@ -263,14 +271,14 @@ lightning-button[variant='brand']::part(button):active {
  * The component's brand-disabled rule reads --slds-g-color-disabled-container-2
  * / -border-disabled-1 / -on-disabled-2. Those are global tokens: setting them
  * would repaint every disabled control on the site, and SEP specifies this
- * treatment for the primary button only. Scoped here instead. */
+ * treatment for the primary button only. Scoped here instead. *\/
 lightning-button[variant='brand']::part(button):disabled {
     background-color: var(--site-color-brand-disabled);
     background-image: none;
     border-color: var(--site-color-brand-disabled);
     color: var(--site-color-on-brand-disabled);
 }
-
+ * [END OFF — custom button styles] */
 /* SEP's welcome mat.
  *
  * The blueprint is built around a background illustration, and THIS PACKAGE
@@ -349,6 +357,9 @@ lightning-button[variant='brand']::part(button):disabled {
  * decisions there — the size always comes from a class or a hook.
  * ============================================================================= */
 
+/* [OFF — custom page header] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 /* The SEP page header.
  *
  * SCOPED, not a bare `.slds-page-header` override: every screen opts in with
@@ -374,7 +385,7 @@ lightning-button[variant='brand']::part(button):disabled {
  *
  * NOTE: top margin is deliberately NOT here — it is placement, not identity,
  * and differs per screen. Use the `slds-m-top_*` utility in the markup, beside
- * the `slds-m-bottom_*` the headers already carry. */
+ * the `slds-m-bottom_*` the headers already carry. *\/
 .sep-page-header {
     --slds-s-pageheader-sizing-border: 0;
     --slds-s-pageheader-shadow: none;
@@ -388,11 +399,20 @@ lightning-button[variant='brand']::part(button):disabled {
  * that SLDS rule is unlayered, so its class selector outranks an element
  * selector. There is no title-colour hook — the shipped rule reads the GLOBAL
  * token directly, and redefining that would recolour far more than titles.
- * Scoped to the opt-in class, so a stock page header keeps the stock colour. */
+ * Scoped to the opt-in class, so a stock page header keeps the stock colour. *\/
+ * [END OFF — custom page header] */
+
+/* [OFF — custom page-title colour] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 .sep-page-header .slds-page-header__title {
     color: var(--site-color-brand-navy);
 }
+ * [END OFF — custom page-title colour] */
 
+/* [OFF — custom page header rows] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 /* Removing the header's padding has a consequence two of its own rows depend on.
  *
  * SLDS builds `__row_gutters` and `__detail-row` to BLEED to the header's
@@ -411,7 +431,7 @@ lightning-button[variant='brand']::part(button):disabled {
  * measured.
  *
  * This is our own blueprint markup — we hand-write the page header — so
- * adjusting these classes is not reaching into a shipped component. */
+ * adjusting these classes is not reaching into a shipped component. *\/
 .sep-page-header .slds-page-header__row_gutters {
     margin-inline: 0;
 }
@@ -440,13 +460,14 @@ lightning-button[variant='brand']::part(button):disabled {
  * the margin on its own indents the band by 16px. The two have to move
  * together or not at all — it is the PAIR that has to stay consistent, not
  * either value. With no background left there is no band to bleed, so zero is
- * the right end of the pair to land on. */
+ * the right end of the pair to land on. *\/
 .sep-page-header .slds-page-header__detail-row {
     --slds-s-pageheader-row-color-background: transparent;
     margin-block-end: 0;
     margin-inline: 0;
     padding: 0;
 }
+ * [END OFF — custom page header rows] */
 
 /* Modifier: top space, from the large breakpoint up.
  *
@@ -472,6 +493,9 @@ lightning-button[variant='brand']::part(button):disabled {
     }
 }
 
+/* [OFF — custom scoped-notification skin] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 /* SEP's Info Panel, as a skin for the shipped scoped notification.
  *
  * WHY EVERY PROPERTY HERE IS AN OVERRIDE, not a hook.
@@ -500,11 +524,11 @@ lightning-button[variant='brand']::part(button):disabled {
  * @layer component, this file is unlayered, and unlayered beats layered
  * whatever the specificity — the same mechanism .sep-page-header relies on.
  *
- * Opt in per use: `class="slds-scoped-notification sep-scoped-notification"`. */
+ * Opt in per use: `class="slds-scoped-notification sep-scoped-notification"`. *\/
 .sep-scoped-notification {
     background-color: var(--site-color-blue-10);
     /* Navy at 25%. color-mix keeps the brand token as the single source, so a
-       theme change still reaches the border — a baked rgba() would not. */
+       theme change still reaches the border — a baked rgba() would not. *\/
     border: var(--slds-g-sizing-border-1) solid
         color-mix(in srgb, var(--site-color-brand-navy) 25%, transparent);
     border-radius: var(--site-radius-mid);
@@ -513,10 +537,10 @@ lightning-button[variant='brand']::part(button):disabled {
     /* 20px is SEP's spacing-450, and the SLDS scale has no step for it
        (--slds-g-spacing-4 is 16px, -5 is 24px). A value used by exactly one
        class is a value, not a token — rules-lwc-layout.md § Defining a project
-       token — so it is stated here rather than invented as --site-spacing-*. */
+       token — so it is stated here rather than invented as --site-spacing-*. *\/
     padding-block: 1.25rem;
     /* The info icon is navy, not the SLDS default grey. This one IS a published
-       hook, which is why it sits with the overrides rather than against them. */
+       hook, which is why it sits with the overrides rather than against them. *\/
     --slds-c-icon-color-foreground-default: var(--site-color-brand-navy);
 }
 
@@ -537,7 +561,7 @@ lightning-button[variant='brand']::part(button):disabled {
  * warning ACCENT — amber on an amber container.
  *
  * Opt in per use, alongside the theme class:
- * `class="slds-scoped-notification slds-theme_warning sep-scoped-notification_warning"` */
+ * `class="slds-scoped-notification slds-theme_warning sep-scoped-notification_warning"` *\/
 .sep-scoped-notification_warning {
     --slds-c-icon-color-foreground-default: var(--slds-g-color-on-warning-1);
 }
@@ -548,7 +572,7 @@ lightning-button[variant='brand']::part(button):disabled {
  * alone does not do — media puts the figure beside ALL the body content. So a
  * panel with a title uses this row for the icon + title, and leaves the
  * description as a sibling underneath. A panel with no title needs none of
- * this and stays a plain media object. */
+ * this and stays a plain media object. *\/
 .sep-scoped-notification__header {
     display: flex;
     align-items: center;
@@ -560,7 +584,7 @@ lightning-button[variant='brand']::part(button):disabled {
  * --site-font-heading-xs grows at the 48em and 64em breakpoints, as the rest of
  * this project's type does. The design specifies 18px, which is this token's
  * base value, so the panel matches at small widths and scales with the site
- * above them rather than pinning one size the page around it does not use. */
+ * above them rather than pinning one size the page around it does not use. *\/
 .sep-scoped-notification__title {
     font-size: var(--site-font-heading-xs);
     font-weight: var(--slds-g-font-weight-7);
@@ -573,11 +597,12 @@ lightning-button[variant='brand']::part(button):disabled {
  * No font-size: it inherits the site body size. The design draws 15px, which is
  * not on this project's body scale (17px body, 14px small) — matching it would
  * mean an off-scale value in the one place the page's own body text sets the
- * measure. See the note in the handover. */
+ * measure. See the note in the handover. *\/
 .sep-scoped-notification__body {
     margin-block-start: var(--slds-g-spacing-2);
     line-height: var(--site-lineheight-body);
 }
+ * [END OFF — custom scoped-notification skin] */
 
 /* Headings run at SLDS's own sizes. (Their colour is the rule after this note.)
  *
@@ -652,6 +677,9 @@ lightning-button[variant='brand']::part(button):disabled {
  *   - headings inside a `lightning-*` shadow root, such as a `lightning-card`
  *     given a string `title`. The rule cannot cross that boundary.
  */
+/* [OFF — custom heading typography] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 h1, h2, h3, h4, h5, h6 {
     font-weight: var(--slds-g-font-weight-7);
 }
@@ -666,7 +694,7 @@ h1, h2, h3, h4, h5, h6 {
  * a class outranks a tag selector, so one would override the level. Pick a
  * heading's size by choosing its tag — and choose the tag for the document
  * outline first; a heading that must look smaller than its level is the
- * exception to raise, not to patch with a class. */
+ * exception to raise, not to patch with a class. *\/
 h1 {
     font-family: var(--dxp-s-text-heading-extra-large-font-family);
     font-size: var(--dxp-s-text-heading-extra-large-font-size);
@@ -714,11 +742,15 @@ h6 {
  * text-color` would recolour the whole card.
  *
  * A title passed through the `title` slot is our own markup and already takes
- * the heading rule; a link inside it keeps its link colour either way. */
+ * the heading rule; a link inside it keeps its link colour either way. *\/
 lightning-card::part(title) {
     color: var(--site-color-brand-navy);
 }
+ * [END OFF — custom heading typography] */
 
+/* [OFF — custom listing chip] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 /* The job listing's chips.
  *
  * ENTIRELY PUBLISHED HOOKS — there is no override here at all. SLDS's own
@@ -736,13 +768,14 @@ lightning-card::part(title) {
  * remapped to MSD blue in design-tokens.css, so a brand change reaches this
  * without the file being touched.
  *
- * Opt in per use: `class="sep-listing-chip"` on the badge. */
+ * Opt in per use: `class="sep-listing-chip"` on the badge. *\/
 .sep-listing-chip {
     --slds-c-badge-color-background: var(--slds-g-color-accent-container-1);
     --slds-c-badge-color-border: var(--slds-g-color-accent-container-1);
     --slds-c-badge-text-color: var(--slds-g-color-on-accent-1);
     --slds-c-badge-radius-border: var(--site-radius-pill);
 }
+ * [END OFF — custom listing chip] */
 
 /* =============================================================================
  * Text colour utilities
@@ -793,6 +826,9 @@ lightning-card::part(title) {
 .sep-text-error { color: var(--site-text-error); }
 .sep-text-success { color: var(--site-text-success); }
 
+/* [OFF — custom status tag] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 /* Status tag — SEP's four states.
  *
  * All of it is tier-4 hooks. `lightning-badge` exposes twelve public
@@ -814,7 +850,7 @@ lightning-card::part(title) {
  * `statusTagClass()` in `data/vacancyRules` names the classes for a status, so
  * no screen spells them itself.
  *
- * Opt in per use: `class={statusTagClass}` on a `lightning-badge`. */
+ * Opt in per use: `class={statusTagClass}` on a `lightning-badge`. *\/
 
 .sep-status-tag {
     --slds-c-badge-font-size: var(--site-font-body-sm);
@@ -840,78 +876,39 @@ lightning-card::part(title) {
  *   line-height on the host   does not reach the label, which lives in the
  *       shadow span and keeps its own `normal`.
  *
- * Verified by reading the computed line-height off both elements. */
+ * Verified by reading the computed line-height off both elements. *\/
 .sep-status-tag::part(badge) {
     line-height: 1;
 }
 
-/* Active — filled navy. */
+/* Active — filled navy. *\/
 .sep-status-tag_active {
     --slds-c-badge-color-background: var(--site-bg-accent-secondary);
     --slds-c-badge-color-border: var(--site-bg-accent-secondary);
     --slds-c-badge-text-color: var(--site-text-inverse-primary);
 }
 
-/* In review — tinted, with a warning-orange border and text. */
+/* In review — tinted, with a warning-orange border and text. *\/
 .sep-status-tag_in-review {
     --slds-c-badge-color-background: var(--site-color-red-05);
     --slds-c-badge-color-border: var(--site-bg-warning);
     --slds-c-badge-text-color: var(--site-bg-warning);
 }
 
-/* Draft — tinted, with a purple border and text. */
+/* Draft — tinted, with a purple border and text. *\/
 .sep-status-tag_draft {
     --slds-c-badge-color-background: var(--site-bg-secondary);
     --slds-c-badge-color-border: var(--site-color-brand-purple);
     --slds-c-badge-text-color: var(--site-color-brand-purple);
 }
 
-/* Closed — filled, in the disabled blue-grey. */
+/* Closed — filled, in the disabled blue-grey. *\/
 .sep-status-tag_closed {
     --slds-c-badge-color-background: var(--site-bg-disabled);
     --slds-c-badge-color-border: var(--site-bg-disabled);
     --slds-c-badge-text-color: var(--site-text-inverse-primary);
 }
-
-/* Vacancy listing — the out-of-the-box card on /jobs3.
- *
- * HOOKS ONLY, no real property. Source: `ui/vacancyCard`'s frame, so the stock
- * `lightning-card` in `ui/vacancyListingCard` gets the same edge without a
- * stylesheet of its own: 8px top in MSD blue, 2px elsewhere, 8px corners.
- *
- *   --slds-c-card-sizing-border   feeds `border-width`, so it takes the
- *       four-value shorthand. SLDS's border scale stops at 4px, hence x2.
- *
- * CARD HOOKS ONLY. Nothing here is inherited by the card's content: the body
- * is laid out with SLDS blueprint classes and utilities alone, so its icons,
- * text and badges render as shipped.
- *
- * Padding: 1rem inside the border on every side, all through card hooks.
- * The card's body hooks have NO default — its shadow rule is
- * `padding-inline-start: var(--slds-c-card-body-spacing-inlinestart)` with no
- * fallback — so an unset body sits flush against the border. The header's
- * block-end hook feeds both its padding AND its margin, so it is zeroed and the
- * header-to-body gap comes from the body's block-start alone (0.75rem, the
- * card's own default rhythm).
- *
- * Not reached: the custom category artwork (the card has no header icon at
- * all — see `ui/vacancyListingCard`), the navy title link, and the
- * status pill staying top right on a phone — see `ui/vacancyListingCard`. */
-.sep-vacancy-listing {
-    --slds-c-card-color-border: var(--site-color-brand-blue);
-    --slds-c-card-sizing-border: calc(var(--slds-g-sizing-border-4) * 2)
-        var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2);
-    --slds-c-card-radius-border: var(--slds-g-radius-border-3);
-
-    --slds-c-card-header-spacing-block-start: var(--slds-g-spacing-4);
-    --slds-c-card-header-spacing-block-end: 0;
-    --slds-c-card-header-spacing-inline-start: var(--slds-g-spacing-4);
-    --slds-c-card-header-spacing-inline-end: var(--slds-g-spacing-4);
-    --slds-c-card-body-spacing-block-start: var(--slds-g-spacing-3);
-    --slds-c-card-body-spacing-block-end: var(--slds-g-spacing-4);
-    --slds-c-card-body-spacing-inline-start: var(--slds-g-spacing-4);
-    --slds-c-card-body-spacing-inline-end: var(--slds-g-spacing-4);
-}
+ * [END OFF — custom status tag] */
 
 /* =============================================================================
  * COMPONENT SKINS
@@ -959,6 +956,9 @@ lightning-card::part(title) {
  *
  * Unverified: no computed values were read in a browser. A compiled hook can
  * be a no-op — check each state before relying on it. */
+/* [OFF — custom input styles (combobox)] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 lightning-grouped-combobox {
     --slds-c-inputtext-color-border: var(--site-stroke-primary);
     --slds-c-inputtext-sizing-border: var(--slds-g-sizing-border-2);
@@ -970,9 +970,10 @@ lightning-grouped-combobox {
     --slds-c-inputtext-text-color-placeholder: var(--site-text-secondary);
     /* The site's field size, matched to the buttons — as every other input.
        SEP's Input text style says 20px; see the Form inputs note in
-       design-tokens.css for why fields run at --site-font-body. */
+       design-tokens.css for why fields run at --site-font-body. *\/
     --slds-c-inputtext-font-size: var(--site-font-body);
     --slds-c-inputtext-label-color: var(--site-text-primary);
     --slds-c-inputtext-icon-color-foreground: var(--site-icon-primary);
     --slds-g-color-border-error-1: var(--site-stroke-error);
 }
+ * [END OFF — custom input styles (combobox)] */

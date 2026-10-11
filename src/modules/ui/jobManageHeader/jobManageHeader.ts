@@ -22,11 +22,6 @@ interface MenuItem {
     disabled: boolean;
 }
 
-/** Labels this header words differently from the shared action set. */
-const HEADER_LABELS: Record<string, string> = {
-    close: 'Close job'
-};
-
 /**
  * The Manage job header on a vacancy's record page: title and status, the
  * primary and overflow actions, who and when, and how the vacancy is run.
@@ -120,19 +115,17 @@ export default class JobManageHeader extends LightningElement {
      * from `data/vacancyRules` plus what only this page adds.
      *
      * Two adjustments to the shared set, both specific to this header:
-     *   - Close reads "Close job" — on the record page the verb needs its
-     *     object; on a card, inside the vacancy, "Close" already has one.
+     *   - No "Preview job" — this page is where Preview leads, and its
+     *     Details tab already is the listing preview.
      *   - "Set job outcome" — a PLACEHOLDER behind `jobDetail.setOutcome`.
      *     Offered once a vacancy has been live (active or closed), since there
      *     is no outcome before that. Unwired, and the data has nowhere to store
      *     an outcome yet.
      */
     get actions(): MenuItem[] {
-        const items: MenuItem[] = actionsFor(this.status, this.release).map((a) => ({
-            ...a,
-            label: HEADER_LABELS[a.key] ?? a.label,
-            disabled: false
-        }));
+        const items: MenuItem[] = actionsFor(this.status)
+            .filter((a) => a.key !== 'preview')
+            .map((a) => ({ ...a, disabled: false }));
         if (
             isEnabled('jobDetail.setOutcome', this.release) &&
             (this.status === 'active' || this.status === 'closed')

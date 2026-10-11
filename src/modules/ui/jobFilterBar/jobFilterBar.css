@@ -39,10 +39,12 @@
      * cannot reach. Measured — the host stayed at 0px and the button at 1px.
      * The hook works because it is a custom property, and those do cross the
      * shadow boundary. */
+    /* [OFF — custom button styles] Default Lightning button size instead.
     --slds-s-button-font-size: var(--slds-g-font-scale-2);
     --slds-s-button-spacing-block: var(--slds-g-spacing-3);
     --slds-s-button-spacing-inline: var(--slds-g-spacing-5);
     --slds-s-button-sizing-border: 2px;
+    */
 }
 
 /* The search takes the rest of the row but should not collapse to nothing when

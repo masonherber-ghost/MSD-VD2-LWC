@@ -19,6 +19,101 @@ interface Blueprint {
 
 const ALL = BLUEPRINTS as Blueprint[];
 
+interface Example {
+    key: string;
+    label: string;
+    /** The exact class string on the example's root — shown under it as well. */
+    cls: string;
+    icon: string;
+    iconVariant: string | null;
+    text: string;
+}
+
+/**
+ * Hand-written examples, keyed by blueprint name. The ONE exception to this
+ * page being generated: SLDS ships no markup for a blueprint, so an example is
+ * necessarily ours. Each is built only from classes the generated data lists
+ * for that blueprint (plus the `slds-media` layout and a `lightning-icon`),
+ * and the page labels it as ours. Add one only on request. A blueprint with an
+ * example is listed even when a component is credited with rendering it.
+ *
+ * scopedNotifications: the base blueprint and every variant the bundled
+ * stylesheet styles — `_light`, `_dark`, and the dedicated
+ * `.slds-scoped-notification.slds-theme_warning` pairing.
+ */
+const EXAMPLES: Record<string, Example[]> = {
+    scopedNotifications: [
+        {
+            key: 'base',
+            label: 'Base',
+            cls: 'slds-scoped-notification slds-media slds-media_center',
+            icon: 'utility:info',
+            iconVariant: null,
+            text: 'The base blueprint: padding and radius only, no fill of its own.'
+        },
+        {
+            key: 'light',
+            label: 'Light',
+            cls: 'slds-scoped-notification slds-scoped-notification_light slds-media slds-media_center',
+            icon: 'utility:info',
+            iconVariant: null,
+            text: 'The light variant, on the surface-container-3 fill.'
+        },
+        {
+            key: 'dark',
+            label: 'Dark',
+            cls: 'slds-scoped-notification slds-scoped-notification_dark slds-media slds-media_center',
+            icon: 'utility:info',
+            iconVariant: 'inverse',
+            text: 'The dark variant, white on neutral grey.'
+        },
+        {
+            key: 'warning',
+            label: 'Warning',
+            cls: 'slds-scoped-notification slds-theme_warning slds-media slds-media_center',
+            icon: 'utility:warning',
+            iconVariant: null,
+            text: 'Paired with slds-theme_warning, which SLDS styles for this blueprint.'
+        }
+    ]
+};
+
+interface AlertExample {
+    key: string;
+    label: string;
+    variant: 'info' | 'warning' | 'error' | 'offline';
+    cls: string;
+    text: string;
+}
+
+/**
+ * The Alert blueprint's four styles, rendered through `ui/alert` so the markup
+ * has one source. `cls` mirrors the class string that wrapper writes.
+ *
+ * Note the coverage column for this blueprint says `lightning-alert`: the
+ * generator credits it by NAME, but `lightning-alert` is the modal dialog
+ * (`LightningAlert.open()`), not this in-page banner. Nothing ships the
+ * banner — that is why `ui/alert` exists.
+ */
+const ALERT_EXAMPLES: Record<string, AlertExample[]> = {
+    alert: [
+        { key: 'info', label: 'Informational', variant: 'info',
+          cls: 'slds-notify slds-notify_alert',
+          text: 'Informational: the default alert, with no modifier.' },
+        { key: 'warning', label: 'Warning', variant: 'warning',
+          cls: 'slds-notify slds-notify_alert slds-alert_warning',
+          text: 'Warning: something needs attention.' },
+        { key: 'error', label: 'Error', variant: 'error',
+          cls: 'slds-notify slds-notify_alert slds-alert_error',
+          text: 'Error: something went wrong.' },
+        { key: 'offline', label: 'Offline', variant: 'offline',
+          cls: 'slds-notify slds-notify_alert slds-alert_offline',
+          text: 'Offline: you are not connected.' }
+    ]
+};
+
+const hasExample = (name: string): boolean => Boolean(EXAMPLES[name] || ALERT_EXAMPLES[name]);
+
 /**
  * Browses the SLDS 2 blueprints that are installed.
  *
@@ -59,7 +154,7 @@ export default class BlueprintBrowser extends LightningElement {
     get matches(): Blueprint[] {
         const term = this.query.trim().toLowerCase();
         return ALL.filter((b) => {
-            if (!this.showCovered && b.coveredBy.length) return false;
+            if (!this.showCovered && b.coveredBy.length && !hasExample(b.name)) return false;
             if (this.usedOnly && !b.usedIn.length) return false;
             if (!term) return true;
             // Match the class names too: "what ships the class I half-remember"
@@ -118,6 +213,22 @@ export default class BlueprintBrowser extends LightningElement {
 
     get missingList(): { key: string; name: string }[] {
         return this.current.missing.map((c) => ({ key: c, name: c }));
+    }
+
+    get examples(): Example[] {
+        return EXAMPLES[this.current.name] ?? [];
+    }
+
+    get hasExamples(): boolean {
+        return this.examples.length > 0;
+    }
+
+    get alertExamples(): AlertExample[] {
+        return ALERT_EXAMPLES[this.current.name] ?? [];
+    }
+
+    get hasAlertExamples(): boolean {
+        return this.alertExamples.length > 0;
     }
 
     get hasBorrowed(): boolean {

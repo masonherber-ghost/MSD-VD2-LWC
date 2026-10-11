@@ -14,7 +14,9 @@
                 blueprints as <strong>stylesheets only</strong> — 134 CSS files and, across
                 all 89 blueprints, exactly one HTML file. There is no markup to render, so
                 any preview on this page would be markup we wrote, presented as the
-                design system's. The classes below are the real contract.
+                design system's. The classes below are the real contract. The one
+                exceptions, on request, are the scoped notification and the alert,
+                whose examples are labelled as ours.
             </p>
         </div>
 
@@ -100,7 +102,7 @@
                             <p class="sep-scoped-notification__title">Not in the bundled stylesheet</p>
                             <p class="sep-scoped-notification__body">
                                 These are declared in the blueprint's own CSS file but do not
-                                appear in <code>slds2.lightning-blue.css</code>, which is the
+                                appear in <code>slds2.cosmos.css</code>, which is the
                                 stylesheet this site loads. Writing one renders unstyled markup.
                             </p>
                             <ul class="slds-list_horizontal slds-wrap slds-m-top_x-small">
@@ -119,6 +121,60 @@
                                 Classes only found there are on their way out — check before relying on one.
                             </p>
                         </div>
+
+                        <!-- Hand-written examples (see EXAMPLES in the .ts), labelled
+                             as ours because SLDS ships no markup to render. -->
+                        <template lwc:if={hasExamples}>
+                            <h3 class="slds-text-title_caps slds-m-bottom_x-small">Example</h3>
+                            <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                                Markup written by this project from the classes below, not shipped by
+                                SLDS. No project CSS: what you see is the bundled stylesheet alone.
+                            </p>
+                            <ul id="blueprint-browser-examples" class="slds-m-bottom_medium">
+                                <template for:each={examples} for:item="ex">
+                                    <li key={ex.key} class="slds-m-bottom_small">
+                                        <p class="slds-text-title_bold slds-m-bottom_xx-small">{ex.label}</p>
+                                        <div class={ex.cls}>
+                                            <div class="slds-media__figure">
+                                                <lightning-icon
+                                                    icon-name={ex.icon}
+                                                    variant={ex.iconVariant}
+                                                    size="x-small"
+                                                    alternative-text={ex.label}
+                                                ></lightning-icon>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <p>{ex.text}</p>
+                                            </div>
+                                        </div>
+                                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                                            <code>{ex.cls}</code>
+                                        </p>
+                                    </li>
+                                </template>
+                            </ul>
+                        </template>
+
+                        <!-- The Alert blueprint, rendered through `ui/alert`. -->
+                        <template lwc:if={hasAlertExamples}>
+                            <h3 class="slds-text-title_caps slds-m-bottom_x-small">Example</h3>
+                            <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                                Rendered by this project's <code>ui-alert</code>, which writes the
+                                blueprint's markup with no CSS of its own. Not shipped by SLDS. The
+                                <code>lightning-alert</code> credited above is the modal dialog, not this banner.
+                            </p>
+                            <ul id="blueprint-browser-alert-examples" class="slds-m-bottom_medium">
+                                <template for:each={alertExamples} for:item="ex">
+                                    <li key={ex.key} class="slds-m-bottom_small">
+                                        <p class="slds-text-title_bold slds-m-bottom_xx-small">{ex.label}</p>
+                                        <ui-alert variant={ex.variant} message={ex.text} static-message></ui-alert>
+                                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                                            <code>&lt;ui-alert variant="{ex.variant}"&gt;</code> → <code>{ex.cls}</code>
+                                        </p>
+                                    </li>
+                                </template>
+                            </ul>
+                        </template>
 
                         <h3 class="slds-text-title_caps slds-m-bottom_x-small">Classes it declares</h3>
                         <ul id="blueprint-browser-classes" class="slds-list_horizontal slds-wrap slds-m-bottom_medium">

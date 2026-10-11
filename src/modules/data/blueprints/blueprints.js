@@ -113,7 +113,11 @@ export const BLUEPRINTS = [
             "--slds-s-alert-close-button-hover"
         ],
         "privateHooks": [],
-        "usedIn": [],
+        "usedIn": [
+            "src/assets/css/design-tokens.css",
+            "src/modules/ui/alert/alert.ts",
+            "src/modules/ui/blueprintBrowser/blueprintBrowser.ts"
+        ],
         "missing": [],
         "bundled": true,
         "deprecated": false,
@@ -266,8 +270,8 @@ export const BLUEPRINTS = [
         "privateHooks": [],
         "usedIn": [
             "src/assets/css/site.css",
-            "src/modules/ui/vacancyCard/vacancyCard.css",
-            "src/modules/ui/vacancyCard/vacancyCard.html"
+            "src/modules/ui/vacancyCard/vacancyCard.html",
+            "src/modules/ui/vacancyListingCard/vacancyListingCard.html"
         ],
         "missing": [],
         "bundled": true,
@@ -2021,7 +2025,6 @@ export const BLUEPRINTS = [
         "privateHooks": [],
         "usedIn": [
             "src/assets/css/design-tokens.css",
-            "src/modules/example/createJobStep1/createJobStep1.html",
             "src/modules/example/createJobStep3/createJobStep3.html",
             "src/modules/example/createJobStep5/createJobStep5.html",
             "src/modules/example/createJobStep7/createJobStep7.html",
@@ -2261,6 +2264,9 @@ export const BLUEPRINTS = [
             "--_slds-c-icon-sizing"
         ],
         "usedIn": [
+            "src/assets/css/site.css",
+            "src/modules/ui/alert/alert.html",
+            "src/modules/ui/alert/alert.ts",
             "src/modules/ui/welcomeMat/welcomeMat.html"
         ],
         "missing": [],
@@ -2669,12 +2675,14 @@ export const BLUEPRINTS = [
             "src/modules/example/designSystem/designSystem.html",
             "src/modules/example/emails/emails.html",
             "src/modules/example/home/home.html",
-            "src/modules/example/jobDetail/jobDetail.html",
-            "src/modules/example/jobs/jobs.css",
             "src/modules/example/jobs/jobs.html",
+            "src/modules/example/jobs2/jobs2.html",
+            "src/modules/example/jobs3/jobs3.css",
+            "src/modules/example/jobs3/jobs3.html",
             "src/modules/example/manageOrg/manageOrg.html",
             "src/modules/example/profile/profile.html",
             "src/modules/example/vacancies/vacancies.html",
+            "src/modules/ui/jobManageHeader/jobManageHeader.html",
             "src/modules/ui/pagePlaceholder/pagePlaceholder.html"
         ],
         "missing": [],
@@ -3374,15 +3382,14 @@ export const BLUEPRINTS = [
         "privateHooks": [],
         "usedIn": [
             "src/assets/css/site.css",
-            "src/modules/example/createJobStep1/createJobStep1.html",
             "src/modules/example/createJobStep2/createJobStep2.html",
             "src/modules/example/createJobStep3/createJobStep3.html",
             "src/modules/example/createJobStep4/createJobStep4.html",
             "src/modules/example/createJobStep6/createJobStep6.html",
             "src/modules/example/createJobStep7/createJobStep7.html",
             "src/modules/ui/blueprintBrowser/blueprintBrowser.html",
-            "src/modules/ui/readOnlyNotice/readOnlyNotice.html",
-            "src/modules/ui/vacancyCard/vacancyCard.html"
+            "src/modules/ui/blueprintBrowser/blueprintBrowser.ts",
+            "src/modules/ui/readOnlyNotice/readOnlyNotice.html"
         ],
         "missing": [],
         "bundled": true,

@@ -2,10 +2,9 @@
     <!-- Informational, deliberately not an alert.
          `slds-scoped-notification` is the quiet, in-page blueprint — it sits
          inside the content it describes rather than shouting over it, which is
-         what separates it from `slds-notify_alert slds-theme_error` used for
-         save failures on these same screens. `sep-scoped-notification` is our
-         opt-in skin for it; the rule and why every property there is an
-         override rather than a hook are in `site.css`.
+         what separates it from the error `ui/alert` used for save failures on
+         these same screens. Unskinned: the scoped notification exactly as SLDS
+         ships it, laid out with SLDS media objects and text utilities only.
 
          No `role`. A scoped notification is often given `role="status"`, but
          that makes it a live region, which is for content that CHANGES — this
@@ -15,20 +14,24 @@
          The margin lives on this div rather than on the host: a custom element
          is `display: inline`, so a margin on `ui-read-only-notice` would compute
          and never apply. -->
-    <div id={ids.root} class="slds-scoped-notification sep-scoped-notification slds-m-bottom_medium">
-        <!-- With a heading: the design's stacked form — icon beside the heading,
-             description underneath. -->
+    <div id={ids.root} class="slds-scoped-notification slds-m-bottom_medium">
+        <!-- With a heading: icon beside the heading (a media object), description
+             underneath. -->
         <template lwc:if={heading}>
-            <div id={ids.header} class="sep-scoped-notification__header">
-                <lightning-icon
-                    id={ids.iconStacked}
-                    icon-name="utility:info"
-                    size="small"
-                    alternative-text="Information"
-                ></lightning-icon>
-                <p id={ids.title} class="sep-scoped-notification__title">{heading}</p>
+            <div id={ids.header} class="slds-media slds-media_center">
+                <div class="slds-media__figure">
+                    <lightning-icon
+                        id={ids.iconStacked}
+                        icon-name="utility:info"
+                        size="small"
+                        alternative-text="Information"
+                    ></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <p id={ids.title} class="slds-text-title_bold">{heading}</p>
+                </div>
             </div>
-            <p id={ids.body} class="sep-scoped-notification__body">
+            <p id={ids.body} class="slds-m-top_x-small">
                 {message} To change anything, contact your relationship manager or
                 <a id={ids.contactLinkStacked} href="/contact-us">contact us</a>.
             </p>

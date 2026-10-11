@@ -95,7 +95,12 @@ A component reading a query param must fall back sensibly when it is missing or 
 | `sldsCss` | `node_modules/@salesforce-ux/design-system-2/dist/css/bundled` | `/public/slds` |
 | `favicon` | `src/assets/favicon.ico` | `/favicon.ico` |
 
-The stylesheet is the **unscoped** `slds2.lightning-blue.css`, loaded globally in `main.njk`. There
+The stylesheet is the **unscoped** `slds2.cosmos.css` — the Cosmos theme, SLDS 2's default — loaded
+globally in `main.njk`. (The package also ships `slds2.lightning-blue.css`, the classic theme this
+site used before; the alert, notification and badge rules are identical in both, but 517 tokens
+differ — Cosmos draws status as pale tinted fills with coloured text, and rounds `radius-border-2`
+to 8px.) Cosmos's dark mode is opt-in through a `slds-color-scheme_*` class on `<body>`, which this
+site does not set, so it renders light. There
 is no cascade-layer juggling and no scope wrapper — which is precisely why every component must be
 light DOM (see `rules-lwc-components.md`).
 
@@ -144,7 +149,7 @@ grep -rn "url(" src/assets/css/ src/modules --include="*.css"
 
 ```
 [warn][lwr-default-asset-transformer] Failed to resolve reference
-  '../../public/einstein-figure.svg' in asset '…/slds2.lightning-blue.css'
+  '../../public/einstein-figure.svg' in asset '…/slds2.cosmos.css'
 ```
 
 That warning is no help here, because it resolves the reference **against the source tree**, where

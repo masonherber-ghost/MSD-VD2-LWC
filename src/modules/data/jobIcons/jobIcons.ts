@@ -15,7 +15,7 @@
  * An unusable value returns '' so the caller falls back to the shipped icon.
  * A job type with no artwork is a real state, not an error.
  *
- * Shared rather than duplicated: `example/jobs` and `example/jobDetail` both
+ * Shared rather than duplicated: `example/jobs3` and `example/jobDetail` both
  * render this icon, and a sanitiser that exists twice is a sanitiser that will
  * eventually differ.
  */

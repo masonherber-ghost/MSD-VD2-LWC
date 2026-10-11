@@ -3,7 +3,7 @@
  * Scoped by the class, not by the file. Every component here is light DOM and
  * nothing is named `*.scoped.css`, so a component stylesheet is injected
  * globally — a bare `.slds-page-header` rule would restyle the header on all
- * nine pages that use one. The `jobs__` prefix is the scoping mechanism, as it
+ * nine pages that use one. The `jobs3__` prefix is the scoping mechanism, as it
  * is for every other rule in this file.
  *
  * Four of the five are public `--slds-s-pageheader-*` hooks, set on the element
@@ -12,7 +12,7 @@
  *
  * `slds-page-header_object-home` is gone from the markup rather than overridden
  * here: its only declaration is a padding-block-end this rule would cancel. */
-.jobs__page-header {
+.jobs3__page-header {
     --slds-s-pageheader-color-background: transparent;
     --slds-s-pageheader-shadow: none;
     --slds-s-pageheader-sizing-border: 0;
@@ -21,7 +21,7 @@
 }
 
 /* Spinners need a sized, positioned parent to centre against. */
-.jobs__loading {
+.jobs3__loading {
     min-height: 8rem;
 }
 

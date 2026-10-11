@@ -54,10 +54,7 @@
                     <!-- Tab 1: Org details -------------------------------->
                     <lightning-tab id="org-tab-details" label="Org details">
                         <div lwc:if={hasError} id="org-details-error" class="slds-m-bottom_small">
-                            <div class="slds-notify slds-notify_alert slds-theme_error" role="alert">
-                                <span class="slds-assistive-text">Error</span>
-                                <span>{error}</span>
-                            </div>
+                            <ui-alert variant="error" message={error}></ui-alert>
                         </div>
                         <div lwc:if={saved} id="org-details-saved" class="slds-m-bottom_small">
                             <div class="slds-notify slds-notify_alert slds-theme_success" role="status">

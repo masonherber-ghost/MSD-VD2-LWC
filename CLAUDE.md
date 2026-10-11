@@ -26,7 +26,7 @@ there rather than throwing.
 | Framework | `lwc` `9.4.3` | Pinned to the compiler `lwr` bundles — see `rules-architecture.md` |
 | Dev server / SSG | `lwr` `0.24.1` | `npm run dev`, `npm run build` |
 | Components | `lightning-base-components` `1.28.19-alpha` | 84 `lightning-*` components |
-| Styling | `@salesforce-ux/design-system-2` `2.264.2` | SLDS 2, Lightning Blue theme, **unscoped and global** |
+| Styling | `@salesforce-ux/design-system-2` `2.264.2` | SLDS 2, Cosmos theme (the SLDS 2 default), **unscoped and global** |
 | Data (dev only) | `better-sqlite3` | Express API over `data/msd-vd2.db` |
 | Server language | TypeScript via `tsx` | No build step; `tsx` runs `.ts` directly |
 

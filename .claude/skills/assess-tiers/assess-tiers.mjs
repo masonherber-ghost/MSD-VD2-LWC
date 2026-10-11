@@ -81,7 +81,7 @@ const UTILITY_FAMILIES = {
     assistive: /^slds-assistive-text/
 };
 const utilityFamilyOf = (c) => Object.keys(UTILITY_FAMILIES).find((k) => UTILITY_FAMILIES[k].test(c));
-const SLDS_CSS = read(path.join(ROOT, 'node_modules/@salesforce-ux/design-system-2/dist/css/bundled/slds2.lightning-blue.css'));
+const SLDS_CSS = read(path.join(ROOT, 'node_modules/@salesforce-ux/design-system-2/dist/css/bundled/slds2.cosmos.css'));
 const shippedClasses = new Set(
     [...SLDS_CSS.matchAll(/\.(slds-[a-z0-9_-]+)/g)].map((m) => m[1]).filter((c) => !c.includes('--'))
 );
