@@ -1,37 +1,34 @@
 <template lwc:render-mode="light">
     <ui-site-header current="jobs"></ui-site-header>
 
-    <div class="site__body">
-        <main class="site__main">
-            <!-- One measure for the whole screen.
-                 The header, the filter bar and the list are all children of a
-                 single 8-of-12 column rather than each being sized on its own,
-                 so they cannot drift out of alignment with one another. Full
-                 width below the large breakpoint, where 8 columns would leave
-                 the cards too narrow to read.
-
-                 No `padding` on the item: the layouts nested inside already
-                 pair `padding="around-small"` with `pull-to-boundary="small"`,
-                 which cancels at the edges. Adding padding here would inset
-                 the list but not the header above it. -->
+    <div class="site__body" id="jobs3-body">
+        <main class="site__main" id="jobs3-main">
+            <!-- The same object home as /jobs, with each vacancy drawn as an
+                 out-of-the-box `lightning-card` (`ui/vacancyListingCard`) in
+                 place of the rebuilt `ui/vacancyCard`. Same measure, data,
+                 filters and actions; reachable by URL only. No stylesheet. -->
             <lightning-layout horizontal-align="center">
-                <lightning-layout-item size="12" large-device-size="10">
+                <lightning-layout-item id="jobs3-col-main" size="12" large-device-size="10">
                     <!-- Object home header ------------------------------------------>
-                    <div class="slds-page-header sep-page-header sep-page-header_spaced slds-m-bottom_medium">
+                    <div
+                        id="jobs3-header"
+                        class="slds-page-header sep-page-header sep-page-header_spaced slds-m-bottom_medium"
+                    >
                         <div class="slds-page-header__row">
                             <div class="slds-page-header__col-title">
                                 <div class="slds-page-header__name">
                                     <div class="slds-page-header__name-title">
-                                        <h1 class="slds-page-header__title slds-truncate sep-page-header__title">My jobs</h1>
+                                        <h1 id="jobs3-title" class="slds-page-header__title slds-truncate">My jobs</h1>
                                     </div>
                                 </div>
-                                <p class="slds-page-header__name-meta">{itemCount}</p>
+                                <p id="jobs3-item-count" class="slds-page-header__name-meta">{itemCount}</p>
                             </div>
                             <div class="slds-page-header__col-actions">
                                 <div class="slds-page-header__controls">
                                     <div class="slds-page-header__control">
                                         <a href="/create-job/step2?start=new">
                                             <lightning-button
+                                                id="jobs3-list-job-button"
                                                 variant="brand"
                                                 label="List a job"
                                             ></lightning-button>
@@ -43,6 +40,7 @@
                     </div>
 
                     <ui-job-filter-bar
+                        id="jobs3-filter-bar"
                         options={filterOptions}
                         value={filter}
                         search-term={search}
@@ -50,11 +48,17 @@
                         onsearchchange={handleSearchChange}
                     ></ui-job-filter-bar>
 
-                    <div lwc:if={loading} class="slds-is-relative jobs__loading slds-box slds-theme_default">
+                    <!-- Padding, not a min-height rule, gives the spinner room:
+                         this page carries no stylesheet. -->
+                    <div
+                        lwc:if={loading}
+                        id="jobs3-loading"
+                        class="slds-is-relative slds-box slds-theme_default slds-p-around_xx-large"
+                    >
                         <lightning-spinner alternative-text="Loading vacancies" size="small"></lightning-spinner>
                     </div>
 
-                    <div lwc:elseif={hasError} class="slds-box slds-theme_default">
+                    <div lwc:elseif={hasError} id="jobs3-error" class="slds-box slds-theme_default">
                         <lightning-icon icon-name="utility:info" size="small" class="slds-m-right_x-small"></lightning-icon>
                         <span>{error}</span>
                         <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
@@ -62,26 +66,24 @@
                         </p>
                     </div>
 
-                    <!-- One card per row. The design is a stacked list, not a grid:
-                         a full-width card has room for the metadata to sit on one line
-                         beside the title instead of wrapping under it. -->
-                    <lightning-layout lwc:elseif={hasJobs} multiple-rows pull-to-boundary="small">
+                    <!-- One card per row, as on /jobs. -->
+                    <lightning-layout lwc:elseif={hasJobs} id="jobs3-list" multiple-rows pull-to-boundary="small">
                         <template for:each={cards} for:item="card">
                             <lightning-layout-item key={card.id} size="12" padding="around-small">
-                                <ui-vacancy-card
+                                <ui-vacancy-listing-card
                                     card={card}
-                                    show-applicants={showApplicants}
-                                ></ui-vacancy-card>
+                                ></ui-vacancy-listing-card>
                             </lightning-layout-item>
                         </template>
                     </lightning-layout>
 
                     <!-- "Nothing matches" is a different state from "nothing exists",
                          and only the first one is worth offering a way out of. -->
-                    <div lwc:elseif={hasNoMatches} class="slds-box slds-theme_default">
+                    <div lwc:elseif={hasNoMatches} id="jobs3-no-matches" class="slds-box slds-theme_default">
                         <p>No vacancies match these filters.</p>
                         <div class="slds-m-top_x-small">
                             <lightning-button
+                                id="jobs3-clear-filters-button"
                                 variant="base"
                                 label="Clear filters"
                                 onclick={handleClearFilters}
@@ -89,7 +91,7 @@
                         </div>
                     </div>
 
-                    <div lwc:else class="slds-box slds-theme_default">
+                    <div lwc:else id="jobs3-empty" class="slds-box slds-theme_default">
                         <p>No vacancies for this account.</p>
                     </div>
                 </lightning-layout-item>

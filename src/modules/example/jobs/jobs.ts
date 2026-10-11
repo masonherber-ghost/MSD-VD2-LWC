@@ -1,9 +1,6 @@
 import { LightningElement } from 'lwc';
-import Toast from 'lightning/toast';
 import api, { ApiError, DEV_ACCOUNT_ID, type Row } from 'data/api';
-import { takeFlash } from 'data/flash';
 import { currentAccountId } from 'data/session';
-import { iconUrl } from 'data/jobIcons';
 import {
     currentRelease,
     isEnabled,
@@ -17,7 +14,6 @@ import {
     actionsFor,
     closingText,
     filterJobs,
-    statusTagClass,
     noActionsReason
 } from 'data/vacancyRules';
 
@@ -27,11 +23,15 @@ function managedBy(name: unknown): string {
     return text ? `Managed by ${text}` : '';
 }
 
+/** A media-object row; every row after the first takes the 4px gap. */
+const META_ROW = 'slds-media slds-media_center slds-media_small';
+
 interface MetaItem {
     key: string;
     icon: string;
     label: string;
     value: string;
+    rowClass: string;
 }
 
 interface MenuItem {
@@ -44,11 +44,8 @@ interface MenuItem {
 interface JobCard {
     id: number;
     title: string;
-    subtitle: string;
     href: string;
     statusLabel: string;
-    statusClass: string;
-    iconUrl: string;
     isInReview: boolean;
     reviewNotice: string;
     meta: MetaItem[];
@@ -59,8 +56,16 @@ interface JobCard {
     actions: MenuItem[];
 }
 
-/** The account's vacancies as a card grid — the object home for /jobs. */
-export default class Jobs extends LightningElement {
+/**
+ * The account's vacancies as out-of-the-box `lightning-card`s — a third
+ * rendering of `/jobs`, reachable by URL only.
+ *
+ * Same data, filters and lifecycle actions as `/jobs`; the difference is the
+ * card. `ui/vacancyListingCard` keeps the shipped card anatomy and carries no
+ * stylesheet, so this page shows how close the stock component gets to the
+ * design `ui/vacancyCard` was built to.
+ */
+export default class Jobs3 extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
 
     jobs: Row[] = [];
@@ -71,7 +76,6 @@ export default class Jobs extends LightningElement {
     release: Release = currentRelease();
     private unsubRelease: (() => void) | null = null;
 
-    /** The selected filter and the title search, owned here, not in the bar. */
     filter = 'all';
     search = '';
 
@@ -79,27 +83,6 @@ export default class Jobs extends LightningElement {
         this.unsubRelease = onReleaseChange(() => {
             this.release = currentRelease();
         });
-
-        // Anything the previous route raised — today, the confirmation that a
-        // vacancy was submitted from the last step of the create flow. Taken
-        // BEFORE the await, so a slow API cannot delay the confirmation, and
-        // taken at all only once: `takeFlash` clears as it reads.
-        //
-        // `lightning/toast` builds its own overlay container, so this needs no
-        // markup and no host app. `ShowToastEvent` on its own would not work
-        // here — see `rules-architecture.md` § Version pinning.
-        const flash = takeFlash();
-        if (flash) {
-            Toast.show(
-                {
-                    label: flash.label,
-                    message: flash.message,
-                    variant: flash.variant ?? 'info',
-                    mode: 'dismissible'
-                },
-                this
-            );
-        }
 
         try {
             this.jobs = await api.jobs(currentAccountId() ?? DEV_ACCOUNT_ID);
@@ -122,7 +105,6 @@ export default class Jobs extends LightningElement {
         return JOB_FILTERS.map((f) => ({ label: f.label, value: f.value }));
     }
 
-    /** In memory, by the rule `data/vacancyRules` shares with `/jobs2`. */
     get filteredJobs(): Row[] {
         return filterJobs(this.jobs, this.filter, this.search);
     }
@@ -140,15 +122,6 @@ export default class Jobs extends LightningElement {
         this.search = '';
     }
 
-    /** Distinguishes "this account has no vacancies" from "none match". */
-    get isFiltered(): boolean {
-        return this.filter !== 'all' || this.search.trim() !== '';
-    }
-
-    get hasNoMatches(): boolean {
-        return !this.loading && !this.error && this.jobs.length > 0 && this.filteredJobs.length === 0;
-    }
-
     /** Applicant counts arrived with the applicant views, at 1.2. */
     get showApplicants(): boolean {
         return isEnabled('jobs.applicantCount', this.release);
@@ -160,22 +133,17 @@ export default class Jobs extends LightningElement {
             const count = Number(j.candidate_count ?? 0);
             const fresh = Number(j.new_candidate_count ?? 0);
 
-            // Only rows the record actually holds. A missing value is left out
-            // rather than shown as an em dash: on a wrapping row a placeholder
-            // costs as much space as a real value and says less.
+            // Only rows the record actually holds, as on /jobs.
             const meta: MetaItem[] = [];
             const push = (key: string, icon: string, label: string, value: unknown) => {
                 const text = String(value ?? '').trim();
-                if (text) meta.push({ key, icon, label, value: text });
+                if (!text) return;
+                const rowClass = meta.length ? `${META_ROW} slds-m-top_xx-small` : META_ROW;
+                meta.push({ key, icon, label, value: text, rowClass });
             };
-            // No label on the first two: each value already says what it is
-            // ("Closes next month", "Managed by <name>"), and a screen reader
-            // would otherwise hear it twice.
             push('closes', 'utility:event', '', closingText(status, j.closing_date));
             push('owner', 'utility:user', '', managedBy(j.creator_name));
             push('location', 'utility:location', 'Location', j.location);
-            // Pay and contract type are deliberately not on the card. They are
-            // still on the record page and in the /jobs2 table.
 
             const actions: MenuItem[] = actionsFor(status, this.release).map((a) => ({
                 ...a,
@@ -188,11 +156,8 @@ export default class Jobs extends LightningElement {
             return {
                 id: Number(j.id),
                 title: String(j.title ?? 'Untitled vacancy'),
-                subtitle: String(j.subtitle ?? ''),
                 href: `/jobs/job-detail?id=${j.id}`,
                 statusLabel: JOB_STATUS_LABELS[status] ?? status,
-                statusClass: statusTagClass(status),
-                iconUrl: iconUrl(j.icon),
                 isInReview: status === 'in_review',
                 reviewNotice: IN_REVIEW_NOTICE,
                 meta,
@@ -204,6 +169,8 @@ export default class Jobs extends LightningElement {
         });
     }
 
+    // -- states ------------------------------------------------------------
+
     get hasError(): boolean {
         return Boolean(this.error);
     }
@@ -212,8 +179,8 @@ export default class Jobs extends LightningElement {
         return !this.loading && !this.error && this.filteredJobs.length > 0;
     }
 
-    get isEmpty(): boolean {
-        return !this.loading && !this.error && this.jobs.length === 0;
+    get hasNoMatches(): boolean {
+        return !this.loading && !this.error && this.jobs.length > 0 && this.filteredJobs.length === 0;
     }
 
     /** Counts what is on screen, so it tracks the filter rather than the account. */
