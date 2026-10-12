@@ -1827,6 +1827,13 @@ export const COMPONENTS = [
                 "name": "sizePerDevice",
                 "label": "Size Per Device",
                 "module": "examples/layoutItemSizePerDevice"
+            },
+            {
+                "id": "layoutItem/project-paddingReference",
+                "name": "paddingReference",
+                "label": "Padding Reference (project)",
+                "module": "examples/layoutItemProjectPaddingReference",
+                "project": true
             }
         ]
     },

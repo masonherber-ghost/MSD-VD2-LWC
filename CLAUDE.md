@@ -131,13 +131,16 @@ All documented in `rules-database.md`.
 Run the cheap checks. **Do not screenshot and analyse the page unless asked**, or unless a
 cheap check comes back wrong and you need to see why.
 
-- `npm run dev` on a free port, then **curl the route's module** — a `200` proves the template
-  compiled, a `500` is a compile error with the detail in the dev server log:
+- `npm run dev` on a free port, then **curl the TEMPLATE module** of every component you touched.
+  The template is its own module (`<name>%23<name>.html`); the component's `.js` URL does **not**
+  compile it, and answers `200` over a broken template — measured. `500` is a compile error, with
+  the detail in the dev server log:
   ```bash
   curl -sL -o /dev/null -w '%{http_code}\n' \
-    "http://localhost:3000/1/module/esm/0/l/en-US/mi/example%2Fjobs%2Fv%2F0_0_1/latest/example_jobs.js"
+    "http://localhost:3000/1/module/esm/0/l/en-US/mi/example%2Fjobs%23jobs.html%2Fv%2F0_0_1/latest/example_jobs_jobs_html.js"
   ```
-- `npm run build` must exit 0 before reporting completion.
+- `npm run build` must exit 0 before reporting completion. It does **not** prove templates compile
+  either: it exited 0 over the same broken template.
 - **Reading a computed value beats looking at a picture** and is faster. When a change has a
   number behind it — a size, a colour, a font — read it back off the rendered element rather
   than eyeballing it. That is what caught a button silently rendering in Arial, and a

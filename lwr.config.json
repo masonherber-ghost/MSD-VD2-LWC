@@ -608,6 +608,10 @@
                 "path": "node_modules/lightning-base-components/src/lightning/layoutItem/__examples__/sizePerDevice/sizePerDevice.js"
             },
             {
+                "name": "examples/layoutItemProjectPaddingReference",
+                "path": "src/examples/layoutItem/paddingReference/paddingReference.js"
+            },
+            {
                 "name": "examples/menuDividerDivider",
                 "path": "node_modules/lightning-base-components/src/lightning/menuDivider/__examples__/divider/divider.js"
             },
@@ -1159,6 +1163,7 @@
             "examples/layoutItemSize",
             "examples/layoutItemSizeOverriddenForTablets",
             "examples/layoutItemSizePerDevice",
+            "examples/layoutItemProjectPaddingReference",
             "examples/menuDividerDivider",
             "examples/menuDividerWithSubhead",
             "examples/menuItemIteration",

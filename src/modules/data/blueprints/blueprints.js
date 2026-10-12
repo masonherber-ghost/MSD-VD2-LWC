@@ -2109,9 +2109,7 @@ export const BLUEPRINTS = [
             "--_slds-c-globalheader-task-color-background-active",
             "--_slds-c-globalheader-task-color-background-hover"
         ],
-        "usedIn": [
-            "src/modules/ui/siteHeader/siteHeader.html"
-        ],
+        "usedIn": [],
         "missing": [],
         "bundled": true,
         "deprecated": false,
@@ -2198,7 +2196,10 @@ export const BLUEPRINTS = [
             "--_slds-c-globalnavigation-spacing-block",
             "--_slds-c-globalnavigation-spacing-gap"
         ],
-        "usedIn": [],
+        "usedIn": [
+            "src/modules/ui/siteHeader/siteHeader.html",
+            "src/modules/ui/siteHeader/siteHeader.ts"
+        ],
         "missing": [],
         "bundled": true,
         "deprecated": false,

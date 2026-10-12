@@ -627,14 +627,13 @@ export const COMPOSITIONS = [
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 290
+        "htmlLines": 245
     },
     {
         "name": "jobManageHeader",
         "tag": "ui-job-manage-header",
         "doc": "The Manage job header on a vacancy's record page: title and status, the\nprimary and overflow actions, who and when, and how the vacancy is run.\n\nPresentational. The page fetches the record and passes it down; this shapes\nit and dispatches `edit` (either Edit control) and `action` (an overflow\nmenu item, `detail.value` the action key). See `rules-lwc-layout.md`\n§ The modular component rule.\n\nEvery value is the record's own — `rules-app-logic.md` § Never invent data.",
         "composes": [
-            "lightning-badge",
             "lightning-button",
             "lightning-button-group",
             "lightning-button-menu",
@@ -650,8 +649,7 @@ export const COMPOSITIONS = [
         ],
         "sepClasses": [
             "sep-page-header",
-            "sep-page-header_spaced",
-            "sep-status-tag"
+            "sep-page-header_spaced"
         ],
         "hasCss": true,
         "css": {
@@ -670,7 +668,7 @@ export const COMPOSITIONS = [
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 129
+        "htmlLines": 127
     },
     {
         "name": "kitchenSink",
@@ -910,28 +908,7 @@ export const COMPOSITIONS = [
     {
         "name": "siteHeader",
         "tag": "ui-site-header",
-        "doc": "Lightning Experience style global header, shared by every route.\n\nHas an authenticated and an unauthenticated form: signed in, the main nav and\nthe profile menu show; signed out, only a Login link does. It re-renders on\nsession changes so signing in or out updates the header without a reload.",
-        "composes": [
-            "lightning-avatar",
-            "lightning-button-icon",
-            "lightning-button-menu",
-            "lightning-menu-item"
-        ],
-        "wraps": [
-            "ui-site-nav"
-        ],
-        "blueprints": [
-            "globalHeader"
-        ],
-        "sepClasses": [],
-        "hasCss": false,
-        "css": null,
-        "htmlLines": 102
-    },
-    {
-        "name": "siteNav",
-        "tag": "ui-site-nav",
-        "doc": "The global navigation, in its two forms.\n\nSigned in it is the employer's workspace — List a job, My jobs, Help centre\nand its dropdown. Signed out from 1.2 it is the public front door — List your\njob and Recruiting with MSD. Signed out at 1.1 it renders nothing: that\nrelease had no public site, and `data/gate` is already redirecting.\n\nEach form is written twice, once as a menu for phones and once as an inline\nrow for desktop, swapped by `slds-hide_medium` / `slds-show_medium` at 768px.\nOnly one is ever in the layout.\n\n`release` arrives as a property rather than being read from the module, so\nLWC records it as a render dependency and the toggle takes effect without a\nreload — see `rules-app-logic.md` § The reactivity rule.",
+        "doc": "A context-bar item, and the same item in the blueprint's selected state.",
         "composes": [
             "lightning-button-menu",
             "lightning-menu-divider",
@@ -943,32 +920,28 @@ export const COMPOSITIONS = [
         "sepClasses": [],
         "hasCss": true,
         "css": {
-            "lines": 60,
-            "text": "/* The phone trigger is a flex item in the global actions row; the host must be\n   a block for its size and spacing to apply. */\n.site-nav__trigger {\n    display: inline-block;\n}\n\n/* `lightning-button-menu` always renders a caret beside its icon — the extra\n   icon is in its shadow root with no part, so it can neither be removed nor\n   moved. A bordered variant therefore draws its box around icon *and* caret,\n   which is what made the small button look broken. `bare` drops the box, so the\n   caret simply sits beside the icon, matching how the avatar's menu reads.\n   Bare leaves a 16px hit area, well under a comfortable touch target, so the\n   button part is padded out — the part is the component's own public surface. */\n.site-nav__trigger::part(button) {\n    padding: var(--slds-g-spacing-3);\n}\n\n.site-nav {\n    display: flex;\n    align-items: center;\n    gap: 1rem;\n    margin-left: 1.5rem;\n}\n\n.site-nav__link {\n    /* [OFF — custom nav link colour] color: var(--slds-g-color-on-surface-2, #444); */\n    text-decoration: none;\n    /* [OFF — custom typography] font-size: var(--site-font-body); line-height: 1; */\n    padding: 0.35rem 0;\n    white-space: nowrap;\n    /* [OFF — custom nav underline] border-bottom: 2px solid transparent; */\n}\n\n.site-nav__link:hover {\n    /* [OFF — custom nav link colour] color: var(--slds-g-color-accent-container-1, #0176d3); */\n}\n\n.site-nav__link_active {\n    /* [OFF — custom nav link colour + underline]\n    color: var(--slds-g-color-accent-container-1, #0176d3);\n    border-bottom-color: var(--slds-g-color-accent-container-1, #0176d3); */\n    /* [OFF — custom typography] font-weight: 600; */\n}\n\n/* A dropdown nav entry is a lightning-button-menu so it can hold a menu, but it\n   has to read as one of the plain links beside it. Its <button> is exposed as a\n   part; nothing deeper is reachable. The values match .site-nav__link above\n   deliberately — the two sit on the same row and any difference shows as a\n   misalignment. */\n.site-nav__menu::part(button) {\n    /* [OFF — custom nav link colour] color: var(--slds-g-color-on-surface-2, #444); */\n    /* [OFF — custom typography] font-size: var(--site-font-body); line-height: 1; */\n    padding: 0.35rem 0;\n    border: 0;\n    /* [OFF — custom nav underline] border-bottom: 2px solid transparent; */\n    border-radius: 0;\n}\n\n.site-nav__menu::part(button):hover {\n    /* [OFF — custom nav link colour] color: var(--slds-g-color-accent-container-1, #0176d3); */\n}\n\n.site-nav__menu_active::part(button) {\n    /* [OFF — custom nav link colour + underline]\n    color: var(--slds-g-color-accent-container-1, #0176d3);\n    border-bottom-color: var(--slds-g-color-accent-container-1, #0176d3); */\n    /* [OFF — custom typography] font-weight: 600; */\n}",
+            "lines": 27,
+            "text": "/* The nav's dropdown triggers — `lightning-button-menu` hooks only.\n *\n * Design: the header screenshot review (square triggers, no border on the\n * unselected ones). A labelled `bare` button menu falls back to the\n * component's NEUTRAL button styles, so the neutral hooks are the ones it\n * reads. All public `--slds-c-button-*` hooks; nothing private, no ::part.\n *\n * Square corners need the FOUR per-corner hooks. The single\n * `--slds-c-button-radius-border` does nothing here: the package's own\n * mapping writes it as a bare fallback (`var(--…-startstart, --…-border, …)`,\n * no inner `var()`), so it is never read.\n *\n * Not reached: the label colour stays the button's accent text, not the\n * context bar's on-surface colour — `--slds-c-button-neutral-text-color`\n * would reach it, but no change was asked for. */\n.site-header__nav-menu {\n    --slds-c-button-radius-border-startstart: 0;\n    --slds-c-button-radius-border-startend: 0;\n    --slds-c-button-radius-border-endstart: 0;\n    --slds-c-button-radius-border-endend: 0;\n}\n\n/* Unselected: no border, at rest or on hover. A selected item keeps the\n   button's border as well as the context bar's selected indicator. */\n.site-header__nav-menu_unselected {\n    --slds-c-button-neutral-color-border: transparent;\n    --slds-c-button-neutral-color-border-hover: transparent;\n}",
             "selectors": [
-                ".site-nav",
-                ".site-nav__link",
-                ".site-nav__link:hover",
-                ".site-nav__link_active",
-                ".site-nav__menu::part(button)",
-                ".site-nav__menu::part(button):hover",
-                ".site-nav__menu_active::part(button)",
-                ".site-nav__trigger",
-                ".site-nav__trigger::part(button)"
+                ".site-header__nav-menu",
+                ".site-header__nav-menu_unselected"
             ],
-            "hooks": [],
-            "tokens": [
-                "--slds-g-spacing-3"
+            "hooks": [
+                "--slds-c-button-neutral-color-border",
+                "--slds-c-button-neutral-color-border-hover",
+                "--slds-c-button-radius-border-endend",
+                "--slds-c-button-radius-border-endstart",
+                "--slds-c-button-radius-border-startend",
+                "--slds-c-button-radius-border-startstart"
             ],
+            "tokens": [],
             "siteTokens": [],
-            "parts": [
-                "button"
-            ],
+            "parts": [],
             "privateHooks": [],
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 99
+        "htmlLines": 152
     },
     {
         "name": "tokenBrowser",

@@ -152,6 +152,7 @@ export const EXAMPLE_LOADERS = {
     'layoutItem/size': () => import('examples/layoutItemSize'),
     'layoutItem/sizeOverriddenForTablets': () => import('examples/layoutItemSizeOverriddenForTablets'),
     'layoutItem/sizePerDevice': () => import('examples/layoutItemSizePerDevice'),
+    'layoutItem/project-paddingReference': () => import('examples/layoutItemProjectPaddingReference'),
     'menuDivider/divider': () => import('examples/menuDividerDivider'),
     'menuDivider/withSubhead': () => import('examples/menuDividerWithSubhead'),
     'menuItem/iteration': () => import('examples/menuItemIteration'),

@@ -1,7 +1,6 @@
 import { LightningElement, api } from 'lwc';
 import Toast from 'lightning/toast';
 import { TRAINING_LEVELS } from 'data/reference';
-import { JOB_STATUS_LABELS, statusThemeClass } from 'data/vacancyRules';
 
 type Row = Record<string, unknown>;
 
@@ -89,11 +88,25 @@ export default class JobListingPreview extends LightningElement {
     @api idPrefix = 'job-listing';
 
     /**
-     * The "Job preview" heading and status tag above the title. The record
+     * The "Preview Job" heading above the title. The record
      * page turns it on; the create flow's last step has its own "Preview your
      * job listing" heading, so it leaves this off.
      */
     @api showPreviewHeading = false;
+
+    /**
+     * Badges in the About card in the Cosmos informational theme
+     * (`slds-theme_info`) rather than the base badge. The record page turns
+     * it on; the create flow leaves its badges plain.
+     */
+    @api infoChips = false;
+
+    /** The About card's badge classes: the blueprint, themed when asked. */
+    get chipClass(): string {
+        return this.infoChips
+            ? 'slds-badge slds-theme_info slds-m-bottom_xx-small'
+            : 'slds-badge slds-m-bottom_xx-small';
+    }
 
     /**
      * Every static landmark's id, from `idPrefix`. Keyed in camelCase because
@@ -111,9 +124,8 @@ export default class JobListingPreview extends LightningElement {
             'selling-points-heading', 'selling-points-edit-button', 'selling-points', 'selling-points-empty',
             'training-heading', 'training-edit-button', 'training', 'training-empty',
             'checks-heading', 'checks-edit-button', 'checks', 'checks-empty',
-            'schedule-heading', 'schedule-edit-button', 'schedule', 'schedule-empty',
             'about-card', 'about-heading',
-            'preview-heading', 'status-group', 'status-label', 'status',
+            'preview-heading',
             'job-id', 'job-id-heading', 'job-id-value', 'job-id-copy-button'
         ];
         return Object.fromEntries(
@@ -123,15 +135,6 @@ export default class JobListingPreview extends LightningElement {
 
     // -- header --------------------------------------------------------------
 
-    get statusLabel(): string {
-        const status = text(this.job.status);
-        return JOB_STATUS_LABELS[status] ?? status;
-    }
-
-    /** The SEP status tag, the one the /jobs cards and the page header carry. */
-    get statusBadgeClass(): string {
-        return `${statusThemeClass(text(this.job.status))} slds-m-left_x-small`;
-    }
 
     /**
      * `jobs.external_job_id` — the stable business key, and the number an
@@ -329,7 +332,27 @@ export default class JobListingPreview extends LightningElement {
             emptyText: 'Nothing added'
         });
 
+        // Work schedule as labelled groups, the shape Languages already uses:
+        // Days, then General working hours (the design's names), then what
+        // else the record holds. Free text stays one chip — nothing is split.
+        const schedule: Box[] = [];
+        const addGroup = (key: string, title: string, list: Chip[]) => {
+            if (list.length) schedule.push({ key, title, chips: list });
+        };
+        addGroup('sched-days', 'Days', this.scheduleDays);
+        const one = (key: string, value: string): Chip[] => (value ? [{ key, label: value }] : []);
+        addGroup('sched-hours', 'General working hours', one('sched-hours-0', this.scheduleHours));
+        addGroup('sched-type', 'Schedule type', one('sched-type-0', this.scheduleType));
+        addGroup('sched-extra', 'Additional information', one('sched-extra-0', this.scheduleAdditional));
+
+        // The design's order: Location, Work schedule, Important skills,
+        // Important strengths, Study or training, NZ driver licence,
+        // Languages, Work experience. Endorsements is ours (the data holds
+        // them) and sits with the licence it qualifies.
         return [
+            asChips('location', 'Location', 'location', one('loc-0', this.location)),
+            asBoxes('schedule', 'Work schedule', 'schedule', schedule),
+            asChips('skills', 'Important skills', 'skills', chips(this.job.skills, 'skill')),
             asChips(
                 'strengths',
                 'Important strengths',
@@ -337,8 +360,6 @@ export default class JobListingPreview extends LightningElement {
                 [],
                 'No table holds job strengths yet'
             ),
-            asChips('skills', 'Important skills', 'skills', chips(this.job.skills, 'skill')),
-            asBoxes('languages', 'Languages', 'languages', languages),
             asChips(
                 'study',
                 'Study or training',
@@ -352,6 +373,7 @@ export default class JobListingPreview extends LightningElement {
                 'endorsements',
                 chips(this.job.licence_endorsements, 'end')
             ),
+            asBoxes('languages', 'Languages', 'languages', languages),
             asChips(
                 'experience',
                 'Work experience',

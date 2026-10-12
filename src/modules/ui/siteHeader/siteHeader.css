@@ -1,0 +1,28 @@
+/* The nav's dropdown triggers — `lightning-button-menu` hooks only.
+ *
+ * Design: the header screenshot review (square triggers, no border on the
+ * unselected ones). A labelled `bare` button menu falls back to the
+ * component's NEUTRAL button styles, so the neutral hooks are the ones it
+ * reads. All public `--slds-c-button-*` hooks; nothing private, no ::part.
+ *
+ * Square corners need the FOUR per-corner hooks. The single
+ * `--slds-c-button-radius-border` does nothing here: the package's own
+ * mapping writes it as a bare fallback (`var(--…-startstart, --…-border, …)`,
+ * no inner `var()`), so it is never read.
+ *
+ * Not reached: the label colour stays the button's accent text, not the
+ * context bar's on-surface colour — `--slds-c-button-neutral-text-color`
+ * would reach it, but no change was asked for. */
+.site-header__nav-menu {
+    --slds-c-button-radius-border-startstart: 0;
+    --slds-c-button-radius-border-startend: 0;
+    --slds-c-button-radius-border-endstart: 0;
+    --slds-c-button-radius-border-endend: 0;
+}
+
+/* Unselected: no border, at rest or on hover. A selected item keeps the
+   button's border as well as the context bar's selected indicator. */
+.site-header__nav-menu_unselected {
+    --slds-c-button-neutral-color-border: transparent;
+    --slds-c-button-neutral-color-border-hover: transparent;
+}

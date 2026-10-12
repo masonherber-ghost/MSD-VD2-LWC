@@ -1,105 +1,155 @@
 <template lwc:render-mode="light">
-    <header id="site-header" class="slds-global-header_container">
-        <div class="slds-global-header slds-grid">
-            <!-- The bar stays full-bleed; this inner row carries the content cap
-                 so the wordmark lines up with the page below. See site.css. -->
-            <div id="site-header-inner" class="site-header__inner slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
-                <div id="site-header-brand" class="slds-global-header__item site-header__brand">
-                    <!-- Logo first, nav after, as the wireframe has it. -->
-                    <div class="slds-global-header__logo site-header__logo">
-                        <a id="site-header-home-link" href="/" class="site-header__wordmark">
+    <!-- The SLDS 2 Global Navigation blueprint (`slds-context-bar`) inside the
+         shipped global header container, exactly as Cosmos draws it. Design:
+         Figma 446:89788 (desktop), 445:46593 (phone). The only styling is the
+         button-menu hooks in `siteHeader.css` (square, borderless triggers);
+         the padding around the bar is SLDS utilities on the container, because
+         the context bar exposes no public spacing hook.
+
+         Layout follows the blueprint: `__primary` holds the app name (the
+         logo), `__secondary` the nav items, `__tertiary` the phone menu.
+         Everything is written here rather than in a child component, because
+         the bar is a flex row and a custom-element host between it and its
+         regions would break the blueprint's layout. -->
+    <!-- `slds-theme_default` gives the padded container the bar's white, so
+         the padding reads as part of the header rather than a gap. site.css
+         pushes the page down by this header's height. -->
+    <header id="site-header" class="slds-global-header_container slds-theme_default slds-p-around_small">
+        <div id="site-header-bar" class="slds-context-bar">
+            <!-- App name: the logo, linking home. -->
+            <div class="slds-context-bar__primary">
+                <div class="slds-context-bar__item slds-no-hover">
+                    <span class="slds-context-bar__label-action slds-context-bar__app-name">
+                        <a id="site-header-home-link" href="/">
                             <img
                                 id="site-header-logo"
                                 src="/public/assets/logo-employer-portal.svg"
                                 alt="myMSD — Employers"
-                                class="site-header__logo-image"
                             />
                         </a>
-                    </div>
-
-                    <ui-site-nav
-                        id="site-header-nav-links"
-                        region="links"
-                        signed-in={isSignedIn}
-                        current={current}
-                        release={release}
-                        no-vacancies={noVacancies}
-                    ></ui-site-nav>
+                    </span>
                 </div>
+            </div>
 
-                <div class="slds-global-header__item">
-                    <ul id="site-header-actions" class="slds-global-actions slds-grid slds-grid_vertical-align-center">
-                        <template lwc:if={isSignedIn}>
-                            <!-- Desktop only: the wireframe's phone bar carries
-                                 the avatar and the menu, nothing else. -->
-                            <li lwc:if={showNotifications} class="slds-global-actions__item slds-show_medium">
-                                <lightning-button-icon
-                                    id="site-header-notifications-button"
-                                    icon-name="utility:notification"
-                                    variant="bare"
-                                    alternative-text="Notifications"
-                                ></lightning-button-icon>
-                            </li>
-                            <li class="slds-global-actions__item slds-p-left_x-small site-header__profile">
-                                <lightning-avatar
-                                    id="site-header-avatar"
-                                    fallback-icon-name="standard:user"
-                                    alternative-text={userName}
-                                    size="small"
-                                    variant="circle"
-                                ></lightning-avatar>
-                                <lightning-button-menu
-                                    id="site-header-account-menu"
-                                    icon-name="utility:down"
-                                    icon-size="x-small"
-                                    variant="bare"
-                                    alternative-text="Account menu"
-                                    menu-alignment="right"
-                                    onselect={handleProfileSelect}
-                                >
-                                    <lightning-menu-item
-                                        id="site-header-account-profile"
-                                        value="/profile"
-                                        label="My profile"
-                                        prefix-icon-name="utility:user"
-                                    ></lightning-menu-item>
-                                    <lightning-menu-item
-                                        id="site-header-account-manage-org"
-                                        value="/manage-org"
-                                        label="Manage org"
-                                        prefix-icon-name="utility:settings"
-                                    ></lightning-menu-item>
-                                    <lightning-menu-item
-                                        id="site-header-account-log-out"
-                                        value="sign-out"
-                                        label="Log out"
-                                        prefix-icon-name="utility:logout"
-                                    ></lightning-menu-item>
-                                </lightning-button-menu>
-                            </li>
-                        </template>
-
-                        <!-- Signed out: the Login link is the way in on desktop.
-                             On a phone it moves inside the menu instead, so the
-                             bar is just the logo and one control — see ui/siteNav. -->
-                        <li lwc:else class="slds-global-actions__item slds-show_medium">
-                            <a id="site-header-login-link" href="/login" class={loginClass}>Login</a>
+            <!-- Desktop nav, from 768px. Each item is a `slds-context-bar__item`;
+                 `slds-is-active` is the blueprint's selected state. A dropdown
+                 item holds a `lightning-button-menu` (the shipped control),
+                 not the blueprint's hand-built dropdown. -->
+            <nav lwc:if={showNav} id="site-header-nav" class="slds-context-bar__secondary slds-show_medium" aria-label="Main">
+                <ul class="slds-grid">
+                    <template lwc:if={isSignedIn}>
+                        <li id="site-header-nav-first" class={firstSlotClass}>
+                            <a href={firstSlotHref} class="slds-context-bar__label-action" title={firstSlotLabel}>
+                                <span class="slds-truncate">{firstSlotLabel}</span>
+                            </a>
                         </li>
-
-                        <!-- The phone trigger sits last in the actions row, to the
-                             right of the avatar, as the wireframe has it. -->
-                        <li class="slds-global-actions__item slds-p-left_xx-small">
-                            <ui-site-nav
-                                id="site-header-nav-menu"
-                                region="menu"
-                                signed-in={isSignedIn}
-                                current={current}
-                                release={release}
-                                no-vacancies={noVacancies}
-                            ></ui-site-nav>
+                        <li id="site-header-nav-profile" class={profileClass}>
+                            <lightning-button-menu
+                                id="site-header-profile-menu"
+                                class={profileMenuClass}
+                                label="Employer profile"
+                                icon-name="utility:chevrondown"
+                                variant="bare"
+                                menu-alignment="left"
+                                onselect={handleMenuSelect}
+                            >
+                                <lightning-menu-item id="site-header-profile-my-profile" href="/profile" label="My profile"></lightning-menu-item>
+                                <lightning-menu-item id="site-header-profile-business" href="/manage-org" label="My business details"></lightning-menu-item>
+                                <lightning-menu-divider></lightning-menu-divider>
+                                <lightning-menu-item id="site-header-profile-sign-out" value="sign-out" label="Sign out"></lightning-menu-item>
+                            </lightning-button-menu>
                         </li>
-                    </ul>
-                </div>
+                        <li id="site-header-nav-help" class={helpClass}>
+                            <lightning-button-menu
+                                id="site-header-help-menu"
+                                class={helpMenuClass}
+                                label="Help centre"
+                                icon-name="utility:chevrondown"
+                                variant="bare"
+                                menu-alignment="left"
+                            >
+                                <lightning-menu-item id="site-header-help-help-centre" href="/help-centre" label="Help centre"></lightning-menu-item>
+                                <lightning-menu-item id="site-header-help-how-it-works" href="/how-it-works" label="How it works"></lightning-menu-item>
+                                <lightning-menu-item id="site-header-help-why-recruit" href="/why-recruit-with-msd" label="Why recruit with MSD"></lightning-menu-item>
+                                <lightning-menu-item id="site-header-help-supporting" href="/supporting-employees" label="Supporting employees"></lightning-menu-item>
+                                <lightning-menu-item id="site-header-help-about" href="/about-this-site" label="About this site"></lightning-menu-item>
+                                <lightning-menu-item id="site-header-help-request-support" href="/request-support" label="Request support"></lightning-menu-item>
+                                <lightning-menu-divider></lightning-menu-divider>
+                                <lightning-menu-item id="site-header-help-contact-us" href="/contact-us" label="Contact us"></lightning-menu-item>
+                            </lightning-button-menu>
+                        </li>
+                    </template>
+
+                    <!-- Signed out (from 1.2): the public front door. -->
+                    <template lwc:else>
+                        <li id="site-header-nav-public-list" class={listYourJobClass}>
+                            <a href="/create-job/step2?start=new" class="slds-context-bar__label-action" title="List your job">
+                                <span class="slds-truncate">List your job</span>
+                            </a>
+                        </li>
+                        <li id="site-header-nav-public-recruiting" class="slds-context-bar__item slds-grid_vertical-align-center">
+                            <lightning-button-menu
+                                id="site-header-recruiting-menu"
+                                class="site-header__nav-menu site-header__nav-menu_unselected"
+                                label="Recruiting with MSD"
+                                icon-name="utility:chevrondown"
+                                variant="bare"
+                                menu-alignment="left"
+                            >
+                                <lightning-menu-item id="site-header-recruiting-why" href="/why-recruit-with-msd" label="Why recruit with MSD"></lightning-menu-item>
+                                <lightning-menu-item id="site-header-recruiting-supporting" href="/supporting-employees" label="Supporting employees"></lightning-menu-item>
+                                <lightning-menu-item id="site-header-recruiting-how" href="/how-it-works" label="How it works"></lightning-menu-item>
+                                <lightning-menu-item id="site-header-recruiting-contact" href="/contact-us" label="Contact us"></lightning-menu-item>
+                            </lightning-button-menu>
+                        </li>
+                        <li id="site-header-nav-public-login" class={loginClass}>
+                            <a id="site-header-login-link" href="/login" class="slds-context-bar__label-action" title="Login">
+                                <span class="slds-truncate">Login</span>
+                            </a>
+                        </li>
+                    </template>
+                </ul>
+            </nav>
+
+            <!-- Phone nav, below 768px: the design's bordered button opening a
+                 `⚡ Menu` (Figma 445:46593). The icon swaps to a close cross
+                 while the menu is open (446:89324). -->
+            <div lwc:if={showNav} class="slds-context-bar__tertiary slds-hide_medium slds-col_bump-left slds-grid_vertical-align-center slds-p-right_small">
+                <lightning-button-menu
+                    id="site-header-mobile-menu"
+                    icon-name={mobileMenuIcon}
+                    alternative-text="Menu"
+                    menu-alignment="right"
+                    onopen={handleMobileOpen}
+                    onclose={handleMobileClose}
+                    onselect={handleMenuSelect}
+                >
+                    <template lwc:if={isSignedIn}>
+                        <lightning-menu-item id="site-header-mobile-first" href={firstSlotHref} label={firstSlotLabel}></lightning-menu-item>
+                        <lightning-menu-subheader label="Employer profile"></lightning-menu-subheader>
+                        <lightning-menu-item id="site-header-mobile-my-profile" href="/profile" label="My profile"></lightning-menu-item>
+                        <lightning-menu-item id="site-header-mobile-business" href="/manage-org" label="My business details"></lightning-menu-item>
+                        <lightning-menu-item id="site-header-mobile-sign-out" value="sign-out" label="Sign out"></lightning-menu-item>
+                        <lightning-menu-subheader label="Help centre"></lightning-menu-subheader>
+                        <lightning-menu-item id="site-header-mobile-help-centre" href="/help-centre" label="Help centre"></lightning-menu-item>
+                        <lightning-menu-item id="site-header-mobile-how-it-works" href="/how-it-works" label="How it works"></lightning-menu-item>
+                        <lightning-menu-item id="site-header-mobile-why-recruit" href="/why-recruit-with-msd" label="Why recruit with MSD"></lightning-menu-item>
+                        <lightning-menu-item id="site-header-mobile-supporting" href="/supporting-employees" label="Supporting employees"></lightning-menu-item>
+                        <lightning-menu-item id="site-header-mobile-about" href="/about-this-site" label="About this site"></lightning-menu-item>
+                        <lightning-menu-item id="site-header-mobile-request-support" href="/request-support" label="Request support"></lightning-menu-item>
+                        <lightning-menu-item id="site-header-mobile-contact-us" href="/contact-us" label="Contact us"></lightning-menu-item>
+                    </template>
+                    <template lwc:else>
+                        <lightning-menu-item id="site-header-mobile-public-list" href="/create-job/step2?start=new" label="List your job"></lightning-menu-item>
+                        <lightning-menu-subheader label="Recruiting with MSD"></lightning-menu-subheader>
+                        <lightning-menu-item id="site-header-mobile-public-why" href="/why-recruit-with-msd" label="Why recruit with MSD"></lightning-menu-item>
+                        <lightning-menu-item id="site-header-mobile-public-supporting" href="/supporting-employees" label="Supporting employees"></lightning-menu-item>
+                        <lightning-menu-item id="site-header-mobile-public-how" href="/how-it-works" label="How it works"></lightning-menu-item>
+                        <lightning-menu-item id="site-header-mobile-public-contact" href="/contact-us" label="Contact us"></lightning-menu-item>
+                        <lightning-menu-divider></lightning-menu-divider>
+                        <lightning-menu-item id="site-header-mobile-public-login" href="/login" label="Login"></lightning-menu-item>
+                    </template>
+                </lightning-button-menu>
             </div>
         </div>
     </header>

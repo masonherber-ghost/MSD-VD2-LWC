@@ -5,7 +5,6 @@ import {
     JOB_STATUS_LABELS,
     actionsFor,
     closingText,
-    noActionsReason,
     statusThemeClass
 } from 'data/vacancyRules';
 
@@ -59,8 +58,9 @@ export default class JobManageHeader extends LightningElement {
         return JOB_STATUS_LABELS[this.status] ?? this.status;
     }
 
+    /** The Cosmos status badge — `slds-badge` plus its `slds-theme_*`. */
     get statusTagClass(): string {
-        return statusThemeClass(this.status);
+        return `${statusThemeClass(this.status)} slds-m-left_x-small`;
     }
 
     /** View applicants arrived with the applicant views, at 1.2. */
@@ -69,25 +69,32 @@ export default class JobManageHeader extends LightningElement {
     }
 
     /**
-     * Only lines the record actually holds; a missing value is left out rather
-     * than shown as a dash, as on the /jobs cards. Who manages it, when it
-     * closes, when it starts — the posted date and the vacancy contact are
-     * deliberately not shown here.
+     * Who and when, by state — the design's lines (Figma 570:93671):
+     *   draft      Managed by
+     *   in review  Managed by · Close date
+     *   published  Managed by · Published · Close date
+     *   closed     Managed by · Closed
      *
-     * `start_date` is free text in the data ("12 October 2025"), so it is
-     * shown as written rather than reformatted to the design's dd/mm/yy.
+     * Only lines the record holds. The design's "Publish date" for a vacancy
+     * in review has no column behind it, so it is not shown. `posted_date` and
+     * `closing_date` are free text ("Recently posted", "Next Month"), shown as
+     * the record words them — not reformatted to dd/mm/yy.
      */
     get metaItems(): MetaItem[] {
         const job = this.job ?? {};
-        const start = String(job.start_date ?? '').trim();
+        const status = this.status;
+        const posted = String(job.posted_date ?? '').trim();
+        const closes = closingText(status, job.closing_date);
 
         const items: MetaItem[] = [];
         const push = (key: string, icon: string, text: string) => {
             if (text.trim()) items.push({ key, icon, text });
         };
         push('owner', 'utility:user', this.creatorName ? `Managed by ${this.creatorName}` : '');
-        push('closes', 'utility:date_input', closingText(this.status, job.closing_date));
-        push('starts', 'utility:date_time', start ? `Start date ${start}` : '');
+        if (status === 'active') push('posted', 'utility:event', posted);
+        if (status === 'in_review' || status === 'active' || status === 'closed') {
+            push('closes', 'utility:event', closes);
+        }
         return items;
     }
 
@@ -111,53 +118,44 @@ export default class JobManageHeader extends LightningElement {
     }
 
     /**
-     * Every action this header offers, in menu order: the lifecycle actions
-     * from `data/vacancyRules` plus what only this page adds.
+     * The header's actions by state, as the design draws them:
+     *   draft      "Edit job", plus a menu of every draft action
+     *   in review  nothing — the vacancy is with MSD
+     *   published  "Close job"
+     *   closed     "Delete listing"
      *
-     * Two adjustments to the shared set, both specific to this header:
-     *   - No "Preview job" — this page is where Preview leads, and its
-     *     Details tab already is the listing preview.
-     *   - "Set job outcome" — a PLACEHOLDER behind `jobDetail.setOutcome`.
-     *     Offered once a vacancy has been live (active or closed), since there
-     *     is no outcome before that. Unwired, and the data has nowhere to store
-     *     an outcome yet.
-     */
-    get actions(): MenuItem[] {
-        const items: MenuItem[] = actionsFor(this.status)
-            .filter((a) => a.key !== 'preview')
-            .map((a) => ({ ...a, disabled: false }));
-        if (
-            isEnabled('jobDetail.setOutcome', this.release) &&
-            (this.status === 'active' || this.status === 'closed')
-        ) {
-            items.push({ key: 'outcome', label: 'Set job outcome', icon: 'utility:task', disabled: false });
-        }
-        return items;
-    }
-
-    /**
-     * The action that leads the button group, as a button rather than a menu
-     * item. On a live vacancy that is "Set job outcome" — the thing an employer
-     * comes back to a running job to do. Everywhere else it is Edit, where the
-     * lifecycle allows editing at all. Null when neither applies, which leaves
-     * the group as the menu alone.
+     * The draft menu is the shared set from `data/vacancyRules` (Preview is
+     * left out — this page IS the preview), so it reads exactly as the
+     * design's: Edit job, Submit for review, Discard job. The other states
+     * use this page's own wording for a single action. Only Edit is wired.
      */
     get primaryAction(): MenuItem | null {
-        const preferred = this.status === 'active' ? ['outcome', 'edit'] : ['edit'];
-        for (const key of preferred) {
-            const found = this.actions.find((a) => a.key === key);
-            if (found) return found;
+        switch (this.status) {
+            case 'draft':
+                return { key: 'edit', label: 'Edit job', icon: 'utility:edit', disabled: false };
+            case 'active':
+                return { key: 'close', label: 'Close job', icon: 'utility:close', disabled: false };
+            case 'closed':
+                return { key: 'discard', label: 'Delete listing', icon: 'utility:delete', disabled: false };
+            default:
+                return null;
         }
-        return null;
     }
 
-    /** The menu: every other action. Never empty — see `noActionsReason`. */
+    /** Draft only: the menu beside "Edit job". Empty in every other state. */
     get menuItems(): MenuItem[] {
-        const primary = this.primaryAction?.key;
-        const items = this.actions.filter((a) => a.key !== primary);
-        return items.length
-            ? items
-            : [{ key: 'none', label: noActionsReason(this.status), icon: '', disabled: true }];
+        if (this.status !== 'draft') return [];
+        return actionsFor(this.status)
+            .filter((a) => a.key !== 'preview')
+            .map((a) => ({ ...a, disabled: false }));
+    }
+
+    get hasMenu(): boolean {
+        return this.menuItems.length > 0;
+    }
+
+    get hasActions(): boolean {
+        return this.primaryAction !== null;
     }
 
     handleEdit(): void {

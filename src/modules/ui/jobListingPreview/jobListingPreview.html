@@ -14,19 +14,10 @@
                 large-device-size="8"
                 padding="horizontal-small"
             >
-                <!-- "Job preview" on the left; "Status:" and the status tag
-                     on the right, as the design has it. Record page only
-                     (`show-preview-heading`). -->
-                <div
-                    lwc:if={showPreviewHeading}
-                    class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_x-small"
-                >
-                    <h6 id={ids.previewHeading}>Job preview</h6>
-                    <div id={ids.statusGroup} class="slds-grid slds-grid_vertical-align-center">
-                        <span id={ids.statusLabel}>Status:</span>
-                        <span class={statusBadgeClass} id={ids.status}>{statusLabel}</span>
-                    </div>
-                </div>
+                <!-- "Preview Job" above the title. Record page only
+                     (`show-preview-heading`). The status lives in the Manage
+                     Job card above (Figma 570:93671), not here. -->
+                <h6 lwc:if={showPreviewHeading} id={ids.previewHeading} class="slds-m-bottom_x-small">Preview Job</h6>
 
                 <div class="slds-grid slds-grid_align-spread">
                     <h1 id={ids.title}>{title}</h1>
@@ -192,45 +183,8 @@
                 </ul>
                 <p lwc:else id={ids.checksEmpty} class="slds-text-color_weak">Nothing added.</p>
 
-                <!-- Work schedule -------------------------------------------->
-                <hr />
-                <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
-                    <h6 id={ids.scheduleHeading}>Work schedule</h6>
-                    <lightning-button
-                        lwc:if={editable}
-                        variant="base"
-                        icon-name="utility:edit"
-                        label="Edit"
-                        id={ids.scheduleEditButton}
-                        data-section="schedule"
-                        onclick={handleEdit}
-                    ></lightning-button>
-                </div>
-                <template lwc:if={hasSchedule}>
-                    <dl id={ids.schedule}>
-                        <template lwc:if={scheduleType}>
-                            <dt class="slds-text-title_bold">Schedule type</dt>
-                            <dd class="slds-m-bottom_small">{scheduleType}</dd>
-                        </template>
-                        <template lwc:if={hasScheduleDays}>
-                            <dt class="slds-text-title_bold">Days</dt>
-                            <dd class="slds-m-bottom_small">
-                                <template for:each={scheduleDays} for:item="day">
-                                    <span class="slds-badge slds-m-right_xx-small" key={day.key}>{day.label}</span>
-                                </template>
-                            </dd>
-                        </template>
-                        <template lwc:if={scheduleHours}>
-                            <dt class="slds-text-title_bold">Working hours</dt>
-                            <dd class="slds-m-bottom_small">{scheduleHours}</dd>
-                        </template>
-                        <template lwc:if={scheduleAdditional}>
-                            <dt class="slds-text-title_bold">Additional information</dt>
-                            <dd class="slds-m-bottom_small">{scheduleAdditional}</dd>
-                        </template>
-                    </dl>
-                </template>
-                <p lwc:else id={ids.scheduleEmpty} class="slds-text-color_weak">Nothing added.</p>
+                <!-- Work schedule moved into the About card, where the design
+                     (Figma 570:93671) draws it — see `buildAboutSections`. -->
             </lightning-layout-item>
 
             <!-- About the job ------------------------------------------------>
@@ -248,7 +202,7 @@
                          class. A span, not a heading — the card already wraps
                          the slot in its own <h2>, so this stays a heading
                          without nesting one in another. -->
-                    <span slot="title" id={ids.aboutHeading} class="slds-text-heading_large">About the job</span>
+                    <h3 slot="title" id={ids.aboutHeading} class="slds-text-heading_medium">About the mahi</h3>
                     <!-- 16px left, right and bottom; none on top — the card
                          header above supplies that (see the .css). -->
                     <div class="slds-p-horizontal_medium slds-p-bottom_medium">
@@ -275,22 +229,30 @@
                                     {section.emptyText}
                                 </p>
 
-                                <!-- Flat chips: strengths, skills, study,
-                                     endorsements, experience. -->
+                                <!-- Flat chips: location, skills, strengths, study,
+                                     endorsements, experience.
+
+                                     Each badge sits in its own span, so no two
+                                     `.slds-badge` are adjacent siblings: SLDS's
+                                     `.slds-badge + .slds-badge` margin would
+                                     otherwise indent the first badge of every
+                                     wrapped line. Markup only, no CSS. -->
                                 <div lwc:elseif={section.isChips} class="slds-m-top_xx-small">
                                     <template for:each={section.chips} for:item="chip">
-                                        <span class="slds-badge slds-m-right_xx-small slds-m-bottom_xx-small" key={chip.key}>{chip.label}</span>
+                                        <span key={chip.key} class="slds-m-right_xx-small"><span class={chipClass}>{chip.label}</span></span>
                                     </template>
                                 </div>
 
-                                <!-- One box per parent row: a language with its
-                                     abilities, a licence class with its stage. -->
+                                <!-- One group per parent row: a schedule part, a
+                                     language with its abilities, a licence class
+                                     with its stage. A bold title over its badges,
+                                     unboxed, as the design draws them. -->
                                 <template lwc:elseif={section.isBoxes}>
                                     <template for:each={section.boxes} for:item="box">
-                                        <div key={box.key} class="slds-box slds-m-top_x-small">
+                                        <div key={box.key} class="slds-m-top_small">
                                             <p class="slds-text-title_bold slds-m-bottom_xx-small">{box.title}</p>
                                             <template for:each={box.chips} for:item="chip">
-                                                <span class="slds-badge slds-m-right_xx-small" key={chip.key}>{chip.label}</span>
+                                                <span key={chip.key} class="slds-m-right_xx-small"><span class={chipClass}>{chip.label}</span></span>
                                             </template>
                                         </div>
                                     </template>

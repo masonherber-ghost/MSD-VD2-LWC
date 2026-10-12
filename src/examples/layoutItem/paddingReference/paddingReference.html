@@ -1,0 +1,91 @@
+<template lwc:render-mode="light">
+    <!-- 1. The contract ------------------------------------------------------>
+    <p class="slds-m-bottom_small">
+        <code>padding</code> takes exactly six values. The item turns each into SLDS
+        padding classes on its own host, so you never write the classes yourself.
+    </p>
+    <table class="slds-table slds-table_bordered slds-m-bottom_large">
+        <thead>
+            <tr>
+                <th scope="col"><code>padding="…"</code></th>
+                <th scope="col">Classes it adds to the host</th>
+                <th scope="col">Space</th>
+            </tr>
+        </thead>
+        <tbody>
+            <template for:each={values} for:item="v">
+                <tr key={v.key}>
+                    <td><code>{v.key}</code></td>
+                    <td><code>{v.classes}</code></td>
+                    <td>{v.space}</td>
+                </tr>
+            </template>
+        </tbody>
+    </table>
+
+    <!-- 2. Every value, rendered ------------------------------------------->
+    <p class="slds-m-bottom_small">
+        Every value. The grey is the item's padding; the white box is its content.
+    </p>
+    <template for:each={values} for:item="v">
+        <div key={v.key} class="slds-m-bottom_small">
+            <p class="slds-text-title_caps slds-m-bottom_xx-small">{v.key}</p>
+            <lightning-layout>
+                <lightning-layout-item padding={v.key} class="slds-theme_shade">
+                    <div class="slds-box slds-box_x-small slds-theme_default">Content</div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </template>
+
+    <!-- 3. The traps --------------------------------------------------------->
+    <p class="slds-m-top_large slds-m-bottom_small">
+        <strong>Anything else is ignored, without an error.</strong>
+        <code>padding="vertical-small"</code> or <code>padding="medium"</code>
+        falls back to no padding:
+    </p>
+    <lightning-layout class="slds-m-bottom_large">
+        <lightning-layout-item padding="vertical-small" class="slds-theme_shade">
+            <div class="slds-box slds-box_x-small slds-theme_default">padding="vertical-small" — no padding</div>
+        </lightning-layout-item>
+    </lightning-layout>
+
+    <p class="slds-m-bottom_small">
+        <strong>No vertical-only or single-side value.</strong> Put an SLDS utility in
+        <code>class</code> on the item instead — the host is in your template, so it
+        applies: <code>class="slds-p-vertical_medium"</code>.
+    </p>
+    <lightning-layout class="slds-m-bottom_large">
+        <lightning-layout-item class="slds-theme_shade slds-p-vertical_medium">
+            <div class="slds-box slds-box_x-small slds-theme_default">class="slds-p-vertical_medium"</div>
+        </lightning-layout-item>
+    </lightning-layout>
+
+    <p class="slds-m-bottom_small">
+        <strong>Pair item padding with <code>pull-to-boundary</code> on the parent.</strong>
+        Item padding pushes the row's outer edges inward; the matching
+        <code>pull-to-boundary</code> pulls them back so the row lines up with the
+        content above it. <code>around-small</code> pairs with <code>small</code>,
+        <code>around-medium</code> with <code>medium</code>, and so on. Below: the first
+        row without it, the second with it.
+    </p>
+    <div class="slds-box slds-box_x-small">
+        <p class="slds-m-bottom_x-small">Edge of the content column</p>
+        <lightning-layout class="slds-m-bottom_small">
+            <lightning-layout-item size="6" padding="around-small" class="slds-theme_shade">
+                <div class="slds-box slds-box_x-small slds-theme_default">No pull — inset</div>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" padding="around-small" class="slds-theme_shade">
+                <div class="slds-box slds-box_x-small slds-theme_default">No pull — inset</div>
+            </lightning-layout-item>
+        </lightning-layout>
+        <lightning-layout pull-to-boundary="small">
+            <lightning-layout-item size="6" padding="around-small" class="slds-theme_shade">
+                <div class="slds-box slds-box_x-small slds-theme_default">pull-to-boundary="small" — flush</div>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" padding="around-small" class="slds-theme_shade">
+                <div class="slds-box slds-box_x-small slds-theme_default">pull-to-boundary="small" — flush</div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

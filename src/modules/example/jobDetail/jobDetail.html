@@ -23,6 +23,7 @@
 
                     <template lwc:elseif={hasJob}>
                         <lightning-breadcrumbs id="job-detail-breadcrumbs" class="slds-m-bottom_x-small">
+                            <lightning-breadcrumb id="job-detail-breadcrumb-home" label="Home" href="/"></lightning-breadcrumb>
                             <lightning-breadcrumb id="job-detail-breadcrumb-jobs" label="My jobs" href="/jobs"></lightning-breadcrumb>
                             <lightning-breadcrumb
                                 id="job-detail-breadcrumb-record"
@@ -41,10 +42,13 @@
                             onedit={handleEdit}
                         ></ui-job-manage-header>
 
-                        <!-- The rule between the header and the record body, as the
-                             design draws it. A plain hr: SLDS styles the element, and
-                             no lightning-* component renders a separator. -->
-                        <hr />
+                        <!-- A state notice under the Manage Job card, in review and
+                             closed only (Figma 570:93671): the informational alert,
+                             unskinned. The div carries the spacing; a custom element
+                             is inline. The design has no rule here, so the old hr went. -->
+                        <div lwc:if={stateNotice} id="job-detail-state-notice" class="slds-m-bottom_medium">
+                            <ui-alert variant="info" message={stateNotice} static-message></ui-alert>
+                        </div>
 
                         <!-- Path ------------------------------------------------------>
                         <!-- <div class="slds-m-vertical_medium">
@@ -85,6 +89,7 @@
                                             id="job-detail-listing-tabbed"
                                             id-prefix="job-detail-listing"
                                             show-preview-heading
+                                            info-chips
                                             job={job}
                                         ></ui-job-listing-preview>
                                     </lightning-tab>
@@ -113,6 +118,7 @@
                                     id="job-detail-listing-untabbed"
                                     id-prefix="job-detail-listing"
                                     show-preview-heading
+                                    info-chips
                                     job={job}
                                 ></ui-job-listing-preview>
                             </lightning-layout-item>

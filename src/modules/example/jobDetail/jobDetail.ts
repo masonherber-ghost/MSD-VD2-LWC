@@ -162,6 +162,22 @@ export default class JobDetail extends LightningElement {
      * The creator's name for the header. `api.job()` does not join it;
      * `api.jobs()` does, and that list is already loaded for this account.
      */
+    /**
+     * The notice under the Manage Job card. The design's copy, verbatim — the
+     * 24 hours is placeholder product copy, not an SLA the data enforces (as
+     * on the /jobs cards). Draft and published carry none.
+     */
+    get stateNotice(): string {
+        switch (String(this.job?.status ?? '')) {
+            case 'in_review':
+                return 'This job is in review. Expect to hear from a staff member within 24hrs.';
+            case 'closed':
+                return 'This job listing is closed or has expired. To list a similar job, select List a job.';
+            default:
+                return '';
+        }
+    }
+
     get creatorName(): string {
         const row = this.jobs.find((j) => Number(j.id) === Number(this.job?.id));
         return String(row?.creator_name ?? '');

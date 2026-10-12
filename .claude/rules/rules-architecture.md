@@ -218,11 +218,14 @@ A green build proves the modules compile. It does **not** prove the page renders
 client-side, so a template error surfaces only at runtime. Load the page in a browser and read the
 console before calling anything done.
 
-To check a module compiles without a browser:
+To check a component compiles without a browser, request its **template** module — the `.html`
+is a separate module, `<name>%23<name>.html`, and the component's own `.js` URL does not compile
+it. Measured: with a stray `</div>` in a template the `.js` URL answered `200`, the template URL
+`500`, and `npm run build` still exited 0.
 
 ```bash
 curl -sL -o /dev/null -w '%{http_code}\n' \
-  "http://localhost:3000/1/module/esm/0/l/en-US/mi/example%2Fjobs%2Fv%2F0_0_1/latest/example_jobs.js"
+  "http://localhost:3000/1/module/esm/0/l/en-US/mi/example%2Fjobs%23jobs.html%2Fv%2F0_0_1/latest/example_jobs_jobs_html.js"
 ```
 
 `500` there is a compile error — the dev server log has it in full. If the error quotes source that

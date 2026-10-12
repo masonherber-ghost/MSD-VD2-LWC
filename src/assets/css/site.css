@@ -8,16 +8,17 @@ body {
 /* slds-global-header_container is position:fixed, so page content has to be
    pushed clear of it.
  *
- * Read from the same hook the header's own height comes from, NOT a repeated
- * pixel value: the height changes at the large breakpoint, and a hardcoded 50px
- * here would tuck the top of every page under the bar above 1024px. The
- * fallback matches the SLDS default in case the hook is ever unset. */
+ * The header (ui/siteHeader) is the Cosmos context bar — 2.5rem, its shipped
+ * default, with a 3px bottom border — inside a container padded by
+ * `slds-p-around_small` (0.75rem top and bottom). 2.5 + 1.5 = 4rem, which is
+ * --slds-g-sizing-11, plus --slds-g-sizing-border-3 for the border. Tokens,
+ * not a typed number; if the header's padding utility changes, change this. */
 .site__body {
-    padding-top: var(--slds-s-header-sizing-height, 3.125rem);
+    padding-top: calc(var(--slds-g-sizing-11) + var(--slds-g-sizing-border-3));
     /* The release toggle is docked at the bottom; reserve its height so page
        content can always scroll clear of it. */
     padding-bottom: 3.25rem;
-    min-height: calc(100vh - var(--slds-s-header-sizing-height, 3.125rem));
+    min-height: calc(100vh - var(--slds-g-sizing-11) - var(--slds-g-sizing-border-3));
 }
 
 /* Page-level tokens (--site-content-max-width, --site-content-gutter) are
@@ -37,10 +38,13 @@ body {
 
 
 
+/* [OFF — old site header (replaced by the context bar)] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
 /* A flex child of the header bar, so the bar keeps its own full-bleed
    background and shadow while its contents sit in the content column.
    slds-global-header__item already carries 1rem of horizontal padding, so the
-   row makes up only the difference. */
+   row makes up only the difference. *\/
 .site-header__inner {
     flex: 1 1 auto;
     min-width: 0;
@@ -49,7 +53,7 @@ body {
     padding-inline: calc(var(--site-content-gutter) - var(--slds-g-spacing-4, 1rem));
 }
 
-/* Keep the wordmark and nav on one row inside the header. */
+/* Keep the wordmark and nav on one row inside the header. *\/
 .site-header__brand {
     display: flex;
     align-items: center;
@@ -72,7 +76,7 @@ body {
 
 /* The supplied lockup is 216x30. Height is pinned so the bar's height is set by
    the header hook alone, whatever the file's intrinsic size; width follows the
-   aspect ratio. */
+   aspect ratio. *\/
 .site-header__logo-image {
     display: block;
     height: 1.75rem;
@@ -81,24 +85,25 @@ body {
 
 
 .site-header__link {
-    /* [OFF — custom nav link colour] color: var(--slds-g-color-on-surface-2, #444); */
+    /* [OFF — custom nav link colour] color: var(--slds-g-color-on-surface-2, #444); *\/
     text-decoration: none;
-    /* [OFF — custom typography] font-size: var(--site-font-body); line-height: 1; */
+    /* [OFF — custom typography] font-size: var(--site-font-body); line-height: 1; *\/
     padding: 0.35rem 0;
     white-space: nowrap;
-    /* [OFF — custom nav underline] border-bottom: 2px solid transparent; */
+    /* [OFF — custom nav underline] border-bottom: 2px solid transparent; *\/
 }
 
 .site-header__link:hover {
-    /* [OFF — custom nav link colour] color: var(--slds-g-color-accent-container-1, #0176d3); */
+    /* [OFF — custom nav link colour] color: var(--slds-g-color-accent-container-1, #0176d3); *\/
 }
 
 .site-header__link_active {
     /* [OFF — custom nav link colour + underline]
     color: var(--slds-g-color-accent-container-1, #0176d3);
-    border-bottom-color: var(--slds-g-color-accent-container-1, #0176d3); */
-    /* [OFF — custom typography] font-weight: 600; */
+    border-bottom-color: var(--slds-g-color-accent-container-1, #0176d3); *\/
+    /* [OFF — custom typography] font-weight: 600; *\/
 }
+ * [END OFF — old site header (replaced by the context bar)] */
 
 /* [OFF — custom badge rule] ------------------------------------------------
  * Commented out to show the default Lightning styling. To restore: delete
@@ -144,12 +149,16 @@ lightning-card {
     display: block;
 }
 
-/* Avatar and its menu read as one control in the global actions row. */
+/* [OFF — old header profile row] ------------------------------------------------
+ * Commented out to show the default Lightning styling. To restore: delete
+ * this line block and its END line, and un-escape every `*\/` below.
+/* Avatar and its menu read as one control in the global actions row. *\/
 .site-header__profile {
     display: flex;
     align-items: center;
     gap: 0.125rem;
 }
+ * [END OFF — old header profile row] */
 
 /* The SEP button — only what no hook can express.
  *
@@ -487,11 +496,11 @@ lightning-button[variant='brand']::part(button):disabled {
  *
  * Use INSTEAD of `slds-m-top_x-large`, never alongside it: that utility is
  * unconditional and carries `!important`, so it would win at every width. */
-@media (min-width: 64em) {
+/* @media (min-width: 64em) {
     .sep-page-header_spaced {
         margin-block-start: var(--slds-g-spacing-6);
     }
-}
+} */
 
 /* [OFF — custom scoped-notification skin] ------------------------------------------------
  * Commented out to show the default Lightning styling. To restore: delete

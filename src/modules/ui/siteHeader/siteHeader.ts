@@ -1,30 +1,43 @@
 import { LightningElement, api } from 'lwc';
 import {
     currentUser,
-    displayName,
     onChange,
     signOut,
     type SessionUser
 } from 'data/session';
 import {
     currentRelease,
-    isEnabled,
     onChange as onReleaseChange,
     type Release
 } from 'data/release';
-import { enforceLoginGate } from 'data/gate';
+import { enforceLoginGate, hasPublicSite } from 'data/gate';
 // Aliased: `api` is already taken by the @api decorator imported from lwc.
 import apiClient, { DEV_ACCOUNT_ID } from 'data/api';
 
-const LINK = 'site-header__link';
-const LINK_ACTIVE = 'site-header__link site-header__link_active';
+/** A context-bar item, and the same item in the blueprint's selected state. */
+const ITEM = 'slds-context-bar__item';
+const ITEM_ACTIVE = 'slds-context-bar__item slds-is-active';
+/** An item holding a button menu: centred, since the bar stretches its items. */
+const MENU_ITEM = 'slds-context-bar__item slds-grid_vertical-align-center';
+const MENU_ITEM_ACTIVE = `${MENU_ITEM} slds-is-active`;
+/** The button menu inside such an item: square always, borderless unless selected. */
+const NAV_MENU = 'site-header__nav-menu';
+const NAV_MENU_UNSELECTED = 'site-header__nav-menu site-header__nav-menu_unselected';
 
 /**
- * Lightning Experience style global header, shared by every route.
+ * The site header: the SLDS 2 Global Navigation blueprint (`slds-context-bar`)
+ * under the Cosmos theme, with no project CSS. Shared by every route.
  *
- * Has an authenticated and an unauthenticated form: signed in, the main nav and
- * the profile menu show; signed out, only a Login link does. It re-renders on
- * session changes so signing in or out updates the header without a reload.
+ * Signed in it carries the employer's workspace — My jobs, Employer profile
+ * (My profile, My business details, Sign out) and Help centre. Signed out
+ * from 1.2 it is the public front door — List your job, Recruiting with MSD,
+ * Login. Signed out at 1.1 it shows the logo alone: that release had no
+ * public site, and `data/gate` is already redirecting.
+ *
+ * Desktop and phone are the same destinations twice — context-bar items from
+ * 768px, one `lightning-button-menu` below it — swapped by
+ * `slds-show_medium` / `slds-hide_medium`. It re-renders on session and
+ * release changes, so signing in or out needs no reload.
  */
 export default class SiteHeader extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
@@ -94,42 +107,77 @@ export default class SiteHeader extends LightningElement {
         return this.user !== null;
     }
 
-    /** The bell has nothing behind it yet, so it only appears at 2+. */
-    get showNotifications(): boolean {
-        return isEnabled('siteHeader.notifications', this.release);
-    }
-
-    get userName(): string {
-        return displayName(this.user);
-    }
-
-    get companyName(): string {
-        return this.user?.company_name ?? '';
-    }
-
-    get loginClass(): string {
-        return this.current === 'login' ? LINK_ACTIVE : LINK;
+    /** Signed out at 1.1 there is no public site, so no nav at all. */
+    get showNav(): boolean {
+        return this.isSignedIn || hasPublicSite(this.release);
     }
 
     /**
-     * The menu is navigation, not commands: lightning-button-menu has no href,
-     * so the item's value carries the path and selection becomes a page load.
-     * 'sign-out' is the one value that acts instead of navigating.
+     * One slot, two labels: an employer with nothing listed is sent to create
+     * their first vacancy; once anything exists — a draft counts — it becomes
+     * the way back to the list.
      */
-    handleProfileSelect(event: CustomEvent): void {
-        const value = (event.detail as { value?: string })?.value;
-        if (value === 'sign-out') {
-            signOut();
-            window.location.assign('/');
-            return;
-        }
-        this.navigate(event);
+    get firstSlotLabel(): string {
+        return this.noVacancies ? 'Create a job' : 'My jobs';
     }
 
-    private navigate(event: CustomEvent): void {
-        const path = (event.detail as { value?: string })?.value;
-        if (path) {
-            window.location.assign(path);
+    get firstSlotHref(): string {
+        return this.noVacancies ? '/create-job/step2?start=new' : '/jobs';
+    }
+
+    get firstSlotClass(): string {
+        const active = this.noVacancies ? this.current === 'create-job' : this.current === 'jobs';
+        return active ? ITEM_ACTIVE : ITEM;
+    }
+
+    /** Employer profile covers both pages its menu leads to. */
+    get profileClass(): string {
+        return this.current === 'profile' || this.current === 'manage-org' ? MENU_ITEM_ACTIVE : MENU_ITEM;
+    }
+
+    get helpClass(): string {
+        return this.current === 'help-centre' ? MENU_ITEM_ACTIVE : MENU_ITEM;
+    }
+
+    get profileMenuClass(): string {
+        return this.current === 'profile' || this.current === 'manage-org' ? NAV_MENU : NAV_MENU_UNSELECTED;
+    }
+
+    get helpMenuClass(): string {
+        return this.current === 'help-centre' ? NAV_MENU : NAV_MENU_UNSELECTED;
+    }
+
+    get listYourJobClass(): string {
+        return this.current === 'create-job' ? ITEM_ACTIVE : ITEM;
+    }
+
+    get loginClass(): string {
+        return this.current === 'login' ? ITEM_ACTIVE : ITEM;
+    }
+
+    /** The phone trigger: a hamburger, a cross while its menu is open. */
+    mobileMenuOpen = false;
+
+    get mobileMenuIcon(): string {
+        return this.mobileMenuOpen ? 'utility:close' : 'utility:rows';
+    }
+
+    handleMobileOpen(): void {
+        this.mobileMenuOpen = true;
+    }
+
+    handleMobileClose(): void {
+        this.mobileMenuOpen = false;
+    }
+
+    /**
+     * Menu items navigate through their own `href`; 'sign-out' is the one
+     * value that acts instead.
+     */
+    handleMenuSelect(event: CustomEvent): void {
+        if ((event.detail as { value?: string })?.value === 'sign-out') {
+            signOut();
+            window.location.assign('/');
         }
     }
 }
