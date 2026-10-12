@@ -17,10 +17,10 @@
                 <!-- "Preview Job" above the title. Record page only
                      (`show-preview-heading`). The status lives in the Manage
                      Job card above (Figma 570:93671), not here. -->
-                <h6 lwc:if={showPreviewHeading} id={ids.previewHeading} class="slds-m-bottom_x-small">Preview Job</h6>
+                <h6 lwc:if={showPreviewHeading} id={ids.previewHeading} class="slds-m-bottom_x-small slds-text-heading_small">Preview Job</h6>
 
                 <div class="slds-grid slds-grid_align-spread">
-                    <h1 id={ids.title}>{title}</h1>
+                    <h1 id={ids.title} class="slds-text-heading_large">{title}</h1>
                     <lightning-button
                         lwc:if={editable}
                         variant="base"
@@ -33,41 +33,32 @@
                 </div>
                 <p lwc:if={subtitle} id={ids.subtitle} class="slds-text-body_regular slds-m-bottom_small">{subtitle}</p>
 
-                <div lwc:if={location} id={ids.location} class="slds-grid slds-grid_align-spread slds-m-bottom_small">
-                    <div class="slds-media slds-media_center">
-                        <div class="slds-media__figure">
-                            <lightning-icon
-                                id={ids.locationIcon}
-                                icon-name="utility:location"
-                                size="x-small"
-                                alternative-text="Location"
-                            ></lightning-icon>
-                        </div>
-                        <div class="slds-media__body">{location}</div>
-                    </div>
-                    <lightning-button
-                        lwc:if={editable}
-                        variant="base"
-                        icon-name="utility:edit"
-                        label="Edit"
-                        id={ids.locationEditButton}
-                        data-section="location"
-                        onclick={handleEdit}
-                    ></lightning-button>
-                </div>
-
-                <!-- Facts. Only the rows the record holds. -->
-                <ul id={ids.facts}>
+                <!-- Facts, location first. Only the rows the record holds.
+                     A row with `editSection` carries the create flow's Edit
+                     button (`editable`); today that is location alone. Its id
+                     comes from the getter — never a static id in a for:each. -->
+                <ul id={ids.facts} class="slds-m-bottom_small">
                     <template for:each={facts} for:item="fact">
-                        <li key={fact.key} class="slds-media slds-media_center slds-m-bottom_x-small">
-                            <div class="slds-media__figure">
-                                <lightning-icon
-                                    icon-name={fact.icon}
-                                    size="x-small"
-                                    alternative-text={fact.label}
-                                ></lightning-icon>
+                        <li key={fact.key} class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_x-small">
+                            <div class="slds-media slds-media_center">
+                                <div class="slds-media__figure">
+                                    <lightning-icon
+                                        icon-name={fact.icon}
+                                        size="x-small"
+                                        alternative-text={fact.label}
+                                    ></lightning-icon>
+                                </div>
+                                <div class="slds-media__body">{fact.value}</div>
                             </div>
-                            <div class="slds-media__body">{fact.value}</div>
+                            <lightning-button
+                                lwc:if={fact.showEdit}
+                                variant="base"
+                                icon-name="utility:edit"
+                                label="Edit"
+                                id={fact.editId}
+                                data-section={fact.editSection}
+                                onclick={handleEdit}
+                            ></lightning-button>
                         </li>
                     </template>
                 </ul>

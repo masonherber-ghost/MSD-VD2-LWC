@@ -95,18 +95,19 @@ component gate*.
 to `isEnabled`, and gate the whole widget.
 
 ### Browse what the component library can do
-`npm run dev` → `/design-system`. Five tabs, every one generated — from the installed packages, or
+`npm run dev` → `/design-system`. Six tabs, every one generated — from the installed packages, or
 from this project's own source. Nothing on that page is hand-maintained.
 
 | Tab | Shows | Regenerate |
 |---|---|---|
+| **Foundations** | Typography: every class that sets type, the full `--slds-g-font-scale-*` scale with the classes that reach each step (and the CSS a classless step needs), and the weights | `npm run foundations` |
 | **Components** | Every shipped `lightning-*` example, rendered live — plus project examples from `src/examples/<component>/<name>/`, tabbed "(project)" | `npm run catalog` |
 | **Blueprints** | The 37 blueprints **no shipped component renders** — the ones you write by hand. Classes declared, whether they are in the stylesheet we actually load, hooks you may set, private ones you may not, and where this site uses each. A checkbox reveals the other 52 | `npm run blueprints` |
 | **Compositions** | Every wrapper in `src/modules/ui/`, ordered by how much CSS it needed, with what that CSS touches — plus the `sep-` classes in `site.css` | `npm run compositions` |
 | **Tokens** | Every design token with its resolved value: this project's `--site-*` and the SLDS globals by family | `npm run tokens` |
 | **Component hooks** | The `--slds-c-*` hooks you may set, grouped by component | `npm run tokens` |
 
-Re-run `catalog`, `tokens` and `blueprints` after upgrading a package. Re-run `compositions` after
+Re-run `catalog`, `tokens`, `blueprints` and `foundations` after upgrading a package. Re-run `compositions` after
 adding or restyling a wrapper — it reads our source, not the packages, and each wrapper's
 description on that page is its own leading docblock, so the explanation lives with the code.
 

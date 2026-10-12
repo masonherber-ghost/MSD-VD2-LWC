@@ -9,6 +9,7 @@
     "tokens": "node scripts/build-tokens.mjs",
     "blueprints": "node scripts/build-blueprints.mjs",
     "compositions": "node scripts/build-compositions.mjs",
+    "foundations": "node scripts/build-foundations.mjs",
     "dev": "tsx scripts/dev-server.ts",
     "dev:lwr": "lwr dev",
     "db:reset": "rm -f data/msd-vd2.db data/msd-vd2.db-wal data/msd-vd2.db-shm && cp data/msd-vd2.seed.db data/msd-vd2.db && echo \"database restored from data/msd-vd2.seed.db\"",

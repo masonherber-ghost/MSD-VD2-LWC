@@ -1,0 +1,118 @@
+<template lwc:render-mode="light">
+    <div id="foundations-browser">
+        <!-- One tab per foundation. Typography is the first; more go beside it. -->
+        <lightning-tabset id="foundations-tabset">
+            <lightning-tab id="foundations-tab-typography" label="Typography">
+                <p id="foundations-typography-summary" class="slds-text-body_small slds-text-color_weak slds-m-bottom_medium">
+                    {summary}
+                </p>
+
+                <!-- 1. The classes: what you can put in markup. -->
+                <lightning-card id="foundations-type-classes-card" title="Text classes" icon-name="standard:text" class="slds-m-bottom_medium">
+                    <div class="slds-p-horizontal_medium">
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                            Every class in <code>slds2.cosmos.css</code> that sets a font size — the only
+                            way to size type without CSS. Each sample uses the class itself.
+                        </p>
+                        <table id="foundations-type-classes" class="slds-table slds-table_bordered slds-table_col-bordered">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">Sample</th>
+                                    <th scope="col">Class</th>
+                                    <th scope="col">Size</th>
+                                    <th scope="col">Token</th>
+                                    <th scope="col">Weight</th>
+                                    <th scope="col">Line height</th>
+                                    <th scope="col">Case</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={typeClasses} for:item="c">
+                                    <tr key={c.key} data-class={c.name}>
+                                        <td><span class={c.name}>{sample}</span></td>
+                                        <th scope="row"><code>{c.name}</code></th>
+                                        <td>{c.size} · {c.px}</td>
+                                        <td><code>{c.sizeToken}</code></td>
+                                        <td>{c.weightLabel}</td>
+                                        <td>{c.lineHeightLabel}</td>
+                                        <td>{c.caseLabel}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </lightning-card>
+
+                <!-- 2. The scale: every size step, and whether a class reaches it. -->
+                <lightning-card id="foundations-type-scale-card" title="Type scale" icon-name="standard:metrics" class="slds-m-bottom_medium">
+                    <div class="slds-p-horizontal_medium">
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                            Every <code>--slds-g-font-scale-*</code> step, largest first. A step with no
+                            class can only be used from CSS; the rule it needs is shown. Samples set
+                            the token directly so each step can be seen.
+                        </p>
+                        <table id="foundations-type-scale" class="slds-table slds-table_bordered slds-table_col-bordered">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">Sample</th>
+                                    <th scope="col">Token</th>
+                                    <th scope="col">Size</th>
+                                    <th scope="col">Class</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={scaleSteps} for:item="s">
+                                    <tr key={s.key} data-token={s.name}>
+                                        <td><span style={s.sampleStyle}>Aa</span></td>
+                                        <th scope="row">
+                                            <code>{s.name}</code>
+                                            <div lwc:if={s.aliasLabel} class="slds-text-body_small slds-text-color_weak">{s.aliasLabel}</div>
+                                        </th>
+                                        <td>{s.value} · {s.px}</td>
+                                        <td>
+                                            <code lwc:if={s.hasClass}>{s.classLabel}</code>
+                                            <span lwc:else class="slds-text-color_weak">No class — CSS only: <code>{s.cssHint}</code></span>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </lightning-card>
+
+                <!-- 3. Weights: tokens, and the two classes that set one. -->
+                <lightning-card id="foundations-type-weights-card" title="Font weights" icon-name="standard:text_template">
+                    <div class="slds-p-horizontal_medium">
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                            SLDS ships no weight classes. Two text classes set a weight as a side effect;
+                            every other weight needs CSS.
+                        </p>
+                        <table id="foundations-type-weights" class="slds-table slds-table_bordered slds-table_col-bordered">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">Sample</th>
+                                    <th scope="col">Token</th>
+                                    <th scope="col">Weight</th>
+                                    <th scope="col">Set by a class</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={weights} for:item="w">
+                                    <tr key={w.key} data-token={w.name}>
+                                        <td><span style={w.sampleStyle}>{sample}</span></td>
+                                        <th scope="row"><code>{w.name}</code></th>
+                                        <td>{w.value}</td>
+                                        <td>
+                                            <code lwc:if={w.hasClass}>{w.classLabel}</code>
+                                            <span lwc:else class="slds-text-color_weak">No — CSS only: <code>{w.cssHint}</code></span>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </lightning-card>
+            </lightning-tab>
+        </lightning-tabset>
+    </div>
+</template>

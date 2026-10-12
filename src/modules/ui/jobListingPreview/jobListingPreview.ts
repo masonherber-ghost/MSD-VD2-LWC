@@ -9,6 +9,17 @@ interface Chip {
     label: string;
 }
 
+interface Fact {
+    key: string;
+    icon: string;
+    label: string;
+    value: string;
+    /** The section the create flow's Edit button opens; '' for none. */
+    editSection: string;
+    showEdit: boolean;
+    editId: string;
+}
+
 interface Box {
     key: string;
     title: string;
@@ -118,7 +129,7 @@ export default class JobListingPreview extends LightningElement {
         const names = [
             'root', 'layout', 'col-main', 'col-about',
             'title', 'title-edit-button', 'subtitle',
-            'location', 'location-icon', 'location-edit-button',
+            'location-edit-button',
             'facts',
             'description-heading', 'description-edit-button', 'description', 'description-empty',
             'selling-points-heading', 'selling-points-edit-button', 'selling-points', 'selling-points-empty',
@@ -180,12 +191,23 @@ export default class JobListingPreview extends LightningElement {
      * shown as an em dash — the design's own rule for this screen, stated on it:
      * "Any section left empty will not be displayed on the job listing."
      */
-    get facts(): { key: string; icon: string; label: string; value: string }[] {
-        const out: { key: string; icon: string; label: string; value: string }[] = [];
-        const push = (key: string, icon: string, label: string, value: unknown) => {
+    get facts(): Fact[] {
+        const out: Fact[] = [];
+        const push = (key: string, icon: string, label: string, value: unknown, editSection = '') => {
             const v = text(value);
-            if (v) out.push({ key, icon, label, value: v });
+            if (!v) return;
+            out.push({
+                key,
+                icon,
+                label,
+                value: v,
+                editSection,
+                showEdit: this.editable && editSection !== '',
+                editId: editSection ? this.ids.locationEditButton : ''
+            });
         };
+        // Location leads the list — one list of facts, as the design draws it.
+        push('location', 'utility:location', 'Location', this.job.location, 'location');
         push('pay', 'utility:moneybag', 'Pay', this.job.pay);
         push('contract', 'utility:contract', 'Contract', this.job.contract_type);
         push('start', 'utility:event', 'Start date', this.job.start_date);
