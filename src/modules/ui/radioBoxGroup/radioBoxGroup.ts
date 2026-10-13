@@ -65,7 +65,18 @@ export default class RadioBoxGroup extends LightningElement {
         }));
     }
 
+    /**
+     * Re-dispatched as the group's own `change`, carrying the option value.
+     *
+     * The inner `lightning-input` change is stopped here. It bubbles out of this
+     * light-DOM component, and its detail has no `value` — so a consumer reading
+     * `detail.value` heard the right value from this event and then a blank one
+     * from the inner event a moment later. That blanked the set-outcome form's
+     * choice and left its Submit disabled; the create flow only escaped it
+     * because its handler ignores events not targeted at the group itself.
+     */
     handleChange(event: Event): void {
+        event.stopPropagation();
         this.dispatchEvent(
             new CustomEvent('change', {
                 detail: { value: (event.target as HTMLInputElement).value }

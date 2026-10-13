@@ -626,15 +626,17 @@ export const COMPOSITIONS = [
         "sepClasses": [],
         "hasCss": true,
         "css": {
-            "lines": 9,
-            "text": "/* The \"About the job\" card's header: 16px above the title rather than the\n * card's default 12px (--slds-g-spacing-3).\n *\n * The header is inside `lightning-card`'s shadow root, so its padding is set\n * through the card's own public hook, not a class. Scoped to this card by the\n * class on its host; every other card keeps the default. */\n.job-listing-preview__about-card {\n    --slds-c-card-header-spacing-block-start: var(--slds-g-spacing-4);\n}",
+            "lines": 16,
+            "text": "/* The \"About the job\" card's header: 16px above the title rather than the\n * card's default 12px (--slds-g-spacing-3).\n *\n * The header is inside `lightning-card`'s shadow root, so its padding is set\n * through the card's own public hook, not a class. Scoped to this card by the\n * class on its host; every other card keeps the default. */\n.job-listing-preview__about-card {\n    --slds-c-card-header-spacing-block-start: var(--slds-g-spacing-4);\n\n    /* The title's weight. A slotted title inherits from the card's own <h2>,\n     * which the card makes bold (`[part='title'] h2` reads this hook, falling\n     * back to --slds-g-font-weight-7). Every other heading on the page gets the\n     * SLDS reset's `font-weight: inherit` from the body — 400 — so the hook is\n     * set to that. `inherit` would not do: the card's header part is bold too,\n     * with no hook. */\n    --slds-c-card-heading-font-weight: var(--slds-g-font-weight-4);\n}",
             "selectors": [
                 ".job-listing-preview__about-card"
             ],
             "hooks": [
-                "--slds-c-card-header-spacing-block-start"
+                "--slds-c-card-header-spacing-block-start",
+                "--slds-c-card-heading-font-weight"
             ],
             "tokens": [
+                "--slds-g-font-weight-4",
                 "--slds-g-spacing-4"
             ],
             "siteTokens": [],
@@ -684,6 +686,58 @@ export const COMPOSITIONS = [
             "important": 0
         },
         "htmlLines": 133
+    },
+    {
+        "name": "jobOutcomeForm",
+        "tag": "ui-job-outcome-form",
+        "doc": "The three outcomes, worded as the design has them (Figma 570:99727).",
+        "composes": [
+            "lightning-button",
+            "lightning-textarea"
+        ],
+        "wraps": [
+            "ui-radio-box-group"
+        ],
+        "blueprints": [],
+        "sepClasses": [],
+        "hasCss": false,
+        "css": null,
+        "htmlLines": 37
+    },
+    {
+        "name": "jobSummary",
+        "tag": "ui-job-summary",
+        "doc": "A vacancy at a glance — title, subtitle, status and who/when — for a page\nthat is ABOUT the vacancy but is not its record page: the set-outcome page\n(Figma 570:99727). The record page has the Manage Job header instead.\n\nPresentational: the page fetches and passes the job down. Boxed like the\nManage Job header — `slds-page-header` + `slds-box`, no project CSS — and its\nwho/when lines come from the same `jobMetaItems`, so the two never differ.",
+        "composes": [
+            "lightning-icon",
+            "lightning-layout",
+            "lightning-layout-item"
+        ],
+        "wraps": [],
+        "blueprints": [
+            "pageHeader"
+        ],
+        "sepClasses": [],
+        "hasCss": false,
+        "css": null,
+        "htmlLines": 28
+    },
+    {
+        "name": "keepJobActiveModal",
+        "tag": "ui-keep-job-active-modal",
+        "doc": "\"Keep job active\" — asked when an employer closes a vacancy because they did\nnot find anyone (Figma 570:100221). Offers MSD's help before the vacancy\ncloses.\n\nThe shipped `LightningModal`, subclassed only to set its body copy and its\ntwo buttons — `LightningConfirm` fixes its buttons to OK / Cancel, and the\ndesign names them. Open with\n`KeepJobActiveModal.open({ label: 'Keep job active', size: 'small' })`.\n\nResolves to `'keep'`, `'close'`, or `undefined` when dismissed with the ×\n(treated as \"changed my mind\" — nothing happens).\n\nShadow DOM, as every LightningModal is: SLDS utility classes would be inert\nin here, so the template uses none.",
+        "composes": [
+            "lightning-button",
+            "lightning-modal-body",
+            "lightning-modal-footer",
+            "lightning-modal-header"
+        ],
+        "wraps": [],
+        "blueprints": [],
+        "sepClasses": [],
+        "hasCss": false,
+        "css": null,
+        "htmlLines": 11
     },
     {
         "name": "kitchenSink",
@@ -963,9 +1017,13 @@ export const COMPOSITIONS = [
         "tag": "ui-token-browser",
         "doc": "Set on the one preview shape this row uses, so the template can pick.",
         "composes": [
-            "lightning-button",
             "lightning-card",
-            "lightning-input"
+            "lightning-input",
+            "lightning-layout",
+            "lightning-layout-item",
+            "lightning-vertical-navigation",
+            "lightning-vertical-navigation-item-badge",
+            "lightning-vertical-navigation-section"
         ],
         "wraps": [],
         "blueprints": [],
@@ -997,7 +1055,7 @@ export const COMPOSITIONS = [
             "rawColors": [],
             "important": 0
         },
-        "htmlLines": 134
+        "htmlLines": 172
     },
     {
         "name": "vacancyCard",

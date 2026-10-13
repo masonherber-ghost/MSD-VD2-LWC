@@ -87,15 +87,14 @@ export interface VacancyAction {
  * The vacancy actions this app offers, named once. Labels and icons are the
  * vacancy card design's flyout menu (Figma 445:39792).
  *
- * Withdraw and Set job filled both end a live vacancy; they are two actions
- * because they say different things about why it ended.
+ * A published vacancy ends through one action, Close job, which opens the
+ * set-outcome page (`setOutcomeHref`) — the outcome is chosen there.
  */
 const PREVIEW: VacancyAction = { key: 'preview', label: 'Preview job', icon: 'utility:preview' };
 const EDIT: VacancyAction = { key: 'edit', label: 'Edit job', icon: 'utility:edit' };
 const SUBMIT: VacancyAction = { key: 'submit', label: 'Submit for review', icon: 'utility:upload' };
 const DISCARD: VacancyAction = { key: 'discard', label: 'Discard job', icon: 'utility:delete' };
-const WITHDRAW: VacancyAction = { key: 'withdraw', label: 'Withdraw job', icon: 'utility:close' };
-const FILLED: VacancyAction = { key: 'filled', label: 'Set job filled', icon: 'utility:fill_rate' };
+const CLOSE: VacancyAction = { key: 'close', label: 'Close job', icon: 'utility:close' };
 
 /**
  * What an employer may do to a vacancy, by lifecycle state — the design's
@@ -115,7 +114,7 @@ export function actionsFor(status: string): VacancyAction[] {
         case 'in_review':
             return [PREVIEW];
         case 'active':
-            return [PREVIEW, WITHDRAW, FILLED];
+            return [PREVIEW, CLOSE];
         case 'closed':
             return [PREVIEW, DISCARD];
         // A state the lifecycle does not name is one whose transitions are
@@ -202,4 +201,43 @@ export function statusThemeClass(status: string): string {
         default:
             return 'slds-badge';
     }
+}
+
+/** The set-outcome page for a vacancy — where Close job leads. */
+export function setOutcomeHref(id: unknown): string {
+    return `/jobs/set-outcome?id=${encodeURIComponent(String(id ?? ''))}`;
+}
+
+export interface JobMetaItem {
+    key: string;
+    icon: string;
+    text: string;
+}
+
+/**
+ * Who and when, by state — shared by the Manage Job header and the job
+ * summary on the set-outcome page, so both say the same thing:
+ *   draft      Managed by
+ *   in review  Managed by · Close date
+ *   published  Managed by · Published · Close date
+ *   closed     Managed by · Closed
+ *
+ * Only lines the record holds. `posted_date` and `closing_date` are free text
+ * ("Recently posted", "Next Month"), shown as the record words them.
+ */
+export function jobMetaItems(job: Record<string, unknown>, creatorName: string): JobMetaItem[] {
+    const status = String(job.status ?? '');
+    const posted = String(job.posted_date ?? '').trim();
+    const closes = closingText(status, job.closing_date);
+
+    const items: JobMetaItem[] = [];
+    const push = (key: string, icon: string, text: string) => {
+        if (text.trim()) items.push({ key, icon, text });
+    };
+    push('owner', 'utility:user', creatorName ? `Managed by ${creatorName}` : '');
+    if (status === 'active') push('posted', 'utility:event', posted);
+    if (status === 'in_review' || status === 'active' || status === 'closed') {
+        push('closes', 'utility:event', closes);
+    }
+    return items;
 }

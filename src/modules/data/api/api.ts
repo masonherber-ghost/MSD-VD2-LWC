@@ -138,6 +138,9 @@ export const api = {
     jobs: (accountId: number, filters: { status?: string; contact_id?: number } = {}) =>
         request<Record<string, unknown>[]>(`/jobs${query({ account_id: accountId, ...filters })}`),
     job: (id: number) => request<Record<string, unknown>>(`/jobs/${id}`),
+    /** Close a published vacancy. 400 if it is not published. */
+    closeJob: (id: number) =>
+        request<Record<string, unknown>>(`/jobs/${id}/close`, { method: 'POST' }),
 
     candidates: (accountId: number, filters: { status?: string } = {}) =>
         request<Record<string, unknown>[]>(

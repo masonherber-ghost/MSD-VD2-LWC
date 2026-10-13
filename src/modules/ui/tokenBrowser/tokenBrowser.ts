@@ -88,13 +88,21 @@ export default class TokenBrowser extends LightningElement {
         return this.section === 'hooks';
     }
 
-    get familyTabs(): { key: string; label: string; count: number; variant: string }[] {
-        return FAMILIES.map((f) => ({
-            key: f.family,
-            label: f.family,
-            count: f.tokens.length,
-            variant: f.family === this.family ? 'brand' : 'neutral'
-        }));
+    /** The menu's SLDS families. `project` is the menu's other entry. */
+    get familyNav(): { key: string; label: string; count: number }[] {
+        return FAMILIES.map((f) => ({ key: f.family, label: f.family, count: f.tokens.length }));
+    }
+
+    get projectCount(): number {
+        return this.projectTokens.length;
+    }
+
+    get isProject(): boolean {
+        return this.family === 'project';
+    }
+
+    get familyTitle(): string {
+        return `${this.currentFamily.family} — SLDS global tokens`;
     }
 
     get currentFamily(): Family {
@@ -142,13 +150,21 @@ export default class TokenBrowser extends LightningElement {
         return shown === total ? `${total} tokens` : `${shown} of ${total} tokens`;
     }
 
-    get hookTabs(): { key: string; label: string; count: number; variant: string }[] {
+    /** The menu's components. `private` is the menu's other entry. */
+    get hookNav(): { key: string; label: string; count: number }[] {
         return (COMPONENT_HOOKS as { component: string; tokens: Token[] }[]).map((c) => ({
             key: c.component,
             label: c.component,
-            count: c.tokens.length,
-            variant: c.component === this.hookComponent ? 'brand' : 'neutral'
+            count: c.tokens.length
         }));
+    }
+
+    get isPrivate(): boolean {
+        return this.hookComponent === 'private';
+    }
+
+    get hookTitle(): string {
+        return `${this.hookComponent} — component hooks`;
     }
 
     get hookRows(): { key: string; name: string }[] {
@@ -158,12 +174,14 @@ export default class TokenBrowser extends LightningElement {
         return (c?.tokens ?? []).map((t) => ({ key: t.name, name: t.name }));
     }
 
-    handleFamily(event: Event): void {
-        this.family = (event.currentTarget as HTMLElement).dataset.value as string;
+    /** `lightning-vertical-navigation` reports the chosen item's `name`. */
+    handleCategorySelect(event: CustomEvent): void {
+        this.family = (event.detail as { name: string }).name;
+        this.query = '';
     }
 
-    handleHookComponent(event: Event): void {
-        this.hookComponent = (event.currentTarget as HTMLElement).dataset.value as string;
+    handleHookSelect(event: CustomEvent): void {
+        this.hookComponent = (event.detail as { name: string }).name;
     }
 
     handleSearch(event: Event): void {

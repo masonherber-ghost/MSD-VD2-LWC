@@ -1,0 +1,11 @@
+<template>
+    <lightning-modal-header label="Keep job active"></lightning-modal-header>
+    <lightning-modal-body>
+        <p><strong>Would you like us to help you find more candidates for this job?</strong></p>
+        <p>Keep this job active so we can help you find more candidates for this job. We'll reach out within the next 48hrs.</p>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button label="Close job" onclick={handleClose}></lightning-button>
+        <lightning-button variant="brand" label="Keep job active" onclick={handleKeep}></lightning-button>
+    </lightning-modal-footer>
+</template>

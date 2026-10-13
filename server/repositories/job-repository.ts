@@ -2,6 +2,7 @@ import type { Statement } from 'better-sqlite3'
 import { db } from '../database.ts'
 import { applyUpdate, groupBy, parseJsonArray, placeholders } from '../lib/sql.ts'
 import { iconForJobType } from '../lib/job-icons.ts'
+import { DomainError } from './account-repository.ts'
 import type {
   Job, JobDetail, JobDriverLicence, JobLanguage, JobListItem, JobSchedule, JobStatus,
 } from '../types.ts'
@@ -288,6 +289,37 @@ export function update(id: number, input: Record<string, unknown>): JobDetail | 
 
     applyUpdate('jobs', id, toPatch(input), UPDATABLE)
     writeChildren(id, input as ChildInput)
+    return true
+  })
+
+  return run() ? findById(id) : null
+}
+
+/**
+ * Close a vacancy. Not called yet: the prototype's "Close job" flow
+ * (/jobs/set-outcome) leaves the status as it is. Here for when closing is real.
+ *
+ * Only a PUBLISHED vacancy (`active`) can be closed: a draft is discarded, not
+ * closed, and one in review is with MSD. That is a business rule, so it lives
+ * here and the route turns it into a 400 — the UI offering "Close job" only on
+ * a published card is a convenience, not the control.
+ *
+ * The employer's outcome (filled / partly filled / not filled) and their
+ * details are NOT stored: the `jobs` table has no column for them. Adding one
+ * is a schema decision, raised rather than made here.
+ *
+ * Returns null when there is no such vacancy.
+ */
+export function close(id: number): JobDetail | null {
+  const run = db.transaction((): boolean | null => {
+    const row = db.prepare('SELECT status FROM jobs WHERE id = ?').get(id) as
+      | { status: JobStatus }
+      | undefined
+    if (!row) return null
+    if (row.status !== 'active') {
+      throw new DomainError('Only a published vacancy can be closed.')
+    }
+    applyUpdate('jobs', id, { status: 'closed' }, UPDATABLE)
     return true
   })
 

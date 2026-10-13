@@ -55,6 +55,12 @@
       "layoutTemplate": "$layoutsDir/main.njk"
     },
     {
+      "id": "setOutcome",
+      "path": "/jobs/set-outcome",
+      "rootComponent": "example/setOutcome",
+      "layoutTemplate": "$layoutsDir/main.njk"
+    },
+    {
       "id": "createJobStep2",
       "path": "/create-job/step2",
       "rootComponent": "example/createJobStep2",

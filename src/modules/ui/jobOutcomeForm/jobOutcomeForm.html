@@ -1,0 +1,40 @@
+<template lwc:render-mode="light">
+    <div id="job-outcome-form">
+        <h2 id="job-outcome-heading" class="slds-m-bottom_small">Close this job</h2>
+        <p id="job-outcome-intro" class="slds-m-bottom_large">
+            Submitting this form will not automatically close the job listing. It will send a
+            notification to us so we can either close the job and notify the applicants, or help
+            you find other candidates.
+        </p>
+
+        <div class="slds-m-bottom_large">
+            <ui-radio-box-group
+                id="job-outcome-reason"
+                name="job-outcome-reason"
+                legend="Why are you closing this job?"
+                options={outcomes}
+                value={outcome}
+                required
+                onchange={handleOutcome}
+            ></ui-radio-box-group>
+        </div>
+
+        <lightning-textarea
+            id="job-outcome-details"
+            label="Share more details with us"
+            placeholder="Please provide some details so that we can help ensure the applicants are supported and you have what you need."
+            value={details}
+            onchange={handleDetails}
+        ></lightning-textarea>
+
+        <div class="slds-grid slds-grid_align-end slds-m-top_medium">
+            <lightning-button
+                id="job-outcome-submit-button"
+                variant="brand"
+                label="Submit"
+                disabled={submitDisabled}
+                onclick={handleSubmit}
+            ></lightning-button>
+        </div>
+    </div>
+</template>

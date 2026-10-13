@@ -6,4 +6,12 @@
  * class on its host; every other card keeps the default. */
 .job-listing-preview__about-card {
     --slds-c-card-header-spacing-block-start: var(--slds-g-spacing-4);
+
+    /* The title's weight. A slotted title inherits from the card's own <h2>,
+     * which the card makes bold (`[part='title'] h2` reads this hook, falling
+     * back to --slds-g-font-weight-7). Every other heading on the page gets the
+     * SLDS reset's `font-weight: inherit` from the body — 400 — so the hook is
+     * set to that. `inherit` would not do: the card's header part is bold too,
+     * with no hook. */
+    --slds-c-card-heading-font-weight: var(--slds-g-font-weight-4);
 }

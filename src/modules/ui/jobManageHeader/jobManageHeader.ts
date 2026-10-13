@@ -4,7 +4,7 @@ import { isEnabled, type Release } from 'data/release';
 import {
     JOB_STATUS_LABELS,
     actionsFor,
-    closingText,
+    jobMetaItems,
     statusThemeClass
 } from 'data/vacancyRules';
 
@@ -68,34 +68,9 @@ export default class JobManageHeader extends LightningElement {
         return isEnabled('jobs.applicantCount', this.release);
     }
 
-    /**
-     * Who and when, by state — the design's lines (Figma 570:93671):
-     *   draft      Managed by
-     *   in review  Managed by · Close date
-     *   published  Managed by · Published · Close date
-     *   closed     Managed by · Closed
-     *
-     * Only lines the record holds. The design's "Publish date" for a vacancy
-     * in review has no column behind it, so it is not shown. `posted_date` and
-     * `closing_date` are free text ("Recently posted", "Next Month"), shown as
-     * the record words them — not reformatted to dd/mm/yy.
-     */
+    /** Who and when, by state — `jobMetaItems` in `data/vacancyRules`. */
     get metaItems(): MetaItem[] {
-        const job = this.job ?? {};
-        const status = this.status;
-        const posted = String(job.posted_date ?? '').trim();
-        const closes = closingText(status, job.closing_date);
-
-        const items: MetaItem[] = [];
-        const push = (key: string, icon: string, text: string) => {
-            if (text.trim()) items.push({ key, icon, text });
-        };
-        push('owner', 'utility:user', this.creatorName ? `Managed by ${this.creatorName}` : '');
-        if (status === 'active') push('posted', 'utility:event', posted);
-        if (status === 'in_review' || status === 'active' || status === 'closed') {
-            push('closes', 'utility:event', closes);
-        }
-        return items;
+        return jobMetaItems(this.job ?? {}, this.creatorName);
     }
 
     get tags(): { key: string; label: string }[] {

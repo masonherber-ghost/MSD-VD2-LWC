@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { HttpError } from '../middleware/error-handler.ts'
 import { parseEnum, parseId, parseOptionalId } from '../lib/http.ts'
 import * as jobRepository from '../repositories/job-repository.ts'
+import { DomainError } from '../repositories/account-repository.ts'
 import type { JobStatus } from '../types.ts'
 
 export const jobsRouter = Router()
@@ -40,5 +41,22 @@ jobsRouter.get('/:id', (req, res, next) => {
     res.json(job)
   } catch (e) {
     next(e)
+  }
+})
+
+/**
+ * Close a published vacancy. The repository enforces that only `active` can
+ * close; breaking that rule is the caller's mistake, so it is a 400.
+ */
+jobsRouter.post('/:id/close', (req, res, next) => {
+  try {
+    const job = jobRepository.close(parseId(req.params.id))
+    if (!job) {
+      next(new HttpError(404, 'Job not found.'))
+      return
+    }
+    res.json(job)
+  } catch (e) {
+    next(e instanceof DomainError ? new HttpError(400, e.message) : e)
   }
 })

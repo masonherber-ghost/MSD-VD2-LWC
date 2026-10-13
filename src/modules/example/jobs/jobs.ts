@@ -15,6 +15,7 @@ import {
     closingText,
     filterJobs,
     noActionsReason,
+    setOutcomeHref,
     statusThemeClass
 } from 'data/vacancyRules';
 
@@ -167,7 +168,7 @@ export default class Jobs extends LightningElement {
             const actions: MenuItem[] = actionsFor(status).map((a) => ({
                 ...a,
                 disabled: false,
-                href: a.key === 'preview' ? href : undefined
+                href: a.key === 'preview' ? href : a.key === 'close' ? setOutcomeHref(j.id) : undefined
             }));
             if (!actions.length) {
                 actions.push({ key: 'none', label: noActionsReason(status), icon: '', disabled: true });

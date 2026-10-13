@@ -1,0 +1,29 @@
+<template lwc:render-mode="light">
+    <div id="job-summary" class="slds-page-header slds-box slds-m-bottom_large">
+        <lightning-layout id="job-summary-title-row" multiple-rows vertical-align="center" pull-to-boundary="small">
+            <lightning-layout-item id="job-summary-col-title" size="12" medium-device-size="8" padding="around-small">
+                <h1 id="job-summary-title" class="slds-page-header__title">{title}</h1>
+                <p lwc:if={subtitle} id="job-summary-subtitle" class="slds-m-top_xx-small">{subtitle}</p>
+            </lightning-layout-item>
+            <lightning-layout-item id="job-summary-col-status" size="12" medium-device-size="4" padding="around-small">
+                <div id="job-summary-status-group" class="slds-grid slds-grid_align-end slds-grid_vertical-align-center">
+                    <span id="job-summary-status-label">Status</span>
+                    <span id="job-summary-status" class={statusClass}>{statusLabel}</span>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+
+        <!-- Who and when. One row of media objects that wraps: SLDS grid and
+             utilities only, no stylesheet. -->
+        <ul id="job-summary-meta" class="slds-grid slds-wrap slds-m-top_x-small">
+            <template for:each={metaItems} for:item="item">
+                <li key={item.key} class="slds-media slds-media_center slds-m-right_large slds-m-bottom_x-small">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name={item.icon} size="x-small"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">{item.text}</div>
+                </li>
+            </template>
+        </ul>
+    </div>
+</template>

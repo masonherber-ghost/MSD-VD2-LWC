@@ -1,8 +1,11 @@
 import { LightningElement } from 'lwc';
+import Toast from 'lightning/toast';
 import api, { ApiError, DEV_ACCOUNT_ID, type Row } from 'data/api';
 import { iconUrl } from 'data/jobIcons';
 import { currentAccountId } from 'data/session';
 import { startFromJob } from 'data/jobDraft';
+import { takeFlash } from 'data/flash';
+import { setOutcomeHref } from 'data/vacancyRules';
 import {
     currentRelease,
     isEnabled,
@@ -92,6 +95,14 @@ export default class JobDetail extends LightningElement {
     private unsubRelease: (() => void) | null = null;
 
     async connectedCallback(): Promise<void> {
+        // A confirmation raised by the route that sent us here — the
+        // set-outcome page's "closed" or "keep active" message. Shown once;
+        // `takeFlash` clears as it reads. See `data/flash`.
+        const flash = takeFlash();
+        if (flash) {
+            Toast.show(flash, this);
+        }
+
         this.unsubRelease = onReleaseChange(() => {
             this.release = currentRelease();
         });
@@ -134,6 +145,17 @@ export default class JobDetail extends LightningElement {
      * the URL as well as in the draft so step 2 can tell a real edit from a
      * stale draft left in this tab. See `data/jobDraft`.
      */
+    /**
+     * The header's other actions. Close job opens the set-outcome page, where
+     * the employer says why; the rest are still unwired.
+     */
+    handleAction(event: CustomEvent): void {
+        const value = (event.detail as { value?: string })?.value;
+        if (value === 'close' && this.job) {
+            window.location.assign(setOutcomeHref(this.job.id));
+        }
+    }
+
     handleEdit(): void {
         if (!this.job) {
             return;

@@ -1,0 +1,63 @@
+<template lwc:render-mode="light">
+    <ui-site-header id="set-outcome-site-header" current="jobs"></ui-site-header>
+
+    <div class="site__body" id="set-outcome-body">
+        <main class="site__main" id="set-outcome-main">
+            <!-- The same measure as the record page: full width below the large
+                 breakpoint, 10 of 12 columns from it up. -->
+            <lightning-layout id="set-outcome-page-layout" horizontal-align="center">
+                <lightning-layout-item id="set-outcome-page-column" size="12" large-device-size="10">
+                    <div lwc:if={loading} id="set-outcome-loading" class="slds-is-relative slds-p-around_xx-large">
+                        <lightning-spinner id="set-outcome-spinner" alternative-text="Loading vacancy" size="small"></lightning-spinner>
+                    </div>
+
+                    <div lwc:elseif={hasError} id="set-outcome-error">
+                        <ui-alert variant="error" message={error}></ui-alert>
+                    </div>
+
+                    <div lwc:elseif={notFound} id="set-outcome-not-found">
+                        <ui-alert variant="warning" message="That vacancy could not be found on your account."></ui-alert>
+                    </div>
+
+                    <template lwc:elseif={hasJob}>
+                        <lightning-breadcrumbs id="set-outcome-breadcrumbs" class="slds-m-bottom_small">
+                            <lightning-breadcrumb id="set-outcome-breadcrumb-home" label="Home" href="/"></lightning-breadcrumb>
+                            <lightning-breadcrumb id="set-outcome-breadcrumb-jobs" label="My jobs" href="/jobs"></lightning-breadcrumb>
+                            <lightning-breadcrumb id="set-outcome-breadcrumb-record" label={title} href={recordHref}></lightning-breadcrumb>
+                            <lightning-breadcrumb id="set-outcome-breadcrumb-current" label="Close job"></lightning-breadcrumb>
+                        </lightning-breadcrumbs>
+
+                        <div class="slds-m-bottom_small">
+                            <lightning-button
+                                id="set-outcome-back-button"
+                                variant="base"
+                                icon-name="utility:chevronleft"
+                                label="Back to job"
+                                onclick={handleBack}
+                            ></lightning-button>
+                        </div>
+
+                        <ui-job-summary id="set-outcome-summary" job={job} creator-name={creatorName}></ui-job-summary>
+
+                        <!-- The form sits in the left 8 of 12, as the design has it. -->
+                        <lightning-layout id="set-outcome-form-layout" multiple-rows>
+                            <lightning-layout-item id="set-outcome-col-form" size="12" medium-device-size="8">
+                                <ui-job-outcome-form
+                                    lwc:if={isPublished}
+                                    id="set-outcome-form"
+                                    onsubmit={handleSubmit}
+                                ></ui-job-outcome-form>
+
+                                <div lwc:else id="set-outcome-not-published">
+                                    <ui-alert variant="info" message="Only a published job can be closed. This one is not published." static-message></ui-alert>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </template>
+                </lightning-layout-item>
+            </lightning-layout>
+        </main>
+    </div>
+
+    <ui-site-footer></ui-site-footer>
+</template>

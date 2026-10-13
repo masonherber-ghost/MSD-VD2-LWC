@@ -1,139 +1,179 @@
 <template lwc:render-mode="light">
     <!-- One component, two tabs. `section` decides which half renders, so the
-         generated data is read in one place instead of two. -->
+         generated data is read in one place instead of two.
+
+         Both halves use the same pattern as the Components and Blueprints
+         tabs: a category menu on the left, that category on the right. The
+         menu is the shipped `lightning-vertical-navigation`, with each
+         category's count as its badge — no hand-built rail, no new CSS. -->
     <template lwc:if={isTokens}>
-        <!-- Ours first: two tokens, and the only ones this project defines. -->
-        <lightning-card title="Project tokens" icon-name="standard:custom" class="slds-m-bottom_medium">
-            <div class="slds-p-horizontal_medium">
-                <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
-                    Defined in <code>src/assets/css/design-tokens.css</code>. Everything below
-                    ships with SLDS; what you may set on a component is under
-                    <strong>Component hooks</strong>.
-                </p>
-                <table class="slds-table slds-table_bordered slds-table_col-bordered">
-                    <thead>
-                        <tr class="slds-line-height_reset">
-                            <th scope="col"><div class="slds-truncate">Token</div></th>
-                            <th scope="col"><div class="slds-truncate">Base value</div></th>
-                            <th scope="col"><div class="slds-truncate">Steps at breakpoints</div></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <template for:each={projectTokens} for:item="t">
-                            <tr key={t.key} class="slds-hint-parent" data-token={t.name}>
-                                <th scope="row"><code>{t.name}</code></th>
-                                <td>
-                                    <code>{t.value}</code>
-                                    <div class="slds-text-body_small slds-text-color_weak">
-                                        resolves to <span data-computed>—</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <template lwc:if={t.hasSteps}>
-                                        <template for:each={t.stepList} for:item="s">
-                                            <div key={s.key}><code>{s.value}</code></div>
-                                        </template>
-                                    </template>
-                                    <template lwc:else>—</template>
-                                </td>
-                            </tr>
+        <lightning-layout id="token-browser-tokens-layout" multiple-rows pull-to-boundary="small">
+            <lightning-layout-item id="token-browser-tokens-rail" size="12" medium-device-size="4" large-device-size="3" padding="around-small">
+                <lightning-vertical-navigation selected-item={family} onselect={handleCategorySelect} compact>
+                    <lightning-vertical-navigation-section label="This project">
+                        <lightning-vertical-navigation-item-badge
+                            label="--site-*"
+                            name="project"
+                            badge-count={projectCount}
+                            assistive-text="tokens"
+                        ></lightning-vertical-navigation-item-badge>
+                    </lightning-vertical-navigation-section>
+                    <lightning-vertical-navigation-section label="SLDS global tokens">
+                        <template for:each={familyNav} for:item="item">
+                            <lightning-vertical-navigation-item-badge
+                                key={item.key}
+                                label={item.label}
+                                name={item.key}
+                                badge-count={item.count}
+                                assistive-text="tokens"
+                            ></lightning-vertical-navigation-item-badge>
                         </template>
-                    </tbody>
-                </table>
-            </div>
-        </lightning-card>
+                    </lightning-vertical-navigation-section>
+                </lightning-vertical-navigation>
+            </lightning-layout-item>
 
-        <!-- SLDS global tokens, by family. -->
-        <lightning-card title="SLDS global tokens" icon-name="standard:palette" class="slds-m-bottom_medium">
-            <div class="slds-p-horizontal_medium">
-                <div class="token-browser__tabs slds-grid slds-wrap slds-m-bottom_small">
-                    <template for:each={familyTabs} for:item="tab">
-                        <lightning-button
-                            key={tab.key}
-                            data-value={tab.key}
-                            label={tab.label}
-                            variant={tab.variant}
-                            onclick={handleFamily}
-                            class="slds-m-right_x-small slds-m-bottom_x-small"
-                        ></lightning-button>
-                    </template>
-                </div>
+            <lightning-layout-item id="token-browser-tokens-detail" size="12" medium-device-size="8" large-device-size="9" padding="around-small">
+                <!-- Ours: the only tokens this project defines. -->
+                <template lwc:if={isProject}>
+                <lightning-card id="token-browser-project-card" title="Project tokens" icon-name="standard:custom">
+                    <div class="slds-p-horizontal_medium">
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                            Defined in <code>src/assets/css/design-tokens.css</code>. Every other
+                            family in the menu ships with SLDS; what you may set on a component is under
+                            <strong>Component hooks</strong>.
+                        </p>
+                        <table class="slds-table slds-table_bordered slds-table_col-bordered">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col"><div class="slds-truncate">Token</div></th>
+                                    <th scope="col"><div class="slds-truncate">Base value</div></th>
+                                    <th scope="col"><div class="slds-truncate">Steps at breakpoints</div></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={projectTokens} for:item="t">
+                                    <tr key={t.key} class="slds-hint-parent" data-token={t.name}>
+                                        <th scope="row"><code>{t.name}</code></th>
+                                        <td>
+                                            <code>{t.value}</code>
+                                            <div class="slds-text-body_small slds-text-color_weak">
+                                                resolves to <span data-computed>—</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <template lwc:if={t.hasSteps}>
+                                                <template for:each={t.stepList} for:item="s">
+                                                    <div key={s.key}><code>{s.value}</code></div>
+                                                </template>
+                                            </template>
+                                            <template lwc:else>—</template>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </lightning-card>
+                </template>
 
-                <div class="token-browser__search slds-m-bottom_small">
-                    <lightning-input
-                        type="search"
-                        label="Filter tokens"
-                        variant="label-hidden"
-                        placeholder="Filter by name…"
-                        value={query}
-                        onchange={handleSearch}
-                    ></lightning-input>
-                    <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
-                        {rowCount}
-                    </p>
-                </div>
+                <!-- One SLDS global family. -->
+                <lightning-card lwc:else id="token-browser-family-card" title={familyTitle} icon-name="standard:palette">
+                    <div class="slds-p-horizontal_medium">
+                        <div class="token-browser__search slds-m-bottom_small">
+                            <lightning-input
+                                type="search"
+                                label="Filter tokens"
+                                variant="label-hidden"
+                                placeholder="Filter by name…"
+                                value={query}
+                                onchange={handleSearch}
+                            ></lightning-input>
+                            <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                                {rowCount}
+                            </p>
+                        </div>
 
-                <ul class="slds-has-dividers_bottom-space">
-                    <template for:each={rows} for:item="row">
-                        <li key={row.key} class="slds-item" data-token={row.name}>
-                            <div class="slds-grid slds-grid_vertical-align-center slds-wrap">
-                                <div class="token-browser__preview slds-m-right_small">
-                                    <span lwc:if={row.isSwatch} class="token-browser__swatch" style={row.style}></span>
-                                    <span lwc:elseif={row.isBar} class="token-browser__bar" style={row.style}></span>
-                                    <span lwc:elseif={row.isRadius} class="token-browser__radius" style={row.style}></span>
-                                    <span lwc:elseif={row.isShadow} class="token-browser__shadow" style={row.style}></span>
-                                    <span lwc:elseif={row.isText} class="token-browser__text" style={row.style}>Aa</span>
-                                </div>
-                                <div class="token-browser__name">
-                                    <code>{row.name}</code>
-                                    <div class="slds-text-body_small slds-text-color_weak">
-                                        <span data-computed>—</span>
+                        <ul class="slds-has-dividers_bottom-space">
+                            <template for:each={rows} for:item="row">
+                                <li key={row.key} class="slds-item" data-token={row.name}>
+                                    <div class="slds-grid slds-grid_vertical-align-center slds-wrap">
+                                        <div class="token-browser__preview slds-m-right_small">
+                                            <span lwc:if={row.isSwatch} class="token-browser__swatch" style={row.style}></span>
+                                            <span lwc:elseif={row.isBar} class="token-browser__bar" style={row.style}></span>
+                                            <span lwc:elseif={row.isRadius} class="token-browser__radius" style={row.style}></span>
+                                            <span lwc:elseif={row.isShadow} class="token-browser__shadow" style={row.style}></span>
+                                            <span lwc:elseif={row.isText} class="token-browser__text" style={row.style}>Aa</span>
+                                        </div>
+                                        <div class="token-browser__name">
+                                            <code>{row.name}</code>
+                                            <div class="slds-text-body_small slds-text-color_weak">
+                                                <span data-computed>—</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </li>
-                    </template>
-                </ul>
-            </div>
-        </lightning-card>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </lightning-card>
+            </lightning-layout-item>
+        </lightning-layout>
     </template>
 
     <template lwc:if={isHooks}>
-        <!-- Component hooks: what you may set on a shipped component. -->
-        <lightning-card title="SLDS component hooks" icon-name="standard:settings" class="slds-m-bottom_medium">
-            <div class="slds-p-horizontal_medium">
-                <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
-                    Set these on a component to restyle it within the design system. Anything not
-                    listed here is not yours to change.
-                </p>
-                <div class="token-browser__tabs slds-grid slds-wrap slds-m-bottom_small">
-                    <template for:each={hookTabs} for:item="tab">
-                        <lightning-button
-                            key={tab.key}
-                            data-value={tab.key}
-                            label={tab.label}
-                            variant={tab.variant}
-                            onclick={handleHookComponent}
-                            class="slds-m-right_x-small slds-m-bottom_x-small"
-                        ></lightning-button>
-                    </template>
-                </div>
-                <ul class="slds-has-dividers_bottom-space">
-                    <template for:each={hookRows} for:item="row">
-                        <li key={row.key} class="slds-item"><code>{row.name}</code></li>
-                    </template>
-                </ul>
-            </div>
-        </lightning-card>
+        <lightning-layout id="token-browser-hooks-layout" multiple-rows pull-to-boundary="small">
+            <lightning-layout-item id="token-browser-hooks-rail" size="12" medium-device-size="4" large-device-size="3" padding="around-small">
+                <lightning-vertical-navigation selected-item={hookComponent} onselect={handleHookSelect} compact>
+                    <lightning-vertical-navigation-section label="Component hooks">
+                        <template for:each={hookNav} for:item="item">
+                            <lightning-vertical-navigation-item-badge
+                                key={item.key}
+                                label={item.label}
+                                name={item.key}
+                                badge-count={item.count}
+                                assistive-text="hooks"
+                            ></lightning-vertical-navigation-item-badge>
+                        </template>
+                    </lightning-vertical-navigation-section>
+                    <lightning-vertical-navigation-section label="Off limits">
+                        <lightning-vertical-navigation-item-badge
+                            label="Private --_slds-*"
+                            name="private"
+                            badge-count={privateCount}
+                            assistive-text="hooks"
+                        ></lightning-vertical-navigation-item-badge>
+                    </lightning-vertical-navigation-section>
+                </lightning-vertical-navigation>
+            </lightning-layout-item>
 
-        <lightning-card title="Private hooks — off limits" icon-name="standard:first_non_empty">
-            <div class="slds-p-horizontal_medium">
-                <p class="slds-text-body_small slds-text-color_weak">
-                    {privateCount} names beginning <code>--_slds-</code> exist in the stylesheet. The
-                    leading underscore is the contract: internal, undocumented, and free to change
-                    without notice. Setting one is a customisation, not a supported override.
-                </p>
-            </div>
-        </lightning-card>
+            <lightning-layout-item id="token-browser-hooks-detail" size="12" medium-device-size="8" large-device-size="9" padding="around-small">
+                <template lwc:if={isPrivate}>
+                <lightning-card id="token-browser-private-card" title="Private hooks — off limits" icon-name="standard:first_non_empty">
+                    <div class="slds-p-horizontal_medium">
+                        <p class="slds-text-body_small slds-text-color_weak">
+                            {privateCount} names beginning <code>--_slds-</code> exist in the stylesheet. The
+                            leading underscore is the contract: internal, undocumented, and free to change
+                            without notice. Setting one is a customisation, not a supported override.
+                        </p>
+                    </div>
+                </lightning-card>
+                </template>
+
+                <!-- What you may set on one shipped component. -->
+                <lightning-card lwc:else id="token-browser-hooks-card" title={hookTitle} icon-name="standard:settings">
+                    <div class="slds-p-horizontal_medium">
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                            Set these on the component to restyle it within the design system.
+                            Anything not listed here is not yours to change.
+                        </p>
+                        <ul class="slds-has-dividers_bottom-space">
+                            <template for:each={hookRows} for:item="row">
+                                <li key={row.key} class="slds-item"><code>{row.name}</code></li>
+                            </template>
+                        </ul>
+                    </div>
+                </lightning-card>
+            </lightning-layout-item>
+        </lightning-layout>
     </template>
 </template>
