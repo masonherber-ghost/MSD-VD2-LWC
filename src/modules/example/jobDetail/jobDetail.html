@@ -47,8 +47,11 @@
                              closed only (Figma 570:93671): the informational alert,
                              unskinned. The div carries the spacing; a custom element
                              is inline. The design has no rule here, so the old hr went. -->
+                        <div lwc:if={publishError} id="job-detail-publish-error" class="slds-m-bottom_medium">
+                            <ui-alert variant="error" message={publishError}></ui-alert>
+                        </div>
                         <div lwc:if={stateNotice} id="job-detail-state-notice" class="slds-m-bottom_medium">
-                            <ui-alert variant="info" message={stateNotice} static-message></ui-alert>
+                            <ui-alert variant={stateNoticeVariant} message={stateNotice} static-message></ui-alert>
                         </div>
 
                         <!-- Path ------------------------------------------------------>

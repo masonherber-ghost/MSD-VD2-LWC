@@ -8,6 +8,11 @@
     <div lwc:if={card.isInReview} class="slds-m-bottom_x-small">
         <ui-alert variant="info" message={card.reviewNotice} static-message></ui-alert>
     </div>
+    <!-- MSD has reviewed and changed it: the employer has to act, so the
+         warning alert (Figma 570:102296). -->
+    <div lwc:elseif={card.isReviewed} class="slds-m-bottom_x-small">
+        <ui-alert variant="warning" message={card.reviewedNotice} static-message></ui-alert>
+    </div>
 
     <!-- `lightning-card` exactly as it ships: title, actions, body. Every
          region is filled through the card's own attribute or slot.
@@ -36,7 +41,7 @@
              plain); see `statusThemeClass`. Below 42.688em the card's
              resize-reflow rule drops this under the title; that is the shipped
              behaviour and is left alone. -->
-        <span class={card.statusClass} slot="actions">{card.statusLabel}</span>
+        <span class={card.statusClass} slot="actions"><span lwc:if={card.statusIcon} class="slds-badge__icon slds-badge__icon_left"><lightning-icon icon-name={card.statusIcon} size="xx-small"></lightning-icon></span>{card.statusLabel}</span>
 
         <!-- Body: metadata left, row menu bottom right, the same 10/2 and 9/3
              split `ui/vacancyCard` uses. The body already carries the card's

@@ -141,6 +141,9 @@ export const api = {
     /** Close a published vacancy. 400 if it is not published. */
     closeJob: (id: number) =>
         request<Record<string, unknown>>(`/jobs/${id}/close`, { method: 'POST' }),
+    /** Publish a vacancy with MSD's changes to review. 400 unless `reviewed`. */
+    publishJob: (id: number) =>
+        request<Record<string, unknown>>(`/jobs/${id}/publish`, { method: 'POST' }),
 
     candidates: (accountId: number, filters: { status?: string } = {}) =>
         request<Record<string, unknown>[]>(

@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS jobs (
   campaign_length_weeks  INTEGER DEFAULT 3,
   views                  INTEGER DEFAULT 0,
   status                 TEXT DEFAULT 'draft'
-                           CHECK (status IN ('draft', 'in_review', 'active', 'closed')),
+                           CHECK (status IN ('draft', 'in_review', 'reviewed', 'active', 'closed')),
   created_at             DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at             DATETIME DEFAULT CURRENT_TIMESTAMP
 );

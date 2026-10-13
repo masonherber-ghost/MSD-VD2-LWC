@@ -132,6 +132,7 @@ export default class JobListingPreview extends LightningElement {
             'location-edit-button',
             'facts',
             'description-heading', 'description-edit-button', 'description', 'description-empty',
+            'responsibilities-heading', 'responsibilities',
             'selling-points-heading', 'selling-points-edit-button', 'selling-points', 'selling-points-empty',
             'training-heading', 'training-edit-button', 'training', 'training-empty',
             'checks-heading', 'checks-edit-button', 'checks', 'checks-empty',
@@ -223,6 +224,15 @@ export default class JobListingPreview extends LightningElement {
 
     get hasDescription(): boolean {
         return this.description !== '';
+    }
+
+    /** `job_responsibilities`, which the API returns as `responsibilities`. */
+    get responsibilities(): Chip[] {
+        return chips(this.job.responsibilities, 'resp');
+    }
+
+    get hasResponsibilities(): boolean {
+        return this.responsibilities.length > 0;
     }
 
     get sellingPoints(): Chip[] {

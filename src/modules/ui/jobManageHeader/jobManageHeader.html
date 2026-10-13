@@ -43,7 +43,7 @@
             >
                 <div id="job-header-status-group" class="slds-grid slds-grid_align-end slds-grid_vertical-align-center">
                     <span id="job-header-status-label">Status</span>
-                    <span id="job-header-status" class={statusTagClass}>{statusLabel}</span>
+                    <span id="job-header-status" class={statusTagClass}><span lwc:if={statusIcon} class="slds-badge__icon slds-badge__icon_left"><lightning-icon icon-name={statusIcon} size="xx-small"></lightning-icon></span>{statusLabel}</span>
                 </div>
 
                 <div lwc:if={hasActions} class="slds-grid slds-grid_align-end slds-grid_vertical-align-center slds-m-top_x-small">

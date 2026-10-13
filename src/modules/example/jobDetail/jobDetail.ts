@@ -4,8 +4,9 @@ import api, { ApiError, DEV_ACCOUNT_ID, type Row } from 'data/api';
 import { iconUrl } from 'data/jobIcons';
 import { currentAccountId } from 'data/session';
 import { startFromJob } from 'data/jobDraft';
-import { takeFlash } from 'data/flash';
-import { setOutcomeHref } from 'data/vacancyRules';
+import { setFlash, takeFlash } from 'data/flash';
+import PublishJobModal from 'ui/publishJobModal';
+import { REVIEWED_NOTICE, setOutcomeHref } from 'data/vacancyRules';
 import {
     currentRelease,
     isEnabled,
@@ -153,6 +154,28 @@ export default class JobDetail extends LightningElement {
         const value = (event.detail as { value?: string })?.value;
         if (value === 'close' && this.job) {
             window.location.assign(setOutcomeHref(this.job.id));
+        } else if (value === 'publish') {
+            void this.publish();
+        }
+    }
+
+    /**
+     * Publish job (a `reviewed` vacancy): confirm, then `POST /publish`, which
+     * accepts MSD's changes and makes it live. The page reloads to show the new
+     * state, carrying the toast across with `setFlash` — see `data/flash`.
+     */
+    private async publish(): Promise<void> {
+        if (!this.job) return;
+        const choice = await PublishJobModal.open({ label: 'Publish job listing', size: 'small' });
+        if (choice !== 'publish') return;
+
+        this.publishFailure = '';
+        try {
+            await api.publishJob(Number(this.job.id));
+            setFlash({ label: `${String(this.job.title ?? 'Job')} was published`, variant: 'success' });
+            window.location.assign(this.recordHref);
+        } catch (e) {
+            this.publishFailure = e instanceof ApiError ? e.message : 'Could not publish this job.';
         }
     }
 
@@ -193,12 +216,25 @@ export default class JobDetail extends LightningElement {
         switch (String(this.job?.status ?? '')) {
             case 'in_review':
                 return 'This job is in review. Expect to hear from a staff member within 24hrs.';
+            case 'reviewed':
+                return REVIEWED_NOTICE;
             case 'closed':
                 return 'This job listing is closed or has expired. To list a similar job, select List a job.';
             default:
                 return '';
         }
     }
+
+    /** Reviewed asks the employer to act, so its notice is a warning. */
+    get stateNoticeVariant(): string {
+        return String(this.job?.status ?? '') === 'reviewed' ? 'warning' : 'info';
+    }
+
+    get publishError(): string {
+        return this.publishFailure;
+    }
+
+    publishFailure = '';
 
     get creatorName(): string {
         const row = this.jobs.find((j) => Number(j.id) === Number(this.job?.id));

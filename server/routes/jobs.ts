@@ -7,7 +7,7 @@ import type { JobStatus } from '../types.ts'
 
 export const jobsRouter = Router()
 
-const JOB_STATUSES = ['draft', 'in_review', 'active', 'closed'] as const satisfies readonly JobStatus[]
+const JOB_STATUSES = ['draft', 'in_review', 'reviewed', 'active', 'closed'] as const satisfies readonly JobStatus[]
 
 /**
  * Jobs for an account. `account_id` is required — jobs belong to the company,
@@ -51,6 +51,23 @@ jobsRouter.get('/:id', (req, res, next) => {
 jobsRouter.post('/:id/close', (req, res, next) => {
   try {
     const job = jobRepository.close(parseId(req.params.id))
+    if (!job) {
+      next(new HttpError(404, 'Job not found.'))
+      return
+    }
+    res.json(job)
+  } catch (e) {
+    next(e instanceof DomainError ? new HttpError(400, e.message) : e)
+  }
+})
+
+/**
+ * Publish a vacancy MSD has reviewed: the employer accepting MSD's changes.
+ * Only `reviewed` can be published; anything else is a 400.
+ */
+jobsRouter.post('/:id/publish', (req, res, next) => {
+  try {
+    const job = jobRepository.publish(parseId(req.params.id))
     if (!job) {
       next(new HttpError(404, 'Job not found.'))
       return

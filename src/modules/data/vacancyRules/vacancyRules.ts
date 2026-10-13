@@ -17,23 +17,32 @@
  * and in `JOB_STATUS_LABELS` alike, so a filter and a badge for the same
  * record agree.
  */
-export const JOB_FILTERS: { value: string; label: string; status?: string }[] = [
+export const JOB_FILTERS: { value: string; label: string; status?: string; statuses?: string[] }[] = [
     { value: 'all', label: 'All' },
     { value: 'active', label: 'Published', status: 'active' },
     { value: 'draft', label: 'Drafts', status: 'draft' },
-    { value: 'in_review', label: 'In review', status: 'in_review' },
+    // `reviewed` is still a vacancy in review — MSD's changes await the
+    // employer — so it is found under the same filter.
+    { value: 'in_review', label: 'In review', statuses: ['in_review', 'reviewed'] },
     { value: 'closed', label: 'Closed', status: 'closed' }
 ];
 
 export const JOB_STATUS_LABELS: Record<string, string> = {
     draft: 'Draft',
     in_review: 'In review',
+    reviewed: 'Changes to review',
     active: 'Published',
     closed: 'Closed'
 };
 
-/** `draft` -> `in_review` -> `active` -> `closed`, for sorting by lifecycle. */
-export const JOB_STATUS_ORDER = ['draft', 'in_review', 'active', 'closed'];
+/** `draft` -> `in_review` -> `reviewed` -> `active` -> `closed`, for sorting by lifecycle. */
+export const JOB_STATUS_ORDER = ['draft', 'in_review', 'reviewed', 'active', 'closed'];
+
+/**
+ * Shown on a vacancy MSD has reviewed and changed (`reviewed`): the employer
+ * must look at the changes and publish. The design's copy (Figma 570:102296).
+ */
+export const REVIEWED_NOTICE = "We've made some changes to this job. Please review them before submitting.";
 
 /**
  * Shown on a vacancy the employer has submitted and cannot yet edit.
@@ -63,7 +72,8 @@ export function filterJobs<T extends Record<string, unknown>>(
     const term = search.trim().toLowerCase();
 
     return jobs.filter((j) => {
-        if (selected?.status && String(j.status ?? '') !== selected.status) {
+        const wanted = selected?.statuses ?? (selected?.status ? [selected.status] : null);
+        if (wanted && !wanted.includes(String(j.status ?? ''))) {
             return false;
         }
         if (
@@ -112,6 +122,10 @@ export function actionsFor(status: string): VacancyAction[] {
         case 'draft':
             return [PREVIEW, EDIT, SUBMIT, DISCARD];
         case 'in_review':
+            return [PREVIEW];
+        // MSD's changes are accepted with Publish job on the record page, so
+        // the card offers the way there.
+        case 'reviewed':
             return [PREVIEW];
         case 'active':
             return [PREVIEW, CLOSE];
@@ -195,6 +209,7 @@ export function statusThemeClass(status: string): string {
         case 'draft':
             return 'slds-badge slds-theme_info';
         case 'in_review':
+        case 'reviewed':
             return 'slds-badge slds-theme_warning';
         case 'active':
             return 'slds-badge slds-theme_success';
@@ -236,8 +251,17 @@ export function jobMetaItems(job: Record<string, unknown>, creatorName: string):
     };
     push('owner', 'utility:user', creatorName ? `Managed by ${creatorName}` : '');
     if (status === 'active') push('posted', 'utility:event', posted);
-    if (status === 'in_review' || status === 'active' || status === 'closed') {
+    if (status === 'in_review' || status === 'reviewed' || status === 'active' || status === 'closed') {
         push('closes', 'utility:event', closes);
     }
     return items;
+}
+
+/**
+ * An icon for the status badge, or '' for none. Only `reviewed` carries one —
+ * the design's warning triangle on "Changes to review", which asks the
+ * employer to act. Drawn with the badge blueprint's `slds-badge__icon`.
+ */
+export function statusIcon(status: string): string {
+    return status === 'reviewed' ? 'utility:warning' : '';
 }

@@ -127,7 +127,14 @@ this is the line to change.
 
 ## Vacancy lifecycle
 
-`draft` → `in_review` → `active` → `closed`, rendered as the Path on the record page.
+`draft` → `in_review` → `reviewed` → `active` → `closed`.
+
+`reviewed` means MSD has reviewed the listing **and changed it**: the employer must look at the
+changes and accept them with **Publish job** on the record page (`POST /api/jobs/:id/publish`, which
+only accepts `reviewed` and moves it to `active`). It reads "Changes to review" with a warning
+badge and notice, and sits under the **In review** filter. Added by
+`npm run db:migrate-reviewed` (`scripts/migrate-reviewed-status.ts`), which widened the
+`jobs.status` CHECK in both database files and seeded one vacancy in the state.
 
 Candidate statuses, in pipeline order: `applied`, `screening`, `shortlisted`, `interview`, `offer`,
 `rejected`, `sourced`.

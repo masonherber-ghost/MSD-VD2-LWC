@@ -9,6 +9,7 @@ import {
 } from 'data/release';
 import {
     IN_REVIEW_NOTICE,
+    REVIEWED_NOTICE,
     JOB_FILTERS,
     JOB_STATUS_LABELS,
     actionsFor,
@@ -16,6 +17,7 @@ import {
     filterJobs,
     noActionsReason,
     setOutcomeHref,
+    statusIcon,
     statusThemeClass
 } from 'data/vacancyRules';
 
@@ -61,7 +63,12 @@ interface JobCard {
     statusLabel: string;
     /** An SLDS `slds-theme_*` class, or '' for the plain badge. */
     statusClass: string;
+    /** The badge's icon, '' for none — see `statusIcon`. */
+    statusIcon: string;
     isInReview: boolean;
+    /** MSD has changed it and the employer must review — a warning notice. */
+    isReviewed: boolean;
+    reviewedNotice: string;
     /** Closed reads struck through and weak, per the design. */
     isClosed: boolean;
     reviewNotice: string;
@@ -180,7 +187,10 @@ export default class Jobs extends LightningElement {
                 href,
                 statusLabel: JOB_STATUS_LABELS[status] ?? status,
                 statusClass: statusThemeClass(status),
+                statusIcon: statusIcon(status),
                 isInReview: status === 'in_review',
+                isReviewed: status === 'reviewed',
+                reviewedNotice: REVIEWED_NOTICE,
                 isClosed: status === 'closed',
                 reviewNotice: IN_REVIEW_NOTICE,
                 meta,

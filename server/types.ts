@@ -100,7 +100,8 @@ export interface AuthUser {
 // Jobs
 // ---------------------------------------------------------------------------
 
-export type JobStatus = 'draft' | 'in_review' | 'active' | 'closed'
+/** `reviewed`: MSD has changed the listing; the employer accepts (publishes) it. */
+export type JobStatus = 'draft' | 'in_review' | 'reviewed' | 'active' | 'closed'
 
 export interface JobSchedule {
   schedule_type: string | null

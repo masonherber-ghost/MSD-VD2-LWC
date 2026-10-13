@@ -113,66 +113,109 @@
                 <p lwc:if={hasDescription} id={ids.description}>{description}</p>
                 <p lwc:else id={ids.descriptionEmpty} class="slds-text-color_weak">Nothing added.</p>
 
-                <!-- What makes this job great -------------------------------->
+                <!-- The four sections below are two columns from the large
+                     breakpoint up — heading 2/5, content 3/5 (Figma
+                     570:103964) — and stack below it. The SLDS grid, not
+                     lightning-layout: its items size in twelfths, and 2/5 is
+                     not a whole number of them. `slds-gutters_small` pairs
+                     with `slds-col` here, which is what it is written for. -->
+                <template lwc:if={hasResponsibilities}>
+                <!-- Key responsibilities — shown only when the job has some; no create step edits them. -->
                 <hr />
-                <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
-                    <h6 id={ids.sellingPointsHeading} class="slds-text-heading_small">What makes this job great</h6>
-                    <lightning-button
-                        lwc:if={editable}
-                        variant="base"
-                        icon-name="utility:edit"
-                        label="Edit"
-                        id={ids.sellingPointsEditButton}
-                        data-section="selling-points"
-                        onclick={handleEdit}
-                    ></lightning-button>
+                <div class="slds-grid slds-wrap slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_2-of-5">
+                        <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                            <h6 id={ids.responsibilitiesHeading} class="slds-text-heading_small">Key responsibilities</h6>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_3-of-5">
+                        <ul id={ids.responsibilities} class="slds-list_dotted">
+                            <template for:each={responsibilities} for:item="item">
+                                <li key={item.key}>{item.label}</li>
+                            </template>
+                        </ul>
+                    </div>
                 </div>
-                <ul lwc:if={hasSellingPoints} id={ids.sellingPoints} class="slds-list_dotted">
-                    <template for:each={sellingPoints} for:item="point">
-                        <li key={point.key}>{point.label}</li>
-                    </template>
-                </ul>
-                <p lwc:else id={ids.sellingPointsEmpty} class="slds-text-color_weak">Nothing added.</p>
+                </template>
+
+                <!-- What makes this job great -->
+                <hr />
+                <div class="slds-grid slds-wrap slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_2-of-5">
+                        <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                            <h6 id={ids.sellingPointsHeading} class="slds-text-heading_small">What makes this job great</h6>
+                            <lightning-button
+                                lwc:if={editable}
+                                variant="base"
+                                icon-name="utility:edit"
+                                label="Edit"
+                                id={ids.sellingPointsEditButton}
+                                data-section="selling-points"
+                                onclick={handleEdit}
+                            ></lightning-button>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_3-of-5">
+                        <ul lwc:if={hasSellingPoints} id={ids.sellingPoints} class="slds-list_dotted">
+                            <template for:each={sellingPoints} for:item="point">
+                                <li key={point.key}>{point.label}</li>
+                            </template>
+                        </ul>
+                        <p lwc:else id={ids.sellingPointsEmpty} class="slds-text-color_weak">Nothing added.</p>
+                    </div>
+                </div>
 
                 <!-- On-the-job training. No column holds this — see the docblock. -->
                 <hr />
-                <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
-                    <h6 id={ids.trainingHeading} class="slds-text-heading_small">On-the-job training</h6>
-                    <lightning-button
-                        lwc:if={editable}
-                        variant="base"
-                        icon-name="utility:edit"
-                        label="Edit"
-                        id={ids.trainingEditButton}
-                        data-section="training"
-                        onclick={handleEdit}
-                    ></lightning-button>
+                <div class="slds-grid slds-wrap slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_2-of-5">
+                        <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                            <h6 id={ids.trainingHeading} class="slds-text-heading_small">On-the-job training</h6>
+                            <lightning-button
+                                lwc:if={editable}
+                                variant="base"
+                                icon-name="utility:edit"
+                                label="Edit"
+                                id={ids.trainingEditButton}
+                                data-section="training"
+                                onclick={handleEdit}
+                            ></lightning-button>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_3-of-5">
+                        <p lwc:if={hasTraining} id={ids.training}>
+                            <strong>{training.label}</strong> — {training.description}
+                        </p>
+                        <p lwc:else id={ids.trainingEmpty} class="slds-text-color_weak">Nothing added.</p>
+                    </div>
                 </div>
-                <p lwc:if={hasTraining} id={ids.training}>
-                    <strong>{training.label}</strong> — {training.description}
-                </p>
-                <p lwc:else id={ids.trainingEmpty} class="slds-text-color_weak">Nothing added.</p>
 
-                <!-- Pre-employment checks ------------------------------------>
+                <!-- Pre-employment checks -->
                 <hr />
-                <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
-                    <h6 id={ids.checksHeading} class="slds-text-heading_small">Pre-employment checks</h6>
-                    <lightning-button
-                        lwc:if={editable}
-                        variant="base"
-                        icon-name="utility:edit"
-                        label="Edit"
-                        id={ids.checksEditButton}
-                        data-section="pre-employment-checks"
-                        onclick={handleEdit}
-                    ></lightning-button>
+                <div class="slds-grid slds-wrap slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_2-of-5">
+                        <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                            <h6 id={ids.checksHeading} class="slds-text-heading_small">Pre-employment checks</h6>
+                            <lightning-button
+                                lwc:if={editable}
+                                variant="base"
+                                icon-name="utility:edit"
+                                label="Edit"
+                                id={ids.checksEditButton}
+                                data-section="pre-employment-checks"
+                                onclick={handleEdit}
+                            ></lightning-button>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_3-of-5">
+                        <ul lwc:if={hasPreEmploymentChecks} id={ids.checks} class="slds-list_dotted">
+                            <template for:each={preEmploymentChecks} for:item="check">
+                                <li key={check.key}>{check.label}</li>
+                            </template>
+                        </ul>
+                        <p lwc:else id={ids.checksEmpty} class="slds-text-color_weak">Nothing added.</p>
+                    </div>
                 </div>
-                <ul lwc:if={hasPreEmploymentChecks} id={ids.checks} class="slds-list_dotted">
-                    <template for:each={preEmploymentChecks} for:item="check">
-                        <li key={check.key}>{check.label}</li>
-                    </template>
-                </ul>
-                <p lwc:else id={ids.checksEmpty} class="slds-text-color_weak">Nothing added.</p>
 
                 <!-- Work schedule moved into the About card, where the design
                      (Figma 570:93671) draws it — see `buildAboutSections`. -->

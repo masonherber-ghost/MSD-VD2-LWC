@@ -326,6 +326,31 @@ export function close(id: number): JobDetail | null {
   return run() ? findById(id) : null
 }
 
+/**
+ * Publish a vacancy MSD has reviewed (`reviewed` -> `active`): the employer
+ * accepting MSD's changes, from Publish job on the record page.
+ *
+ * Only `reviewed` can be published this way — a draft goes to review first,
+ * and one still `in_review` is with MSD. Enforced here; the route makes it a 400.
+ * Sets `posted_date` to today, as a published listing carries one.
+ */
+export function publish(id: number): JobDetail | null {
+  const run = db.transaction((): boolean | null => {
+    const row = db.prepare('SELECT status FROM jobs WHERE id = ?').get(id) as
+      | { status: JobStatus }
+      | undefined
+    if (!row) return null
+    if (row.status !== 'reviewed') {
+      throw new DomainError('Only a vacancy with changes to review can be published.')
+    }
+    const today = new Date().toLocaleDateString('en-NZ', { day: 'numeric', month: 'long', year: 'numeric' })
+    applyUpdate('jobs', id, { status: 'active', posted_date: today }, UPDATABLE)
+    return true
+  })
+
+  return run() ? findById(id) : null
+}
+
 export function remove(id: number): boolean {
   return db.prepare('DELETE FROM jobs WHERE id = ?').run(id).changes > 0
 }

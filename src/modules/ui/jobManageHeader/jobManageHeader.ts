@@ -5,6 +5,7 @@ import {
     JOB_STATUS_LABELS,
     actionsFor,
     jobMetaItems,
+    statusIcon,
     statusThemeClass
 } from 'data/vacancyRules';
 
@@ -58,6 +59,11 @@ export default class JobManageHeader extends LightningElement {
         return JOB_STATUS_LABELS[this.status] ?? this.status;
     }
 
+    /** The badge's icon, '' for none — "Changes to review" carries a warning. */
+    get statusIcon(): string {
+        return statusIcon(this.status);
+    }
+
     /** The Cosmos status badge — `slds-badge` plus its `slds-theme_*`. */
     get statusTagClass(): string {
         return `${statusThemeClass(this.status)} slds-m-left_x-small`;
@@ -96,6 +102,7 @@ export default class JobManageHeader extends LightningElement {
      * The header's actions by state, as the design draws them:
      *   draft      "Edit job", plus a menu of every draft action
      *   in review  nothing — the vacancy is with MSD
+     *   reviewed   "Publish job" — accepting MSD's changes
      *   published  "Close job"
      *   closed     "Delete listing"
      *
@@ -108,6 +115,9 @@ export default class JobManageHeader extends LightningElement {
         switch (this.status) {
             case 'draft':
                 return { key: 'edit', label: 'Edit job', icon: 'utility:edit', disabled: false };
+            // MSD has changed the listing: the employer accepts by publishing.
+            case 'reviewed':
+                return { key: 'publish', label: 'Publish job', icon: '', disabled: false };
             case 'active':
                 return { key: 'close', label: 'Close job', icon: 'utility:close', disabled: false };
             case 'closed':
