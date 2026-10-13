@@ -1,81 +1,51 @@
 import { LightningElement } from 'lwc';
-import api, { ApiError } from 'data/api';
+import api, { ApiError, type Row } from 'data/api';
 import { currentUser, displayName, onChange, type SessionUser } from 'data/session';
-import {
-    currentRelease,
-    isEnabled,
-    onChange as onReleaseChange,
-    type Release
-} from 'data/release';
+import { toListingCard, type ListingCard } from 'data/vacancyRules';
 
 /**
  * Homepage, in two forms.
  *
  * Signed out it is the pitch, with the ways in. Signed in it is the employer's
- * landing pad: their vacancies at a glance and the actions they came to do.
+ * landing pad — the homepage template (Figma 181:39504): a greeting with two
+ * quick links, the jobs still in progress, and help centre topics.
  */
+
+/** How many in-progress jobs the homepage lists before "View all jobs". */
+const IN_PROGRESS_LIMIT = 3;
+
 /**
- * The welcome mat's orientation tiles.
- *
- * Copy is the supplied design's, verbatim. Icons are shipped `utility:` and
- * `standard:` glyphs chosen to match each tile's meaning — the design's
- * placeholder book icon is not a Salesforce icon and has no equivalent.
+ * Help centre topics. PLACEHOLDER COPY — transcribed from the design, which
+ * itself labels them as placeholders ("Help topic 4 that runs over two
+ * lines"). There are no help articles in the database or anywhere else in
+ * the project yet, so every topic links to the help centre landing page.
  */
-const WELCOME_TILES = [
-    {
-        key: 'new-listing',
-        icon: 'standard:job_profile',
-        title: 'New job listing',
-        description:
-            'Begin drafting and submitting a new vacancy directly through the Employer Portal.',
-        href: '/create-job/step2?start=new'
-    },
-    {
-        key: 'manage-jobs',
-        icon: 'standard:task',
-        title: 'Manage your jobs',
-        description:
-            'Manage all your vacancies in one place. Partner with your relationship manager to review applications and get tailored candidate recommendations.',
-        href: '/jobs'
-    },
-    {
-        key: 'profile-business',
-        icon: 'standard:account',
-        title: 'Profile & business info',
-        description:
-            'View your profile and company details. Contact us to request updates to your information.',
-        href: '/profile'
-    }
+const HELP_TOPICS = [
+    { key: 'topic-1', label: 'How do I make changes to a vacancy listing', href: '/help-centre' },
+    { key: 'topic-2', label: 'How do I make changes to a vacancy listing', href: '/help-centre' },
+    { key: 'topic-3', label: 'How do I make changes to a vacancy listing', href: '/help-centre' },
+    { key: 'topic-4', label: 'Help topic 4 that runs over two lines', href: '/help-centre' },
+    { key: 'topic-5', label: 'Help topic 5 that runs over two lines', href: '/help-centre' },
+    { key: 'topic-6', label: 'Help topic 6 that runs over two lines', href: '/help-centre' }
 ];
 
 export default class Home extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
 
-    /** Orientation tiles for the welcome mat. Static copy, so a constant. */
-    welcomeTiles = WELCOME_TILES;
+    /** Static placeholder copy, so a constant. */
+    helpTopics = HELP_TOPICS;
 
     user: SessionUser | null = null;
-    jobCount = 0;
-    applicantCount = 0;
-    activeCount = 0;
+    jobs: Row[] = [];
     loaded = false;
-
-    /**
-     * Held as a field, not read straight from the module, because only a field
-     * change tells LWC to re-render — and every getter re-runs when it does.
-     */
-    release: Release = currentRelease();
+    error = '';
 
     private unsubscribe: (() => void) | null = null;
-    private unsubRelease: (() => void) | null = null;
 
     async connectedCallback(): Promise<void> {
         this.user = currentUser();
         this.unsubscribe = onChange(() => {
             this.user = currentUser();
-        });
-        this.unsubRelease = onReleaseChange(() => {
-            this.release = currentRelease();
         });
 
         const accountId = this.user?.account_id;
@@ -83,25 +53,17 @@ export default class Home extends LightningElement {
             return;
         }
         try {
-            const jobs = await api.jobs(accountId);
-            this.jobCount = jobs.length;
-            this.activeCount = jobs.filter((j) => j.status === 'active').length;
-            this.applicantCount = jobs.reduce(
-                (total, j) => total + Number(j.candidate_count ?? 0),
-                0
-            );
+            this.jobs = await api.jobs(accountId);
             this.loaded = true;
         } catch (e) {
-            // The static build has no /api; the summary simply stays hidden.
-            this.loaded = !(e instanceof ApiError);
+            // The static build has no /api, so this is an expected state there.
+            this.error = e instanceof ApiError ? e.message : 'Could not load your jobs.';
         }
     }
 
     disconnectedCallback(): void {
         this.unsubscribe?.();
         this.unsubscribe = null;
-        this.unsubRelease?.();
-        this.unsubRelease = null;
     }
 
     get isSignedIn(): boolean {
@@ -117,35 +79,36 @@ export default class Home extends LightningElement {
     }
 
     /**
-     * Whether the account's vacancies are known.
-     *
-     * Everything below depends on this. With no /api — the static build — the
-     * count is not zero, it is unknown, and the difference matters: an empty
-     * state that fires on a failed load tells an employer with ten vacancies to
-     * create their first.
+     * Jobs in progress: everything not closed — the design's hidden fourth
+     * card is the closed one. The API returns newest first
+     * (`job-repository.findByAccount`), so the first three are the latest.
      */
-    get hasVacancies(): boolean {
-        return this.loaded && this.jobCount > 0;
+    get inProgressCards(): ListingCard[] {
+        return this.jobs
+            .filter((j) => j.status !== 'closed')
+            .slice(0, IN_PROGRESS_LIMIT)
+            .map(toListingCard);
     }
 
+    get hasInProgress(): boolean {
+        return this.loaded && this.inProgressCards.length > 0;
+    }
+
+    /**
+     * Known to be empty, not unknown. With no /api the count is not zero, so
+     * the empty state must not fire on a failed load — it would tell an
+     * employer with ten vacancies to create their first.
+     */
     get hasNoVacancies(): boolean {
-        return this.loaded && this.jobCount === 0;
+        return this.loaded && this.jobs.length === 0;
     }
 
-    /**
-     * The Applicants and Next steps cards arrived after the first release. The
-     * Vacancies card did not — it is the landing pad's whole point, so it is
-     * ungated and shows from 1.1 up.
-     */
-    get hasSummary(): boolean {
-        return this.loaded && isEnabled('home.dashboardStats', this.release);
+    /** Vacancies exist but every one is closed. */
+    get hasOnlyClosed(): boolean {
+        return this.loaded && this.jobs.length > 0 && this.inProgressCards.length === 0;
     }
 
-    /**
-     * The Vacancies card shares a row with the other two once they arrive, and
-     * would look stranded at a third width on its own before then.
-     */
-    get vacancyCardSize(): string {
-        return this.hasSummary ? '4' : '6';
+    get hasError(): boolean {
+        return Boolean(this.error);
     }
 }

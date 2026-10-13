@@ -51,7 +51,6 @@ const FEATURES: Record<string, Release> = {
     // org record could be viewed but not edited.
     'profile.edit': '1.2',
     'manageOrg.editDetails': '1.2',
-    'home.dashboardStats': '1.2',
     'jobDetail.activityTimeline': '1.2',
     'jobDetail.applicants': '1.2',
     // The tab bar on the vacancy record page. 1.1 has only a Details tab, and

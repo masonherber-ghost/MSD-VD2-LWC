@@ -525,7 +525,7 @@
 
 :root {
     /* Text */
-    --site-text-primary: var(--site-color-black-80);
+    /* --site-text-primary: var(--site-color-black-80);
     --site-text-secondary: var(--site-color-black-60);
     --site-text-accent-primary: var(--site-color-brand-blue-accessible);
     --site-text-accent-secondary: var(--site-color-brand-navy);
@@ -533,10 +533,10 @@
     --site-text-inverse-disabled: var(--site-color-blue-10);
     --site-text-disabled: var(--site-color-navy-40);
     --site-text-error: var(--site-color-red);
-    --site-text-success: var(--site-color-green-90);
+    --site-text-success: var(--site-color-green-90); */
 
     /* Background */
-    --site-bg-primary: var(--site-color-white);
+    /* --site-bg-primary: var(--site-color-white);
     --site-bg-secondary: var(--site-color-blue-04);
     --site-bg-tertiary: var(--site-color-blue-10);
     --site-bg-accent-primary: var(--site-color-brand-blue);
@@ -546,10 +546,10 @@
     --site-bg-success-primary: var(--site-color-green-70);
     --site-bg-success-secondary: var(--site-color-green-05);
     --site-bg-warning: var(--site-color-orange);
-    --site-bg-overlay: #00000099;
+    --site-bg-overlay: #00000099; */
 
     /* Icon */
-    --site-icon-primary: var(--site-color-black-80);
+    /* --site-icon-primary: var(--site-color-black-80);
     --site-icon-secondary: var(--site-color-black-60);
     --site-icon-accent-primary: var(--site-color-brand-blue-accessible);
     --site-icon-accent-secondary: var(--site-color-brand-navy);
@@ -557,17 +557,17 @@
     --site-icon-disabled: var(--site-color-navy-40);
     --site-icon-error: var(--site-color-red);
     --site-icon-success: var(--site-color-green-70);
-    --site-icon-warning: var(--site-color-orange);
+    --site-icon-warning: var(--site-color-orange); */
 
     /* Stroke */
-    --site-stroke-primary: var(--site-color-navy-60);
+    /* --site-stroke-primary: var(--site-color-navy-60);
     --site-stroke-secondary: var(--site-color-navy-20);
     --site-stroke-tertiary: var(--site-color-navy-40);
     --site-stroke-accent-primary: var(--site-color-brand-blue);
     --site-stroke-accent-secondary: var(--site-color-brand-navy);
     --site-stroke-error: var(--site-color-red);
     --site-stroke-success: var(--site-color-green-70);
-    --site-stroke-focus: var(--site-color-pink);
+    --site-stroke-focus: var(--site-color-pink); */
 }
 
 /* -----------------------------------------------------------------------------

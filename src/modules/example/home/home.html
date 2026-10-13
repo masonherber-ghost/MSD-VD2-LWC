@@ -20,100 +20,78 @@
                  cards but not the page header above them. -->
             <lightning-layout horizontal-align="center">
                 <lightning-layout-item id="home-col-main" size="12" large-device-size="10">
-                    <!-- Signed in: the employer's landing pad ---------------------->
+                    <!-- Signed in: the homepage template (Figma 181:39504) ------->
                     <template lwc:if={isSignedIn}>
-                        <div class="slds-page-header sep-page-header sep-page-header_spaced slds-m-bottom_medium">
-                            <div class="slds-page-header__row">
-                                <div class="slds-page-header__col-title">
-                            
-                                    <div class="slds-media__body">
-                                        <h1 class="slds-page-header__title slds-truncate">
-                                            Kia ora, {firstName}
-                                        </h1>
-                                        <p class="slds-page-header__name-meta">{companyName}</p>
-                                    </div>
-                            
-                                </div>
-                                <!-- <div class="slds-page-header__col-actions">
-                                    <div class="slds-page-header__controls">
-                                        <div class="slds-page-header__control">
-                                            <a href="/create-job/step2?start=new">
-                                                <lightning-button
-                                                    variant="brand"
-                                                    label="List a job"
-                                                ></lightning-button>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div> -->
+                        <!-- Hero. The design draws a full-bleed grey band; content is
+                             capped by .site__main and nothing shipped breaks out of it,
+                             so by decision this is the SLDS box blueprint with the
+                             shade theme, inside the column. No project CSS.
+                             Type: sep-font-scale-8 / -6 with sep-text-accent-primary,
+                             the approved project utilities. -->
+                        <section id="home-hero" class="slds-box slds-theme_shade sep-page-header_spaced slds-m-bottom_x-large">
+                            <h1 id="home-hero-title" class="sep-font-scale-8 sep-text-accent-primary">
+                                Kia ora {firstName}
+                            </h1>
+                            <p lwc:if={companyName} id="home-hero-company" class="sep-font-scale-6 sep-text-accent-primary slds-m-top_small">
+                                {companyName}
+                            </p>
+                            <!-- Quick links: the SLDS button blueprint on an anchor, so a
+                                 link that looks like a button is still a link. -->
+                            <div id="home-hero-links" class="slds-m-top_large">
+                                <a id="home-quick-new-job" class="slds-button slds-button_neutral slds-m-right_small slds-m-bottom_x-small" href="/create-job/step2?start=new">
+                                    <lightning-icon icon-name="standard:job_profile" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                                    List a new job
+                                </a>
+                                <a id="home-quick-my-jobs" class="slds-button slds-button_neutral slds-m-bottom_x-small" href="/jobs">
+                                    <lightning-icon icon-name="standard:task" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                                    My jobs
+                                </a>
                             </div>
-                        </div>
+                        </section>
 
-                            <!-- Orientation. Replaces the "Welcome back" scoped
-                             notification that sat here: both answer "what is
-                             this place for", and two of them would compete.
+                        <!-- Jobs in progress ------------------------------------->
+                        <section id="home-jobs" class="slds-m-bottom_x-large">
+                            <h2 id="home-jobs-heading" class="sep-font-scale-4 sep-text-primary slds-m-bottom_medium">Jobs in-progress</h2>
 
-                             Not gated on hasVacancies, unlike the panel it
-                             replaces — an employer with no vacancies yet is
-                             exactly who needs orienting, and the panel used to
-                             hide from them. -->
-                        <ui-welcome-mat
-                            heading="Welcome to the Employer Portal"
-                            description="Easily list and manage your vacancies in one place. Head to My Jobs to see your active listings. Applicant screening and candidate recommendations remain a direct, collaborative process with your relationship manager."
-                            tiles={welcomeTiles}
-                        ></ui-welcome-mat>
-
-                        <template lwc:if={hasNoVacancies}>
-                            <ui-vacancy-empty-state></ui-vacancy-empty-state>
-                        </template>
-
-                        <lightning-layout lwc:elseif={hasVacancies} multiple-rows pull-to-boundary="small">
-                            <lightning-layout-item
-                                size="12"
-                                medium-device-size={vacancyCardSize}
-                                padding="around-small"
-                            >
-                                <!-- <ui-vacancy-summary-card
-                                    count={jobCount}
-                                    active-count={activeCount}
-                                ></ui-vacancy-summary-card> -->
-                            </lightning-layout-item>
-
-                            <!-- Applicants and Next steps landed in 1.2; the Vacancies
-                                 card above ships from 1.1. -->
-                            <lightning-layout-item
-                                lwc:if={hasSummary}
-                                size="12"
-                                medium-device-size="4"
-                                padding="around-small"
-                            >
-                                <lightning-card title="Applicants" icon-name="standard:groups">
-                                    <p class="home__stat slds-p-horizontal_medium">{applicantCount}</p>
-                                    <p class="slds-text-body_small slds-text-color_weak slds-p-horizontal_medium slds-p-bottom_medium">
-                                        Across all vacancies
-                                    </p>
-                                </lightning-card>
-                            </lightning-layout-item>
-
-                            <lightning-layout-item
-                                lwc:if={hasSummary}
-                                size="12"
-                                medium-device-size="4"
-                                padding="around-small"
-                            >
-                                <lightning-card title="Next steps" icon-name="standard:task">
-                                    <div class="slds-p-horizontal_medium slds-p-bottom_medium">
-                                        <p><a href="/profile">Update your profile</a></p>
-                                        <p class="slds-m-top_xx-small">
-                                            <a href="/manage-org">Manage your organisation</a>
-                                        </p>
-                                        <p class="slds-m-top_xx-small">
-                                            <a href="/help-centre">Visit the help centre</a>
-                                        </p>
+                            <!-- Each card in a block wrapper: a custom element is
+                                 inline, so the margin goes on the div. No id inside
+                                 the loop — `key` is the handle. -->
+                            <template lwc:if={hasInProgress}>
+                                <template for:each={inProgressCards} for:item="card">
+                                    <div key={card.id} class="slds-m-bottom_medium">
+                                        <ui-vacancy-listing-card card={card}></ui-vacancy-listing-card>
                                     </div>
-                                </lightning-card>
-                            </lightning-layout-item>
-                        </lightning-layout>
+                                </template>
+                                <div class="slds-align_absolute-center">
+                                    <a id="home-jobs-view-all" class="slds-button slds-button_brand" href="/jobs">View all jobs</a>
+                                </div>
+                            </template>
+
+                            <div lwc:elseif={hasNoVacancies} id="home-jobs-empty">
+                                <ui-vacancy-empty-state></ui-vacancy-empty-state>
+                            </div>
+
+                            <p lwc:elseif={hasOnlyClosed} id="home-jobs-none-open" class="slds-text-color_weak">
+                                You have no jobs in progress. <a href="/jobs">View all jobs</a>
+                            </p>
+
+                            <p lwc:elseif={hasError} id="home-jobs-error" class="slds-text-color_weak">{error}</p>
+                        </section>
+
+                        <!-- Help centre — placeholder topics, see HELP_TOPICS ---->
+                        <section id="home-help">
+                            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                                <h2 id="home-help-heading" class="sep-font-scale-4 sep-text-primary">Help centre</h2>
+                                <a id="home-help-all-button" class="slds-button slds-button_neutral" href="/help-centre">See all articles</a>
+                            </div>
+                            <lightning-layout multiple-rows pull-to-boundary="small">
+                                <template for:each={helpTopics} for:item="topic">
+                                    <lightning-layout-item key={topic.key} size="12" medium-device-size="4" padding="around-small">
+                                        <a href={topic.href} class="slds-text-body_regular">{topic.label}</a>
+                                    </lightning-layout-item>
+                                </template>
+                            </lightning-layout>
+                        </section>
                     </template>
 
                     <!-- Signed out: the pitch ------------------------------------->

@@ -265,3 +265,105 @@ export function jobMetaItems(job: Record<string, unknown>, creatorName: string):
 export function statusIcon(status: string): string {
     return status === 'reviewed' ? 'utility:warning' : '';
 }
+
+/** One icon + value line on a listing card. */
+export interface ListingMetaItem {
+    key: string;
+    icon: string;
+    label: string;
+    value: string;
+    rowClass: string;
+}
+
+/** One row-menu item on a listing card. */
+export interface ListingMenuItem {
+    key: string;
+    label: string;
+    icon: string;
+    disabled: boolean;
+    /** Set on Preview and Close only: the actions that go somewhere today. */
+    href?: string;
+}
+
+/** The shape `ui/vacancyListingCard` renders. */
+export interface ListingCard {
+    id: number;
+    title: string;
+    href: string;
+    statusLabel: string;
+    /** An SLDS `slds-theme_*` class, or '' for the plain badge. */
+    statusClass: string;
+    /** The badge's icon, '' for none — see `statusIcon`. */
+    statusIcon: string;
+    isInReview: boolean;
+    /** MSD has changed it and the employer must review — a warning notice. */
+    isReviewed: boolean;
+    reviewedNotice: string;
+    /** Closed reads struck through and weak, per the design. */
+    isClosed: boolean;
+    reviewNotice: string;
+    meta: ListingMetaItem[];
+    applicants: string;
+    newApplicants: string;
+    hasNew: boolean;
+    /** The row menu's items. Never empty — see `noActionsReason`. */
+    actions: ListingMenuItem[];
+}
+
+/** A media-object row; every row after the first takes the 4px gap. */
+const META_ROW = 'slds-media slds-media_center slds-media_small';
+
+/**
+ * One job row shaped for `ui/vacancyListingCard`. Shared by `/jobs` and the
+ * homepage's Jobs in-progress list, so the two cards cannot drift apart.
+ * Only meta lines the record actually holds are included.
+ */
+export function toListingCard(j: Record<string, unknown>): ListingCard {
+    const status = String(j.status ?? '');
+    const count = Number(j.candidate_count ?? 0);
+    const fresh = Number(j.new_candidate_count ?? 0);
+
+    const meta: ListingMetaItem[] = [];
+    const push = (key: string, icon: string, label: string, value: unknown) => {
+        const text = String(value ?? '').trim();
+        if (!text) return;
+        const rowClass = meta.length ? `${META_ROW} slds-m-top_xx-small` : META_ROW;
+        meta.push({ key, icon, label, value: text, rowClass });
+    };
+    // `creator_name` is already joined in by `job-repository.findByAccount`.
+    const creator = String(j.creator_name ?? '').trim();
+    // Icons are the design's: dayview, profile_alt, company.
+    push('closes', 'utility:dayview', '', closingText(status, j.closing_date));
+    push('owner', 'utility:profile_alt', '', creator ? `Managed by ${creator}` : '');
+    push('location', 'utility:company', 'Location', j.location);
+
+    const href = `/jobs/job-detail?id=${j.id}`;
+
+    const actions: ListingMenuItem[] = actionsFor(status).map((a) => ({
+        ...a,
+        disabled: false,
+        href: a.key === 'preview' ? href : a.key === 'close' ? setOutcomeHref(j.id) : undefined
+    }));
+    if (!actions.length) {
+        actions.push({ key: 'none', label: noActionsReason(status), icon: '', disabled: true });
+    }
+
+    return {
+        id: Number(j.id),
+        title: String(j.title ?? 'Untitled vacancy'),
+        href,
+        statusLabel: JOB_STATUS_LABELS[status] ?? status,
+        statusClass: statusThemeClass(status),
+        statusIcon: statusIcon(status),
+        isInReview: status === 'in_review',
+        isReviewed: status === 'reviewed',
+        reviewedNotice: REVIEWED_NOTICE,
+        isClosed: status === 'closed',
+        reviewNotice: IN_REVIEW_NOTICE,
+        meta,
+        applicants: count === 1 ? '1 applicant' : `${count} applicants`,
+        newApplicants: `${fresh} new`,
+        hasNew: fresh > 0,
+        actions
+    };
+}

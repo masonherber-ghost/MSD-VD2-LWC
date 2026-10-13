@@ -29,12 +29,68 @@ which is the whole point of the prototype.
 2. **No customisations.** Do not restyle a component to look like the mockup. Styling hooks, SLDS
    utilities and exposed parts are the only levers. If the design cannot be reached with those,
    that is **the customisation gate** — stop and ask. See below.
-3. **Layout comes from `lightning-layout` and SLDS grid**, the way a FlexiPage region does. There is
+3. **No new CSS without explicit approval.** Not a new `.css` file, not a new rule in an existing
+   one, not a new `sep-` class, not a hook override, not an inline `style=`. The build is
+   `lightning-*` components, SLDS blueprint and utility classes, and the **already-approved**
+   project classes listed in *Approved project utilities* below — nothing else. If a region cannot
+   be reached without writing CSS, that is the customisation gate: build the closest CSS-free
+   version, then ask, naming the exact selector and declarations you would add and where they
+   would live. Write it only after the user says yes, and say in the report which rules were
+   approved.
+4. **Layout comes from `lightning-layout` and SLDS grid**, the way a FlexiPage region does. There is
    no FlexiPage component to use, so write what App Builder compiles down to.
-4. **Never invent a tag, attribute or SLDS class.** Verify each one ships — the two commands are in
+5. **Never invent a tag, attribute or SLDS class.** Verify each one ships — the two commands are in
    `rules-lwc-components.md`.
-5. **Never invent data.** Every value on screen comes from the database or is explicitly labelled
+6. **Never invent data.** Every value on screen comes from the database or is explicitly labelled
    placeholder copy.
+
+---
+
+## Approved project utilities — type size and text colour
+
+SLDS 2 ships only three heading sizes (`slds-text-heading_large` / `_medium` / `_small`, on font
+scale steps 6, 4 and 2) and no text-colour classes for the site's brand palette. Designs routinely
+ask for the steps in between. These project classes already exist, are approved, and **using them
+in markup is not new CSS** — reach for them before concluding a heading size or colour is a gap.
+
+**Type size — `src/assets/css/sep-utilities.css`**, loaded by `main.njk` after `site.css`. That
+file is the only place these classes are declared:
+
+| Class | Token | Size | Same as |
+|---|---|---|---|
+| `sep-font-scale-8` | `--slds-g-font-scale-8` | 3rem / 48px | — (display) |
+| `sep-font-scale-7` | `--slds-g-font-scale-7` | 2.5rem / 40px | — (display) |
+| `sep-font-scale-6` | `--slds-g-font-scale-6` | 2rem / 32px | `slds-text-heading_large` |
+| `sep-font-scale-5` | `--slds-g-font-scale-5` | 1.75rem / 28px | — |
+| `sep-font-scale-4` | `--slds-g-font-scale-4` | 1.5rem / 24px | `slds-text-heading_medium` |
+| `sep-font-scale-3` | `--slds-g-font-scale-3` | 1.25rem / 20px | — |
+| `sep-font-scale-2` | `--slds-g-font-scale-2` | 1rem / 16px | `slds-text-heading_small` |
+| `sep-font-scale-1` | `--slds-g-font-scale-1` | 0.875rem / 14px | — |
+
+How to use them:
+
+- **Pick the size off the design, not a guess.** Read the font size from the Figma node and choose
+  the step whose value matches. If none matches, use the nearest step and list the difference as a
+  gap. Do not add a new size.
+- **The class sets the size, the tag sets the level.** SLDS resets `h1`–`h6` to `1em`, so choose
+  the element for the document outline and the class for the look: `<h2 class="sep-font-scale-4">`
+  is correct for a 24px section heading under the page's `h1`.
+- **Size and line-height only.** They do not set weight or colour. Pair with a colour class below;
+  SLDS has no weight-only utility, so a bold the design asks for is a gap to report (or CSS to ask
+  for), not something to add.
+- **Do not stack** one on an `slds-text-heading_*` class. Both are single-class rules, so which one
+  wins depends on load order. Where an SLDS class is identical (steps 6, 4, 2), either is fine;
+  prefer the SLDS one when the design matches it exactly.
+
+**Text colour — `site.css`, `sep-text-*`.** Each class maps one-to-one to a `--site-text-*` token
+in `design-tokens.css`: `sep-text-primary`, `-secondary`, `-accent-primary`, `-accent-secondary`,
+`-inverse-primary`, `-inverse-disabled`, `-disabled`, `-error`, `-success`. Use these for brand
+heading colours (e.g. the MSD blue headline is `sep-text-accent-primary`) before reaching for a
+hook or a new rule. For neutral weak text, SLDS's own `slds-text-color_weak` is still first choice.
+
+Anything beyond these two families, plus the existing `sep-` blueprint skins in `site.css`
+(`sep-page-header`, `sep-welcome-mat`, `sep-scoped-notification`, …, browsable at
+`/design-system` → Compositions), is new CSS and falls under hard constraint 3.
 
 ---
 
@@ -183,6 +239,42 @@ A wireframe is one width and the build has to hold at the others, so **say plain
 check the other widths** rather than implying it held. Responsive breakage is exactly what this mode
 stops catching.
 
+### 7. Final server error check — mandatory, last thing before reporting
+
+The checks above each look at one thing. Errors slip between them: a template that compiles but
+throws in the browser, a child component's template nobody curled, a stale cache answering `200`,
+an `/api` route that 500s only once the page calls it. Run this sweep **after the last edit** and
+do not report done until it is clean.
+
+1. **Clean start.** Kill anything on the port, clear the compile cache and start fresh, logging to
+   a file you can read:
+   ```bash
+   lsof -ti:3000 | xargs kill 2>/dev/null; rm -rf __lwr_cache__
+   PORT=3000 npm run dev > /tmp/dev.log 2>&1 &   # run in the background
+   ```
+   Wait until the server answers (`curl -s -o /dev/null -w '%{http_code}' localhost:3000/`).
+2. **Every template you touched or rendered.** Curl the TEMPLATE module (`<name>%23<name>.html`)
+   of the route component **and every `ui/*` child it renders** — new, edited or merely reused.
+   Every one must be `200`.
+3. **The route itself and its data.** `curl` the page path (`200`) and every `/api/*` endpoint the
+   page calls (`200` with a JSON body — not the HTML shell, not `500`).
+4. **Read the server log.** Grep it for anything that went wrong while the requests above ran:
+   ```bash
+   grep -niE "error|warn|fail|exception|LWC[0-9]+|cannot|undefined" /tmp/dev.log \
+     | grep -v "einstein-"   # SLDS's own pre-existing asset warnings — see rules-architecture.md
+   ```
+   Every remaining line is either fixed or explained in the report. "Pre-existing" is an
+   acceptable explanation only after checking it also appears on `git stash`-ed code or is listed
+   in `rules-architecture.md`.
+5. **Build.** `npm run build` exits 0, and its output is grepped the same way.
+6. **CSS audit.** `git diff --stat -- '*.css'` and `git status --short -- '*.css'` must show
+   **no CSS change** you were not explicitly given approval for (hard constraint 3). Also grep the
+   touched templates for `style=`. If something shows up, revert it or ask.
+7. **Stop the server** you started, and restore any data a test wrote (`git status data/`).
+
+Report the result as a short checklist — templates (n/n `200`), route, API, log (clean / lines
+explained), build, CSS audit — so the reader can see each was actually run.
+
 ---
 
 ## Reporting back
@@ -191,7 +283,9 @@ Lead with the region → component table. Then state, briefly:
 
 - what you matched
 - what you could not match and why (the rule-2 list)
+- any CSS you are asking approval for, as exact selector + declarations + file — or "none written"
 - anything the wireframe implies that the data cannot support
+- the step-7 final check results
 
 Never claim a wireframe was matched exactly. It never is, and the gaps are the useful part.
 
@@ -203,6 +297,8 @@ Never claim a wireframe was matched exactly. It never is, and the gaps are the u
 |---|---|
 | Hand-rolling a nav bar / chip / drawer / tab strip to match the picture | Every one of those ships. See the antipattern list in `rules-lwc-components.md` |
 | Restyling `lightning-*` internals to hit the mockup's colours | That is a customisation, and it breaks on the next package upgrade |
+| Writing "just a small" `.css` rule or `sep-` class to close a gap | Hard constraint 3 — ask first, with the exact rule. Build the CSS-free version meanwhile |
+| Declaring a heading size in CSS | `sep-font-scale-*` already covers every step of the SLDS ramp |
 | Copying exact pixel values off the image | Use SLDS spacing utilities and styling hooks — `rules-lwc-layout.md` § *Spacing* |
 | Building a new component because the shipped one is "close but not right" | Close is the target. Say what is off and move on |
 | Inventing a status, count or label to fill a slot the design shows | `rules-app-logic.md` § *Never invent data* |

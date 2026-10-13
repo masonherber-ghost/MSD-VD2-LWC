@@ -8,24 +8,11 @@ import {
     type Release
 } from 'data/release';
 import {
-    IN_REVIEW_NOTICE,
-    REVIEWED_NOTICE,
     JOB_FILTERS,
-    JOB_STATUS_LABELS,
-    actionsFor,
-    closingText,
     filterJobs,
-    noActionsReason,
-    setOutcomeHref,
-    statusIcon,
-    statusThemeClass
+    toListingCard,
+    type ListingCard
 } from 'data/vacancyRules';
-
-/** `creator_name` is already joined in by `job-repository.findByAccount`. */
-function managedBy(name: unknown): string {
-    const text = String(name ?? '').trim();
-    return text ? `Managed by ${text}` : '';
-}
 
 /** "Showing …" per filter value — `JOB_FILTERS`' values, in plain words. */
 const SHOWING: Record<string, string> = {
@@ -35,50 +22,6 @@ const SHOWING: Record<string, string> = {
     in_review: 'Showing jobs in review',
     closed: 'Showing closed jobs'
 };
-
-/** A media-object row; every row after the first takes the 4px gap. */
-const META_ROW = 'slds-media slds-media_center slds-media_small';
-
-interface MetaItem {
-    key: string;
-    icon: string;
-    label: string;
-    value: string;
-    rowClass: string;
-}
-
-interface MenuItem {
-    key: string;
-    label: string;
-    icon: string;
-    disabled: boolean;
-    /** Set on Preview only: the one action that goes somewhere today. */
-    href?: string;
-}
-
-interface JobCard {
-    id: number;
-    title: string;
-    href: string;
-    statusLabel: string;
-    /** An SLDS `slds-theme_*` class, or '' for the plain badge. */
-    statusClass: string;
-    /** The badge's icon, '' for none — see `statusIcon`. */
-    statusIcon: string;
-    isInReview: boolean;
-    /** MSD has changed it and the employer must review — a warning notice. */
-    isReviewed: boolean;
-    reviewedNotice: string;
-    /** Closed reads struck through and weak, per the design. */
-    isClosed: boolean;
-    reviewNotice: string;
-    meta: MetaItem[];
-    applicants: string;
-    newApplicants: string;
-    hasNew: boolean;
-    /** The row menu's items. Never empty — see `noActionsReason`. */
-    actions: MenuItem[];
-}
 
 /**
  * The account's vacancies as out-of-the-box `lightning-card`s — the object
@@ -151,55 +94,8 @@ export default class Jobs extends LightningElement {
         return isEnabled('jobs.applicantCount', this.release);
     }
 
-    get cards(): JobCard[] {
-        return this.filteredJobs.map((j) => {
-            const status = String(j.status ?? '');
-            const count = Number(j.candidate_count ?? 0);
-            const fresh = Number(j.new_candidate_count ?? 0);
-
-            // Only rows the record actually holds, as on /jobs3.
-            const meta: MetaItem[] = [];
-            const push = (key: string, icon: string, label: string, value: unknown) => {
-                const text = String(value ?? '').trim();
-                if (!text) return;
-                const rowClass = meta.length ? `${META_ROW} slds-m-top_xx-small` : META_ROW;
-                meta.push({ key, icon, label, value: text, rowClass });
-            };
-            // Icons are the design's: dayview, profile_alt, company.
-            push('closes', 'utility:dayview', '', closingText(status, j.closing_date));
-            push('owner', 'utility:profile_alt', '', managedBy(j.creator_name));
-            push('location', 'utility:company', 'Location', j.location);
-
-            const href = `/jobs/job-detail?id=${j.id}`;
-
-            const actions: MenuItem[] = actionsFor(status).map((a) => ({
-                ...a,
-                disabled: false,
-                href: a.key === 'preview' ? href : a.key === 'close' ? setOutcomeHref(j.id) : undefined
-            }));
-            if (!actions.length) {
-                actions.push({ key: 'none', label: noActionsReason(status), icon: '', disabled: true });
-            }
-
-            return {
-                id: Number(j.id),
-                title: String(j.title ?? 'Untitled vacancy'),
-                href,
-                statusLabel: JOB_STATUS_LABELS[status] ?? status,
-                statusClass: statusThemeClass(status),
-                statusIcon: statusIcon(status),
-                isInReview: status === 'in_review',
-                isReviewed: status === 'reviewed',
-                reviewedNotice: REVIEWED_NOTICE,
-                isClosed: status === 'closed',
-                reviewNotice: IN_REVIEW_NOTICE,
-                meta,
-                applicants: count === 1 ? '1 applicant' : `${count} applicants`,
-                newApplicants: `${fresh} new`,
-                hasNew: fresh > 0,
-                actions
-            };
-        });
+    get cards(): ListingCard[] {
+        return this.filteredJobs.map(toListingCard);
     }
 
     // -- states ------------------------------------------------------------

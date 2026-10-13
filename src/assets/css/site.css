@@ -835,51 +835,8 @@ lightning-card::part(title) {
 .sep-text-error { color: var(--site-text-error); }
 .sep-text-success { color: var(--site-text-success); }
 
-/* =============================================================================
- * Type size utilities — display and heading
- *
- * Two display sizes and five heading sizes, as opt-in classes, read straight
- * off SLDS's own type ramp. NOT ONE SIZE IS WRITTEN HERE: every value is a
- * shipped `--slds-g-font-scale-*` step, so a theme that moves the ramp moves
- * these with it.
- *
- *   .sep-text-display_1   --slds-g-font-scale-8   3rem     48px
- *   .sep-text-display_2   --slds-g-font-scale-7   2.5rem   40px
- *   .sep-text-heading_1   --slds-g-font-scale-6   2rem     32px  = slds-text-heading_large
- *   .sep-text-heading_2   --slds-g-font-scale-5   1.75rem  28px
- *   .sep-text-heading_3   --slds-g-font-scale-4   1.5rem   24px  = slds-text-heading_medium
- *   .sep-text-heading_4   --slds-g-font-scale-3   1.25rem  20px
- *   .sep-text-heading_5   --slds-g-font-scale-2   1rem     16px  = slds-text-heading_small
- *
- * WHY THESE ARE NEEDED AT ALL. SLDS 2 ships three heading utilities —
- * `slds-text-heading_large`, `_medium`, `_small` — on steps 6, 4 and 2. No
- * class reaches steps 3, 5, 7 or 8, and there is no `slds-text-display*` at
- * all. (`.slds-markdown h1…h6` and `.slds-welcome-mat__info-title` do reach
- * some of them, but they belong to those blueprints, not to page headings.)
- * Three of the seven duplicate an SLDS utility exactly; they are here so the
- * scale reads as one set. Either class gives the same result on those steps.
- *
- * SIZE AND LINE-HEIGHT ONLY, as SLDS's own heading utilities do — line-height
- * is the same `--slds-g-font-lineheight-2` (1.25) they use. Weight and colour
- * stay separate decisions: SLDS resets h1–h6 to inherit both. Colour pairs with
- * a `.sep-text-*` class above; SLDS ships no weight-only utility, so a bold
- * heading is still a weight declaration of its own.
- *
- * THE CLASS SETS THE SIZE, THE TAG SETS THE LEVEL. SLDS resets h1–h6 to 1em,
- * so pick the element for the document outline and the class for the look:
- * `<h2 class="sep-text-display_2">` is correct.
- *
- * No `!important`, no media query: the SLDS ramp is one size at every width.
- * Don't stack one on an `slds-text-heading_*` class anyway — both are a single
- * class, so which wins comes down to load order, not intent.
- * ========================================================================== */
-.sep-text-display_1 { font-size: var(--slds-g-font-scale-8); line-height: var(--slds-g-font-lineheight-2); }
-.sep-text-display_2 { font-size: var(--slds-g-font-scale-7); line-height: var(--slds-g-font-lineheight-2); }
-.sep-text-heading_1 { font-size: var(--slds-g-font-scale-6); line-height: var(--slds-g-font-lineheight-2); }
-.sep-text-heading_2 { font-size: var(--slds-g-font-scale-5); line-height: var(--slds-g-font-lineheight-2); }
-.sep-text-heading_3 { font-size: var(--slds-g-font-scale-4); line-height: var(--slds-g-font-lineheight-2); }
-.sep-text-heading_4 { font-size: var(--slds-g-font-scale-3); line-height: var(--slds-g-font-lineheight-2); }
-.sep-text-heading_5 { font-size: var(--slds-g-font-scale-2); line-height: var(--slds-g-font-lineheight-2); }
+/* Type size utilities (`.sep-font-scale-*`) live in `sep-utilities.css`,
+ * loaded after this file by `main.njk`. */
 
 /* [OFF — custom status tag] ------------------------------------------------
  * Commented out to show the default Lightning styling. To restore: delete

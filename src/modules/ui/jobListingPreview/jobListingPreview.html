@@ -20,7 +20,7 @@
                 <h6 lwc:if={showPreviewHeading} id={ids.previewHeading} class="slds-m-bottom_x-small slds-text-heading_small">Preview Job</h6>
 
                 <div class="slds-grid slds-grid_align-spread">
-                    <h1 id={ids.title} class="slds-text-heading_large">{title}</h1>
+                    <h1 id={ids.title} class="sep-font-scale-8">{title}</h1>
                     <lightning-button
                         lwc:if={editable}
                         variant="base"
@@ -236,7 +236,7 @@
                          class. Slotted, it inherits the card's own <h2> — bold —
                          so its weight is set back to the page's heading weight
                          with the card's public hook (see the .css). -->
-                    <h3 slot="title" id={ids.aboutHeading} class="slds-text-heading_medium">About the mahi</h3>
+                    <h3 slot="title" id={ids.aboutHeading} class="sep-font-scale-6">About the mahi</h3>
                     <!-- 16px left, right and bottom; none on top — the card
                          header above supplies that (see the .css). -->
                     <div class="slds-p-horizontal_medium slds-p-bottom_medium">
