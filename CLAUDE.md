@@ -80,7 +80,8 @@ questions. Build nothing until they are answered, then use `component-from-desig
 ### Import or change design tokens
 **Use the `lwc-figma-ds-tokens-import` skill** for a Figma variables import, and for any edit to
 `src/assets/css/design-tokens.css`. It records the decisions already made (`--sep-*` prefix, light
-values only, overrides in `[OFF]` blocks) and `check-tokens.mjs` verifies the file. Update the
+values only, all 524 globals declared, Figma's value wherever Figma defines the hook; C1 and C3
+are generated) and `check-tokens.mjs` verifies the file. Update the
 skill's *Current state* and decision log whenever the tokens file changes.
 
 ### Build or change a page

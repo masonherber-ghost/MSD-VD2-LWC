@@ -16,9 +16,43 @@ function fetchSources(): Promise<Record<string, SourceFile[]>> {
     return sourcesPromise;
 }
 
+let pageSheetsPromise: Promise<CSSStyleSheet[]> | undefined;
+
+/**
+ * The page's own stylesheets (SLDS, fonts, design tokens, site.css, utilities),
+ * as constructed sheets — built once, shared by every example.
+ *
+ * WHY. The shipped examples are native shadow-DOM components, and the global
+ * stylesheets cannot reach inside a shadow root. On a real org synthetic shadow
+ * lets them through, so the examples' own utility classes work there
+ * (`slds-m-left_x-small` is what spaces the buttons in button/basic) — here
+ * they did nothing, and neither did our component skins in site.css. Adopting
+ * the page's sheets into the example's root restores both.
+ *
+ * Custom properties need none of this: they inherit through the shadow
+ * boundary, so the tokens already reached the examples.
+ */
+function pageSheets(): Promise<CSSStyleSheet[]> {
+    if (!pageSheetsPromise) {
+        const hrefs = Array.from(
+            document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]')
+        ).map((l) => l.href);
+        pageSheetsPromise = Promise.all(
+            hrefs.map(async (href) => {
+                const sheet = new CSSStyleSheet();
+                await sheet.replace(await (await fetch(href)).text());
+                return sheet;
+            })
+        );
+    }
+    return pageSheetsPromise;
+}
+
 /**
  * Renders one official example bundle from lightning-base-components, plus its
- * real source. Nothing about the example is re-authored here.
+ * real source. Nothing about the example is re-authored here — the page's
+ * stylesheets are adopted into its shadow root so it renders as it would on a
+ * page (see `pageSheets`).
  */
 export default class ExampleStage extends LightningElement {
     static renderMode: 'light' | 'shadow' = 'light';
@@ -103,6 +137,21 @@ export default class ExampleStage extends LightningElement {
             // Source display is a convenience; the live example still stands without it.
             this.sources = [];
         }
+    }
+
+    renderedCallback(): void {
+        if (typeof document === 'undefined') return;
+        const root = this.querySelector('.stage__canvas > :not(lightning-spinner)')?.shadowRoot;
+        if (!root || (root as ShadowRoot & { _pageSheets?: boolean })._pageSheets) return;
+        (root as ShadowRoot & { _pageSheets?: boolean })._pageSheets = true;
+        pageSheets()
+            .then((sheets) => {
+                // Page sheets first, so the example's own styles still win.
+                root.adoptedStyleSheets = [...sheets, ...root.adoptedStyleSheets];
+            })
+            .catch(() => {
+                // Unstyled examples are a degraded view, not an error worth surfacing.
+            });
     }
 
     handleToggleSource(): void {

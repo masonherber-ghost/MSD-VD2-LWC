@@ -9,9 +9,8 @@
 //   default   SLDS 2's own value — the Cosmos and Lightning Blue themes agree
 //   cosmos    the Cosmos theme's value — it differs from Lightning Blue, which is shown
 //
-// Skipped — both count as defined above the block: tokens the Figma import declares
-// (C1–C4), and tokens section A lists as Figma variables (FIGMA_MATCHES below). So this
-// never overrides or repeats a Figma value. Re-run after upgrading @salesforce-ux/design-system-2 —
+// Skipped: every token declared above the block (the generated Figma block C1, and C2).
+// So this never overrides or repeats a Figma value. Re-run after upgrading @salesforce-ux/design-system-2 —
 // the block is generated, never hand-edited.
 //
 //   node .claude/skills/lwc-figma-ds-tokens-import/sync-slds-globals.mjs
@@ -105,22 +104,10 @@ const figma = new Set(
     [...outside.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/(--slds-g-[a-z0-9-]+)\s*:/g)].map((m) => m[1]),
 );
 
-// Tokens Figma DOES define, with the value SLDS already ships — section A of the import.
-// They count as defined above the generated block, so they are NOT written into it.
-// Keep in step with section A when the Figma file changes.
-const FIGMA_MATCHES = [
-    /^--slds-g-sizing-\d+$/, /^--slds-g-sizing-border-[1-4]$/, /^--slds-g-spacing-([1-9]|1[0-2])$/,
-    /^--slds-g-radius-border-([1-4]|circle)$/, /^--slds-g-font-weight-[347]$/,
-    /^--slds-g-color-neutral-base-(0|100)$/,
-    /^--slds-g-color-palette-(cloud-blue|indigo|orange|purple|red|violet)-\d+$/,
-    /^--slds-g-color-info-base-(10|15|20|30|35|40|50|60|65|70|80|90|95)$/,
-];
-const figmaMatches = (n) => FIGMA_MATCHES.some((re) => re.test(n));
-
 // Family = the name up to its first numeric or state segment.
 const family = (n) => {
     const p = n.replace(/^--slds-g-/, '').split('-');
-    if (p[0] === 'color' && p[1] === 'palette') return p.slice(0, 3).join('-');
+    if (p[0] === 'color' && p[1] === 'palette') return 'Palette: ' + n.replace(/^--slds-g-color-palette-/, '').replace(/-\d+$/, '') + ' — not in Figma';
     if (p[0] === 'color' && /-base-/.test(n)) return p.slice(0, 3).join('-');
     if (p[0] === 'color') return 'color-' + p[1];
     if (p[0] === 'font') return 'font-' + p[1];
@@ -129,11 +116,9 @@ const family = (n) => {
 };
 
 const groups = new Map();
-let nCosmos = 0, nDefault = 0, nMatch = 0;
+let nCosmos = 0, nDefault = 0;
 for (const name of cosmos.keys()) {
     if (!name.startsWith('--slds-g-') || figma.has(name)) continue;
-    // Defined above the block (section A lists them as Figma variables) — not repeated here.
-    if (figmaMatches(name)) { nMatch++; continue; }
     const value = written(cosmos, name);
     const rc = resolved(cosmos, name);
     const rb = blue.has(name) ? resolved(blue, name) : null;
@@ -167,4 +152,4 @@ if (file.includes(START)) {
     file = file.slice(0, anchor) + block + '\n\n' + file.slice(anchor);
 }
 writeFileSync(TOKENS, file);
-console.log(`figma, set in C1–C4: ${figma.size}  section A (not repeated): ${nMatch}  cosmos: ${nCosmos}  default: ${nDefault}  total: ${figma.size + nMatch + nCosmos + nDefault}`);
+console.log(`declared above (C1 Figma + C2 effect styles): ${figma.size}   cosmos: ${nCosmos}  default: ${nDefault}  total: ${figma.size + nCosmos + nDefault}`);

@@ -1,0 +1,355 @@
+# Figma local variables — "LDS2 | MSD | Components for Web" (figma.com/design/3FTyjvu0JC5UtYqnoLqDFh)
+# Read 2026-10-19, re-read and patched 2026-10-19 (9 colour lines, 1 type line) through the Plugin API. DEFAULT MODE ONLY (light) — Dark Mode BETA is not imported.
+# One variable per line:  <figma name> ; <Web code syntax, or -> ; <value>
+#   value: a number (px for spacing/sizing/radius/type), a font name or style, a hex colour,
+#   or →<code syntax / name of the aliased variable>.
+# Regenerate with step 1 of SKILL.md; import-figma.mjs reads this file.
+@collection Spacing/Sizing 37
+sizing-border/1 (1px);--slds-g-sizing-border-1;1
+sizing-border/2 (2px);--slds-g-sizing-border-2;1.5
+sizing-border/3 (2px);--slds-g-sizing-border-3;2
+sizing-border/4 (4px);--slds-g-sizing-border-4;3
+sizing/1 (2px);--slds-g-sizing-1;2
+sizing/2 (4px);--slds-g-sizing-2;4
+sizing/3 (8px);--slds-g-sizing-3;8
+sizing/4 (12px);--slds-g-sizing-4;12
+sizing/5 (16px);--slds-g-sizing-5;16
+sizing/6 (20px);--slds-g-sizing-6;20
+sizing/7 (24px);--slds-g-sizing-7;24
+sizing/8 (28px);--slds-g-sizing-8;28
+sizing/9 (32px);--slds-g-sizing-9;32
+sizing/10 (48px);--slds-g-sizing-10;48
+sizing/11 (64px);--slds-g-sizing-11;64
+sizing/12 (80px);--slds-g-sizing-12;80
+sizing/13 (160px);--slds-g-sizing-13;160
+sizing/14 (240px);--slds-g-sizing-14;240
+sizing/15 (320px);--slds-g-sizing-15;320
+sizing/16 (480px);--slds-g-sizing-16;480
+spacing/1 (4px);--slds-g-spacing-1;4
+spacing/2 (8px);--slds-g-spacing-2;8
+spacing/3 (12px);--slds-g-spacing-3;12
+spacing/4 (16px);--slds-g-spacing-4;16
+spacing/5 (24px);--slds-g-spacing-5;24
+spacing/6 (32px);--slds-g-spacing-6;32
+spacing/7 (40px);--slds-g-spacing-7;40
+spacing/8 (48px);--slds-g-spacing-8;48
+spacing/9 (56px);--slds-g-spacing-9;56
+spacing/10 (64px);--slds-g-spacing-10;64
+spacing/11 (72px);--slds-g-spacing-11;72
+spacing/12 (80px);--slds-g-spacing-12;80
+radius-border/1 (4px);--slds-g-radius-border-1;4
+radius-border/2 (8px);--slds-g-radius-border-2;8
+radius-border/3 (12px);--slds-g-radius-border-3;12
+radius-border/4 (20px);--slds-g-radius-border-4;20
+radius-border/circle (9999px);--slds-g-radius-border-circle;9999
+@collection Typography 19
+font/scale/neg-2;--slds-g-font-scale-neg-2;12
+font/scale/neg-1;--slds-g-font-scale-neg-1;14
+font/scale/base;--slds-g-font-scale-base;16
+font/scale/1;--slds-g-font-scale-1;18
+font/scale/2;--slds-g-font-scale-2;20
+font/scale/3;--slds-g-font-scale-3;24
+font/scale/4;--slds-g-font-scale-4;32
+font/scale/5;--slds-g-font-scale-5;36
+font/scale/6;--slds-g-font-scale-6;40
+font/family/base;--slds-g-font-family-base;Atkinson Hyperlegible Next
+font/scale/7;--slds-g-font-scale-7;48
+font/family/monospace;--slds-g-font-family-monospace;SF Mono
+font/scale/8;--slds-g-font-scale-8;60
+font/weight/3;--slds-g-font-weight-3;Light
+font/weight/4;--slds-g-font-weight-4;Regular
+font/weight/5;--slds-g-font-weight-5;Medium
+font/weight/6;--slds-g-font-weight-6;SemiBold
+font/weight/7;--slds-g-font-weight-7;Bold
+font/family/mobile;-;Atkinson Hyperlegible Next
+@collection Color Mode 290
+surface/1 (Neutral 100);--slds-g-color-surface-1;→--slds-g-color-neutral-base-100
+surface/2 (Neutral 95);--slds-g-color-surface-2;→--slds-g-color-neutral-base-95
+surface/inverse-1 (Blue 20);--slds-g-color-surface-inverse-1;→--slds-g-color-brand-base-20
+surface/inverse-2 (Blue 15);--slds-g-color-surface-inverse-2;→--slds-g-color-brand-base-15
+on-surface/1 (Neutral 40);--slds-g-color-on-surface-1;→--slds-g-color-neutral-base-40
+on-surface/2 (Neutral 20);--slds-g-color-on-surface-2;→--slds-g-color-neutral-base-20
+on-surface/3 (Blue 15);--slds-g-color-on-surface-3;→--slds-g-color-brand-base-15
+on-surface/inverse-1 (Neutral 100);--slds-g-color-on-surface-inverse-1;→--slds-g-color-neutral-base-100
+on-surface/inverse-2 (Electric Blue 80);--slds-g-color-on-surface-inverse-2;→--slds-g-color-brand-base-80
+accent/1 (Electric Blue 50);--slds-g-color-accent-1;→--slds-g-color-brand-base-50
+accent/2 (Electric Blue 40);--slds-g-color-accent-2;→--slds-g-color-brand-base-40
+accent/3 (Electric Blue 30);--slds-g-color-accent-3;→--slds-g-color-brand-base-30
+accent/container-1 (Electric Blue 50);--slds-g-color-accent-container-1;→--slds-g-color-brand-base-50
+accent/container-2 (Electric Blue 40);--slds-g-color-accent-container-2;→--slds-g-color-brand-base-40
+accent/container-3 (Electric Blue 30);--slds-g-color-accent-container-3;→--slds-g-color-brand-base-30
+accent/on-accent-1 (Neutral 100);--slds-g-color-on-accent-1;→--slds-g-color-neutral-base-100
+accent/on-accent-2 (Neutral 100);--slds-g-color-on-accent-2;→--slds-g-color-neutral-base-100
+accent/on-accent-3 (Neutral 100);--slds-g-color-on-accent-3;→--slds-g-color-neutral-base-100
+accent/border-accent-1 (Electric Blue 50);--slds-g-color-border-accent-1;→--slds-g-color-brand-base-50
+accent/border-accent-2 (Electric Blue 35);--slds-g-color-border-accent-2;→--slds-g-color-brand-base-40
+accent/border-accent-3 (Electric Blue 20);--slds-g-color-border-accent-3;→--slds-g-color-brand-base-30
+container/1 (Neutral 100);--slds-g-color-surface-container-1;→--slds-g-color-neutral-base-100
+container/2 (Neutral 95);--slds-g-color-surface-container-2;→--slds-g-color-neutral-base-95
+container/3 (Neutral 90);--slds-g-color-surface-container-3;→--slds-g-color-neutral-base-90
+container/inverse-1 (Blue 20);--slds-g-color-surface-container-inverse-1;→--slds-g-color-brand-base-20
+container/inverse-2 (Blue 15);--slds-g-color-surface-container-inverse-2;→--slds-g-color-brand-base-15
+border/1 (Neutral 80);--slds-g-color-border-1;→--slds-g-color-neutral-base-80
+border/2 (Neutral 60);--slds-g-color-border-2;→--slds-g-color-neutral-base-60
+border/inverse-1 (Neutral 95);--slds-g-color-border-inverse-1;→--slds-g-color-neutral-base-95
+border/inverse-2 (Blue 20);--slds-g-color-border-inverse-2;→--slds-g-color-brand-base-20
+error/1 (Pink 40);--slds-g-color-error-1;→--slds-g-color-error-base-40
+error/container-1 (Pink 90);--slds-g-color-error-container-1;→--slds-g-color-error-base-90
+error/container-2 (Pink 80);--slds-g-color-error-container-2;→--slds-g-color-error-base-80
+error/on-error-1 (Pink 30);--slds-g-color-on-error-1;→--slds-g-color-error-base-30
+error/on-error-2 (Pink 20);--slds-g-color-on-error-2;→--slds-g-color-error-base-20
+error/border-error-1 (Pink 40);--slds-g-color-border-error-1;→--slds-g-color-error-base-40
+error/border-error-2 (Pink 30);--slds-g-color-border-error-2;→--slds-g-color-error-base-30
+warning/1 (Yellow 40);--slds-g-color-warning-1;→--slds-g-color-warning-base-40
+warning/container-1 (Yellow 90);--slds-g-color-warning-container-1;→--slds-g-color-warning-base-90
+warning/on-warning-1 (Yellow 30);--slds-g-color-on-warning-1;→--slds-g-color-warning-base-30
+success/1 (Teal 40);--slds-g-color-success-1;→--slds-g-color-success-base-40
+success/container-1 (Teal 90);--slds-g-color-success-container-1;→--slds-g-color-success-base-90
+success/container-2 (Teal 80);--slds-g-color-success-container-2;→--slds-g-color-success-base-80
+success/on-success-1 (Teal 30);--slds-g-color-on-success-1;→--slds-g-color-success-base-30
+success/on-success-2 (Teal 20);--slds-g-color-on-success-2;→--slds-g-color-success-base-20
+success/border-success-1 (Teal 40);--slds-g-color-border-success-1;→--slds-g-color-success-base-40
+success/border-success-2 (Teal 20);--slds-g-color-border-success-2;→--slds-g-color-success-base-20
+info/1 (Blue 40);--slds-g-color-info-1;→--slds-g-color-info-base-40
+info/container-1 (Blue 90);--slds-g-color-info-container-1;→--slds-g-color-info-base-90
+info/on-info-1 (Blue 40);--slds-g-color-on-info-1;→--slds-g-color-info-base-40
+disabled/1 (Neutral 50);--slds-g-color-disabled-1;→--slds-g-color-neutral-base-50
+disabled/disabled-container-1 (Neutral 90);--slds-g-color-disabled-container-1;→--slds-g-color-neutral-base-90
+disabled/disabled-container-2 (Neutral 80);--slds-g-color-disabled-container-2;→--slds-g-color-neutral-base-80
+disabled/on-disabled-1 (Neutral 50);--slds-g-color-on-disabled-1;→--slds-g-color-neutral-base-50
+disabled/on-disabled-2 (Neutral 40);--slds-g-color-on-disabled-2;→--slds-g-color-neutral-base-40
+disabled/border-disabled-1 (Neutral 80);--slds-g-color-border-disabled-1;→--slds-g-color-neutral-base-80
+neutral-base/100 (Neutral 100);--slds-g-color-neutral-base-100;#ffffff
+neutral-base/95 (Neutral 95);--slds-g-color-neutral-base-95;#f0f0f0
+neutral-base/90 (Neutral 90);--slds-g-color-neutral-base-90;#e0e0e0
+neutral-base/80 (Neutral 80);--slds-g-color-neutral-base-80;#c2c2c2
+neutral-base/70 (Neutral 70);--slds-g-color-neutral-base-70;#a3a3a3
+neutral-base/65 (Neutral 65);--slds-g-color-neutral-base-65;#949494
+neutral-base/60 (Neutral 60);--slds-g-color-neutral-base-60;#858585
+neutral-base/55 (Neutral 55);--slds-g-color-neutral-base-55;#757575
+neutral-base/50 (Neutral 50);--slds-g-color-neutral-base-50;#666666
+neutral-base/45 (Neutral 45);--slds-g-color-neutral-base-45;#5c5c5c
+neutral-base/40 (Neutral 40);--slds-g-color-neutral-base-40;#525252
+neutral-base/30 (Neutral 30);--slds-g-color-neutral-base-30;#3d3d3d
+neutral-base/20 (Neutral 20);--slds-g-color-neutral-base-20;#292929
+neutral-base/15 (Neutral 15);--slds-g-color-neutral-base-15;#1f1f1f
+neutral-base/10 (Neutral 10);--slds-g-color-neutral-base-10;#141414
+brand-base/100 (Electric Blue 100);--slds-g-color-brand-base-100;#ffffff
+neutral-base/0 (Neutral 0);--slds-g-color-neutral-base-0;#000000
+brand-base/95 (Electric Blue 95);--slds-g-color-brand-base-95;#e6f2fa
+brand-base/90 (Electric Blue 90);--slds-g-color-brand-base-90;#cce4f4
+brand-base/80 (Electric Blue 80);--slds-g-color-brand-base-80;#99cae9
+brand-base/70 (Electric Blue 70);--slds-g-color-brand-base-70;#67afdf
+brand-base/65 (Electric Blue 65);--slds-g-color-brand-base-65;#4da2d9
+brand-base/60 (Electric Blue 60);--slds-g-color-brand-base-60;#3495d4
+brand-base/55 (Electric Blue 55);--slds-g-color-brand-base-55;#1a87ce
+brand-base/50 (Electric Blue 50);--slds-g-color-brand-base-50;#017ac9
+brand-base/45 (Electric Blue 45);--slds-g-color-brand-base-45;#066cb4
+brand-base/40 (Electric Blue 40);--slds-g-color-brand-base-40;#0a5ea0
+brand-base/30 (Electric Blue 30);--slds-g-color-brand-base-30;#134276
+brand-base/20 (Electric Blue 20);--slds-g-color-brand-base-20;#0d2c4f
+brand-base/15 (Electric Blue 15);--slds-g-color-brand-base-15;#0a213b
+error-base/100 (Pink 100);--slds-g-color-error-base-100;#ffffff
+brand-base/10 (Electric Blue 10);--slds-g-color-brand-base-10;#061627
+error-base/95 (Pink 95);--slds-g-color-error-base-95;#faebeb
+error-base/90 (Pink 90);--slds-g-color-error-base-90;#f6d7d6
+error-base/80 (Pink 80);--slds-g-color-error-base-80;#ecafad
+error-base/70 (Pink 70);--slds-g-color-error-base-70;#e38685
+error-base/65 (Pink 65);--slds-g-color-error-base-65;#de7270
+error-base/60 (Pink 60);--slds-g-color-error-base-60;#d95e5c
+error-base/55 (Pink 55);--slds-g-color-error-base-55;#d54a47
+error-base/50 (Pink 50);--slds-g-color-error-base-50;#d03633
+error-base/45 (Pink 45);--slds-g-color-error-base-45;#bb312e
+error-base/40 (Pink 40);--slds-g-color-error-base-40;#a62b29
+error-base/30 (Pink 30);--slds-g-color-error-base-30;#7d201f
+error-base/20 (Pink 20);--slds-g-color-error-base-20;#531614
+error-base/15 (Pink 15);--slds-g-color-error-base-15;#3e100f
+warning-base/100 (Yellow 100);--slds-g-color-warning-base-100;#ffffff
+error-base/10 (Pink 10);--slds-g-color-error-base-10;#2a0b0a
+warning-base/95 (Yellow 95);--slds-g-color-warning-base-95;#fff2e8
+warning-base/90 (Yellow 90);--slds-g-color-warning-base-90;#fee5d0
+warning-base/80 (Yellow 80);--slds-g-color-warning-base-80;#fdcca1
+warning-base/70 (Yellow 70);--slds-g-color-warning-base-70;#fcb272
+warning-base/65 (Yellow 65);--slds-g-color-warning-base-65;#fca55b
+warning-base/60 (Yellow 60);--slds-g-color-warning-base-60;#fb9943
+warning-base/55 (Yellow 55);--slds-g-color-warning-base-55;#fb8c2c
+warning-base/50 (Yellow 50);--slds-g-color-warning-base-50;#fa7f14
+warning-base/45 (Yellow 45);--slds-g-color-warning-base-45;#e17212
+warning-base/40 (Yellow 40);--slds-g-color-warning-base-40;#c86610
+warning-base/30 (Yellow 30);--slds-g-color-warning-base-30;#964c0c
+warning-base/20 (Yellow 20);--slds-g-color-warning-base-20;#643308
+warning-base/15 (Yellow 15);--slds-g-color-warning-base-15;#4b2606
+success-base/100 (Teal 100);--slds-g-color-success-base-100;#ffffff
+warning-base/10 (Yellow 10);--slds-g-color-warning-base-10;#321904
+success-base/95 (Teal 95);--slds-g-color-success-base-95;#ebf3e8
+success-base/90 (Teal 90);--slds-g-color-success-base-90;#d7e6d0
+success-base/80 (Teal 80);--slds-g-color-success-base-80;#afcda1
+success-base/70 (Teal 70);--slds-g-color-success-base-70;#88b572
+success-base/65 (Teal 65);--slds-g-color-success-base-65;#74a85b
+success-base/60 (Teal 60);--slds-g-color-success-base-60;#609c43
+success-base/55 (Teal 55);--slds-g-color-success-base-55;#4c8f2c
+success-base/50 (Teal 50);--slds-g-color-success-base-50;#388314
+success-base/45 (Teal 45);--slds-g-color-success-base-45;#327612
+success-base/40 (Teal 40);--slds-g-color-success-base-40;#2d6910
+success-base/30 (Teal 30);--slds-g-color-success-base-30;#224f0c
+success-base/20 (Teal 20);--slds-g-color-success-base-20;#163408
+success-base/15 (Teal 15);--slds-g-color-success-base-15;#112706
+success-base/10 (Teal 10);--slds-g-color-success-base-10;#0b1a04
+information/100 (Blue 100);--slds-g-color-info-base-100;#ffffff
+information/95 (Blue 95);--slds-g-color-info-base-95;#e6f2fa
+palette/cloud-blue/95 (Cloud Blue 95);--slds-g-color-palette-cloud-blue-95;#eaf5fe
+palette/cloud-blue/90 (Cloud Blue 90);--slds-g-color-palette-cloud-blue-90;#cfe9fe
+palette/cloud-blue/85 (Cloud Blue 85);-;#aeddfe
+palette/cloud-blue/80 (Cloud Blue 80);--slds-g-color-palette-cloud-blue-80;#90d0fe
+palette/cloud-blue/70 (Cloud Blue 70);--slds-g-color-palette-cloud-blue-70;#1ab9ff
+palette/cloud-blue/65 (Cloud Blue 65);--slds-g-color-palette-cloud-blue-65;#08abed
+palette/cloud-blue/60 (Cloud Blue 60);--slds-g-color-palette-cloud-blue-60;#0d9dda
+palette/cloud-blue/50 (Cloud Blue 50);--slds-g-color-palette-cloud-blue-50;#107cad
+palette/cloud-blue/40 (Cloud Blue 40);--slds-g-color-palette-cloud-blue-40;#05628a
+palette/cloud-blue/35 (Cloud Blue 35);--slds-g-color-palette-cloud-blue-40;#075579
+palette/cloud-blue/30 (Cloud Blue 30);--slds-g-color-palette-cloud-blue-30;#084968
+palette/cloud-blue/20 (Cloud Blue 20);--slds-g-color-palette-cloud-blue-20;#023248
+palette/cloud-blue/15 (Cloud Blue 15);--slds-g-color-palette-cloud-blue-15;#0a2636
+palette/cloud-blue/10 (Cloud Blue 10);--slds-g-color-palette-cloud-blue-10;#001a28
+palette/cloud-blue/5 (Cloud Blue 5);--slds-g-color-palette-cloud-blue-10;#000409
+palette/green/95 (Green 95);--slds-g-color-palette-green-95;#ebf9f8
+palette/green/100 (Green 100);--slds-g-color-palette-green-100;#ffffff
+palette/green/90 (Green 90);--slds-g-color-palette-green-90;#d7f2f1
+palette/green/80 (Green 80);--slds-g-color-palette-green-80;#aee6e3
+palette/green/70 (Green 70);--slds-g-color-palette-green-70;#86d9d6
+palette/green/65 (Green 65);--slds-g-color-palette-green-65;#72d3cf
+palette/green/60 (Green 60);--slds-g-color-palette-green-60;#5dcdc8
+palette/green/55 (Green 55);--slds-g-color-palette-green-55;#49c6c1
+palette/green/50 (Green 50);--slds-g-color-palette-green-50;#35c0ba
+palette/green/45 (Green 45);--slds-g-color-palette-green-45;#30ada7
+palette/green/40 (Green 40);--slds-g-color-palette-green-40;#2a9a95
+palette/green/30 (Green 30);--slds-g-color-palette-green-30;#207370
+palette/green/20 (Green 20);--slds-g-color-palette-green-20;#154d4a
+palette/green/15 (Green 15);--slds-g-color-palette-green-15;#103a38
+palette/green/10 (Green 10);--slds-g-color-palette-green-10;#0b2625
+palette/hot-orange/95 (Hot Orange 95);--slds-g-color-palette-hot-orange-95;#feefee
+palette/hot-orange/100 (Hot Orange 100);--slds-g-color-palette-hot-orange-100;#ffffff
+palette/hot-orange/90 (Hot Orange 90);--slds-g-color-palette-hot-orange-90;#fddede
+palette/hot-orange/80 (Hot Orange 80);--slds-g-color-palette-hot-orange-80;#fcbebc
+palette/hot-orange/70 (Hot Orange 70);--slds-g-color-palette-hot-orange-70;#fa9d9b
+palette/hot-orange/65 (Hot Orange 65);--slds-g-color-palette-hot-orange-65;#f98d8a
+palette/hot-orange/60 (Hot Orange 60);--slds-g-color-palette-hot-orange-60;#f97d79
+palette/hot-orange/55 (Hot Orange 55);--slds-g-color-palette-hot-orange-55;#f86c69
+palette/hot-orange/50 (Hot Orange 50);--slds-g-color-palette-hot-orange-50;#f75c58
+palette/hot-orange/45 (Hot Orange 45);--slds-g-color-palette-hot-orange-45;#de534f
+palette/hot-orange/40 (Hot Orange 40);--slds-g-color-palette-hot-orange-40;#c64a46
+palette/hot-orange/30 (Hot Orange 30);--slds-g-color-palette-hot-orange-30;#943735
+palette/hot-orange/20 (Hot Orange 20);--slds-g-color-palette-hot-orange-20;#632523
+palette/hot-orange/15 (Hot Orange 15);--slds-g-color-palette-hot-orange-15;#4a1c1a
+palette/hot-orange/10 (Hot Orange 10);--slds-g-color-palette-hot-orange-10;#311212
+palette/indigo/95 (Indigo 95);--slds-g-color-palette-indigo-95;#f1f3fb
+palette/indigo/90 (Indigo 90);--slds-g-color-palette-indigo-90;#e0e5f8
+palette/indigo/85 (Indigo 85);--slds-g-color-palette-indigo-90;#cfd4f7
+palette/indigo/80 (Indigo 80);--slds-g-color-palette-indigo-80;#bec7f6
+palette/indigo/70 (Indigo 70);--slds-g-color-palette-indigo-70;#9ea9f1
+palette/indigo/65 (Indigo 65);--slds-g-color-palette-indigo-65;#8e9bef
+palette/indigo/60 (Indigo 60);--slds-g-color-palette-indigo-60;#7f8ced
+palette/indigo/50 (Indigo 50);--slds-g-color-palette-indigo-50;#5867e8
+palette/indigo/40 (Indigo 40);--slds-g-color-palette-indigo-40;#3a49da
+palette/indigo/35 (Indigo 35);--slds-g-color-palette-indigo-40;#343bc8
+palette/indigo/30 (Indigo 30);--slds-g-color-palette-indigo-30;#2f2cb7
+palette/indigo/20 (Indigo 20);--slds-g-color-palette-indigo-20;#270c92
+palette/indigo/15 (Indigo 15);--slds-g-color-palette-indigo-15;#1f0974
+palette/indigo/10 (Indigo 10);--slds-g-color-palette-indigo-10;#17094e
+palette/indigo/5 (Indigo 5);--slds-g-color-palette-indigo-10;#060116
+palette/orange/95 (Orange 95);--slds-g-color-palette-orange-95;#fff1ea
+palette/orange/90 (Orange 90);--slds-g-color-palette-orange-90;#fedfd0
+palette/orange/85 (Orange 85);--slds-g-color-palette-orange-90;#ffccad
+palette/orange/80 (Orange 80);--slds-g-color-palette-orange-80;#ffba90
+palette/orange/70 (Orange 70);--slds-g-color-palette-orange-70;#fe9339
+palette/orange/65 (Orange 65);--slds-g-color-palette-orange-65;#f38303
+palette/orange/60 (Orange 60);--slds-g-color-palette-orange-60;#dd7a01
+palette/orange/50 (Orange 50);--slds-g-color-palette-orange-50;#a96404
+palette/orange/40 (Orange 40);--slds-g-color-palette-orange-40;#825101
+palette/orange/35 (Orange 35);--slds-g-color-palette-orange-40;#704801
+palette/orange/30 (Orange 30);--slds-g-color-palette-orange-30;#5f3e02
+palette/orange/20 (Orange 20);--slds-g-color-palette-orange-20;#3e2b02
+palette/orange/15 (Orange 15);--slds-g-color-palette-orange-15;#2e2204
+palette/orange/10 (Orange 10);--slds-g-color-palette-orange-10;#201600
+palette/orange/5 (Orange 5);--slds-g-color-palette-orange-10;#060300
+palette/purple/95 (Purple 95);--slds-g-color-palette-purple-95;#f6f2fb
+palette/purple/90 (Purple 90);--slds-g-color-palette-purple-90;#ece1f9
+palette/purple/85 (Purple 85);--slds-g-color-palette-purple-90;#e2d0f6
+palette/purple/80 (Purple 80);--slds-g-color-palette-purple-80;#d7bff2
+palette/purple/70 (Purple 70);--slds-g-color-palette-purple-70;#c29ef1
+palette/purple/65 (Purple 65);--slds-g-color-palette-purple-65;#b78def
+palette/purple/60 (Purple 60);--slds-g-color-palette-purple-60;#ad7bee
+palette/purple/50 (Purple 50);--slds-g-color-palette-purple-50;#9050e9
+palette/purple/40 (Purple 40);--slds-g-color-palette-purple-40;#7526e3
+palette/purple/35 (Purple 35);--slds-g-color-palette-purple-40;#681dc9
+palette/purple/30 (Purple 30);--slds-g-color-palette-purple-30;#5a1ba9
+palette/purple/20 (Purple 20);--slds-g-color-palette-purple-20;#401075
+palette/purple/15 (Purple 15);--slds-g-color-palette-purple-15;#300b60
+palette/purple/10 (Purple 10);--slds-g-color-palette-purple-10;#240643
+palette/purple/5 (Purple 5);--slds-g-color-palette-purple-10;#070114
+palette/red/95 (Red 95);--slds-g-color-palette-red-95;#fef1ee
+palette/red/90 (Red 90);--slds-g-color-palette-red-90;#feded8
+palette/red/85 (Red 85);--slds-g-color-palette-red-90;#feccc3
+palette/red/80 (Red 80);--slds-g-color-palette-red-80;#feb8ab
+palette/red/70 (Red 70);--slds-g-color-palette-red-70;#fe8f7d
+palette/red/65 (Red 65);--slds-g-color-palette-red-65;#fe7765
+palette/red/60 (Red 60);--slds-g-color-palette-red-60;#fe5c4c
+palette/red/50 (Red 50);--slds-g-color-palette-red-50;#ea001e
+palette/red/40 (Red 40);--slds-g-color-palette-red-40;#ba0517
+palette/red/35 (Red 35);--slds-g-color-palette-red-40;#a40413
+palette/red/30 (Red 30);--slds-g-color-palette-red-30;#8e030f
+palette/red/20 (Red 20);--slds-g-color-palette-red-20;#640103
+palette/red/15 (Red 15);--slds-g-color-palette-red-15;#4a0c04
+palette/red/10 (Red 10);--slds-g-color-palette-red-10;#300c01
+palette/red/5 (Red 5);--slds-g-color-palette-red-10;#0c0200
+palette/violet/95 (Violet 95);--slds-g-color-palette-violet-95;#f9f0ff
+palette/violet/90 (Violet 90);--slds-g-color-palette-violet-90;#f2defe
+palette/violet/85 (Violet 85);--slds-g-color-palette-violet-90;#eccdfe
+palette/violet/80 (Violet 80);--slds-g-color-palette-violet-80;#e5b9fe
+palette/violet/70 (Violet 70);--slds-g-color-palette-violet-70;#d892fe
+palette/violet/65 (Violet 65);--slds-g-color-palette-violet-65;#d17dfe
+palette/violet/60 (Violet 60);--slds-g-color-palette-violet-60;#cb65ff
+palette/violet/50 (Violet 50);--slds-g-color-palette-violet-50;#ba01ff
+palette/violet/40 (Violet 40);--slds-g-color-palette-violet-40;#9602c7
+palette/violet/35 (Violet 35);--slds-g-color-palette-violet-40;#8402ad
+palette/violet/30 (Violet 30);--slds-g-color-palette-violet-30;#730394
+palette/violet/20 (Violet 20);--slds-g-color-palette-violet-20;#580276
+palette/violet/15 (Violet 15);--slds-g-color-palette-violet-15;#3d0157
+palette/violet/10 (Violet 10);--slds-g-color-palette-violet-10;#2e0039
+palette/violet/5 (Violet 5);--slds-g-color-palette-violet-10;#060300
+information/90 (Blue 90);--slds-g-color-info-base-90;#cce4f4
+information/80 (Blue 80);--slds-g-color-info-base-80;#99cae9
+information/70 (Blue 70);--slds-g-color-info-base-70;#67afdf
+information/65 (Blue 65);--slds-g-color-info-base-65;#4da2d9
+information/60 (Blue 60);--slds-g-color-info-base-60;#3495d4
+information/55 (Blue 55);--slds-g-color-info-base-55;#1a87ce
+information/50 (Blue 50);--slds-g-color-info-base-50;#017ac9
+information/45 (Blue 45);--slds-g-color-info-base-45;#016eb5
+information/40 (Blue 40);--slds-g-color-info-base-40;#0162a1
+information/30 (Blue 30);--slds-g-color-info-base-30;#014979
+information/20 (Blue 20);--slds-g-color-info-base-20;#003150
+information/15 (Blue 15);--slds-g-color-info-base-15;#00253c
+information/10 (Blue 10);--slds-g-color-info-base-10;#001828
+component hooks/list item drag;-;#134276cc
+component hooks/modal backdrop;-;→--slds-g-color-neutral-base-20
+component hooks/destructive-button-container-1;-;→--slds-g-color-error-base-50
+component hooks/destructive-button-container-2;-;→--slds-g-color-error-base-40
+component hooks/on-destructive-button-1;-;→--slds-g-color-neutral-base-100
+component hooks/on-destructive-button-2;-;→--slds-g-color-neutral-base-100
+component hooks/success-button-container-1;-;→--slds-g-color-success-base-50
+component hooks/success-button-container-2;-;→--slds-g-color-success-base-40
+component hooks/on-success-button-1;-;→--slds-g-color-neutral-base-100
+component hooks/on-success-button-2;-;→--slds-g-color-neutral-base-100
+component hooks/neutral-button-bevel;-;→--slds-g-color-neutral-base-20
+component hooks/brand-button-bevel;-;→--slds-g-color-brand-base-20
+component hooks/destructive-button-bevel;-;→--slds-g-color-error-base-20
+component hooks/success-button-bevel;-;→--slds-g-color-success-base-20
+shadows/level 1/1+2;-;#162c4533
+shadows/level 1/3;-;#162c451a
+shadows/level 2/1+2;-;#162c4529
+shadows/level 2/3;-;#162c4517
+shadows/level 3/1+2;-;#162c4524
+shadows/level 3/3;-;#162c4514
+shadows/level 4/1+2;-;#162c451f
+shadows/level 4/3;-;#162c4512
+warning/border-warning-1;--slds-g-color-border-warning-1;→--slds-g-color-warning-base-40

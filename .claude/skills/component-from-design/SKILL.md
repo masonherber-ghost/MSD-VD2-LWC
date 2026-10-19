@@ -78,9 +78,10 @@ part only**. This table goes in the report and, condensed, in the skin's comment
 
 ## 6. Update the design system
 
-- **`/design-system` → Components** renders the shipped examples live, so a skin set on the tag
-  shows there automatically — check that the component has examples (`ls
-  node_modules/lightning-base-components/src/lightning/<name>/__examples__/`).
+- **`/design-system` → Components shows the skin.** The shipped examples are native shadow-DOM
+  components; `ui/exampleStage` adopts the page's stylesheets (SLDS, tokens, `site.css`,
+  utilities) into each example's shadow root, so their own `slds-*` classes and our tag-level
+  skins apply as on a page (fixed 2026-10-19 — before, buttons rendered unspaced and unskinned).
 - `npm run compositions` if you added a `sep-` class or a wrapper; `npm run tokens` if you added a
   token.
 - Run the `assess-tiers` skill: the skin must add **no** out-of-bounds flag.
@@ -88,8 +89,15 @@ part only**. This table goes in the report and, condensed, in the skin's comment
 ## 7. Verify
 
 - Curl the changed modules / served CSS (`CLAUDE.md` § *Verifying*); `npm run build` exits 0.
-- **Read computed values per state in a browser.** If none is available, report the skin as
-  *unverified* — a compiled hook can be a no-op.
+- **Read computed values per state in a browser.** `measure-states.mjs` in this folder does it:
+  headless Chrome (installed app, `playwright-core` in a scratch dir), the component's shipped
+  examples moved into the light DOM so `site.css` applies, each state forced with CDP
+  `CSS.forcePseudoState` (synthetic mouse events gave wrong `:active` readings). Usage is in its
+  header. Compare every row with the skin map; a hook that changes nothing is a finding.
+- A hook can be read by the component and **still be dead**: `lightning-button` reads
+  `--slds-c-button-neutral-spacing-inline` in a declaration SLDS ships with a stray `;`, so it
+  never applies. `hook-map.mjs` lists it as OPEN; only measuring caught it.
+- If no browser is available, report the skin as *unverified*.
 
 ## 8. Report
 

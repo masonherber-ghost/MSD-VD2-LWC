@@ -376,3 +376,21 @@ After building:
 - **Component:** `node .claude/skills/lwc-component-review/hook-map.mjs button` (rules, OPEN and CLOSED hooks, globals, private), plus a read of `button/button.slds.css` lines 181–470 for each variant's chain. Shared defaults (`--slds-s-button-*`) come from the shipped Cosmos sheet.
 - **OOTB values:** resolved through `design-tokens.css` with C1–C4 live.
 - **Verdict counts:** re-counted from the tables before saving.
+
+---
+
+## Built — 2026-10-19
+
+Built with `component-from-design` into `site.css` § Component skins ("MSD Button"). Decisions: Q1 solid; Q2 the design's `-1` disabled pair; Q3 accept the component (no `::part`); Q4 take the component's behaviour. Q5 built as drawn; Q6 answered by the design itself.
+
+**The design had changed since this review:** padding 12/24px (`spacing-3` / `spacing-5`), line height 137.5% (`--slds-g-font-line-height-3`), the text style is now "Body/font-scale-1/Medium" (`font-weight-5`), and the outlined border is bound to `sizing-border-2` = 1.5px. So the 1.5px value flagged in the Figma tokens report is deliberate; only its "(2px)" label is wrong. Destructive Text's hover/active text is now `on-error-1`.
+
+**Measured in headless Chrome, every variant × state.** It matches the design except:
+- **Side padding: 16px, not 24px.** `--slds-c-button-neutral-spacing-inline` is a no-op, because SLDS ships the declaration that reads it with a stray `;`. Reaching it needs `::part` or the private `--slds-s-button-spacing-inline`.
+- **Gaps from §7, as decided:**
+  - every variant: 1px outline, no hover lift
+  - base: border and inset shadow when pressed
+  - destructive: focus fill uses the hover colour
+  - destructive text: hover border and text
+  - inverse: every gap listed in §4.7
+- **Height:** 50.75px, against 49px drawn, because CSS borders add to the box.

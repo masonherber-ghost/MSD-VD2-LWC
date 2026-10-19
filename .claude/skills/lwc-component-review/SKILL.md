@@ -137,3 +137,5 @@ If the review finds that `design-tokens.css` documents a hook wrongly, fix that 
 | Date | Change |
 |---|---|
 | 2026-10-19 | Created. First run: `lightning-button`, Figma node 18216:94008. `hook-map.mjs` added |
+| 2026-10-19 | Button built (component-from-design). Measured: `--slds-c-button-neutral-spacing-inline` is OPEN per hook-map but dead — SLDS ships its declaration with a stray `;`. hook-map proves a hook is read, not that it works; the build step measures. The design changed between review and build (padding 12/24, line height 1.375, 1.5px outline) — re-read the design before building |
+| 2026-10-19 | **Post-build review** (`_docs/component-review-button-2026-10-19-b.md`): when the component is already skinned, compare the design with what RENDERS, measured with `component-from-design/measure-states.mjs`, not with OOTB. Verdicts: ✓ / ≈ / ✗ decided / ✗ new; count the marks with a script — the first draft estimated 104 values, the tables held 142. Same-day reviews take a `-b` suffix |

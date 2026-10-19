@@ -1,232 +1,214 @@
 ---
 name: lwc-figma-ds-tokens-import
-description: Import a Figma file's design tokens (local variables, plus the text and effect styles bound to them) into src/assets/css/design-tokens.css, categorised by the SLDS tier each one lands in — global hooks that already match, global hooks that differ, project `--sep-*` tokens, component hooks, `--dxp` hooks, private hooks — and write a report in _docs on what in the Figma file does not line up with SLDS and how to fix it. Use when asked for a "Figma tokens report" or given a Figma link and asked to "import the variables/tokens", "sync the tokens from Figma", "update design-tokens.css from Figma", or to re-run the import after the Figma library changes. Also the reference for any later edit to design-tokens.css.
+description: Import a Figma file's design tokens (local variables, plus the effect styles bound to them) into src/assets/css/design-tokens.css so that EVERY public --slds-g-* global hook is declared there — Figma's value wherever Figma defines the hook, Cosmos's or SLDS's own value everywhere else — and write a report in _docs on what in the Figma file does not line up with SLDS and how to fix it. Use when asked for a "Figma tokens report" or given a Figma link and asked to "import the variables/tokens", "sync the tokens from Figma", "update/replace the values in design-tokens.css from Figma", or to re-run the import after the Figma library changes. Also the reference for any later edit to design-tokens.css.
 ---
 
 # Figma design tokens → design-tokens.css
 
-Pulls **every** local variable from a Figma design file, checks each one against the SLDS stylesheet
-this site actually loads, and writes it into `src/assets/css/design-tokens.css` in the tier it
-belongs to. Nothing is declared on trust: a name the stylesheet does not ship is not a global hook,
-whatever its code syntax says.
+Reads **every** local variable in the Figma file, works out which public `--slds-g-*` hook each
+one is meant for, and **generates** `src/assets/css/design-tokens.css` so that:
+
+- **all 524 public `--slds-g-*` hooks are declared** in that one file, and
+- **every hook Figma defines carries Figma's value** — whether or not it differs from SLDS — while
+  every hook Figma does not define carries Cosmos's (or SLDS's own) value.
+
+Nothing is declared on trust: a name the shipped stylesheet does not declare is not a hook, whatever
+its code syntax says.
 
 **Read first:** `.claude/rules/rules-lwc-layout.md` § *Styling hooks, not hex* and § *Defining a
 project token*, and `.claude/rules/rules-skinning.md` § *Never*. Where they disagree with this skill,
 they win.
 
 **Keep this skill current.** Any change to how `design-tokens.css` is structured, named, switched or
-checked updates this file in the same piece of work — the decision log at the bottom and, if it
-changes, *Current state*. A skill that describes last month's file is worse than none.
+checked updates this file in the same piece of work — *Current state* and the decision log.
 
 ---
+
+## The pipeline — three files, two generators
+
+```
+Figma ──(step 1, use_figma)──▶ figma-variables.txt ──import-figma.mjs──▶ C1 (generated)
+                                                    sync-slds-globals.mjs──▶ C3 (generated)
+Figma effect styles ──(step 1)──▶ hand-written C2 (elevation, focus) + B (--sep shadow tints)
+```
+
+| File in this folder | Role |
+|---|---|
+| `figma-variables.txt` | The snapshot: one Figma variable per line — `name ; code syntax ; Default-mode value or →alias`. Committed, so an import is reviewable as a diff |
+| `import-figma.mjs` | Writes **C1** between `@generated figma:start/end`: every variable that lands on a shipped `--slds-g-*` hook, with Figma's value. Prints every set-up problem it had to work around — that output is the core of the report |
+| `sync-slds-globals.mjs` | Writes **C3** between `@generated slds-globals:start/end`: every global **not declared above it**, at Cosmos's value, labelled `cosmos — default X` or `default` |
+| `check-tokens.mjs` | Verifies the file (step 4) |
+
+**Never hand-edit C1 or C3.** Change the snapshot (or the scripts) and regenerate.
 
 ## Decisions already made — do not re-litigate
 
 | Decision | Why |
 |---|---|
-| Project tokens are **`--sep-*`** | User's rule (was `--site-*`). Never `--slds-*` for a name SLDS does not ship |
+| **All 524 public globals are declared** in `design-tokens.css` | User's rule (2026-10-19): the file is the complete record of the site's tokens |
+| **Figma's value wins** for every hook Figma defines — including ones equal to SLDS | User's rule (2026-10-19). Labels say which equal SLDS: `figma = default`, `figma = cosmos` |
+| What is declared above the C3 block is the source of truth; **C3 never repeats it** | User's rule (2026-10-19) |
+| The import is **live** — no `[OFF]` blocks | Superseded the 2026-10-15 "off by default". The user switched every block on, then asked for Figma's values to replace the file's |
+| Project tokens are **`--sep-*`**. Never `--slds-*` for a name SLDS does not ship | User's rule |
 | **Light values only** — Figma's Default mode. No `light-dark()` | User's decision. Dark Mode BETA is not imported |
-| Overrides of `--slds-g-*` go in **`[OFF]` blocks** by default | The site shows default Lightning until the user switches a block on. Ask before importing anything live |
-| A global hook whose Figma value **equals** the shipped one is **listed in section A, not declared** — and not repeated in C5 | User's rule (2026-10-19): what is defined above the generated block is the source of truth; C5 never repeats it |
-| Every other global is declared in **C5**, generated by `sync-slds-globals.mjs` | User's decision (2026-10-19): the whole set visible in one file, re-synced after an upgrade rather than drifting |
-| Semantic tokens **alias** ramp steps with `var()`, as Figma does | Keeps Figma's structure: change a ramp, every role follows |
-| Component hooks (`--slds-c-*`) are **listed only** | They live on the component's tag in `site.css` § *Component skins* (`rules-skinning.md`) |
-| `--slds-r-*` (Cosmos reference ramps) and `--slds-s-*` are **not set** | Undocumented / private. Set the public `--slds-g-*` names instead |
-| Content width and gutter (`--sep-content-*`) are **not** Figma tokens | Layout, read by `site.css` and `siteFooter.css`. Never delete them in an import |
+| A `--sep-*` token only when something reads it | Today: the 8 shadow tints. Figma-only steps nothing aliases are *not imported* |
+| Semantic tokens **alias** ramp steps with `var()`, as Figma does | Change a ramp, every role follows |
+| Component hooks (`--slds-c-*`) are **listed only** (section D) | They live on the component's tag in `site.css` (`rules-skinning.md`) |
+| `--slds-r-*` and `--slds-s-*` are **never set or read** | Undocumented / private. C3 writes `--slds-r-*` references as literals |
+| Content width and gutter (`--sep-content-*`) are **not** Figma tokens | Layout. Never delete them in an import |
 
 ---
 
-## 1. Read the file through the Plugin API, not `get_variable_defs`
+## 1. Snapshot the Figma file → `figma-variables.txt`
 
-`get_variable_defs` only returns the variables **one node uses**, and the cloud server needs a
-frame, not a page (a page id answers "nothing selected"). For the whole set use `use_figma` — load
-the `figma:figma-use` skill first, as it requires.
-
-Returns are capped at **20 KB**. A ~300-variable colour collection does not fit; split it.
+`get_variable_defs` only returns what **one node** uses — useless here. Use `use_figma` (load the
+`figma:figma-use` skill first). Returns are capped at **20 KB**, so split the colour collection.
+Run in parallel; they are read-only.
 
 ```js
-// 1. Collections, counts, modes
+// Collections and counts — first, to see whether the file changed since the last snapshot.
 const cols = await figma.variables.getLocalVariableCollectionsAsync();
 return cols.map(c => ({ name: c.name, count: c.variableIds.length, modes: c.modes.map(m => m.name) }));
 ```
 
 ```js
-// 2. One collection (or a slice of one): name ; Web code syntax ; value per mode
+// One collection (or a slice): name ; code syntax ; DEFAULT-mode value or →alias target.
+// Aliases into a linked library are resolved to their value.
 const c = (await figma.variables.getLocalVariableCollectionsAsync()).find(c => c.name === 'Color Mode');
 const vars = await figma.variables.getLocalVariablesAsync();
 const byId = new Map(vars.map(v => [v.id, v]));
 const hex = c => { const h = x => Math.round(x*255).toString(16).padStart(2,'0');
-  return '#'+h(c.r)+h(c.g)+h(c.b)+(c.a!==undefined && c.a<1 ? h(c.a) : ''); };
-const fmt = val => (val && val.type === 'VARIABLE_ALIAS') ? '→' + (byId.get(val.id)?.name ?? '?')
-  : (val && typeof val === 'object' && 'r' in val) ? hex(val) : val;
-return c.variableIds.slice(0, 150).map(id => { const v = byId.get(id);
-  return [v.name, v.codeSyntax.WEB || '-', c.modes.map(m => fmt(v.valuesByMode[m.modeId])).join('|')].join(';'); }).join('\n');
-```
-
-An alias shown as `→?` points into a **linked library**. Resolve it with
-`figma.variables.getVariableByIdAsync(id)` and read that variable's first mode value.
-
-```js
-// 3. Text and effect styles, with the variables they bind
-(await figma.getLocalTextStylesAsync()).map(s => [s.name, s.fontName, s.fontSize, s.lineHeight, s.boundVariables]);
-(await figma.getLocalEffectStylesAsync()).map(s => [s.name, s.effects]);
-```
-
-Run the reads in parallel. They are read-only; say so in each call's `description`.
-
-## 2. Classify every variable against the shipped stylesheet
-
-```bash
-C=node_modules/@salesforce-ux/design-system-2/dist/css/bundled/slds2.cosmos.css
-grep -o -- "--slds-g-spacing-4:[^;]*" $C          # does the name ship, and with what value?
-grep -o -- "--slds-g-color-brand-base-[0-9]*:" $C | sort -u   # which ramp steps exist
-```
-
-| Figma variable | Category | Goes |
-|---|---|---|
-| Code syntax is a shipped `--slds-g-*` and the value **matches** | **A** | Comment list in section A |
-| Code syntax is a shipped `--slds-g-*` and the value **differs** | **C** | An `[OFF]` block, by family |
-| No SLDS name (a ramp step SLDS lacks, a colour SLDS writes inline) and something reads it | **B** | `--sep-*`, live — inert unless a C block reads it |
-| A component colour (button, backdrop…) | **D** | Comment table naming the `--slds-c-*` hook — verify the hook ships |
-| Would be a Theme-panel value on Experience Cloud | **E** | Comment table. Only declare a `--dxp` name confirmed in `_docs/customisation-tiers.md` |
-| Only reachable through `--slds-s-*` / `--_slds-*` | **F** | Comment, not declared |
-| Unused, duplicate, or no valid name | — | "Not imported", with the reason |
-
-**Compare resolved values, not names.** Cosmos defines many globals through `--slds-r-*` and
-`light-dark()`; resolve both before deciding "matches". This is what found that every spacing,
-sizing and radius step, and the six Salesforce palettes, already equal Cosmos.
-
-**Trust the alias, not the label.** Figma names like `border/2 (Neutral 40)` often alias a different
-step. Import the alias and list the mismatch.
-
-**Effect styles map to shadow globals.** Figma `Elevation/N` down/up/left/right →
-`--slds-g-shadow-N` / `-block-start-N` / `-inline-start-N` / `-inline-end-N`. SLDS writes the shadow
-colour inline, so the tint becomes a `--sep-color-shadow-*` token the shadow reads.
-
-## 3. Write it into design-tokens.css
-
-Section order, after the header and content width:
-
-```
-FIGMA IMPORT header   source, date, collection counts, the tier tally (must sum to the total)
-A                     matches — comment only
-B                     --sep-* shadow tints
-C1 … C4               type, colour ramps (each ending with its --sep-* 85/35/5 steps), semantics, elevation
-D, E, F               comment tables
-```
-
-The `[OFF]` block convention — exactly this, so the user's switching routine keeps working:
-
-```css
-/* [OFF — Figma colour ramps] ------------------------------------------------
- * Commented out to show the default Lightning styling. To restore: delete
- * this line block and its END line, and un-escape every `*\/` below.
-:root {
-    --slds-g-color-brand-base-50: #017ac9;
+  return '#'+h(c.r)+h(c.g)+h(c.b)+(c.a!==undefined && c.a<1 ? h(c.a):''); };
+const m = c.modes[0].modeId; const out = [];
+for (const id of c.variableIds.slice(0, 150)) {          // then .slice(150)
+  const v = byId.get(id); let val = v.valuesByMode[m];
+  if (val && val.type === 'VARIABLE_ALIAS') {
+    const t = byId.get(val.id);
+    if (t) val = '→' + (t.codeSyntax.WEB || t.name);
+    else { const r = await figma.variables.getVariableByIdAsync(val.id); const f = r && Object.values(r.valuesByMode)[0];
+           val = (f && 'r' in f) ? hex(f) : '?lib'; }
+  } else if (val && typeof val === 'object' && 'r' in val) val = hex(val);
+  out.push([v.name.replace(/^color\//,''), v.codeSyntax.WEB || '-', val].join(';'));
 }
- * [END OFF — Figma colour ramps] */
+return out.join('\n');
 ```
 
-Avoid comments inside an `[OFF]` block — each one needs its `*/` escaped as `*\/`. Put the
-explanation in the header comment above the block. A block may already be **switched on** — the
-marker line ends `*/` and there is no END line. Check before adding a comment: in a live block
-the comment must close with a plain `*/`, or it swallows every line after it.
+Write the result to `figma-variables.txt` in the format its header documents: one
+`@collection <name> <count>` line before each collection, values in px for spacing, sizing, radius
+and type. Update the header's read date.
 
-Convert px to rem for type (`16px` → `1rem`). Keep hex lowercase. Write the hook Figma *means*,
-not a wrong code syntax — e.g. Figma's `--slds-g-font-size-base` is an alias of
-`--slds-g-font-scale-base`, so set the latter.
+**Detect change first.** Hash each collection in the snapshot's exact line format (djb2 over the
+lines joined with `\n`) in `use_figma`, and the same over `figma-variables.txt` locally. Equal → that
+collection is unchanged; skip it. Different → send the snapshot's per-line hashes into `use_figma`
+and return only the lines whose hash is not among them (plus the indexes of snapshot lines that
+vanished), then **patch** `figma-variables.txt`. Re-hash to confirm; a match up to line order is
+enough. Hash the effect styles the same way.
 
-## 4. Removing or renaming a token
+Also read the **effect styles** (`getLocalEffectStylesAsync()`, with each effect's bound variable).
+They feed C2 and B by hand — check whether geometry or tints changed.
 
-Never just delete. Find every consumer first — other stylesheets read these:
+## 2. Generate
 
 ```bash
-find src -name '*.css' ! -name design-tokens.css -print0 | xargs -0 grep -n -- "--sep-<name>"
+node .claude/skills/lwc-figma-ds-tokens-import/import-figma.mjs --dry-run   # findings only — read them
+node .claude/skills/lwc-figma-ds-tokens-import/import-figma.mjs             # write C1
+node .claude/skills/lwc-figma-ds-tokens-import/sync-slds-globals.mjs        # rewrite C3
 ```
 
-Repoint each use to its Figma/SLDS equivalent with a mapping file applied by `perl` (`zsh` does not
-word-split `$FILES`; use `find -print0 | xargs -0`). Watch for a mapping that makes a declaration
-read itself (`--x: var(--x)`) — delete that line. Then re-run `npm run tokens` and
-`npm run compositions`, which index tokens by the `--sep-` prefix. `scripts/build-tokens.mjs`,
-`scripts/build-compositions.mjs`, `assess-tiers.mjs` and `ui/tokenBrowser` all match on that prefix
-— a prefix change updates all four.
+What `import-figma.mjs` decides — **the hook Figma means**, not always the syntax it exports:
 
-## 5. Verify
+| Figma variable | Written to |
+|---|---|
+| Code syntax is a shipped `--slds-g-*` hook | That hook |
+| Code syntax is an SLDS **alias** of another hook (Cosmos defines it as `var(--x)`), and it is not a ramp step | The hook it aliases — `--slds-g-font-size-base` → `--slds-g-font-scale-base` |
+| Ramp/palette variable whose syntax names a **different step** than its name, or has none | The step in its **name**, if SLDS ships it; otherwise *not imported* |
+| Two variables landing on one hook | The first wins; the second is reported |
+| Code syntax SLDS does not ship | Not imported, reported |
+
+Units: spacing, sizing, radius, font scale → rem (÷16); border widths → px; `radius-border-circle`
+→ px as Figma gives it. Weights: style names → numbers (Medium 500, SemiBold 600…). Family: `'<name>
+Variable', '<name>', <SLDS stack>` (fonts.css registers the `Variable` face).
+
+Labels on every C1 line: `figma — cosmos X` (differs; X is what Cosmos ships), `figma = cosmos`,
+`figma = default`. Comparison is on **resolved light values** in both themes, never names.
+
+If a generated value looks wrong, the bug is in the snapshot or the script — fix there, regenerate.
+Two real bugs this caught: SLDS's `*-base-100` steps are aliases of `neutral-base-100` (so the alias
+rule must not fold ramp steps), and a resolver that lowercases values must never produce output.
+
+## 3. The hand-written parts
+
+| Section | Holds | Update when |
+|---|---|---|
+| Header + contents | What the file is, the section list | Sections change |
+| FIGMA IMPORT banner | Source, read date, collection counts, the tally (must sum to the Figma total), 524 = C1 + C2 + C3 | Every import |
+| B | `--sep-color-shadow-*` — Figma `shadows/level N/*` | Effect tints change |
+| C2 | `--slds-g-shadow-*`, `-focus-1` from Figma effect styles | Effect styles change |
+| D, E, F | Component hooks, `--dxp`, private hooks — comment tables | Component colours change |
+| Not imported | Every variable the importer skipped, with why | Every import |
+
+Inside a live block a comment closes with a plain `*/`.
+
+## 4. Verify
 
 ```bash
 node .claude/skills/lwc-figma-ds-tokens-import/check-tokens.mjs   # names ship, refs resolve, no light-dark, no --site-
+node -e '…count distinct --slds-g-* declarations…'                # must be 524
 npm run tokens && npm run compositions                            # regenerate /design-system data
 npm run build                                                     # must exit 0
-node .claude/skills/lwc-figma-ds-tokens-import/sync-slds-globals.mjs  # after an import or an SLDS upgrade — rewrites C5
 ```
 
-`check-tokens.mjs` **fails** on a declaration SLDS does not ship, a `var()` nothing declares, a
-`light-dark()`, or a leftover `--site-`. It **warns** when a switched-on block reads names only a
-still-`[OFF]` block sets. `--dxp-*` reads are reported, not failed — Experience Cloud supplies them.
+**Diff what renders.** Before writing, copy the file; after, resolve every global's light value in
+both versions and list the changes (the script used is in the 2026-10-19 decision-log entry's
+session; it overlays the tokens file on `slds2.cosmos.css` and follows `var()`). Report the changes
+that matter on screen — a border width, a weight, a base colour — not the `#fff`→`#ffffff` noise.
 
-Values are only verified by reading a computed style in a browser. Without one, report the import as
-"compiles and builds", not "checked".
+Values are only *verified* by reading a computed style in a browser. Without one, say "compiles and
+builds".
 
-## 6. Write the Figma tokens report — `_docs/figma-tokens-report-<YYYY-MM-DD>.md`
+## 5. Write the Figma tokens report — `_docs/figma-tokens-report-<YYYY-MM-DD>.md`
 
-Every import produces one. **Readers: the designer who maintains the Figma file, and the developers
-consuming it.** It reports on the Figma file, not on our CSS. Its job is to say what lines up with
-SLDS and exactly what to change in Figma so the rest does. One file per import; never overwrite an
-earlier report — they are the history of how the library converged.
+Every import produces one; never overwrite an earlier one. **Readers: the designer and the
+developers.** The reference is `_docs/figma-tokens-report-2026-10-19.md`:
 
-The reference is `_docs/figma-tokens-report-2026-10-15.md`. Use the same sections:
+| § | Holds |
+|---|---|
+| Summary | Tally summing to the Figma total; 524 accounted for; the top 3–4 problems |
+| 1 | **Fixed since the last report** — the previous report's findings, one row each, with their status |
+| 2 | **Maps cleanly** — Figma = shipped value, by family, counts re-added |
+| 3 | **Set up incorrectly** — straight from the importer's findings: values that contradict their own label, code syntax naming another step or an unshipped hook, aliases, labels vs aliases. Each: what it breaks → fix → how the import handled it |
+| 4 | **The colour ramps** — step grid vs SLDS, what is unreachable |
+| 5 | **Semantics re-pointed** — every semantic whose alias step differs from the step Cosmos uses (resolve Cosmos's `light-dark(var(--slds-r-…))` to a step; a bare hex is the step with that value) |
+| 6 | **Styles and other variables** — effect styles, component colours, text styles (say if not re-read) |
+| 7 | **Fix list** — numbered, highest impact first |
 
-| § | Section | Holds |
-|---|---|---|
-| — | Header + **Summary** | Source, date, SLDS version, method; the tally (must sum to the Figma total) and the top problems in one line each |
-| 1 | **Maps cleanly** | Hook exists, value equals the shipped one — by family, with counts |
-| 2 | **Maps, value differs** | The MSD theme: type ramp vs SLDS (table), colour ramps, semantics, shadows. Expected, not defects |
-| 3 | **No SLDS hook** | What went to `--sep-*` and why SLDS has no name for it |
-| 4 | **Set up incorrectly** | Wrong or garbled code syntax (quote it verbatim), a code syntax that names a hook SLDS does not ship, missing code syntax where SLDS *does* ship the hook, weights/units that do not translate, label vs alias mismatches, semantic→semantic aliases, duplicate or broken styles, redundant modes. Each: problem → what it breaks → fix |
-| 5 | **The colour ramps** | Step grid Figma vs SLDS; which SLDS steps get no MSD value (and what reads them — grep the stylesheet), which Figma steps have no SLDS name, which semantics depend on them; the fix in order of preference |
-| 6 | **Semantics re-pointed** | Every semantic whose alias step differs from the step SLDS uses (resolve Cosmos's `light-dark(var(--slds-r-…))` to a step). Columns: name says / Figma aliases / SLDS uses / effect. Ask "intentional?" — fix the name, or restore the step |
-| 7 | **Styles and variables not on SLDS hooks** | Text styles (bound? line heights?), effect styles (bound or raw colour? which hook, public/private/none), component colour variables → `--slds-c-*` hook, and variables from **other libraries** bound in components (from `get_variable_defs` on component pages) |
-| 8 | **Fix list** | Numbered, highest impact first, each pointing back to its § |
+Every count is measured, then re-added before saving. Quote Figma names verbatim. Say what each
+finding **breaks**. Distinguish theming (an MSD value) from defects (a wrong name or a value that
+contradicts its label).
 
-Rules for the report:
+**A Figma value that looks like a mistake is still imported** — Figma is the source of truth — but
+it leads the report and the reply (2026-10-19: `sizing-border/2 (2px)` = 1.5).
 
-- **Every count is measured**, then re-tallied before saving — section totals must add up to the
-  summary, and the summary to the Figma total. The first draft of the reference report had five
-  wrong counts; they were caught only by re-adding.
-- **Quote Figma names and values verbatim** — the designer has to find them.
-- **Say what each finding breaks**, not just that it differs. "Overwrites step 40 on export" gets
-  fixed; "code syntax differs" does not.
-- **Distinguish theming from defects.** An MSD value on an SLDS hook (§2) is the point of the file;
-  a wrong name (§4) is a bug.
-- A finding observed on **one page only** (e.g. §7) says so, and says to scan the rest.
-- A hook named in the report is **verified to ship** — the modal backdrop is
-  `--slds-c-modalbase-backdrop-color-background`, not the `--slds-c-backdrop-*` it maps onto.
+## 6. Report back
 
-## 7. Report back to the user
-
-- The tally, and the link to the report file.
-- What changes on screen if a block is switched on (e.g. type base 13 → 16px).
-- The three or four Figma defects that matter most — the report has the rest.
+The tally and the report link; what changed on screen (from the diff); the three or four Figma
+defects that matter, and which of them are now live on the site.
 
 ---
 
 ## Current state of design-tokens.css
 
-Update this whenever a block is added, removed or switched.
-
 | Section | State |
 |---|---|
 | Content width (`--sep-content-max-width`, `--sep-content-gutter`) | Live — layout, not from Figma |
-| B — 8 `--sep-*` shadow tints | Live |
-| 21 `--sep-*` ramp steps (85/35/5) | Live, in C2 after their own ramp |
-| C1 Figma type scale (+ font family) | **Switched on** by the user (marker removed) |
-| C2 Figma colour ramps | **Switched on** by the user. Also lists the 14 steps Figma does not set (45, 55, 100) with Cosmos's light values, each labelled `unchanged from Cosmos — not set in Figma` |
-| C3 Figma semantic colours | **Switched on** by the user, 2026-10-15 |
-| C4 Figma elevation and focus | **Switched on** by the user, 2026-10-15 |
-| C5 Every global Figma does not define (208) | Live, **generated** by `sync-slds-globals.mjs` between `@generated slds-globals` markers. Labels: `cosmos — default X` (42), `default` (166) |
+| B — 8 `--sep-color-shadow-*` | Live, hand-written from Figma `shadows/level N/*` |
+| C1 — 299 Figma variables on public hooks | Live, **generated** by `import-figma.mjs` from the 2026-10-19 snapshot. 176 differ from Cosmos, 4 = Cosmos, 119 = SLDS default |
+| C2 — 20 shadow and focus hooks | Live, hand-written from Figma effect styles (unchanged 2026-10-19) |
+| C3 — 205 other globals | Live, **generated** by `sync-slds-globals.mjs`. 41 `cosmos — default X`, 164 `default` |
+| D, E, F, Not imported | Comment only |
+| **Total `--slds-g-*` declared** | **524 of 524** |
 
-Source: `figma.com/design/3FTyjvu0JC5UtYqnoLqDFh` ("LDS2 | MSD | Components for Web"), 347
-variables in Spacing/Sizing (38), Typography (18), Color Mode (291).
+Border widths 1.5 / 2 / 3px (SLDS 2 / 3 / 4): 1.5px is deliberate — the button design draws its outline at sizing-border-2; the labels are wrong, /3 and /4 to confirm. Snapshot re-read 2026-10-19 (second read): 10 lines changed.
 
 ## Decision log
 
@@ -236,12 +218,10 @@ variables in Spacing/Sizing (38), Typography (18), Color Mode (291).
 | 2026-10-15 | Pre-import tokens removed; their consumers repointed to Figma/SLDS hooks. Content width kept |
 | 2026-10-15 | `light-dark()` removed — light (Default mode) values only |
 | 2026-10-15 | Project prefix `--site-` → `--sep-`, across CSS, rules, scripts and the token browser |
-| 2026-10-15 | C3 and C4 switched on by the user. `check-tokens.mjs` added |
-| 2026-10-15 | Step 6 added: every import writes `_docs/figma-tokens-report-<date>.md`. First report written. Section D's backdrop hook corrected to `--slds-c-modalbase-backdrop-color-background` |
-| 2026-10-15 | C2 switched on by the user. Cosmos-only ramp steps (45, 55, 100) listed in C2 with their Cosmos values, labelled. Inside a LIVE block a comment closes with `*/`; only inside an `[OFF]` block is it escaped `*\/` |
-| 2026-10-16 | Confirmed every Figma block (C1–C4) is live — no `[OFF]` block remains. C2–C4 keep a one-line `[OFF — …]` marker that now closes itself; it is a label only |
-| 2026-10-16 | Comment headers tidied: a contents list in the file header, one title pattern per section (`X. Tier — what`), stale `[OFF — …]` markers removed from the live blocks, "Not imported" split into its own section, section D trimmed to light values, report linked from the import banner |
-| 2026-10-16 | The --sep-* ramp steps (85/35/5) moved out of B to sit straight after their own ramp in C2, under a one-line comment. B now holds the shadow tints only |
-| 2026-10-19 | Section D corrected: lightning-button reads no --slds-c-button-destructive-* / success-* hooks; those variants are reached through scoped --slds-g-color-error-* / success-* tokens. Found by the lwc-component-review skill |
-| 2026-10-19 | All 524 public `--slds-g-*` globals now declared. C5 added, generated by `sync-slds-globals.mjs`: light values, `--slds-r-*` resolved to literals, `--slds-g-*` references kept. Source labels from comparing Cosmos with Lightning Blue. Verified: 0 of 524 resolved light values changed |
-| 2026-10-19 | C5 no longer repeats anything defined above it: the 127 section-A tokens (Figma = shipped value) removed; the script skips them. Verified: 0 resolved values changed |
+| 2026-10-15 | `check-tokens.mjs` added. First report written |
+| 2026-10-15/16 | All Figma blocks switched on by the user; headers tidied; Cosmos-only ramp steps listed |
+| 2026-10-19 | Section D corrected: `lightning-button` reads no `--slds-c-button-destructive-*` / `-success-*` hooks (found by `lwc-component-review`) |
+| 2026-10-19 | All 524 globals declared; `sync-slds-globals.mjs` added (C5, later C3) |
+| 2026-10-19 | **Re-import.** Figma file revised (346 variables; ramps on SLDS steps; weights 5/6 fixed). User's rule: all globals defined, Figma values for every hook Figma defines. Hand-written A and C1–C3 replaced by **generated C1** (`import-figma.mjs`, `figma-variables.txt`). Old C4 → C2, old C5 → C3. The 21 `--sep-*` ramp steps dropped (Figma removed 5/35/85 from its ramps; nothing read them). `sync-slds-globals.mjs` no longer special-cases section A. `[OFF]` convention retired. Report `_docs/figma-tokens-report-2026-10-19.md`. 114 resolved values changed, incl. border widths 2→1.5px (Figma defect, live) |
+| 2026-10-19 | Palettes titled one per palette in both generated blocks (`Palette: <name>`; C3 adds "— not in Figma"). Fixed `sync-slds-globals.mjs` splitting hyphenated palette names (`electric-blue` read as "electric"). Only the neutral palette has steps 0 and 100 — hue palettes run 10–95 in SLDS |
+| 2026-10-19 | **Second read, same day.** Change detection added to step 1 practice: hash each collection in the snapshot's own line format and compare before dumping; if they differ, diff line-by-line (send the snapshot's line hashes into `use_figma`, return only lines not in it) and **patch** the snapshot rather than re-transcribe it. 10 lines changed: `font/scale/base` and `error-base/100` code syntax fixed; `on-error-1/-2` re-pointed (30 / 20); green and hot-orange swapped 35/85/5 for 100/55/45 — not SLDS palette steps, so not imported. 2 rendered values changed. Report `_docs/figma-tokens-report-2026-10-19-b.md` (a delta report — same-day reports take a `-b` suffix rather than overwrite) |
