@@ -1130,3 +1130,99 @@ lightning-button[variant='success'] {
     --slds-g-color-on-disabled-2: var(--slds-g-color-on-disabled-1);
     --slds-g-color-border-disabled-1: var(--slds-g-color-disabled-container-1);
 }
+
+/* MSD Form element → `lightning-input`, `lightning-textarea`,
+ * `lightning-checkbox-group`, `lightning-radio-group`, `lightning-dual-listbox`.
+ *
+ * Design: Figma "LDS2 | MSD | Components for Web", page "⚡ Form Element" —
+ * guidelines 22776:17593, examples 22776:17638; component sets
+ * ⚡ Input - Default 748:78599, ⚡ Textarea - Default 10127:33525,
+ * ⚡ Checkbox 14223:162345 / - Group 17995:407950, ⚡ Radio 1997:53076 /
+ * Group 2002:360640, ⚡ Dual Listbox 2744:62499. "Form Element is not a
+ * supported component" (the guidelines): each lightning-* control renders its
+ * own label, required marker, help text and error, so the skin is per control.
+ * Every hook is one the control's OWN (or its private child's) stylesheet
+ * reads — lwc-component-review/hook-map.mjs.
+ *
+ * NOT reached — no public lever (each tried and measured):
+ *   all       labels and group legends 18px Medium → 16px / 600 (legends 700):
+ *             they read the private --slds-s-label-font-size / -weight, resolved
+ *             at the root from font-size-base / weight-6, so a scoped global
+ *             cannot move them
+ *   input     1.5px outline → 1px; text indent 16px → 32px; focus ring is a 2px
+ *             blur in accent-2, not the design's solid 2px accent-1 outline;
+ *             "filled" navy border (an internal state); the undo button of the
+ *             dirty states (no such anatomy in lightning-input)
+ *   error     help text renders red error-1 with no icon; the design draws
+ *             on-surface-2 text after a red icon
+ *   textarea  1px outline; focus text on-surface-3 (design keeps on-surface-2)
+ *   checkbox  28px box → 16px (internal sizing); so the radius is 4px, not 8px
+ *   radio     28px → 16px; option label on-surface-2 (design on-surface-1)
+ *
+ * VERIFIED 2026-10-19 in headless Chrome (examples moved to the light DOM,
+ * states forced via CDP; error via setCustomValidity + reportValidity): field
+ * fill, border colour per state, radius, 52px height, 18px text, textarea
+ * border/size/focus, checkbox/radio checked colours, option-label weight,
+ * listbox container border, option size, hover and selected fills.
+ * Review: _docs/component-review-form-element-2026-10-19.md. */
+
+/* Text fields — lightning-input (text types). Public family: --slds-c-input-*;
+   the component maps it onto its internal inputtext hooks itself. Focus and
+   error borders come from border-accent-1 / border-error-1 already. */
+lightning-input {
+    --slds-c-input-color-border: var(--slds-g-color-border-1);
+    --slds-c-input-text-color: var(--slds-g-color-on-surface-2);
+    --slds-c-input-font-size: var(--slds-g-font-scale-1);
+    --slds-c-input-sizing-height: calc(var(--slds-g-spacing-4) * 2 + var(--slds-g-sizing-6));
+    --slds-c-inputtext-text-color-placeholder: var(--slds-g-color-on-surface-2);
+}
+
+/* Textarea. The field's border reads the global border-2, re-pointed here to
+   the design's border-1 (rung 5); its type size inherits from the host (rung 6). */
+lightning-textarea {
+    font-size: var(--slds-g-font-scale-1);
+    --slds-g-color-border-2: var(--slds-g-color-border-1);
+    --slds-c-textarea-radius-border: var(--slds-g-radius-border-2);
+    --slds-c-textarea-text-color: var(--slds-g-color-on-surface-2);
+    --slds-c-textarea-color-border-focus: var(--slds-g-color-border-accent-1);
+    --slds-c-textarea-spacing-block-start: var(--slds-g-spacing-4);
+    --slds-c-textarea-spacing-block-end: var(--slds-g-spacing-4);
+    --slds-c-textarea-spacing-inline-start: var(--slds-g-spacing-4);
+    --slds-c-textarea-spacing-inline-end: var(--slds-g-spacing-4);
+}
+
+/* Checkboxes — lightning-checkbox-group (and checkbox inputs). */
+lightning-checkbox-group,
+lightning-input[type='checkbox'] {
+    --slds-c-checkbox-color-border: var(--slds-g-color-border-1);
+    --slds-c-checkbox-color-background-checked: var(--slds-g-color-accent-container-1);
+    --slds-c-checkbox-color-border-checked: var(--slds-g-color-border-accent-1);
+    --slds-c-checkbox-mark-color-foreground: var(--slds-g-color-on-accent-2);
+    /* The design draws 8px on a 28px box. The box stays 16px (no public size
+       hook), and 8px on 16px is a circle — so the proportional step, 4px. */
+    --slds-c-checkbox-radius-border: var(--slds-g-radius-border-1);
+    /* Option labels: Medium, inherited from the host (rung 6). */
+    font-weight: var(--slds-g-font-weight-5);
+}
+
+/* Radios — lightning-radio-group. */
+lightning-radio-group {
+    --slds-c-radio-color-border: var(--slds-g-color-border-1);
+    --slds-c-radio-color-background-checked: var(--slds-g-color-accent-container-1);
+    --slds-c-radio-color-border-checked: var(--slds-g-color-border-accent-2);
+    --slds-c-radio-mark-color-foreground: var(--slds-g-color-on-accent-1);
+    font-weight: var(--slds-g-font-weight-5);
+}
+
+/* Dual listbox — option rows. */
+lightning-dual-listbox {
+    font-size: var(--slds-g-font-scale-1);
+    /* The list container reads the global border-1; the design draws border-2. */
+    --slds-g-color-border-1: var(--slds-g-color-border-2);
+    --slds-c-listbox-option-color: var(--slds-g-color-on-surface-3);
+    --slds-c-listbox-option-color-background-hover: var(--slds-g-color-brand-base-95);
+    /* A selected option reads the global accent-container-2; the design fills
+       it with accent-container-1 (rung 5). Selected + hover keeps Cosmos's
+       accent-container-3 — the design draws no such state. */
+    --slds-g-color-accent-container-2: var(--slds-g-color-accent-container-1);
+}

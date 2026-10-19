@@ -107,3 +107,5 @@ part only**. This table goes in the report and, condensed, in the skin's comment
    modifier, a part on the line, or the custom component gate).
 4. Where the skin lives, and what changed in the design system.
 5. What was verified and how — and what was not.
+
+- **Test levers live before writing them.** Set each candidate hook or property on a real host in headless Chrome and re-read the target; only the ones that move go in the skin (form element, 2026-10-19: of 21 candidates tried, 5 moved). The probe scripts are in the form-element review session; `measure-states.mjs` is the general one.

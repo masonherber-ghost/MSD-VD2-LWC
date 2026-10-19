@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Customisation tiers for Salesforce websites</title>
+<style>
+  @page { size: A4; margin: 18mm 17mm 20mm; }
+  :root { --ink: #1d2433; --muted: #4a5468; --rule: #d5d9e0; --teal: #2d5b6b; --teal-bg: #eef4f4; --rust: #8a4a1f; --rust-bg: #f8efe8; }
+  * { box-sizing: border-box; }
+  body { margin: 0; color: var(--ink); font: 10.5pt/1.55 -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif; }
+  h1, h2, h3 { font-family: Georgia, "Source Serif Pro", "Times New Roman", serif; font-weight: 600; color: var(--ink); }
+  h1 { font-size: 27pt; line-height: 1.15; margin: 0 0 10pt; }
+  h2 { font-size: 16pt; margin: 22pt 0 6pt; break-after: avoid; }
+  h3 { font-size: 12pt; margin: 14pt 0 4pt; break-after: avoid; }
+  p { margin: 0 0 8pt; }
+  .eyebrow { color: var(--teal); letter-spacing: .14em; font-size: 9pt; text-transform: uppercase; margin-bottom: 8pt; }
+  .lede { color: var(--muted); font-size: 13pt; line-height: 1.45; max-width: 46em; margin-bottom: 14pt; }
+  .version { color: var(--muted); font-size: 9pt; margin-bottom: 10pt; }
+  .keyfacts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16pt; border-top: 1.2pt solid var(--ink); border-bottom: .6pt solid var(--rule); padding: 10pt 0; margin-bottom: 6pt; }
+  .keyfacts b { display: block; margin-bottom: 3pt; }
+  .keyfacts span { font-size: 9.5pt; }
+  table { width: 100%; border-collapse: collapse; font-size: 9.8pt; margin: 6pt 0; }
+  th { text-align: left; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; font-size: 8pt; color: var(--muted); border-bottom: 1pt solid var(--ink); padding: 0 6pt 5pt; }
+  td { vertical-align: top; padding: 7pt 6pt; border-bottom: .6pt solid var(--rule); }
+  td.n { font-family: Georgia, serif; font-size: 15pt; color: var(--teal); width: 22pt; }
+  td.n.risk { color: var(--rust); }
+  tr.gate td { padding: 5pt 8pt; font-size: 9pt; border-top: 1.4pt solid var(--teal); border-bottom: 1.4pt solid var(--teal); background: var(--teal-bg); }
+  tr.gate.up td { border-color: var(--rust); background: var(--rust-bg); }
+  tr.gate b { letter-spacing: .12em; color: var(--teal); margin-right: 8pt; }
+  tr.gate.up b { color: var(--rust); }
+  .high { color: var(--rust); font-weight: 600; }
+  .caption { font-size: 8.8pt; color: var(--muted); margin-top: 4pt; }
+  .box { padding: 10pt 14pt 6pt; margin: 12pt 0; border-top: 1.4pt solid var(--teal); background: var(--teal-bg); break-inside: avoid; }
+  .box.up { border-color: var(--rust); background: var(--rust-bg); }
+  .box.new { border-color: #3b6b3b; background: #eef5ee; }
+  .box h4 { margin: 0 0 6pt; font-size: 8.8pt; letter-spacing: .14em; text-transform: uppercase; color: var(--teal); }
+  .box.up h4 { color: var(--rust); }
+  .box.new h4 { color: #3b6b3b; }
+  ul, ol { margin: 4pt 0 8pt; padding-left: 16pt; }
+  li { margin-bottom: 3pt; }
+  code { font: 9pt/1 ui-monospace, Menlo, monospace; }
+  .levers { width: 100%; margin: 6pt 0 8pt; }
+  .levers td:first-child { width: 28%; font-weight: 600; }
+  .evidence { font-size: 9.5pt; color: var(--muted); }
+  .tag { display: inline-block; font-size: 7.5pt; letter-spacing: .08em; text-transform: uppercase; color: #3b6b3b; border: .6pt solid #3b6b3b; border-radius: 3pt; padding: 0 4pt; margin-left: 4pt; vertical-align: 1pt; }
+  .pb { break-before: page; }
+  .glance { break-inside: avoid; break-before: page; }
+  .glance h2 { margin-top: 0; }
+  tr { break-inside: avoid; }
+  .changes td:first-child { width: 30%; }
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Salesforce Experience Cloud</div>
+<h1>Customisation tiers for Salesforce websites</h1>
+<p class="lede">Where design work ends, where developer effort begins, and where customisation starts to put Salesforce upgrades at risk.</p>
+<p class="version">October 2026 · informed by importing the MSD Figma design system into SLDS&nbsp;2 tokens and skinning seven standard components in an LWR prototype.</p>
+
+<div class="keyfacts">
+  <div><b>Five tiers</b><span>Configure, Style, Layout, Component, Override. Each tier adds capability and cost.</span></div>
+  <div><b>Developer gate</b><span>Between Style and Layout. Beyond it, changes are code: built, tested and deployed.</span></div>
+  <div><b>Upgrade gate</b><span>Between Component and Override. Beyond it, each Salesforce release can break the site.</span></div>
+</div>
+
+<h2>Summary</h2>
+<p>A Salesforce website can be customised at five levels. Designers prototype designs as Lightning web components in the Lightning Web Runtime (LWR) and hand those prototypes to developers to build in Salesforce. The first two tiers, configuring in Experience Builder and styling through published tokens, hooks and utility classes, are designer work: no new CSS rules are written, and Salesforce maintains everything underneath.</p>
+<p><b>Tier 2 is narrower than it looks.</b> It covers setting values and naming published classes; new CSS classes sit past the developer gate. Components also honour only some of the hooks Salesforce publishes, and many visual properties have none. Measured in a browser, the skinned button matched 84% of its design's values and the form controls 70%. The rest needs a design change, a Tier 4 build or a Tier 5 override. Most brand requirements can still be met below the gate, but only if the <b>design system is drawn to what the standard components can do</b>.</p>
+<p>Custom layouts and components need developers, but use supported APIs and survive upgrades. Tier 5, overriding standard components, is where upgrade risk sits. We recommend aligning the design system first, treating the developer gate as a funding decision, and treating the upgrade gate as an architecture approval.</p>
+
+<div class="glance"><h2>The tiers at a glance</h2>
+<table>
+  <thead><tr><th></th><th>Tier</th><th>What changes</th><th>Who</th><th>Upgrade risk</th></tr></thead>
+  <tbody>
+    <tr><td class="n">1</td><td><b>Configure</b></td><td>Pages, standard components, navigation, audiences, and the Theme panel's brand colours, fonts and heading styles in Experience Builder</td><td>Admin, designer</td><td>None</td></tr>
+    <tr><td class="n">2</td><td><b>Style</b></td><td>Values and published names only: the theme as global tokens, per-component styling hooks, and SLDS utility classes. No new CSS rules</td><td>Designer, working from a verified hook inventory</td><td>Low: re-verify each release</td></tr>
+    <tr class="gate"><td colspan="5"><b>DEVELOPER GATE</b>Code, source control, testing and deployment from here down</td></tr>
+    <tr><td class="n">3</td><td><b>Layout</b></td><td>Custom theme, page and component layouts built using standard base components, and the CSS classes we write to style them</td><td>Developer, designer</td><td>Low</td></tr>
+    <tr><td class="n">4</td><td><b>Component</b></td><td>New components with their own markup, data, logic and Builder properties, including a rebuild of a standard component whose look no hook reaches</td><td>Developer</td><td>Low, owned by us</td></tr>
+    <tr class="gate up"><td colspan="5"><b>UPGRADE GATE</b>Depends on Salesforce internals that can change without notice</td></tr>
+    <tr><td class="n risk">5</td><td><b>Override</b></td><td>Changing how standard components look or behave by reaching into their internal markup or <b>private styling hooks</b></td><td>Developer</td><td><span class="high">High</span></td></tr>
+  </tbody>
+</table>
+<p class="caption">Figure 1. Tiers in order of cost. Effort and ongoing maintenance rise with each tier.</p></div>
+
+<h2>Tier 1 · Configure</h2>
+<p>Everything set in Experience Builder without code: the LWR template, pages, standard components, navigation, audiences, and the Theme panel's colours, fonts and spacing. Theme values are published as <code>--dxp</code> styling hooks, which map onto the Lightning design tokens. Anything an admin should change later, such as the brand colour or heading sizes, belongs here rather than in CSS.</p>
+<p><b>Constraints.</b> Only the options Salesforce exposes: the template's theme layouts, the standard section and column components, and each component's Builder properties.</p>
+
+<div class="box new">
+  <h4>Before Tier 2 · Align the design system</h4>
+  <p>Tier 2 can only deliver a design drawn in the components' own terms. The Figma library is the contract, so it should:</p>
+  <ul>
+    <li><b>Name every variable after the hook it feeds:</b> a token the shipped stylesheet declares, with no invented names or aliases.</li>
+    <li><b>Use SLDS's steps:</b> colour ramps on 10–95 (plus 45 and 55), and semantic colours pointing where SLDS points, or a recorded reason why not.</li>
+    <li><b>Bind roles, not hues:</b> a button fill bound to <code>accent-container-1</code>, not to "Electric Blue 50" or a "component hook" variable the component never reads.</li>
+    <li><b>Draw only what the component has:</b> its states (no "filled" state), anatomy (no undo button on a plain input) and sizes (16px checkboxes). CSS borders add to a component's size; Figma strokes sit inside it.</li>
+  </ul>
+  <p class="evidence">Evidence: the first import of the MSD library (347 variables) found 26 code syntaxes naming a wrong or non-existent hook, 14 semantic colours re-pointed away from SLDS, and a font weight one step off. Two library revisions fixed most of these.</p>
+</div>
+
+<h2>Tier 2 · Style</h2>
+<p>The brand applied by <b>setting values and naming what Salesforce publishes</b>. None of the three levers writes a new CSS rule, which keeps this tier on the designer's side of the gate.</p>
+<table class="levers">
+  <tbody>
+    <tr><td>Global tokens <code>--slds-g-*</code></td><td>The theme: colour ramps and roles, type scale, spacing, radius, shadows. Set once, they reach every standard component. On Experience Cloud they go in the Theme panel where it exposes them, and in site CSS otherwise.</td></tr>
+    <tr><td>Component hooks <code>--slds-c-*</code></td><td>Per-component values, set on the component. Only hooks the component's own stylesheet reads take effect. Where a variant fixes a hook internally, change the global token underneath it on that component instead.</td></tr>
+    <tr><td>SLDS utility classes <code>slds-*</code></td><td>Published classes for spacing, text, grid, sizing and visibility (<code>slds-m-bottom_small</code>), specified by name. Salesforce's documented order puts them before hooks: <i>variant → utility class → styling hook → your own class</i>. They work only where markup can carry a class: our templates, or content authored in Builder.</td></tr>
+  </tbody>
+</table>
+<p><b>Constraints.</b> Standard components encapsulate their markup, so CSS reaches only what their hooks expose. In the components tested, field label size and weight, checkbox and radio size, border width, input padding, focus-ring shape and hover elevation have no hook. A hook can also exist and do nothing (one button hook is broken in Salesforce's own stylesheet), so only the rendered value in a browser proves it.</p>
+<p>Utilities change between SLDS versions (SLDS&nbsp;2 removed classes SLDS&nbsp;1 had) and have gaps, such as responsive spacing and gap. Filling one takes a class of our own, which is Tier 3.</p>
+<p>Values the Theme panel does not cover live in a site stylesheet. It holds values, not rules, so it stays at this tier, but it needs one owner, version control and review.</p>
+<p><b>The test for the gate:</b> if a change sets a value or names something Salesforce publishes, it is Tier 2. If it writes a new CSS rule, class or selector, it is Tier 3.</p>
+
+<div class="box">
+  <h4>The developer gate</h4>
+  <p>A request needs developer effort when it requires:</p>
+  <ul>
+    <li>A page structure or region arrangement the template does not offer</li>
+    <li>Data the standard components cannot display</li>
+    <li>New behaviour: interaction, logic, validation or integration</li>
+    <li>A new setting for authors in the Builder panel</li>
+    <li>A new CSS rule, class or selector, including a responsive rule SLDS has no utility for</li>
+    <li>A look no hook reaches, which the design cannot drop</li>
+  </ul>
+  <p>From here, work is code: source-controlled, tested and deployed. Designers still own the visual specification.</p>
+</div>
+
+<h2>Tier 3 · Layout</h2>
+<p>Custom theme layouts (header, footer, page frame) and page layouts, built as Lightning web components with regions authors fill in Builder. Usually the first step past the gate, and mostly markup and CSS, so designers and developers work on it closely.</p>
+<p><b>Our own CSS classes live here.</b> A class works only once markup carries it, so it belongs with the layout or component it styles, and we maintain it. Use a project prefix, and never select a Salesforce class or a component's internals: that is Tier 5. A documented <code>::part</code> also sits here, as a signed-off last resort: it is published, but styles the part directly rather than through a value.</p>
+<p><b>Constraints.</b> Deployed as metadata, not edited in Builder. Responsiveness and accessibility become ours. Built on public APIs, so upgrade risk is low.</p>
+
+<h2>Tier 4 · Component</h2>
+<p>New Lightning web components with their own markup, styling, data (including Apex), integrations and Builder properties. This includes rebuilding a standard control when the design needs a look no hook reaches: the supported alternative to Tier 5.</p>
+<p><b>Constraints.</b> Code runs under Salesforce's browser security model, and third-party scripts and domains must be allowed. Performance, accessibility and caching become ours, and a rebuilt control takes on the keyboard behaviour, validation and screen-reader support the standard one provided. Upgrade-safe, but ours to maintain.</p>
+
+<div class="box up">
+  <h4>The upgrade gate</h4>
+  <p>Salesforce ships three major releases a year. A customisation is at risk when it depends on something Salesforce has not committed to keeping stable. Warning signs:</p>
+  <ul>
+    <li>A CSS selector targets a class name or element we did not write</li>
+    <li><code>!important</code> is used to beat a standard component's styles</li>
+    <li>A <b>private styling hook</b> is set (<code>--slds-s-*</code>, <code>--_slds-*</code> or the theme's reference tokens). They look supported but are not; Salesforce's linter flags the first two</li>
+    <li>JavaScript modifies a standard component after it renders</li>
+    <li>The approach was found by inspecting markup in the browser, not in documentation</li>
+    <li>A standard component has been copied and edited instead of rebuilt</li>
+  </ul>
+</div>
+
+<h2>Tier 5 · Override</h2>
+<p>Reaching past a standard component's supported interface: CSS aimed at internal markup, private styling hooks, scripts that alter the page after load, or undocumented behaviour.</p>
+<p><b>Constraints.</b> These often work at first and fail later: a release renames an internal class or retires a private hook, and the live site breaks silently. Salesforce support does not cover them. Each needs regression testing against every release preview.</p>
+
+<h2>Recommendations</h2>
+<ol>
+  <li><b>Align the design system before designing screens.</b> Keep the Figma library on SLDS's names, steps and roles, and audit every import. Most Tier 2 failures start as a variable that names no real hook.</li>
+  <li><b>Design to what ships.</b> Designers work from a <b>verified hook inventory</b>: the hooks each component actually reads and the states they cover, plus the SLDS utilities. Designs it covers are delivered without code.</li>
+  <li><b>Review before building, measure after.</b> Before skinning, map every design value to a lever or to "no lever", and settle the gaps with the designer. After, read the rendered values in a browser.</li>
+  <li><b>Decide the fidelity gap explicitly.</b> For each value no hook reaches: accept the component, change the design, or fund a Tier 4 rebuild. Never drift into Tier 5.</li>
+  <li><b>Treat the developer gate as a funding decision.</b> Estimate and prioritise each Tier 3 or 4 item as development work, with an owner for maintenance.</li>
+  <li><b>Treat the upgrade gate as an architecture approval.</b> Tier 5, including any private styling hook, needs sign-off and a documented reason. Prefer a Tier 4 rebuild.</li>
+  <li><b>Keep a register</b> of every token and hook set, and anything past the upgrade gate, with what was verified. Retest it against each release preview.</li>
+</ol>
+
+</body>
+</html>
