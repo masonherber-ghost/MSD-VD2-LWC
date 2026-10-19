@@ -30,7 +30,7 @@
     justify-content: center;
     inline-size: 0;
     white-space: nowrap;
-    font-size: var(--site-font-body-sm);
+    font-size: var(--slds-g-font-scale-neg-1);
     color: var(--slds-g-color-on-surface-2);
 }
 

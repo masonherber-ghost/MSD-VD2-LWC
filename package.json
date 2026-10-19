@@ -20,7 +20,8 @@
     "build:esm": "lwr build --clean",
     "auth:dev-passwords": "tsx scripts/set-dev-passwords.ts",
     "seed:team": "tsx scripts/seed-team.ts",
-    "db:migrate-reviewed": "tsx scripts/migrate-reviewed-status.ts"
+    "db:migrate-reviewed": "tsx scripts/migrate-reviewed-status.ts",
+    "db:migrate-first-time": "tsx scripts/migrate-first-time.ts"
   },
   "dependencies": {
     "@salesforce-ux/design-system-2": "^2.264.2",

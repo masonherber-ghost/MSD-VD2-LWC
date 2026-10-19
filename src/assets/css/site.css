@@ -2,7 +2,7 @@
 
 body {
     margin: 0;
-    /* [OFF — custom page background] background: var(--site-color-page-background); */
+    /* [OFF — custom page background] background: var(--slds-g-color-surface-2); */
 }
 
 /* slds-global-header_container is position:fixed, so page content has to be
@@ -21,18 +21,18 @@ body {
     min-height: calc(100vh - var(--slds-g-sizing-11) - var(--slds-g-sizing-border-3));
 }
 
-/* Page-level tokens (--site-content-max-width, --site-content-gutter) are
+/* Page-level tokens (--sep-content-max-width, --sep-content-gutter) are
    defined in design-tokens.css, which main.njk loads before this file. */
 
 .site__main {
-    max-width: var(--site-content-max-width);
+    max-width: var(--sep-content-max-width);
     margin-inline: auto;
-     padding: var(--slds-g-spacing-4) var(--site-content-gutter);
-    /* padding: var(--site-content-gutter) var(--site-content-gutter) var(--slds-g-spacing-5); */
+     padding: var(--slds-g-spacing-4) var(--sep-content-gutter);
+    /* padding: var(--sep-content-gutter) var(--sep-content-gutter) var(--slds-g-spacing-5); */
 
     /* 64em / 1024px — the same large breakpoint the content cap steps at. */
     /* @media (min-width: 64em) {
-        padding: var(--slds-g-spacing-10, 1.5rem) var(--site-content-gutter);
+        padding: var(--slds-g-spacing-10, 1.5rem) var(--sep-content-gutter);
     } */
 }
 
@@ -48,9 +48,9 @@ body {
 .site-header__inner {
     flex: 1 1 auto;
     min-width: 0;
-    max-width: var(--site-content-max-width);
+    max-width: var(--sep-content-max-width);
     margin-inline: auto;
-    padding-inline: calc(var(--site-content-gutter) - var(--slds-g-spacing-4, 1rem));
+    padding-inline: calc(var(--sep-content-gutter) - var(--slds-g-spacing-4, 1rem));
 }
 
 /* Keep the wordmark and nav on one row inside the header. *\/
@@ -87,7 +87,7 @@ body {
 .site-header__link {
     /* [OFF — custom nav link colour] color: var(--slds-g-color-on-surface-2, #444); *\/
     text-decoration: none;
-    /* [OFF — custom typography] font-size: var(--site-font-body); line-height: 1; *\/
+    /* [OFF — custom typography] font-size: var(--slds-g-font-scale-base); line-height: 1; *\/
     padding: 0.35rem 0;
     white-space: nowrap;
     /* [OFF — custom nav underline] border-bottom: 2px solid transparent; *\/
@@ -198,7 +198,7 @@ lightning-button-icon::part(button) {
  * on the header menu trigger and the datatable header buttons. Scoped to brand
  * instead. *\/
 lightning-button[variant='brand']::part(button) {
-    box-shadow: var(--site-shadow-raised);
+    box-shadow: var(--slds-g-shadow-2);
 }
 
 /* 1c. The dropdown trigger inside a button group.
@@ -258,8 +258,8 @@ lightning-button-group lightning-button-menu {
 lightning-button[variant='brand']::part(button):hover {
     background-image: linear-gradient(
         to bottom,
-        var(--site-color-brand-blue),
-        var(--site-color-brand-navy)
+        var(--slds-g-color-brand-base-50),
+        var(--slds-g-color-brand-base-30)
     );
 }
 
@@ -282,10 +282,10 @@ lightning-button[variant='brand']::part(button):active {
  * would repaint every disabled control on the site, and SEP specifies this
  * treatment for the primary button only. Scoped here instead. *\/
 lightning-button[variant='brand']::part(button):disabled {
-    background-color: var(--site-color-brand-disabled);
+    background-color: var(--slds-g-color-disabled-container-2);
     background-image: none;
-    border-color: var(--site-color-brand-disabled);
-    color: var(--site-color-on-brand-disabled);
+    border-color: var(--slds-g-color-disabled-container-2);
+    color: var(--slds-g-color-on-disabled-2);
 }
  * [END OFF — custom button styles] */
 /* SEP's welcome mat.
@@ -349,7 +349,7 @@ lightning-button[variant='brand']::part(button):disabled {
  *
  * TWO FILES, TWO JOBS. Change them in the right one:
  *
- *   design-tokens.css  THE VALUES. `--site-font-heading-2xl` and friends, with
+ *   design-tokens.css  THE VALUES. `--slds-g-font-scale-6` and friends, with
  *                      their Mobile / Tablet / Desktop numbers. Change a SIZE
  *                      there and every heading using that step follows.
  *
@@ -415,7 +415,7 @@ lightning-button[variant='brand']::part(button):disabled {
  * Commented out to show the default Lightning styling. To restore: delete
  * this line block and its END line, and un-escape every `*\/` below.
 .sep-page-header .slds-page-header__title {
-    color: var(--site-color-brand-navy);
+    color: var(--slds-g-color-brand-base-30);
 }
  * [END OFF — custom page-title colour] */
 
@@ -535,22 +535,22 @@ lightning-button[variant='brand']::part(button):disabled {
  *
  * Opt in per use: `class="slds-scoped-notification sep-scoped-notification"`. *\/
 .sep-scoped-notification {
-    background-color: var(--site-color-blue-10);
+    background-color: var(--slds-g-color-brand-base-95);
     /* Navy at 25%. color-mix keeps the brand token as the single source, so a
        theme change still reaches the border — a baked rgba() would not. *\/
     border: var(--slds-g-sizing-border-1) solid
-        color-mix(in srgb, var(--site-color-brand-navy) 25%, transparent);
-    border-radius: var(--site-radius-mid);
-    color: var(--site-text-primary);
+        color-mix(in srgb, var(--slds-g-color-brand-base-30) 25%, transparent);
+    border-radius: var(--slds-g-radius-border-2);
+    color: var(--slds-g-color-on-surface-2);
     padding-inline: var(--slds-g-spacing-5);
     /* 20px is SEP's spacing-450, and the SLDS scale has no step for it
        (--slds-g-spacing-4 is 16px, -5 is 24px). A value used by exactly one
        class is a value, not a token — rules-lwc-layout.md § Defining a project
-       token — so it is stated here rather than invented as --site-spacing-*. *\/
+       token — so it is stated here rather than invented as --sep-spacing-*. *\/
     padding-block: 1.25rem;
     /* The info icon is navy, not the SLDS default grey. This one IS a published
        hook, which is why it sits with the overrides rather than against them. *\/
-    --slds-c-icon-color-foreground-default: var(--site-color-brand-navy);
+    --slds-c-icon-color-foreground-default: var(--slds-g-color-brand-base-30);
 }
 
 /* The warning variant of the shipped scoped notification.
@@ -590,15 +590,15 @@ lightning-button[variant='brand']::part(button):disabled {
 
 /* The title. 18px bold navy, line-height 1.3 — all four are existing tokens.
  *
- * --site-font-heading-xs grows at the 48em and 64em breakpoints, as the rest of
+ * --slds-g-font-scale-1 grows at the 48em and 64em breakpoints, as the rest of
  * this project's type does. The design specifies 18px, which is this token's
  * base value, so the panel matches at small widths and scales with the site
  * above them rather than pinning one size the page around it does not use. *\/
 .sep-scoped-notification__title {
-    font-size: var(--site-font-heading-xs);
+    font-size: var(--slds-g-font-scale-1);
     font-weight: var(--slds-g-font-weight-7);
-    line-height: var(--site-lineheight-heading-xs);
-    color: var(--site-text-accent-secondary);
+    line-height: var(--slds-g-font-line-height-1);
+    color: var(--slds-g-color-accent-3);
 }
 
 /* The description. Sits under the header row with the design's 8px gap.
@@ -609,7 +609,7 @@ lightning-button[variant='brand']::part(button):disabled {
  * measure. See the note in the handover. *\/
 .sep-scoped-notification__body {
     margin-block-start: var(--slds-g-spacing-2);
-    line-height: var(--site-lineheight-body);
+    line-height: var(--slds-g-font-line-height-base);
 }
  * [END OFF — custom scoped-notification skin] */
 
@@ -619,24 +619,23 @@ lightning-button[variant='brand']::part(button):disabled {
  * treatment. If they are wanted back, they were:
  *
  *   .page-hero__heading, h1.slds-text-heading_large
- *       font-size: var(--site-font-heading-2xl)
- *       line-height: var(--site-lineheight-heading-2xl)
+ *       font-size: var(--slds-g-font-scale-6)
+ *       line-height: var(--slds-g-font-line-height-1)
  *
  *   .slds-text-heading_large
- *       color: var(--site-color-brand-navy)
- *       font-size: var(--site-font-heading-lg)
- *       line-height: var(--site-lineheight-heading-lg)
+ *       color: var(--slds-g-color-brand-base-30)
+ *       font-size: var(--slds-g-font-scale-4)
+ *       line-height: var(--slds-g-font-line-height-1)
  *
  *   .sep-page-header .slds-page-header__title
- *       color: var(--site-color-brand-navy)
- *       line-height: var(--site-lineheight-heading-lg)
+ *       color: var(--slds-g-color-brand-base-30)
+ *       line-height: var(--slds-g-font-line-height-1)
  *
  *   .sep-page-header
- *       --slds-s-pageheader-title-font-size: var(--site-font-heading-lg)
+ *       --slds-s-pageheader-title-font-size: var(--slds-g-font-scale-4)
  *
- * The `--site-font-heading-*` and `--site-lineheight-heading-*` tokens are all
- * still defined in design-tokens.css — only the ASSIGNMENTS went, so restoring
- * any of these is a copy back into this block.
+ * The values are SLDS global hooks (the Figma import in design-tokens.css), so
+ * restoring any of these is a copy back into this block.
  *
  * What the site takes instead, read off the shipped stylesheet:
  *
@@ -682,7 +681,7 @@ lightning-button[variant='brand']::part(button):disabled {
  *   - text in a child that sets its own colour — a link stays a link, and the
  *     `slds-text-color_weak` "(optional)" in a create-flow heading stays weak;
  *   - a heading with its own colour class, which outranks an element selector
- *     (`.email__heading`, already navy via --site-text-accent-secondary);
+ *     (`.email__heading`, already navy via --slds-g-color-accent-3);
  *   - headings inside a `lightning-*` shadow root, such as a `lightning-card`
  *     given a string `title`. The rule cannot cross that boundary.
  */
@@ -707,37 +706,37 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
     font-family: var(--dxp-s-text-heading-extra-large-font-family);
     font-size: var(--dxp-s-text-heading-extra-large-font-size);
-    line-height: var(--site-lineheight-heading-2xl);
+    line-height: var(--slds-g-font-line-height-1);
     color: var(--dxp-s-text-heading-extra-large-color);
 }
 h2 {
     font-family: var(--dxp-s-text-heading-large-font-family);
     font-size: var(--dxp-s-text-heading-large-font-size);
-    line-height: var(--site-lineheight-heading-xl);
+    line-height: var(--slds-g-font-line-height-1);
     color: var(--dxp-s-text-heading-large-color);
 }
 h3 {
     font-family: var(--dxp-s-text-heading-medium-font-family);
     font-size: var(--dxp-s-text-heading-medium-font-size);
-    line-height: var(--site-lineheight-heading-lg);
+    line-height: var(--slds-g-font-line-height-1);
     color: var(--dxp-s-text-heading-medium-color);
 }
 h4 {
     font-family: var(--dxp-s-text-heading-small-font-family);
     font-size: var(--dxp-s-text-heading-small-font-size);
-    line-height: var(--site-lineheight-heading-md);
+    line-height: var(--slds-g-font-line-height-2);
     color: var(--dxp-s-text-heading-small-color);
 }
 h5 {
     font-family: var(--dxp-s-text-heading-extra-small-font-family);
     font-size: var(--dxp-s-text-heading-extra-small-font-size);
-    line-height: var(--site-lineheight-heading-sm);
+    line-height: var(--slds-g-font-line-height-1);
     color: var(--dxp-s-text-heading-extra-small-color);
 }
 h6 {
     font-family: var(--dxp-s-text-heading-extra-extra-small-font-family);
     font-size: var(--dxp-s-text-heading-extra-extra-small-font-size);
-    line-height: var(--site-lineheight-heading-xs);
+    line-height: var(--slds-g-font-line-height-1);
     color: var(--dxp-s-text-heading-extra-extra-small-color);
 }
 
@@ -753,7 +752,7 @@ h6 {
  * A title passed through the `title` slot is our own markup and already takes
  * the heading rule; a link inside it keeps its link colour either way. *\/
 lightning-card::part(title) {
-    color: var(--site-color-brand-navy);
+    color: var(--slds-g-color-brand-base-30);
 }
  * [END OFF — custom heading typography] */
 
@@ -782,7 +781,7 @@ lightning-card::part(title) {
     --slds-c-badge-color-background: var(--slds-g-color-accent-container-1);
     --slds-c-badge-color-border: var(--slds-g-color-accent-container-1);
     --slds-c-badge-text-color: var(--slds-g-color-on-accent-1);
-    --slds-c-badge-radius-border: var(--site-radius-pill);
+    --slds-c-badge-radius-border: var(--slds-g-radius-border-4);
 }
  * [END OFF — custom listing chip] */
 
@@ -798,8 +797,8 @@ lightning-card::part(title) {
  *   Semantic/Text/Accent/Secondary   #134276   Semantic/Text/Inverse/Primary  #ffffff
  *   Semantic/Text/Inverse/Disabled   #e6f2fa
  *
- * NOT ONE HEX IS WRITTEN HERE. All nine already exist as `--site-text-*` in
- * design-tokens.css and every value matches the library exactly, so these are
+ * NOT ONE HEX IS WRITTEN HERE. All nine read the SLDS semantic colour hooks the
+ * Figma import in design-tokens.css themes, so these are
  * pure consumers — a colour change is still a one-line edit in the tokens file
  * and it reaches these for free. Adding the hexes again would have created a
  * second source of truth that drifts silently.
@@ -823,17 +822,17 @@ lightning-card::part(title) {
  * mechanism as `.sep-page-header`.
  *
  * Each class name mirrors its token exactly: `.sep-text-accent-primary` sets
- * `--site-text-accent-primary`. One-to-one, so neither can be renamed quietly.
+ * `--slds-g-color-accent-2`. One-to-one, so neither can be renamed quietly.
  * ========================================================================== */
-.sep-text-primary { color: var(--site-text-primary); }
-.sep-text-secondary { color: var(--site-text-secondary); }
-.sep-text-accent-primary { color: var(--site-text-accent-primary); }
-.sep-text-accent-secondary { color: var(--site-text-accent-secondary); }
-.sep-text-inverse-primary { color: var(--site-text-inverse-primary); }
-.sep-text-inverse-disabled { color: var(--site-text-inverse-disabled); }
-.sep-text-disabled { color: var(--site-text-disabled); }
-.sep-text-error { color: var(--site-text-error); }
-.sep-text-success { color: var(--site-text-success); }
+.sep-text-primary { color: var(--slds-g-color-on-surface-2); }
+.sep-text-secondary { color: var(--slds-g-color-on-surface-1); }
+.sep-text-accent-primary { color: var(--slds-g-color-accent-2); }
+.sep-text-accent-secondary { color: var(--slds-g-color-accent-3); }
+.sep-text-inverse-primary { color: var(--slds-g-color-on-accent-1); }
+.sep-text-inverse-disabled { color: var(--slds-g-color-on-surface-inverse-2); }
+.sep-text-disabled { color: var(--slds-g-color-on-disabled-1); }
+.sep-text-error { color: var(--slds-g-color-error-1); }
+.sep-text-success { color: var(--slds-g-color-success-1); }
 
 /* Type size utilities (`.sep-font-scale-*`) live in `sep-utilities.css`,
  * loaded after this file by `main.njk`. */
@@ -865,8 +864,8 @@ lightning-card::part(title) {
  * Opt in per use: `class={statusTagClass}` on a `lightning-badge`. *\/
 
 .sep-status-tag {
-    --slds-c-badge-font-size: var(--site-font-body-sm);
-    --slds-c-badge-radius-border: var(--site-radius-pill);
+    --slds-c-badge-font-size: var(--slds-g-font-scale-neg-1);
+    --slds-c-badge-radius-border: var(--slds-g-radius-border-4);
 }
 
 /* The tag's height.
@@ -895,30 +894,30 @@ lightning-card::part(title) {
 
 /* Active — filled navy. *\/
 .sep-status-tag_active {
-    --slds-c-badge-color-background: var(--site-bg-accent-secondary);
-    --slds-c-badge-color-border: var(--site-bg-accent-secondary);
-    --slds-c-badge-text-color: var(--site-text-inverse-primary);
+    --slds-c-badge-color-background: var(--slds-g-color-accent-container-3);
+    --slds-c-badge-color-border: var(--slds-g-color-accent-container-3);
+    --slds-c-badge-text-color: var(--slds-g-color-on-accent-1);
 }
 
 /* In review — tinted, with a warning-orange border and text. *\/
 .sep-status-tag_in-review {
-    --slds-c-badge-color-background: var(--site-color-red-05);
-    --slds-c-badge-color-border: var(--site-bg-warning);
-    --slds-c-badge-text-color: var(--site-bg-warning);
+    --slds-c-badge-color-background: var(--slds-g-color-error-base-95);
+    --slds-c-badge-color-border: var(--slds-g-color-warning-1);
+    --slds-c-badge-text-color: var(--slds-g-color-warning-1);
 }
 
 /* Draft — tinted, with a purple border and text. *\/
 .sep-status-tag_draft {
-    --slds-c-badge-color-background: var(--site-bg-secondary);
-    --slds-c-badge-color-border: var(--site-color-brand-purple);
-    --slds-c-badge-text-color: var(--site-color-brand-purple);
+    --slds-c-badge-color-background: var(--slds-g-color-surface-container-2);
+    --slds-c-badge-color-border: var(--slds-g-color-palette-purple-40);
+    --slds-c-badge-text-color: var(--slds-g-color-palette-purple-40);
 }
 
 /* Closed — filled, in the disabled blue-grey. *\/
 .sep-status-tag_closed {
-    --slds-c-badge-color-background: var(--site-bg-disabled);
-    --slds-c-badge-color-border: var(--site-bg-disabled);
-    --slds-c-badge-text-color: var(--site-text-inverse-primary);
+    --slds-c-badge-color-background: var(--slds-g-color-disabled-container-2);
+    --slds-c-badge-color-border: var(--slds-g-color-disabled-container-2);
+    --slds-c-badge-text-color: var(--slds-g-color-on-accent-1);
 }
  * [END OFF — custom status tag] */
 
@@ -972,20 +971,19 @@ lightning-card::part(title) {
  * Commented out to show the default Lightning styling. To restore: delete
  * this line block and its END line, and un-escape every `*\/` below.
 lightning-grouped-combobox {
-    --slds-c-inputtext-color-border: var(--site-stroke-primary);
+    --slds-c-inputtext-color-border: var(--slds-g-color-border-2);
     --slds-c-inputtext-sizing-border: var(--slds-g-sizing-border-2);
-    --slds-c-inputtext-radius-border: var(--site-radius-mid);
+    --slds-c-inputtext-radius-border: var(--slds-g-radius-border-2);
     --slds-c-inputtext-sizing-height: var(--slds-g-sizing-10);
-    --slds-c-inputtext-color-background: var(--site-bg-primary);
-    --slds-c-inputtext-color-background-focus: var(--site-bg-primary);
-    --slds-c-inputtext-text-color: var(--site-text-primary);
-    --slds-c-inputtext-text-color-placeholder: var(--site-text-secondary);
+    --slds-c-inputtext-color-background: var(--slds-g-color-surface-container-1);
+    --slds-c-inputtext-color-background-focus: var(--slds-g-color-surface-container-1);
+    --slds-c-inputtext-text-color: var(--slds-g-color-on-surface-2);
+    --slds-c-inputtext-text-color-placeholder: var(--slds-g-color-on-surface-1);
     /* The site's field size, matched to the buttons — as every other input.
        SEP's Input text style says 20px; see the Form inputs note in
-       design-tokens.css for why fields run at --site-font-body. *\/
-    --slds-c-inputtext-font-size: var(--site-font-body);
-    --slds-c-inputtext-label-color: var(--site-text-primary);
-    --slds-c-inputtext-icon-color-foreground: var(--site-icon-primary);
-    --slds-g-color-border-error-1: var(--site-stroke-error);
+       design-tokens.css for why fields run at --slds-g-font-scale-base. *\/
+    --slds-c-inputtext-font-size: var(--slds-g-font-scale-base);
+    --slds-c-inputtext-label-color: var(--slds-g-color-on-surface-2);
+    --slds-c-inputtext-icon-color-foreground: var(--slds-g-color-on-surface-2);
 }
  * [END OFF — custom input styles (combobox)] */

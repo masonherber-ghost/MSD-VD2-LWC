@@ -254,7 +254,7 @@ export const COMPOSITIONS = [
         "hasCss": true,
         "css": {
             "lines": 48,
-            "text": "/* The mail-client frame. The email itself is styled by ui/emailShell. */\n\n.email-preview {\n    border: 1px solid var(--slds-g-color-border-1, #e5e5e5);\n    border-radius: var(--site-radius-mid);\n    overflow: hidden;\n    background: var(--slds-g-color-surface-1, #fff);\n}\n\n/* --- The header a client puts above the message ----------------------- */\n\n.email-preview__meta {\n    display: grid;\n    grid-template-columns: max-content minmax(0, 1fr);\n    gap: var(--slds-g-spacing-1) var(--slds-g-spacing-4);\n    margin: 0;\n    padding: var(--slds-g-spacing-4);\n    border-block-end: 1px solid var(--slds-g-color-border-1, #e5e5e5);\n    font-size: var(--site-font-body-sm, 0.875rem);\n}\n\n.email-preview__meta dt {\n    color: var(--slds-g-color-on-surface-2, #5c5c5c);\n}\n\n.email-preview__meta dd {\n    margin: 0;\n    min-width: 0;\n    overflow-wrap: anywhere;\n}\n\n.email-preview__subject {\n    font-weight: 700;\n}\n\n.email-preview__preheader {\n    color: var(--slds-g-color-on-surface-2, #5c5c5c);\n}\n\n/* --- The canvas the message sits on ----------------------------------- */\n\n/* The recessed grey a mail client shows around a fixed-width message. */\n.email-preview__canvas {\n    padding: var(--slds-g-spacing-6) var(--slds-g-spacing-4);\n    background: var(--slds-g-color-surface-container-2, #f3f3f3);\n}\n\n/* 600px is the long-standing width for an HTML email — the widest that fits\n   an Outlook reading pane without a horizontal scroll, and what every MSD\n   template would be built to. It is a fixed send width rather than a spacing\n   value, so no SLDS token applies; below it the sheet goes fluid, as a\n   responsive email does on a phone. */\n.email-preview__sheet {\n    max-width: 600px;\n    margin-inline: auto;\n    background: var(--site-bg-primary);\n    box-shadow: var(--site-shadow-raised);\n}",
+            "text": "/* The mail-client frame. The email itself is styled by ui/emailShell. */\n\n.email-preview {\n    border: 1px solid var(--slds-g-color-border-1, #e5e5e5);\n    border-radius: var(--slds-g-radius-border-2);\n    overflow: hidden;\n    background: var(--slds-g-color-surface-1, #fff);\n}\n\n/* --- The header a client puts above the message ----------------------- */\n\n.email-preview__meta {\n    display: grid;\n    grid-template-columns: max-content minmax(0, 1fr);\n    gap: var(--slds-g-spacing-1) var(--slds-g-spacing-4);\n    margin: 0;\n    padding: var(--slds-g-spacing-4);\n    border-block-end: 1px solid var(--slds-g-color-border-1, #e5e5e5);\n    font-size: var(--slds-g-font-scale-neg-1, 0.875rem);\n}\n\n.email-preview__meta dt {\n    color: var(--slds-g-color-on-surface-2, #5c5c5c);\n}\n\n.email-preview__meta dd {\n    margin: 0;\n    min-width: 0;\n    overflow-wrap: anywhere;\n}\n\n.email-preview__subject {\n    font-weight: 700;\n}\n\n.email-preview__preheader {\n    color: var(--slds-g-color-on-surface-2, #5c5c5c);\n}\n\n/* --- The canvas the message sits on ----------------------------------- */\n\n/* The recessed grey a mail client shows around a fixed-width message. */\n.email-preview__canvas {\n    padding: var(--slds-g-spacing-6) var(--slds-g-spacing-4);\n    background: var(--slds-g-color-surface-container-2, #f3f3f3);\n}\n\n/* 600px is the long-standing width for an HTML email — the widest that fits\n   an Outlook reading pane without a horizontal scroll, and what every MSD\n   template would be built to. It is a fixed send width rather than a spacing\n   value, so no SLDS token applies; below it the sheet goes fluid, as a\n   responsive email does on a phone. */\n.email-preview__sheet {\n    max-width: 600px;\n    margin-inline: auto;\n    background: var(--slds-g-color-surface-container-1);\n    box-shadow: var(--slds-g-shadow-2);\n}",
             "selectors": [
                 ".email-preview",
                 ".email-preview__canvas",
@@ -270,17 +270,16 @@ export const COMPOSITIONS = [
                 "--slds-g-color-border-1",
                 "--slds-g-color-on-surface-2",
                 "--slds-g-color-surface-1",
+                "--slds-g-color-surface-container-1",
                 "--slds-g-color-surface-container-2",
+                "--slds-g-font-scale-neg-1",
+                "--slds-g-radius-border-2",
+                "--slds-g-shadow-2",
                 "--slds-g-spacing-1",
                 "--slds-g-spacing-4",
                 "--slds-g-spacing-6"
             ],
-            "siteTokens": [
-                "--site-bg-primary",
-                "--site-font-body-sm",
-                "--site-radius-mid",
-                "--site-shadow-raised"
-            ],
+            "siteTokens": [],
             "parts": [],
             "privateHooks": [],
             "rawColors": [],
@@ -313,7 +312,7 @@ export const COMPOSITIONS = [
         "hasCss": true,
         "css": {
             "lines": 127,
-            "text": "/* The master email template, plus the typography for every email body.\n *\n * Two things are deliberately unlike the rest of the site:\n *\n * 1. The email sets its own font stack. Mail clients do not load our webfont,\n *    so an MSD send would specify Arial with a system fallback — showing\n *    Atkinson Hyperlegible here would flatter the mockup and mislead.\n * 2. Colours come from the `--site-*` brand tokens so the mockup stays in step\n *    with the portal. A real send would inline these as hex: no mail client\n *    can be relied on for custom properties.\n *\n * `--site-*` tokens are consumed here, never declared — see design-tokens.css.\n */\n\n.email {\n    font-family: Arial, Helvetica, sans-serif;\n    font-size: 1rem;\n    line-height: var(--site-lineheight-body, 1.6);\n    color: var(--site-text-primary);\n    background: var(--site-bg-primary);\n    text-align: left;\n}\n\n/* --- Masthead --------------------------------------------------------- */\n\n.email__masthead {\n    padding: var(--slds-g-spacing-5) var(--slds-g-spacing-5);\n    border-block-end: 4px solid var(--site-color-brand-blue);\n}\n\n.email__logo {\n    display: block;\n    height: 2rem;\n    width: auto;\n}\n\n/* --- Body ------------------------------------------------------------- */\n\n.email__body {\n    padding: var(--slds-g-spacing-6) var(--slds-g-spacing-5);\n}\n\n.email__heading {\n    margin: 0 0 var(--slds-g-spacing-4);\n    font-size: var(--site-font-heading-sm, 1.25rem);\n    line-height: var(--site-lineheight-heading-sm, 1.25);\n    font-weight: 700;\n    color: var(--site-text-accent-secondary);\n}\n\n.email__body p {\n    margin: 0 0 var(--slds-g-spacing-4);\n}\n\n.email__body p:last-child {\n    margin-block-end: 0;\n}\n\n.email__body a {\n    color: var(--site-text-accent-primary);\n}\n\n.email__list {\n    margin: 0 0 var(--slds-g-spacing-4);\n    padding-inline-start: var(--slds-g-spacing-5);\n}\n\n.email__list li {\n    margin-block-end: var(--slds-g-spacing-2);\n}\n\n/* --- The call to action ----------------------------------------------- */\n\n/* A real send would build this as a table cell with a background colour, so it\n   survives Outlook. In a browser mockup an anchor is the honest equivalent. */\n.email__cta {\n    margin: var(--slds-g-spacing-6) 0;\n    text-align: center;\n}\n\n/* The standard primary button, as a link.\n *\n * It reads the same hooks design-tokens.css sets for every button on the site\n * rather than restating their values, so the email CTA moves when the button\n * style does instead of drifting from it.\n *\n * The selector carries `.email__body` because `.email__body a` sets the link\n * colour and would otherwise win on specificity — which is what left the label\n * navy on the blue fill. */\n.email__body a.email__cta-button {\n    display: inline-block;\n    padding: var(--slds-s-button-spacing-block) var(--slds-s-button-spacing-inline);\n    background: var(--slds-c-button-brand-color-background);\n    color: var(--slds-c-button-brand-text-color);\n    font-size: var(--slds-s-button-font-size);\n    line-height: var(--slds-s-button-font-lineheight);\n    font-weight: var(--slds-s-button-font-weight);\n    text-decoration: none;\n    border-radius: var(--slds-s-button-radius-border);\n}\n\n/* The fallback link under the button, for clients that strip the anchor. */\n.email__cta-fallback {\n    margin-block-start: var(--slds-g-spacing-3);\n    font-size: var(--site-font-body-sm, 0.875rem);\n    color: var(--site-text-secondary);\n    word-break: break-all;\n}\n\n/* --- Callout ---------------------------------------------------------- */\n\n.email__callout {\n    margin: var(--slds-g-spacing-5) 0;\n    padding: var(--slds-g-spacing-4);\n    background: var(--site-bg-secondary);\n    border-inline-start: 4px solid var(--site-color-brand-blue);\n    font-size: var(--site-font-body-sm, 0.875rem);\n}\n\n.email__callout p:last-child {\n    margin-block-end: 0;\n}\n\n.email__callout-title {\n    font-weight: 700;\n}\n\n/* --- Footer ----------------------------------------------------------- */\n\n.email__footer {\n    padding: var(--slds-g-spacing-5);\n    border-block-start: 1px solid var(--site-stroke-secondary);\n    background: var(--site-bg-secondary);\n    font-size: var(--site-font-body-sm, 0.875rem);\n    color: var(--site-text-secondary);\n}\n\n.email__footer p {\n    margin: 0 0 var(--slds-g-spacing-2);\n}\n\n.email__footer p:last-child {\n    margin-block-end: 0;\n}\n\n.email__footer a {\n    color: var(--site-text-accent-primary);\n}\n\n.email__footer-sep {\n    margin-inline: var(--slds-g-spacing-2);\n    color: var(--site-stroke-tertiary);\n}",
+            "text": "/* The master email template, plus the typography for every email body.\n *\n * Two things are deliberately unlike the rest of the site:\n *\n * 1. The email sets its own font stack. Mail clients do not load our webfont,\n *    so an MSD send would specify Arial with a system fallback — showing\n *    Atkinson Hyperlegible here would flatter the mockup and mislead.\n * 2. Colours come from the SLDS global colour hooks so the mockup stays in step\n *    with the portal. A real send would inline these as hex: no mail client\n *    can be relied on for custom properties.\n *\n * Tokens are consumed here, never declared — see design-tokens.css.\n */\n\n.email {\n    font-family: Arial, Helvetica, sans-serif;\n    font-size: 1rem;\n    line-height: var(--slds-g-font-line-height-base, 1.6);\n    color: var(--slds-g-color-on-surface-2);\n    background: var(--slds-g-color-surface-container-1);\n    text-align: left;\n}\n\n/* --- Masthead --------------------------------------------------------- */\n\n.email__masthead {\n    padding: var(--slds-g-spacing-5) var(--slds-g-spacing-5);\n    border-block-end: 4px solid var(--slds-g-color-brand-base-50);\n}\n\n.email__logo {\n    display: block;\n    height: 2rem;\n    width: auto;\n}\n\n/* --- Body ------------------------------------------------------------- */\n\n.email__body {\n    padding: var(--slds-g-spacing-6) var(--slds-g-spacing-5);\n}\n\n.email__heading {\n    margin: 0 0 var(--slds-g-spacing-4);\n    font-size: var(--slds-g-font-scale-2, 1.25rem);\n    line-height: var(--slds-g-font-line-height-1, 1.25);\n    font-weight: 700;\n    color: var(--slds-g-color-accent-3);\n}\n\n.email__body p {\n    margin: 0 0 var(--slds-g-spacing-4);\n}\n\n.email__body p:last-child {\n    margin-block-end: 0;\n}\n\n.email__body a {\n    color: var(--slds-g-color-accent-2);\n}\n\n.email__list {\n    margin: 0 0 var(--slds-g-spacing-4);\n    padding-inline-start: var(--slds-g-spacing-5);\n}\n\n.email__list li {\n    margin-block-end: var(--slds-g-spacing-2);\n}\n\n/* --- The call to action ----------------------------------------------- */\n\n/* A real send would build this as a table cell with a background colour, so it\n   survives Outlook. In a browser mockup an anchor is the honest equivalent. */\n.email__cta {\n    margin: var(--slds-g-spacing-6) 0;\n    text-align: center;\n}\n\n/* The standard primary button, as a link.\n *\n * It reads the same hooks design-tokens.css sets for every button on the site\n * rather than restating their values, so the email CTA moves when the button\n * style does instead of drifting from it.\n *\n * The selector carries `.email__body` because `.email__body a` sets the link\n * colour and would otherwise win on specificity — which is what left the label\n * navy on the blue fill. */\n.email__body a.email__cta-button {\n    display: inline-block;\n    padding: var(--slds-s-button-spacing-block) var(--slds-s-button-spacing-inline);\n    background: var(--slds-c-button-brand-color-background);\n    color: var(--slds-c-button-brand-text-color);\n    font-size: var(--slds-s-button-font-size);\n    line-height: var(--slds-s-button-font-lineheight);\n    font-weight: var(--slds-s-button-font-weight);\n    text-decoration: none;\n    border-radius: var(--slds-s-button-radius-border);\n}\n\n/* The fallback link under the button, for clients that strip the anchor. */\n.email__cta-fallback {\n    margin-block-start: var(--slds-g-spacing-3);\n    font-size: var(--slds-g-font-scale-neg-1, 0.875rem);\n    color: var(--slds-g-color-on-surface-1);\n    word-break: break-all;\n}\n\n/* --- Callout ---------------------------------------------------------- */\n\n.email__callout {\n    margin: var(--slds-g-spacing-5) 0;\n    padding: var(--slds-g-spacing-4);\n    background: var(--slds-g-color-surface-container-2);\n    border-inline-start: 4px solid var(--slds-g-color-brand-base-50);\n    font-size: var(--slds-g-font-scale-neg-1, 0.875rem);\n}\n\n.email__callout p:last-child {\n    margin-block-end: 0;\n}\n\n.email__callout-title {\n    font-weight: 700;\n}\n\n/* --- Footer ----------------------------------------------------------- */\n\n.email__footer {\n    padding: var(--slds-g-spacing-5);\n    border-block-start: 1px solid var(--slds-g-color-border-1);\n    background: var(--slds-g-color-surface-container-2);\n    font-size: var(--slds-g-font-scale-neg-1, 0.875rem);\n    color: var(--slds-g-color-on-surface-1);\n}\n\n.email__footer p {\n    margin: 0 0 var(--slds-g-spacing-2);\n}\n\n.email__footer p:last-child {\n    margin-block-end: 0;\n}\n\n.email__footer a {\n    color: var(--slds-g-color-accent-2);\n}\n\n.email__footer-sep {\n    margin-inline: var(--slds-g-spacing-2);\n    color: var(--slds-g-color-border-disabled-1);\n}",
             "selectors": [
                 ".email",
                 ".email__body",
@@ -348,27 +347,26 @@ export const COMPOSITIONS = [
                 "--slds-s-button-spacing-inline"
             ],
             "tokens": [
+                "--slds-g-color-accent-2",
+                "--slds-g-color-accent-3",
+                "--slds-g-color-border-1",
+                "--slds-g-color-border-disabled-1",
+                "--slds-g-color-brand-base-50",
+                "--slds-g-color-on-surface-1",
+                "--slds-g-color-on-surface-2",
+                "--slds-g-color-surface-container-1",
+                "--slds-g-color-surface-container-2",
+                "--slds-g-font-line-height-1",
+                "--slds-g-font-line-height-base",
+                "--slds-g-font-scale-2",
+                "--slds-g-font-scale-neg-1",
                 "--slds-g-spacing-2",
                 "--slds-g-spacing-3",
                 "--slds-g-spacing-4",
                 "--slds-g-spacing-5",
                 "--slds-g-spacing-6"
             ],
-            "siteTokens": [
-                "--site-bg-primary",
-                "--site-bg-secondary",
-                "--site-color-brand-blue",
-                "--site-font-body-sm",
-                "--site-font-heading-sm",
-                "--site-lineheight-body",
-                "--site-lineheight-heading-sm",
-                "--site-stroke-secondary",
-                "--site-stroke-tertiary",
-                "--site-text-accent-primary",
-                "--site-text-accent-secondary",
-                "--site-text-primary",
-                "--site-text-secondary"
-            ],
+            "siteTokens": [],
             "parts": [],
             "privateHooks": [],
             "rawColors": [],
@@ -918,7 +916,7 @@ export const COMPOSITIONS = [
         "hasCss": true,
         "css": {
             "lines": 99,
-            "text": "/* Styles for the RealMe modal's own markup.\n *\n * WHY THIS FILE CARRIES SPACING AT ALL. `LightningModal` renders into a shadow\n * root, and the SLDS stylesheet is a <link> in the document head — document\n * stylesheets do not cross a native shadow boundary. So every `slds-*` utility\n * class is INERT in here, and the spacing has to be declared rather than\n * borrowed. That is only true of class-based styling: custom properties are\n * inherited, so `--slds-g-*` and `--site-*` tokens still resolve, which is why\n * the values below are tokens and not numbers.\n *\n * The `lightning-*` children are unaffected — each ships its own stylesheet and\n * styles itself, which is why the inputs and buttons look right regardless.\n */\n\n/* The brand band that leads the body, standing in for the modal header the\n   design shows. The rule below is the divider under it. */\n.realme__brand {\n    display: flex;\n    justify-content: center;\n    padding-block-end: var(--slds-g-spacing-4);\n    margin-block-end: var(--slds-g-spacing-4);\n    border-block-end: 1px solid var(--site-stroke-secondary);\n}\n\n/* The supplied wordmark is 166x33. Height is pinned so the band keeps its own\n   sizing whatever the file's intrinsic size; width follows the ratio. */\n.realme__wordmark {\n    display: block;\n    height: 1.75rem;\n    width: auto;\n}\n\n.realme__intro {\n    margin: 0 0 var(--slds-g-spacing-4);\n}\n\n/* The field after the first needs separating; the inputs carry no outer\n   margin of their own. */\n.realme__field {\n    margin-block-start: var(--slds-g-spacing-3);\n}\n\n/* Form-level error. `slds-notify_alert` would have done this, so the tokens\n   below are the ones that theme drives. */\n.realme__error {\n    margin-block-end: var(--slds-g-spacing-3);\n    padding: var(--slds-g-spacing-3);\n    border-inline-start: 4px solid var(--site-stroke-error);\n    border-radius: var(--slds-g-radius-border-2, 0.25rem);\n    background: var(--site-bg-error);\n    color: var(--site-text-error);\n}\n\n/* The shipped `slds-assistive-text` pattern, which cannot reach in here. */\n.realme__assistive {\n    position: absolute;\n    width: 1px;\n    height: 1px;\n    margin: -1px;\n    padding: 0;\n    overflow: hidden;\n    clip: rect(0 0 0 0);\n    white-space: nowrap;\n    border: 0;\n}\n\n.realme__links {\n    margin: var(--slds-g-spacing-4) 0 0;\n    font-size: var(--site-font-body-sm, 0.875rem);\n}\n\n.realme__links_tight {\n    margin-block-start: var(--slds-g-spacing-2);\n}\n\n/* Prototype furniture — deliberately looks like a note, not like the form. */\n.realme__hint {\n    margin-block-start: var(--slds-g-spacing-4);\n    padding: var(--slds-g-spacing-3);\n    border: 1px solid var(--site-stroke-secondary);\n    border-radius: var(--slds-g-radius-border-2, 0.25rem);\n    background: var(--site-bg-secondary);\n    font-size: var(--site-font-body-sm, 0.875rem);\n    color: var(--site-text-secondary);\n}\n\n.realme__hint p {\n    margin: 0;\n}\n\n.realme__hint ul {\n    margin: var(--slds-g-spacing-1) 0;\n    padding-inline-start: var(--slds-g-spacing-5);\n    list-style: disc;\n}\n\n/* Separates the footer's two actions.\n *\n * SLDS spaces adjacent footer buttons with `.slds-button + .slds-button`, which\n * never matches here: `.slds-button` sits on the <button> inside each\n * lightning-button's own shadow root, not on the host that is the actual\n * sibling. A margin on the host is the reachable equivalent — and it applies\n * because the margin is horizontal; a vertical one would not, the host being\n * display:inline. */\n.realme__continue {\n    /* Measured: spacing-2 (8px) reads as touching between two pill buttons,\n       because LWC also strips the whitespace text node that would otherwise\n       put a few pixels between two inline-level tags. spacing-4 is the gap the\n       design shows. */\n    margin-inline-start: var(--slds-g-spacing-4);\n}",
+            "text": "/* Styles for the RealMe modal's own markup.\n *\n * WHY THIS FILE CARRIES SPACING AT ALL. `LightningModal` renders into a shadow\n * root, and the SLDS stylesheet is a <link> in the document head — document\n * stylesheets do not cross a native shadow boundary. So every `slds-*` utility\n * class is INERT in here, and the spacing has to be declared rather than\n * borrowed. That is only true of class-based styling: custom properties are\n * inherited, so `--slds-g-*` tokens still resolve, which is why\n * the values below are tokens and not numbers.\n *\n * The `lightning-*` children are unaffected — each ships its own stylesheet and\n * styles itself, which is why the inputs and buttons look right regardless.\n */\n\n/* The brand band that leads the body, standing in for the modal header the\n   design shows. The rule below is the divider under it. */\n.realme__brand {\n    display: flex;\n    justify-content: center;\n    padding-block-end: var(--slds-g-spacing-4);\n    margin-block-end: var(--slds-g-spacing-4);\n    border-block-end: 1px solid var(--slds-g-color-border-1);\n}\n\n/* The supplied wordmark is 166x33. Height is pinned so the band keeps its own\n   sizing whatever the file's intrinsic size; width follows the ratio. */\n.realme__wordmark {\n    display: block;\n    height: 1.75rem;\n    width: auto;\n}\n\n.realme__intro {\n    margin: 0 0 var(--slds-g-spacing-4);\n}\n\n/* The field after the first needs separating; the inputs carry no outer\n   margin of their own. */\n.realme__field {\n    margin-block-start: var(--slds-g-spacing-3);\n}\n\n/* Form-level error. `slds-notify_alert` would have done this, so the tokens\n   below are the ones that theme drives. */\n.realme__error {\n    margin-block-end: var(--slds-g-spacing-3);\n    padding: var(--slds-g-spacing-3);\n    border-inline-start: 4px solid var(--slds-g-color-border-error-1);\n    border-radius: var(--slds-g-radius-border-2, 0.25rem);\n    background: var(--slds-g-color-error-container-1);\n    color: var(--slds-g-color-error-1);\n}\n\n/* The shipped `slds-assistive-text` pattern, which cannot reach in here. */\n.realme__assistive {\n    position: absolute;\n    width: 1px;\n    height: 1px;\n    margin: -1px;\n    padding: 0;\n    overflow: hidden;\n    clip: rect(0 0 0 0);\n    white-space: nowrap;\n    border: 0;\n}\n\n.realme__links {\n    margin: var(--slds-g-spacing-4) 0 0;\n    font-size: var(--slds-g-font-scale-neg-1, 0.875rem);\n}\n\n.realme__links_tight {\n    margin-block-start: var(--slds-g-spacing-2);\n}\n\n/* Prototype furniture — deliberately looks like a note, not like the form. */\n.realme__hint {\n    margin-block-start: var(--slds-g-spacing-4);\n    padding: var(--slds-g-spacing-3);\n    border: 1px solid var(--slds-g-color-border-1);\n    border-radius: var(--slds-g-radius-border-2, 0.25rem);\n    background: var(--slds-g-color-surface-container-2);\n    font-size: var(--slds-g-font-scale-neg-1, 0.875rem);\n    color: var(--slds-g-color-on-surface-1);\n}\n\n.realme__hint p {\n    margin: 0;\n}\n\n.realme__hint ul {\n    margin: var(--slds-g-spacing-1) 0;\n    padding-inline-start: var(--slds-g-spacing-5);\n    list-style: disc;\n}\n\n/* Separates the footer's two actions.\n *\n * SLDS spaces adjacent footer buttons with `.slds-button + .slds-button`, which\n * never matches here: `.slds-button` sits on the <button> inside each\n * lightning-button's own shadow root, not on the host that is the actual\n * sibling. A margin on the host is the reachable equivalent — and it applies\n * because the margin is horizontal; a vertical one would not, the host being\n * display:inline. */\n.realme__continue {\n    /* Measured: spacing-2 (8px) reads as touching between two pill buttons,\n       because LWC also strips the whitespace text node that would otherwise\n       put a few pixels between two inline-level tags. spacing-4 is the gap the\n       design shows. */\n    margin-inline-start: var(--slds-g-spacing-4);\n}",
             "selectors": [
                 ".realme__assistive",
                 ".realme__brand",
@@ -935,6 +933,13 @@ export const COMPOSITIONS = [
             ],
             "hooks": [],
             "tokens": [
+                "--slds-g-color-border-1",
+                "--slds-g-color-border-error-1",
+                "--slds-g-color-error-1",
+                "--slds-g-color-error-container-1",
+                "--slds-g-color-on-surface-1",
+                "--slds-g-color-surface-container-2",
+                "--slds-g-font-scale-neg-1",
                 "--slds-g-radius-border-2",
                 "--slds-g-spacing-1",
                 "--slds-g-spacing-2",
@@ -942,15 +947,7 @@ export const COMPOSITIONS = [
                 "--slds-g-spacing-4",
                 "--slds-g-spacing-5"
             ],
-            "siteTokens": [
-                "--site-bg-error",
-                "--site-bg-secondary",
-                "--site-font-body-sm",
-                "--site-stroke-error",
-                "--site-stroke-secondary",
-                "--site-text-error",
-                "--site-text-secondary"
-            ],
+            "siteTokens": [],
             "parts": [],
             "privateHooks": [],
             "rawColors": [],
@@ -973,7 +970,7 @@ export const COMPOSITIONS = [
         "hasCss": true,
         "css": {
             "lines": 21,
-            "text": "/* Docked to the viewport so the toggle is reachable from anywhere on a page.\n   `.site__body` reserves the matching space — see site.css. */\n.site-footer {\n    position: fixed;\n    inset-block-end: 0;\n    inset-inline: 0;\n    z-index: 5;\n    background: var(--slds-g-color-surface-1, #fff);\n    border-block-start: 1px solid var(--slds-g-color-border-1, #e5e5e5);\n}\n\n/* The bar is full-bleed; its contents sit in the same content column as the\n   page and the header. Both custom properties are defined in site.css. */\n.site-footer__inner {\n    max-width: var(--site-content-max-width);\n    margin-inline: auto;\n    padding: var(--slds-g-spacing-2, 0.5rem) var(--site-content-gutter, 1rem);\n}\n\n/* The segmented control sits inline in the bar rather than stacking. */\n.site-footer__toggle lightning-radio-group {\n    display: inline-block;\n}",
+            "text": "/* Docked to the viewport so the toggle is reachable from anywhere on a page.\n   `.site__body` reserves the matching space — see site.css. */\n.site-footer {\n    position: fixed;\n    inset-block-end: 0;\n    inset-inline: 0;\n    z-index: 5;\n    background: var(--slds-g-color-surface-1, #fff);\n    border-block-start: 1px solid var(--slds-g-color-border-1, #e5e5e5);\n}\n\n/* The bar is full-bleed; its contents sit in the same content column as the\n   page and the header. Both custom properties are defined in site.css. */\n.site-footer__inner {\n    max-width: var(--sep-content-max-width);\n    margin-inline: auto;\n    padding: var(--slds-g-spacing-2, 0.5rem) var(--sep-content-gutter, 1rem);\n}\n\n/* The segmented control sits inline in the bar rather than stacking. */\n.site-footer__toggle lightning-radio-group {\n    display: inline-block;\n}",
             "selectors": [
                 ".site-footer",
                 ".site-footer__inner",
@@ -986,8 +983,8 @@ export const COMPOSITIONS = [
                 "--slds-g-spacing-2"
             ],
             "siteTokens": [
-                "--site-content-gutter",
-                "--site-content-max-width"
+                "--sep-content-gutter",
+                "--sep-content-max-width"
             ],
             "parts": [],
             "privateHooks": [],
@@ -1101,7 +1098,7 @@ export const COMPOSITIONS = [
         "hasCss": true,
         "css": {
             "lines": 121,
-            "text": "/* The card root.\n *\n * No `position: relative` here any more. It existed only to be the containing\n * block for a stretched ::after that made the whole card one click target; that\n * went when the card gained its action column, because an overlay covering the\n * card also covers the actions. The title anchor below is now the only link,\n * which is what Lightning does on a card that carries actions. */\n\n/* The card's frame: a heavy top edge in the link colour, 2px elsewhere, 8px\n * corners.\n *\n * All three go through `lightning-card`'s PUBLIC hooks — the border is drawn\n * on the <article> inside its shadow root, out of reach of a class. Set on the\n * wrapper, they inherit into the card. `--slds-c-card-sizing-border` feeds\n * `border-width` directly, so it takes the four-value shorthand.\n *\n *   colour  --site-text-accent-primary — the value design-tokens.css gives\n *           --slds-s-link-color. Read from the project token rather than from\n *           --slds-s-link-color itself, which the SLDS Linter lists as private.\n *   width   SLDS's border scale stops at 4px (--slds-g-sizing-border-4), so\n *           the 8px top edge is twice that rather than a literal.\n *   radius  --slds-g-radius-border-3 is 0.5rem, 8px. */\n.vacancy-card {\n    --slds-c-card-color-border: var(--site-color-brand-blue);\n    --slds-c-card-sizing-border: calc(var(--slds-g-sizing-border-4) * 2)\n        var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2);\n    --slds-c-card-radius-border: var(--slds-g-radius-border-3);\n}\n\n/* The title link. The card title is an <h4> — Heading 4's size from the\n * site-wide tag rule — and its text is this link, so the link carries the\n * colour: MSD blue rather than the default link accent. */\n.vacancy-card__link {\n    color: var(--site-color-brand-navy);\n    text-decoration: none;\n}\n\n.vacancy-card__link:hover {\n    text-decoration: underline;\n}\n\n/* The card header, rebuilt as a media object.\n *\n * `lightning-card` renders its icon inside a shadow-root figure with no slot,\n * so showing the vacancy's own artwork means dropping `icon-name` and composing\n * the figure here, in the title slot. Nothing shipped is restyled — this is our\n * markup in a public slot, which is the difference between composing and\n * reaching in.\n *\n * Two properties are pinned rather than left to the blueprint, because SLDS 2\n * does not settle them the way SLDS 1 did:\n *\n *   align-items   `slds-media_center` is the class that used to centre a figure\n *       against a multi-line body, and it has NO bare rule at all in the SLDS 2\n *       bundle — 0 hits as a standalone selector. `.slds-media` then declares\n *       `align-items` five times across layers, centre twice and flex-start\n *       once, so which one lands is not worth depending on.\n *\n *   gap           `.slds-media__figure` declares `margin-inline-end` in twelve\n *       separate rules, from spacing-1 to spacing-5. One value stated here\n *       beats guessing which of them wins, so the figure's own margin is\n *       zeroed below and the gap owns the spacing. */\n.vacancy-card__heading {\n    align-items: center;\n    gap: var(--slds-g-spacing-3);\n}\n\n/* The title is the flexible half; the icon never shrinks to make room. */\n.vacancy-card__figure {\n    flex: none;\n    margin-inline-end: 0;\n}\n\n/* The category icon.\n *\n * A size is not spacing, so this is a literal rather than a spacing token — and\n * a value used by one component is a value, not a token, per\n * `rules-lwc-layout.md`. 2.75rem is the 44px the artwork is drawn at on the\n * live site; the file's own 56x56 viewBox scales into it.\n *\n * `display: block` removes the inline baseline gap, which would otherwise sit\n * the icon a few pixels low against the title. */\n.vacancy-card__icon {\n    display: block;\n    width: 2rem;\n    height: 2rem;\n}\n\n/* The subtitle sits under the title rather than inline with it. */\n.vacancy-card__subtitle {\n    display: block;\n    font-weight: var(--slds-g-font-weight-4);\n}\n\n/* Icon + value pairs, one per line.\n *\n * A wrapping row read as a run-on sentence once a card carried five of them —\n * the eye had no column to follow. Stacked, each value starts at the same x and\n * the icons form a scannable rail down the left.\n *\n * Padding comes from `slds-p-around_medium` on the element, not from here: the\n * spacing rules want the utility where one exists. SLDS 2 ships no gap utility,\n * so the row gap is the token in custom CSS. */\n.vacancy-card__meta {\n    display: flex;\n    flex-direction: column;\n    row-gap: var(--slds-g-spacing-1);\n}\n\n.vacancy-card__meta-item {\n    display: inline-flex;\n    align-items: center;\n    gap: var(--slds-g-spacing-2);\n    min-width: 0;\n}\n\n/* A utility icon is filled by its own hook, not by `color`.\n *\n * `variant=\"bare\"` looked like the way to make it inherit currentColor; it is\n * not — the icons rendered with real path data and were simply invisible\n * against the card. --slds-c-icon-color-foreground-default is the public hook\n * the default variant actually reads. */\n.vacancy-card__meta-icon {\n    --slds-c-icon-color-foreground-default: var(--site-color-brand-navy);\n    flex: none;\n    \n}\n\n.vacancy-card__meta-value {\n    color: var(--slds-g-color-on-surface-1);\n    min-width: 0;\n    /* font-size: var(--site-font-body-sm); */\n}",
+            "text": "/* The card root.\n *\n * No `position: relative` here any more. It existed only to be the containing\n * block for a stretched ::after that made the whole card one click target; that\n * went when the card gained its action column, because an overlay covering the\n * card also covers the actions. The title anchor below is now the only link,\n * which is what Lightning does on a card that carries actions. */\n\n/* The card's frame: a heavy top edge in the link colour, 2px elsewhere, 8px\n * corners.\n *\n * All three go through `lightning-card`'s PUBLIC hooks — the border is drawn\n * on the <article> inside its shadow root, out of reach of a class. Set on the\n * wrapper, they inherit into the card. `--slds-c-card-sizing-border` feeds\n * `border-width` directly, so it takes the four-value shorthand.\n *\n *   colour  --slds-g-color-accent-2 — the value design-tokens.css gives\n *           --slds-s-link-color. Read from the project token rather than from\n *           --slds-s-link-color itself, which the SLDS Linter lists as private.\n *   width   SLDS's border scale stops at 4px (--slds-g-sizing-border-4), so\n *           the 8px top edge is twice that rather than a literal.\n *   radius  --slds-g-radius-border-3 is 0.5rem, 8px. */\n.vacancy-card {\n    --slds-c-card-color-border: var(--slds-g-color-brand-base-50);\n    --slds-c-card-sizing-border: calc(var(--slds-g-sizing-border-4) * 2)\n        var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2);\n    --slds-c-card-radius-border: var(--slds-g-radius-border-3);\n}\n\n/* The title link. The card title is an <h4> — Heading 4's size from the\n * site-wide tag rule — and its text is this link, so the link carries the\n * colour: MSD blue rather than the default link accent. */\n.vacancy-card__link {\n    color: var(--slds-g-color-brand-base-30);\n    text-decoration: none;\n}\n\n.vacancy-card__link:hover {\n    text-decoration: underline;\n}\n\n/* The card header, rebuilt as a media object.\n *\n * `lightning-card` renders its icon inside a shadow-root figure with no slot,\n * so showing the vacancy's own artwork means dropping `icon-name` and composing\n * the figure here, in the title slot. Nothing shipped is restyled — this is our\n * markup in a public slot, which is the difference between composing and\n * reaching in.\n *\n * Two properties are pinned rather than left to the blueprint, because SLDS 2\n * does not settle them the way SLDS 1 did:\n *\n *   align-items   `slds-media_center` is the class that used to centre a figure\n *       against a multi-line body, and it has NO bare rule at all in the SLDS 2\n *       bundle — 0 hits as a standalone selector. `.slds-media` then declares\n *       `align-items` five times across layers, centre twice and flex-start\n *       once, so which one lands is not worth depending on.\n *\n *   gap           `.slds-media__figure` declares `margin-inline-end` in twelve\n *       separate rules, from spacing-1 to spacing-5. One value stated here\n *       beats guessing which of them wins, so the figure's own margin is\n *       zeroed below and the gap owns the spacing. */\n.vacancy-card__heading {\n    align-items: center;\n    gap: var(--slds-g-spacing-3);\n}\n\n/* The title is the flexible half; the icon never shrinks to make room. */\n.vacancy-card__figure {\n    flex: none;\n    margin-inline-end: 0;\n}\n\n/* The category icon.\n *\n * A size is not spacing, so this is a literal rather than a spacing token — and\n * a value used by one component is a value, not a token, per\n * `rules-lwc-layout.md`. 2.75rem is the 44px the artwork is drawn at on the\n * live site; the file's own 56x56 viewBox scales into it.\n *\n * `display: block` removes the inline baseline gap, which would otherwise sit\n * the icon a few pixels low against the title. */\n.vacancy-card__icon {\n    display: block;\n    width: 2rem;\n    height: 2rem;\n}\n\n/* The subtitle sits under the title rather than inline with it. */\n.vacancy-card__subtitle {\n    display: block;\n    font-weight: var(--slds-g-font-weight-4);\n}\n\n/* Icon + value pairs, one per line.\n *\n * A wrapping row read as a run-on sentence once a card carried five of them —\n * the eye had no column to follow. Stacked, each value starts at the same x and\n * the icons form a scannable rail down the left.\n *\n * Padding comes from `slds-p-around_medium` on the element, not from here: the\n * spacing rules want the utility where one exists. SLDS 2 ships no gap utility,\n * so the row gap is the token in custom CSS. */\n.vacancy-card__meta {\n    display: flex;\n    flex-direction: column;\n    row-gap: var(--slds-g-spacing-1);\n}\n\n.vacancy-card__meta-item {\n    display: inline-flex;\n    align-items: center;\n    gap: var(--slds-g-spacing-2);\n    min-width: 0;\n}\n\n/* A utility icon is filled by its own hook, not by `color`.\n *\n * `variant=\"bare\"` looked like the way to make it inherit currentColor; it is\n * not — the icons rendered with real path data and were simply invisible\n * against the card. --slds-c-icon-color-foreground-default is the public hook\n * the default variant actually reads. */\n.vacancy-card__meta-icon {\n    --slds-c-icon-color-foreground-default: var(--slds-g-color-brand-base-30);\n    flex: none;\n    \n}\n\n.vacancy-card__meta-value {\n    color: var(--slds-g-color-on-surface-1);\n    min-width: 0;\n    /* font-size: var(--slds-g-font-scale-neg-1); */\n}",
             "selectors": [
                 ".vacancy-card",
                 ".vacancy-card__figure",
@@ -1122,6 +1119,8 @@ export const COMPOSITIONS = [
                 "--slds-c-icon-color-foreground-default"
             ],
             "tokens": [
+                "--slds-g-color-brand-base-30",
+                "--slds-g-color-brand-base-50",
                 "--slds-g-color-on-surface-1",
                 "--slds-g-font-weight-4",
                 "--slds-g-radius-border-3",
@@ -1131,10 +1130,7 @@ export const COMPOSITIONS = [
                 "--slds-g-spacing-2",
                 "--slds-g-spacing-3"
             ],
-            "siteTokens": [
-                "--site-color-brand-blue",
-                "--site-color-brand-navy"
-            ],
+            "siteTokens": [],
             "parts": [],
             "privateHooks": [],
             "rawColors": [],
@@ -1215,7 +1211,7 @@ export const COMPOSITIONS = [
         "hasCss": true,
         "css": {
             "lines": 38,
-            "text": "/* The caption row under the rail.\n *\n * `lightning-progress-indicator type=\"base\"` shows a step's label nowhere on\n * screen — the shipped step template emits only `data-label` and assistive\n * text — so the visible caption is ours, and it has to be positioned to match\n * the dots rather than simply centred under the whole rail.\n *\n * The two values here MIRROR SLDS's own, so the cells line up with the markers:\n *\n *   max-inline-size: 70%   `.slds-progress` is `max-width: 70%; margin: auto`\n *   space-between          `.slds-progress__list` distributes its markers with\n *                          `display: flex; justify-content: space-between`\n *\n * They are literals because they are copied from a shipped rule, not drawn from\n * this project's scale — there is no token for \"whatever SLDS set the progress\n * rail to\". If a future SLDS release changes either, this row drifts and these\n * are the two numbers to re-check. */\n.vacancy-stepper__labels {\n    display: flex;\n    justify-content: space-between;\n    max-inline-size: 70%;\n    margin-inline: auto;\n}\n\n/* Each cell is a zero-width point at its dot, with the text centred on it and\n * allowed to overflow. Giving the cells real width would push the first and\n * last captions inward, away from the dots they belong to. */\n.vacancy-stepper__label {\n    display: flex;\n    justify-content: center;\n    inline-size: 0;\n    white-space: nowrap;\n    font-size: var(--site-font-body-sm);\n    color: var(--slds-g-color-on-surface-2);\n}\n\n/* `visibility`, never `display: none` — see the getter's comment. */\n.vacancy-stepper__label_hidden {\n    visibility: hidden;\n}",
+            "text": "/* The caption row under the rail.\n *\n * `lightning-progress-indicator type=\"base\"` shows a step's label nowhere on\n * screen — the shipped step template emits only `data-label` and assistive\n * text — so the visible caption is ours, and it has to be positioned to match\n * the dots rather than simply centred under the whole rail.\n *\n * The two values here MIRROR SLDS's own, so the cells line up with the markers:\n *\n *   max-inline-size: 70%   `.slds-progress` is `max-width: 70%; margin: auto`\n *   space-between          `.slds-progress__list` distributes its markers with\n *                          `display: flex; justify-content: space-between`\n *\n * They are literals because they are copied from a shipped rule, not drawn from\n * this project's scale — there is no token for \"whatever SLDS set the progress\n * rail to\". If a future SLDS release changes either, this row drifts and these\n * are the two numbers to re-check. */\n.vacancy-stepper__labels {\n    display: flex;\n    justify-content: space-between;\n    max-inline-size: 70%;\n    margin-inline: auto;\n}\n\n/* Each cell is a zero-width point at its dot, with the text centred on it and\n * allowed to overflow. Giving the cells real width would push the first and\n * last captions inward, away from the dots they belong to. */\n.vacancy-stepper__label {\n    display: flex;\n    justify-content: center;\n    inline-size: 0;\n    white-space: nowrap;\n    font-size: var(--slds-g-font-scale-neg-1);\n    color: var(--slds-g-color-on-surface-2);\n}\n\n/* `visibility`, never `display: none` — see the getter's comment. */\n.vacancy-stepper__label_hidden {\n    visibility: hidden;\n}",
             "selectors": [
                 ".vacancy-stepper__label",
                 ".vacancy-stepper__label_hidden",
@@ -1223,11 +1219,10 @@ export const COMPOSITIONS = [
             ],
             "hooks": [],
             "tokens": [
-                "--slds-g-color-on-surface-2"
+                "--slds-g-color-on-surface-2",
+                "--slds-g-font-scale-neg-1"
             ],
-            "siteTokens": [
-                "--site-font-body-sm"
-            ],
+            "siteTokens": [],
             "parts": [],
             "privateHooks": [],
             "rawColors": [],
@@ -1248,16 +1243,16 @@ export const COMPOSITIONS = [
         "hasCss": true,
         "css": {
             "lines": 6,
-            "text": "/* The headline figure. Sized from the SEP type scale rather than a raw value. */\n.vacancy-summary__count {\n    font-size: var(--site-font-heading-lg);\n    line-height: var(--site-lineheight-heading-lg);\n    font-weight: 300;\n}",
+            "text": "/* The headline figure. Sized from the SEP type scale rather than a raw value. */\n.vacancy-summary__count {\n    font-size: var(--slds-g-font-scale-4);\n    line-height: var(--slds-g-font-line-height-1);\n    font-weight: 300;\n}",
             "selectors": [
                 ".vacancy-summary__count"
             ],
             "hooks": [],
-            "tokens": [],
-            "siteTokens": [
-                "--site-font-heading-lg",
-                "--site-lineheight-heading-lg"
+            "tokens": [
+                "--slds-g-font-line-height-1",
+                "--slds-g-font-scale-4"
             ],
+            "siteTokens": [],
             "parts": [],
             "privateHooks": [],
             "rawColors": [],
@@ -1307,11 +1302,11 @@ export const SEP_CLASSES = [
     },
     {
         "name": "sep-text-primary",
-        "note": "Text colour utilities The nine text colours from the Semantic Colours page of the SEP Foundations library, as opt-in classes. Read out of the Figma file rather than eyeballed: Semantic/Text/Primary            #333333   Semantic/Text/Disabled         #a1b3c8 Semantic/Text/Secondary          #666666   Semantic/Text/Status/Error     #d03633 Semantic/Text/Accent/Primary     #0071bb   Semantic/Text/Status/Success   #2d750a Semantic/Text/Accent/Secondary   #134276   Semantic/Text/Inverse/Primary  #ffffff Semantic/Text/Inverse/Disabled   #e6f2fa NOT ONE HEX IS WRITTEN HERE. All nine already exist as `--site-text-*` in design-tokens.css and every value matches the library exactly, so these are pure consumers — a colour change is still a one-line edit in the tokens file and it reaches these for free. Adding the hexes again would have created a second source of truth that drifts silently. WHY THESE ARE NEEDED AT ALL. SLDS 2 ships seven text-colour utilities — `slds-text-color_default`, `_weak`, `_inverse`, `_inverse-weak`, `_error`, `_success`, `_destructive` — and only four of them mean the same thing as one of the nine above. There is no SLDS utility for the accent colours, the disabled pair or the secondary grey, and those are the ones a SEP screen reaches for most. PREFER THE SLDS UTILITY WHERE THE MEANING MATCHES. `slds-text-color_weak` and `.sep-text-secondary` resolve to the same value, because design-tokens.css maps the SLDS token onto the same semantic layer. Reach for these where SLDS has no equivalent, not as a default. NO `!important`, deliberately. SLDS declares its text-colour utilities inside a cascade layer and — unlike its spacing utilities — without `!important`. This file is unlayered, and unlayered beats layered, so a `sep-` class wins over an SLDS one on the same element with no specificity fight. Same mechanism as `.sep-page-header`. Each class name mirrors its token exactly: `.sep-text-accent-primary` sets `--site-text-accent-primary`. One-to-one, so neither can be renamed quietly.",
+        "note": "Text colour utilities The nine text colours from the Semantic Colours page of the SEP Foundations library, as opt-in classes. Read out of the Figma file rather than eyeballed: Semantic/Text/Primary            #333333   Semantic/Text/Disabled         #a1b3c8 Semantic/Text/Secondary          #666666   Semantic/Text/Status/Error     #d03633 Semantic/Text/Accent/Primary     #0071bb   Semantic/Text/Status/Success   #2d750a Semantic/Text/Accent/Secondary   #134276   Semantic/Text/Inverse/Primary  #ffffff Semantic/Text/Inverse/Disabled   #e6f2fa NOT ONE HEX IS WRITTEN HERE. All nine read the SLDS semantic colour hooks the Figma import in design-tokens.css themes, so these are pure consumers — a colour change is still a one-line edit in the tokens file and it reaches these for free. Adding the hexes again would have created a second source of truth that drifts silently. WHY THESE ARE NEEDED AT ALL. SLDS 2 ships seven text-colour utilities — `slds-text-color_default`, `_weak`, `_inverse`, `_inverse-weak`, `_error`, `_success`, `_destructive` — and only four of them mean the same thing as one of the nine above. There is no SLDS utility for the accent colours, the disabled pair or the secondary grey, and those are the ones a SEP screen reaches for most. PREFER THE SLDS UTILITY WHERE THE MEANING MATCHES. `slds-text-color_weak` and `.sep-text-secondary` resolve to the same value, because design-tokens.css maps the SLDS token onto the same semantic layer. Reach for these where SLDS has no equivalent, not as a default. NO `!important`, deliberately. SLDS declares its text-colour utilities inside a cascade layer and — unlike its spacing utilities — without `!important`. This file is unlayered, and unlayered beats layered, so a `sep-` class wins over an SLDS one on the same element with no specificity fight. Same mechanism as `.sep-page-header`. Each class name mirrors its token exactly: `.sep-text-accent-primary` sets `--slds-g-color-accent-2`. One-to-one, so neither can be renamed quietly.",
         "rules": [
             {
                 "selector": ".sep-text-primary",
-                "body": "color: var(--site-text-primary);"
+                "body": "color: var(--slds-g-color-on-surface-2);"
             }
         ],
         "usedIn": [
@@ -1324,7 +1319,7 @@ export const SEP_CLASSES = [
         "rules": [
             {
                 "selector": ".sep-text-secondary",
-                "body": "color: var(--site-text-secondary);"
+                "body": "color: var(--slds-g-color-on-surface-1);"
             }
         ],
         "usedIn": []
@@ -1335,7 +1330,7 @@ export const SEP_CLASSES = [
         "rules": [
             {
                 "selector": ".sep-text-accent-primary",
-                "body": "color: var(--site-text-accent-primary);"
+                "body": "color: var(--slds-g-color-accent-2);"
             }
         ],
         "usedIn": [
@@ -1348,10 +1343,12 @@ export const SEP_CLASSES = [
         "rules": [
             {
                 "selector": ".sep-text-accent-secondary",
-                "body": "color: var(--site-text-accent-secondary);"
+                "body": "color: var(--slds-g-color-accent-3);"
             }
         ],
-        "usedIn": []
+        "usedIn": [
+            "src/modules/example/welcome/welcome.html"
+        ]
     },
     {
         "name": "sep-text-inverse-primary",
@@ -1359,7 +1356,7 @@ export const SEP_CLASSES = [
         "rules": [
             {
                 "selector": ".sep-text-inverse-primary",
-                "body": "color: var(--site-text-inverse-primary);"
+                "body": "color: var(--slds-g-color-on-accent-1);"
             }
         ],
         "usedIn": []
@@ -1370,7 +1367,7 @@ export const SEP_CLASSES = [
         "rules": [
             {
                 "selector": ".sep-text-inverse-disabled",
-                "body": "color: var(--site-text-inverse-disabled);"
+                "body": "color: var(--slds-g-color-on-surface-inverse-2);"
             }
         ],
         "usedIn": []
@@ -1381,7 +1378,7 @@ export const SEP_CLASSES = [
         "rules": [
             {
                 "selector": ".sep-text-disabled",
-                "body": "color: var(--site-text-disabled);"
+                "body": "color: var(--slds-g-color-on-disabled-1);"
             }
         ],
         "usedIn": []
@@ -1392,7 +1389,7 @@ export const SEP_CLASSES = [
         "rules": [
             {
                 "selector": ".sep-text-error",
-                "body": "color: var(--site-text-error);"
+                "body": "color: var(--slds-g-color-error-1);"
             }
         ],
         "usedIn": []
@@ -1403,7 +1400,7 @@ export const SEP_CLASSES = [
         "rules": [
             {
                 "selector": ".sep-text-success",
-                "body": "color: var(--site-text-success);"
+                "body": "color: var(--slds-g-color-success-1);"
             }
         ],
         "usedIn": []
@@ -1419,6 +1416,7 @@ export const SEP_CLASSES = [
         ],
         "usedIn": [
             "src/modules/example/home/home.html",
+            "src/modules/example/login/login.html",
             "src/modules/ui/jobListingPreview/jobListingPreview.html"
         ]
     },
@@ -1431,7 +1429,9 @@ export const SEP_CLASSES = [
                 "body": "font-size: var(--slds-g-font-scale-7); line-height: var(--slds-g-font-lineheight-2);"
             }
         ],
-        "usedIn": []
+        "usedIn": [
+            "src/modules/example/welcome/welcome.html"
+        ]
     },
     {
         "name": "sep-font-scale-6",
@@ -1469,7 +1469,8 @@ export const SEP_CLASSES = [
             }
         ],
         "usedIn": [
-            "src/modules/example/home/home.html"
+            "src/modules/example/home/home.html",
+            "src/modules/example/welcome/welcome.html"
         ]
     },
     {

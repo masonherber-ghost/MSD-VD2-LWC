@@ -34,3 +34,17 @@ contactsRouter.patch('/:id', (req, res, next) => {
     next(e instanceof DomainError ? new HttpError(400, e.message) : e)
   }
 })
+
+/** The first-time welcome page has been seen. Idempotent: a second call is a no-op. */
+contactsRouter.post('/:id/welcome-seen', (req, res, next) => {
+  try {
+    if (!accountRepository.markWelcomeSeen(parseId(req.params.id))) {
+      next(new HttpError(404, 'Contact not found.'))
+      return
+    }
+    // JSON, not 204: `data/api` reads a non-JSON response as "no API in this build".
+    res.json({ first_time: false })
+  } catch (e) {
+    next(e)
+  }
+})

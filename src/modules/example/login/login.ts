@@ -31,7 +31,8 @@ export default class Login extends LightningElement {
         // null means cancelled or dismissed — stay put, say nothing.
         if (user) {
             signIn(user);
-            window.location.assign('/');
+            // A first-time visitor gets the welcome page before the dashboard.
+            window.location.assign(user.first_time ? '/welcome' : '/');
         }
     }
 }

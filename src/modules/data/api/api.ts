@@ -78,6 +78,8 @@ export interface AuthUser {
     account_id: number | null;
     employer_role: string | null;
     company_name: string | null;
+    /** True until the first-time welcome page has been seen. */
+    first_time: boolean;
 }
 
 export interface RegisterInput {
@@ -108,6 +110,9 @@ export const api = {
     contact: (id: number) => request<Row>(`/contacts/${id}`),
     updateContact: (id: number, body: Row) =>
         request<Row>(`/contacts/${id}`, { method: 'PATCH', body }),
+    /** Clears `first_time` once the welcome page has been seen. */
+    markWelcomeSeen: (id: number) =>
+        request<{ first_time: boolean }>(`/contacts/${id}/welcome-seen`, { method: 'POST' }),
 
     account: (id: number) => request<Row>(`/accounts/${id}`),
     updateAccount: (id: number, body: Row) =>

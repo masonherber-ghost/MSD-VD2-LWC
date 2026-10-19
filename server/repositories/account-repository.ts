@@ -56,9 +56,23 @@ export function updateAccount(id: number, updates: Record<string, unknown>): Acc
   return findAccountById(id)
 }
 
+/** `first_time` is stored as INTEGER; callers see a boolean. */
+function toContact<T extends Record<string, unknown>>(row: T): T & Pick<Contact, 'first_time'> {
+  return { ...row, first_time: toBool(row.first_time) }
+}
+
 export function findContactById(id: number): Contact | null {
   selectContact ??= db.prepare('SELECT * FROM contacts WHERE id = ?')
-  return (selectContact.get(id) as Contact | undefined) ?? null
+  const row = selectContact.get(id) as Record<string, unknown> | undefined
+  return row ? (toContact(row) as unknown as Contact) : null
+}
+
+/**
+ * The person has seen the first-time welcome page. Deliberately its own write,
+ * not a CONTACT_UPDATABLE field: the profile form has no business resetting it.
+ */
+export function markWelcomeSeen(id: number): boolean {
+  return db.prepare('UPDATE contacts SET first_time = 0 WHERE id = ?').run(id).changes > 0
 }
 
 export function updateContact(id: number, updates: Record<string, unknown>): Contact | null {
@@ -97,7 +111,7 @@ export function getMembersByAccountId(accountId: number): AccountMember[] {
   })[]
 
   return rows.map(({ primary_contact_id, secondary_contact_id, ...contact }) => ({
-    ...contact,
+    ...toContact(contact as unknown as Record<string, unknown>) as unknown as Contact & { email: string | null },
     is_primary_contact: primary_contact_id === contact.id,
     is_secondary_contact: secondary_contact_id === contact.id,
   }))

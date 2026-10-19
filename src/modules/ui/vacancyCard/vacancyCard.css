@@ -14,14 +14,14 @@
  * wrapper, they inherit into the card. `--slds-c-card-sizing-border` feeds
  * `border-width` directly, so it takes the four-value shorthand.
  *
- *   colour  --site-text-accent-primary — the value design-tokens.css gives
+ *   colour  --slds-g-color-accent-2 — the value design-tokens.css gives
  *           --slds-s-link-color. Read from the project token rather than from
  *           --slds-s-link-color itself, which the SLDS Linter lists as private.
  *   width   SLDS's border scale stops at 4px (--slds-g-sizing-border-4), so
  *           the 8px top edge is twice that rather than a literal.
  *   radius  --slds-g-radius-border-3 is 0.5rem, 8px. */
 .vacancy-card {
-    --slds-c-card-color-border: var(--site-color-brand-blue);
+    --slds-c-card-color-border: var(--slds-g-color-brand-base-50);
     --slds-c-card-sizing-border: calc(var(--slds-g-sizing-border-4) * 2)
         var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2);
     --slds-c-card-radius-border: var(--slds-g-radius-border-3);
@@ -31,7 +31,7 @@
  * site-wide tag rule — and its text is this link, so the link carries the
  * colour: MSD blue rather than the default link accent. */
 .vacancy-card__link {
-    color: var(--site-color-brand-navy);
+    color: var(--slds-g-color-brand-base-30);
     text-decoration: none;
 }
 
@@ -121,7 +121,7 @@
  * against the card. --slds-c-icon-color-foreground-default is the public hook
  * the default variant actually reads. */
 .vacancy-card__meta-icon {
-    --slds-c-icon-color-foreground-default: var(--site-color-brand-navy);
+    --slds-c-icon-color-foreground-default: var(--slds-g-color-brand-base-30);
     flex: none;
     
 }
@@ -129,5 +129,5 @@
 .vacancy-card__meta-value {
     color: var(--slds-g-color-on-surface-1);
     min-width: 0;
-    /* font-size: var(--site-font-body-sm); */
+    /* font-size: var(--slds-g-font-scale-neg-1); */
 }

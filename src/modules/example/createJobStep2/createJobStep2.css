@@ -15,8 +15,8 @@
     justify-content: flex-start;
     inline-size: 100%;
     padding: var(--slds-g-spacing-3) var(--slds-g-spacing-4);
-    border-radius: var(--site-radius-pill);
-    background: var(--site-bg-accent-primary);
+    border-radius: var(--slds-g-radius-border-4);
+    background: var(--slds-g-color-accent-container-1);
     color: var(--slds-g-color-on-accent-1);
 }
 

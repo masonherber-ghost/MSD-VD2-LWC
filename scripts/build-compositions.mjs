@@ -118,7 +118,7 @@ function analyseCss(css) {
         // Tier 4/5: the published API. Using these is the sanctioned path.
         hooks: uniq([...strip.matchAll(/--slds-[sc]-[a-z0-9-]+/g)].map((m) => m[0])),
         tokens: uniq([...strip.matchAll(/--slds-g-[a-z0-9-]+/g)].map((m) => m[0])),
-        siteTokens: uniq([...strip.matchAll(/--site-[a-z0-9-]+/g)].map((m) => m[0])),
+        siteTokens: uniq([...strip.matchAll(/--sep-[a-z0-9-]+/g)].map((m) => m[0])),
         // Tier 6: allowed, but only for parts a component really declares, and
         // it is the most upgrade-sensitive thing on the sanctioned list.
         parts: uniq([...strip.matchAll(/::part\(\s*([a-z0-9-]+)\s*\)/g)].map((m) => m[1])),

@@ -96,8 +96,8 @@ breakpoint up. Two custom properties in `site.css` are the only authority:
 
 | Property | Holds |
 |---|---|
-| `--site-content-max-width` | The cap. `none` below the large breakpoint |
-| `--site-content-gutter` | The horizontal page gutter |
+| `--sep-content-max-width` | The cap. `none` below the large breakpoint |
+| `--sep-content-gutter` | The horizontal page gutter |
 
 Redefined at the SLDS breakpoints, and nowhere else:
 
@@ -125,7 +125,7 @@ Two details that are easy to get wrong:
   why `ui/siteHeader` has a `site-header__inner` wrapper inside it — the bar stays full-bleed, its
   contents do not.
 - **`slds-global-header__item` already has 1rem of horizontal padding.** The header row makes up
-  only the difference (`calc(var(--site-content-gutter) - var(--slds-g-spacing-4))`), or the
+  only the difference (`calc(var(--sep-content-gutter) - var(--slds-g-spacing-4))`), or the
   wordmark sits 16px further in than the page below it.
 
 ---
@@ -200,7 +200,7 @@ Four sets. The first three are usable, in the order you should reach for them; t
 |---|---|---|---|
 | SLDS global tokens | `--slds-g-*` | 514 | The shipped stylesheet — grep it, see below |
 | SLDS component hooks | `--slds-c-<component>-*` | 275 | The shipped stylesheet and the component's own CSS |
-| **This project's tokens** | `--site-*` | 2 | **`src/assets/css/design-tokens.css`** — that file is the documentation |
+| **This project's tokens** | `--sep-*` | 2 | **`src/assets/css/design-tokens.css`** — that file is the documentation |
 | SLDS *private* hooks | `--_slds-*` | 102 | **Off limits.** The underscore is the contract |
 
 **Browse them live: `/design-system` → Tokens.** Every family with its swatch, bar, type sample or
@@ -224,11 +224,11 @@ source of truth*. Re-run `npm run catalog` **and** `npm run tokens` after upgrad
 
 ### Defining a project token
 
-`src/assets/css/design-tokens.css` is the **only** file that declares `--site-*` tokens, and
+`src/assets/css/design-tokens.css` is the **only** file that declares `--sep-*` tokens, and
 `main.njk` loads it before `site.css` so everything can consume them. Its header carries the rules;
 the short version:
 
-- Prefer an SLDS token. Define a `--site-*` one only where SLDS has no equivalent. A project token
+- Prefer an SLDS token. Define a `--sep-*` one only where SLDS has no equivalent. A project token
   that duplicates `--slds-g-spacing-4` will drift from the design system unnoticed.
 - Express its value in SLDS tokens where one fits, so a theme change still reaches it.
 - A value used by exactly one component is **not a token** — it is a value, and belongs in that

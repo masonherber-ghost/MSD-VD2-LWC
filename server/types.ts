@@ -35,6 +35,8 @@ export interface Contact {
   last_name: string | null
   phone: string | null
   job_title: string | null
+  /** True until the person has seen the first-time welcome page. */
+  first_time: boolean
   created_at: string
   updated_at: string
 }

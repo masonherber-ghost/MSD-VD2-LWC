@@ -50,7 +50,8 @@ export default class Register extends LightningElement {
         try {
             const user = await api.auth.register(this.form);
             signIn(user);
-            window.location.assign('/');
+            // A new account is always first-time, so this is the welcome page.
+            window.location.assign(user.first_time ? '/welcome' : '/');
         } catch (e) {
             this.error =
                 e instanceof ApiError ? e.message : 'Could not create the account. Try again.';

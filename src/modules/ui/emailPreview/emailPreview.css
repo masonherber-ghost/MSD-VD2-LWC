@@ -2,7 +2,7 @@
 
 .email-preview {
     border: 1px solid var(--slds-g-color-border-1, #e5e5e5);
-    border-radius: var(--site-radius-mid);
+    border-radius: var(--slds-g-radius-border-2);
     overflow: hidden;
     background: var(--slds-g-color-surface-1, #fff);
 }
@@ -16,7 +16,7 @@
     margin: 0;
     padding: var(--slds-g-spacing-4);
     border-block-end: 1px solid var(--slds-g-color-border-1, #e5e5e5);
-    font-size: var(--site-font-body-sm, 0.875rem);
+    font-size: var(--slds-g-font-scale-neg-1, 0.875rem);
 }
 
 .email-preview__meta dt {
@@ -53,6 +53,6 @@
 .email-preview__sheet {
     max-width: 600px;
     margin-inline: auto;
-    background: var(--site-bg-primary);
-    box-shadow: var(--site-shadow-raised);
+    background: var(--slds-g-color-surface-container-1);
+    box-shadow: var(--slds-g-shadow-2);
 }

@@ -97,7 +97,7 @@ const componentHooks = [...new Set([...hookNames].map(hookComponent))]
 const projectCss = fs.existsSync(PROJECT_CSS) ? fs.readFileSync(PROJECT_CSS, 'utf8') : '';
 const projectTokens = [];
 const seenProject = new Set();
-for (const m of projectCss.matchAll(/(--site-[a-z0-9-]+)\s*:\s*([^;]+);/g)) {
+for (const m of projectCss.matchAll(/(--sep-[a-z0-9-]+)\s*:\s*([^;]+);/g)) {
     const [, name, value] = m;
     if (seenProject.has(name)) {
         // A redefinition inside a media query: record it as a breakpoint step.

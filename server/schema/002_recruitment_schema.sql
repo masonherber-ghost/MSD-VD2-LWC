@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS contacts (
   last_name         TEXT,
   phone             TEXT,
   job_title         TEXT,
+  first_time        INTEGER NOT NULL DEFAULT 1,  -- 1 until the first-time welcome page is seen
   created_at        DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at        DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (ciam_id) REFERENCES ciam(id) ON DELETE CASCADE

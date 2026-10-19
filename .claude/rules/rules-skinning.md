@@ -33,7 +33,7 @@ quicker is the failure mode.
   are debt (see `_docs/teirs-adherance.md`); do not add more.
 - A selector naming an SLDS class or a component's internal markup (`no-slds-class-overrides`).
 - An undocumented attribute set to unlock a hook — check the catalog's `properties`.
-- A raw colour, pixel or font value. Values come from `--site-*` / `--slds-g-*` tokens; a hex is
+- A raw colour, pixel or font value. Values come from `--sep-*` / `--slds-g-*` tokens; a hex is
   only acceptable as a `var()` fallback.
 - `!important`.
 - Rebuilding the component because the skin cannot reach — that is the custom component gate:

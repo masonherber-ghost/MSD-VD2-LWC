@@ -125,11 +125,11 @@ function analyseCss(raw) {
         setsShared: decl('--slds-s-'),
         setsPrivate: decl('--_slds-'),
         setsDxp: decl('--dxp-'),
-        setsSite: decl('--site-'),
+        setsSite: decl('--sep-'),
         setsLwc: decl('--lwc-'),
         readsShared: reads('--slds-s-'),
         readsPrivate: reads('--_slds-'),
-        readsSite: reads('--site-'),
+        readsSite: reads('--sep-'),
         readsDxp: reads('--dxp-'),
         parts: (css.match(/::part\(/g) ?? []).length,
         important: (css.match(/!important/g) ?? []).length,
@@ -278,7 +278,7 @@ p(`| Global hooks \`--slds-g-*\` | ${inventory.globalHooks} | ${used.globalHooks
 p(`| Component hooks \`--slds-c-*\` | ${inventory.componentHooks} | ${used.componentHooksSet} set |`);
 p(`| Private hooks \`--_slds-*\` (+ \`--slds-s-*\` per the SLDS Linter) | ${inventory.privateHooks} | ${used.sharedHooksTouched} \`--slds-s-*\` touched |`);
 p(`| \`--dxp-*\` hooks (Theme panel stand-in) | — | ${used.dxpHooksSet} declared |`);
-p(`| Project tokens \`--site-*\` | ${inventory.projectTokens} | — |`);
+p(`| Project tokens \`--sep-*\` | ${inventory.projectTokens} | — |`);
 p(`| \`sep-\` opt-in classes | — | ${used.sepClasses} |`);
 p(`| \`::part()\` selectors | — | ${used.parts} |`);
 p(`| Routes | — | ${inventory.routes} |`);

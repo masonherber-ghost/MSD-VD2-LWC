@@ -3,26 +3,61 @@
 
     <div class="site__body">
         <main class="site__main auth">
-            <lightning-card>
+            
                 <div class="slds-p-around_large slds-text-align_center">
-                    <h1>Employer login</h1>
+                    <h1 class="sep-font-scale-8">MSD for business</h1>
 
                     <p class="slds-m-top_small">
-                        Welcome to the employer portal. To start creating vacancies
-                        authenticate with RealMe.
+                        Choose an option to sign in to your MSD Employer portal.
                     </p>
 
-                    <div class="slds-m-top_medium">
+                    <!-- One full-width button per identity provider, stacked, as the
+                         design draws them. `stretch` is lightning-button's own
+                         attribute; no project CSS for the layout. -->
+                    <div id="login-methods" class="slds-m-top_medium">
                         <lightning-button
+                            id="login-realme-button"
                             class="login__realme"
                             label="Log in with RealMe"
                             icon-name="utility:forward"
                             icon-position="right"
+                            stretch
                             onclick={handleRealmeLogin}
                         ></lightning-button>
+
+                        <!-- Google and Other IDP are STATIC: no handler, by
+                             decision — the prototype mocks RealMe only.
+
+                             No Google mark: lightning-button only draws SLDS sprite
+                             icons, and the RealMe mark needed a ::part rule and
+                             a vendored asset. Same treatment for Google is new
+                             CSS, so it waits for approval.
+
+                             The margin sits on a wrapper div: lightning-button's
+                             host is inline even with `stretch`, so a vertical
+                             margin on it computes but never applies. -->
+                        <div class="slds-m-top_small">
+                            <lightning-button
+                                id="login-google-button"
+                                label="Continue with Google"
+                                icon-name="utility:forward"
+                                icon-position="right"
+                                stretch
+                            ></lightning-button>
+                        </div>
+
+                        <div class="slds-m-top_small">
+                            <lightning-button
+                                id="login-other-idp-button"
+                                label="Continue with Other IDP…"
+                                icon-name="utility:forward"
+                                icon-position="right"
+                                stretch
+                            ></lightning-button>
+                        </div>
                     </div>
                 </div>
-            </lightning-card>
+           
         </main>
     </div>
 

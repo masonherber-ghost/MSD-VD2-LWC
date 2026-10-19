@@ -24,6 +24,9 @@ export interface SessionUser {
     account_id: number | null;
     employer_role: string | null;
     company_name: string | null;
+    /** True until the first-time welcome page has been seen. Absent on a
+     *  session saved before the flag existed, which reads as not first-time. */
+    first_time?: boolean;
 }
 
 /** Storage can throw (private mode, disabled cookies), so never let it break a render. */
@@ -63,6 +66,22 @@ export function signOut(): void {
         /* nothing to clear */
     }
     broadcast();
+}
+
+/**
+ * Whether to send this person to the first-time welcome page. Read from the
+ * session, which login and registration fill from `contacts.first_time`.
+ */
+export function needsWelcome(): boolean {
+    return safeRead()?.first_time === true;
+}
+
+/** Record locally that the welcome page has been seen, without a re-login. */
+export function markWelcomeSeen(): void {
+    const user = safeRead();
+    if (user?.first_time) {
+        signIn({ ...user, first_time: false });
+    }
 }
 
 /** The account whose data the app shows, or null when nobody is signed in. */

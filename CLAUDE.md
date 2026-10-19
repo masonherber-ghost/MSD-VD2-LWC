@@ -71,6 +71,18 @@ lego allows and say where it falls short.
 the shipped match, skins it with only the levers `rules-skinning.md` allows, and updates the design
 system. A whole page still goes through `build-from-wireframe`.
 
+### Review a component design before building it
+**Use the `lwc-component-review` skill** when given a Figma component (all its variants and
+states). Out of the box first: it maps every property to what the shipped component renders, the
+hook its OWN stylesheet reads (`hook-map.mjs`), or nothing, writes a review to `_docs`, and raises
+questions. Build nothing until they are answered, then use `component-from-design`.
+
+### Import or change design tokens
+**Use the `lwc-figma-ds-tokens-import` skill** for a Figma variables import, and for any edit to
+`src/assets/css/design-tokens.css`. It records the decisions already made (`--sep-*` prefix, light
+values only, overrides in `[OFF]` blocks) and `check-tokens.mjs` verifies the file. Update the
+skill's *Current state* and decision log whenever the tokens file changes.
+
 ### Build or change a page
 1. `rules-lwc-components.md` — find the components that already exist. **Do not invent tags.**
 2. `rules-lwc-layout.md` — pick the page anatomy and compose it modularly.
@@ -104,7 +116,7 @@ from this project's own source. Nothing on that page is hand-maintained.
 | **Components** | Every shipped `lightning-*` example, rendered live — plus project examples from `src/examples/<component>/<name>/`, tabbed "(project)" | `npm run catalog` |
 | **Blueprints** | The 37 blueprints **no shipped component renders** — the ones you write by hand. Classes declared, whether they are in the stylesheet we actually load, hooks you may set, private ones you may not, and where this site uses each. A checkbox reveals the other 52 | `npm run blueprints` |
 | **Compositions** | Every wrapper in `src/modules/ui/`, ordered by how much CSS it needed, with what that CSS touches — plus the `sep-` classes in `site.css` | `npm run compositions` |
-| **Tokens** | Every design token with its resolved value: this project's `--site-*` and the SLDS globals by family | `npm run tokens` |
+| **Tokens** | Every design token with its resolved value: this project's `--sep-*` and the SLDS globals by family | `npm run tokens` |
 | **Component hooks** | The `--slds-c-*` hooks you may set, grouped by component | `npm run tokens` |
 
 Re-run `catalog`, `tokens`, `blueprints` and `foundations` after upgrading a package. Re-run `compositions` after

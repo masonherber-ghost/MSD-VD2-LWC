@@ -1,5 +1,6 @@
 import { db } from '../database.ts'
 import { hashPassword, verifyPassword } from '../lib/password.ts'
+import { toBool } from '../lib/sql.ts'
 import type { Contact } from '../types.ts'
 
 /** What the client gets back on a successful login or registration. */
@@ -14,6 +15,8 @@ export interface AuthUser {
   account_id: number | null
   employer_role: string | null
   company_name: string | null
+  /** True until the person has seen the first-time welcome page. */
+  first_time: boolean
 }
 
 export class AuthError extends Error {}
@@ -23,15 +26,20 @@ const SELECT_USER = `
          ci.id       AS ciam_id,
          ci.email    AS email,
          c.first_name, c.last_name, c.job_title, c.phone,
-         c.account_id, c.employer_role,
+         c.account_id, c.employer_role, c.first_time,
          a.company_name
     FROM ciam ci
     JOIN contacts c ON c.ciam_id = ci.id
     LEFT JOIN accounts a ON a.id = c.account_id
 `
 
+/** `first_time` is stored as INTEGER; callers see a boolean. */
+function toAuthUser(row: Record<string, unknown> | undefined): AuthUser | null {
+  return row ? ({ ...row, first_time: toBool(row.first_time) } as unknown as AuthUser) : null
+}
+
 export function findUserByContactId(contactId: number): AuthUser | null {
-  return (db.prepare(`${SELECT_USER} WHERE c.id = ?`).get(contactId) as AuthUser) ?? null
+  return toAuthUser(db.prepare(`${SELECT_USER} WHERE c.id = ?`).get(contactId) as Record<string, unknown> | undefined)
 }
 
 /**
@@ -52,7 +60,7 @@ export function login(email: string, password: string): AuthUser {
     throw new AuthError('Email or password is incorrect.')
   }
 
-  const user = db.prepare(`${SELECT_USER} WHERE ci.id = ?`).get(row.id) as AuthUser | undefined
+  const user = toAuthUser(db.prepare(`${SELECT_USER} WHERE ci.id = ?`).get(row.id) as Record<string, unknown> | undefined)
   if (!user) {
     throw new AuthError('This login has no profile attached. Contact your administrator.')
   }

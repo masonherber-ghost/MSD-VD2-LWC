@@ -1,77 +1,56 @@
 /* =============================================================================
- * Design tokens — the ones THIS PROJECT defines.
+ * DESIGN TOKENS
  *
- * Everything here is ours. Nothing here is Salesforce's.
+ * Two things live here:
  *
- * SLDS 2 already ships 514 global tokens (`--slds-g-*`) and 275 component hooks
- * (`--slds-c-*`). Those are the palette; this file is only for the handful of
- * decisions the design system has no opinion about — page-level facts that
- * several components must agree on.
+ *   1. The project's own `--sep-*` tokens — values SLDS has no name for.
+ *   2. The Figma import — MSD's values on SLDS's global hooks (`--slds-g-*`),
+ *      which is what themes the site.
+ *
+ * SLDS 2 ships 514 global tokens and 275 component hooks (`--slds-c-*`).
+ * Everything not overridden here keeps its Cosmos value.
+ *
+ * Contents
+ *   Content width ............ page cap and gutter (layout, not from Figma)
+ *   Figma import
+ *     A  Matches SLDS ........ listed only
+ *     B  Project tokens ...... --sep-* shadow tints
+ *     C1 Type ................ scale, family, weight
+ *     C2 Colour ramps ........ ramps, each with its --sep-* 85/35/5 steps
+ *     C3 Semantic colours
+ *     C4 Elevation and focus
+ *     C5 Every other global .. Cosmos or SLDS default, generated
+ *     D  Component hooks ..... listed only
+ *     E  --dxp hooks ......... listed only
+ *     F  Private hooks ....... listed only
+ *
+ * Maintained by the `lwc-figma-ds-tokens-import` skill; run its
+ * check-tokens.mjs after any edit.
  *
  * THE RULES
  *
  * 1. Prefer an SLDS token. Define one here only when SLDS has no equivalent.
  *    A project token that duplicates `--slds-g-spacing-4` is a liability: it
  *    will drift from the design system and nobody will notice.
- * 2. Every token here is prefixed `--site-`, so a grep can always separate what
+ * 2. Every token here is prefixed `--sep-`, so a grep can always separate what
  *    we own from what we inherit.
  * 3. Values are expressed in SLDS tokens wherever one fits, so a theme change
  *    still reaches them.
- * 4. This is the ONLY file that defines `--site-*` tokens. Component stylesheets
+ * 4. This is the ONLY file that defines `--sep-*` tokens. Component stylesheets
  *    consume them; they do not declare new ones. A value used in one component
  *    is not a token — it is just a value, and belongs in that component's CSS.
  * 5. Loaded before `site.css` in `src/layouts/main.njk`, so everything can
  *    consume these.
  *
- * Overriding a shipped `--slds-c-*` hook is a different thing and does not
- * belong here — it is a component-level decision and lives with that component.
- * See `.claude/rules/rules-lwc-layout.md` § Design tokens.
+ * Overriding a shipped `--slds-g-*` GLOBAL hook belongs here, under a comment
+ * saying what it changes — that is the Figma import. Overriding a shipped
+ * `--slds-c-*` COMPONENT hook does not: it is a component-level decision and
+ * lives with that component in site.css.
+ * See `.claude/rules/rules-lwc-layout.md` § Defining a project token.
  * ============================================================================= */
 
 /* -----------------------------------------------------------------------------
- * Typeface
- *
- * The one SLDS global token that is overridden site-wide, rather than a
- * `--site-*` token of our own — because SLDS already has the right token and
- * defining a parallel one would be exactly the drift rule 1 warns about.
- *
- * SLDS 2 ships a single family token. `--slds-g-font-family-base` is set on
- * `:where(html)` inside `@layer defaults`, `--slds-g-font-family` aliases it,
- * and one `html { font-family: ... }` rule consumes it. Everything else
- * inherits, including through shadow roots, and SLDS's own reset
- * (`button, input, optgroup, select, textarea { font: inherit }`) pulls the
- * form controls in too. So this one declaration retypes the whole site and
- * there is nothing left to chase.
- *
- * It wins over the shipped value because this file is unlayered and SLDS sets
- * its default inside `@layer defaults` — unlayered always beats layered,
- * whatever the specificity or the load order.
- *
- * The fallbacks are SLDS's own stack, unchanged, so a failed font load lands
- * back on exactly what Lightning would have rendered.
- *
- * There is no separate heading-family token in SLDS, so this is body as well as
- * headings. That was the deliberate choice: Atkinson Hyperlegible Next is an
- * accessibility typeface designed to hold up at small sizes, which is where
- * most of a Lightning page lives.
- *
- * The @font-face declarations are in `fonts.css`, which `main.njk` loads first.
- * -------------------------------------------------------------------------- */
-
-/* [OFF — custom typeface] ------------------------------------------------
- * Commented out to show the default Lightning styling. To restore: delete
- * this line block and its END line, and un-escape every `*\/` below.
-:root {
-    --slds-g-font-family-base:
-        'Atkinson Hyperlegible Next Variable',
-        system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-        'Helvetica Neue', Arial, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-}
- * [END OFF — custom typeface] */
-
-/* -----------------------------------------------------------------------------
- * Content width
+ * CONTENT WIDTH
  *
  * Lightning Experience itself is fluid — a record page fills the browser at any
  * width. An Experience Cloud site is not: the Theme panel's maximum content
@@ -90,16 +69,16 @@
 
 :root {
     /* The page's maximum content width. `none` = fluid. */
-    --site-content-max-width: none;
+    --sep-content-max-width: none;
 
     /* The horizontal page gutter, inside the cap. */
-    --site-content-gutter: var(--slds-g-spacing-4, 1rem);
+    --sep-content-gutter: var(--slds-g-spacing-4, 1rem);
 }
 
 /* 48em / 768px — the SLDS medium breakpoint. Still fluid, wider gutter. */
 @media (min-width: 48em) {
     :root {
-        --site-content-gutter: var(--slds-g-spacing-5, 1.5rem);
+        --sep-content-gutter: var(--slds-g-spacing-5, 1.5rem);
     }
 }
 
@@ -107,7 +86,7 @@
    the widest cap SLDS ships. */
 @media (min-width: 64em) {
     :root {
-        --site-content-max-width: 80rem;
+        --sep-content-max-width: 80rem;
     }
 }
 
@@ -115,611 +94,848 @@
    at this viewport it still leaves a real margin either side. */
 @media (min-width: 100em) {
     :root {
-        --site-content-max-width: 90rem;
+        --sep-content-max-width: 90rem;
     }
 }
 
-/* -----------------------------------------------------------------------------
- * MSD brand palette
+/* #############################################################################
+ * FIGMA IMPORT — "LDS2 | MSD | Components for Web"
  *
- * Defined here only because SLDS has no equivalent. Each one was checked
- * against the shipped stylesheet first — see the notes.
+ * Source   figma.com/design/3FTyjvu0JC5UtYqnoLqDFh, local variables, read
+ *          2026-10-15 through the Plugin API
+ * Report   _docs/figma-tokens-report-2026-10-15.md — what in the Figma file
+ *          does not line up with SLDS, and the fixes
+ *
+ * 347 variables in three collections:
+ *
+ *   Spacing/Sizing   38   one mode
+ *   Typography       18   Mac/iOS | Windows/Android — identical values
+ *   Color Mode      291   Default | Dark Mode BETA
+ *
+ * Every variable is categorised by the tier its Web code syntax lands in, and
+ * checked against the SLDS stylesheet this site actually loads
+ * (slds2.cosmos.css 2.264.2) — not against what the name implies.
+ *
+ *   Tier                          Count  Here
+ *   ----------------------------  -----  ------------------------------------
+ *   A  Global hook, value MATCHES   127  Listed in A, NOT redeclared
+ *   B  No SLDS name -> --sep-*       29  Declared — shadow tints in B, ramp
+ *                                        steps 85/35/5 in C2
+ *   C  Global hook, value DIFFERS   155  Declared — C1 to C3
+ *      + 20 shadow/focus hooks from Figma EFFECT STYLES — C4
+ *   D  Component hooks               14  Listed only — they belong in site.css
+ *   E  --dxp hooks                    0  None in the file — see section E
+ *   F  Private hooks                  0  None needed; see section F
+ *      Not imported                  22  spacing/0, font/family/mobile, and 20
+ *                                        Figma-only steps of Salesforce ramps
+ *                                   ---
+ *                                   347
+ *
+ * All 524 public --slds-g-* hooks are accounted for here: 189 declared in
+ * C1–C4 (175 from Figma, 14 ramp steps Figma lacks at Cosmos's value), 127
+ * listed in A (Figma = shipped value), 208 declared in C5 (42 Cosmos, 166
+ * SLDS default).
+ *
+ * ALL OF C1–C4 IS LIVE. The site renders MSD's type, colour and elevation.
+ *
+ * LIGHT VALUES ONLY. Every colour is Figma's Default mode; "Dark Mode BETA" is
+ * not imported. Cosmos writes its own colour hooks as light-dark(<light>,
+ * <dark>); these overrides are single values, so the hooks they set stay light
+ * even if <body> gets `slds-color-scheme_dark`. This site does not set that
+ * class.
+ *
+ * ORDER MATTERS. C3 reads the ramps in C2, and C4 reads B and C3. Switching a
+ * block off by commenting it out leaves its readers on Cosmos's values.
+ * ########################################################################## */
+
+/* -----------------------------------------------------------------------------
+ * A. Global hooks that match SLDS — listed, not declared
+ *
+ * Figma's value equals the shipped one, so the import changes nothing here and
+ * they are not declared — this list is their definition. C5 does not repeat
+ * them.
+ *
+ *   Spacing/Sizing (37 of 38)
+ *     --slds-g-sizing-border-1..4      1 2 3 4px
+ *     --slds-g-sizing-1..16            2 4 8 12 16 20 24 28 32 48 64 80
+ *                                      160 240 320 480px
+ *     --slds-g-spacing-1..12           4 8 12 16 24 32 40 48 56 64 72 80px
+ *     --slds-g-radius-border-1..4      4 8 12 20px
+ *     --slds-g-radius-border-circle    Figma 9999px, SLDS 100% — same circle
+ *     spacing/0 (0px)                  Figma names it --slds-g-spacing-0,
+ *                                      which SLDS does not ship. Write 0.
+ *
+ *   Typography
+ *     --slds-g-font-weight-3 / -4 / -7     Light 300 / Regular 400 / Bold 700
+ *
+ *   Colour
+ *     --slds-g-color-neutral-base-0 / -100     #000 / #fff.
+ *         (Figma gives neutral-base/0 no code syntax; SLDS does ship it.)
+ *     --slds-g-color-palette-{cloud-blue, indigo, orange, purple, red,
+ *         violet}-{10..95}                     72 steps. Figma aliases these to
+ *         the "Global Colors" library — Salesforce's own palette — and every
+ *         step equals Cosmos.
+ *     --slds-g-color-info-base-{10..95}        13 steps, info-base-35 among
+ *         them (no code syntax in Figma; SLDS ships it). Salesforce Blue
+ *         (#0176d3 at 50) — Figma's info SEMANTICS use MSD brand-base
+ *         instead, see C3.
+ *     Figma-only steps of those Salesforce ramps — 35, 85 and 5 of each
+ *     palette, 85 and 5 of info — have no SLDS global name. They are not
+ *     declared; nothing in the Figma file aliases them.
+ * -------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
+ * B. Project tokens — shadow tints
+ *
+ * Lightning components cannot reach --sep-* tokens; only C4 and our own CSS
+ * read these. The other --sep-* tokens, ramp steps 85/35/5, sit in C2 next to
+ * the ramp each one belongs to.
+ *
+ * Shadow colours: Figma tints elevation with MSD dark navy (#162c45); SLDS
+ * uses black. The geometry is identical — see C4.
  * -------------------------------------------------------------------------- */
 
 :root {
-    /* MSD Blue. --slds-g-color-accent-container-1 resolves to #0176d3, two
-       points away, but the brand value is the brand value. */
-    --site-color-brand-blue: #017ac9;
-
-    /* MSD Navy. Genuinely different from --slds-g-color-accent-container-2
-       (#0b5cab) — that is a mid blue, this is a navy. */
-    --site-color-brand-navy: #134276;
-
-    /* Disabled brand surface and the text on it. SLDS disabled is a neutral
-       grey (#c9c9c9) with no blue in it. */
-    --site-color-brand-disabled: #a1b3c8;
-    --site-color-on-brand-disabled: #e6f2fa;
-
-    /* SEP elevation 2 and 3. The SLDS shadow scale is far tighter — its
-       widest, --slds-g-shadow-4, is 0 2px 5px. */
-    --site-shadow-raised: 0 4px 8px 0 #162c4533;
-    --site-shadow-overlay: 0 8px 16px 0 #162c4533;
-
-    /* A pill. The SLDS radius scale stops at --slds-g-radius-border-4 (1rem). */
-    --site-radius-pill: 999px;
-
-    /* SEP's Corner radius/Mid — inputs and other boxed controls. */
-    --site-radius-mid: 0.5rem;
-
-    /* The page canvas. Kept as its own name because `body` reads it directly;
-       the value now comes from the semantic layer below. */
-    --site-color-page-background: var(--site-bg-secondary);
+    /* Shadow tints. Figma: shadows/level N/1+2 (the ambient and key layers)
+       and shadows/level N/3 (the reverse edge). */
+    --sep-color-shadow-1:      #162c4533;
+    --sep-color-shadow-1-edge: #162c451a;
+    --sep-color-shadow-2:      #162c4529;
+    --sep-color-shadow-2-edge: #162c4517;
+    --sep-color-shadow-3:      #162c4524;
+    --sep-color-shadow-3-edge: #162c4514;
+    --sep-color-shadow-4:      #162c451f;
+    --sep-color-shadow-4-edge: #162c4512;
 }
 
 /* -----------------------------------------------------------------------------
- * Global header height
+ * C1. Global hooks — type: scale, family, weight
  *
- * `--slds-s-header-sizing-height` is a public shared hook, read by
- * `.slds-global-header` (and the builder and trial headers). Its default is
- * 3.125rem / 50px.
+ * Figma's ramp is a content-site ramp (16px base); Lightning's is a data-app
+ * ramp (13px base). Every step differs:
  *
- * Declared at both breakpoints rather than relying on the `var()` fallback, so
- * the value is always stated in one place. `site.css` reads this same hook for
- * the body's top padding, so the two cannot drift.
+ *   step     neg-2 neg-1 base  1   2   3   4   5   6   7   8
+ *   Figma     12    14    16  18  20  24  32  36  40  48  60
+ *   SLDS      10    12    13  14  16  20  24  28  32  40  48
  *
- * Note the COLOUR of that bar is not reachable: SLDS exposes only private
- * `--_slds-c-globalheader-*` hooks for it. Height is public, colour is not.
- * -------------------------------------------------------------------------- */
-
-/* [OFF — custom header height] ------------------------------------------------
- * Commented out to show the default Lightning styling. To restore: delete
- * this line block and its END line, and un-escape every `*\/` below.
-:root {
-    --slds-s-header-sizing-height: 3.125rem;
-}
-
-/* 64em / 1024px — the same large breakpoint the content cap steps at. *\/
-@media (min-width: 64em) {
-    :root {
-        --slds-s-header-sizing-height: 5rem;
-    }
-}
- * [END OFF — custom header height] */
-
-/* -----------------------------------------------------------------------------
- * Buttons — the SEP primary button, applied site-wide
+ * A global step is read far beyond the heading classes, so this resizes
+ * Lightning's own UI too — labels, table cells, buttons. -9 and -10 alias -8
+ * in SLDS and are left alone.
  *
- * READ THIS BEFORE CHANGING A BUTTON HOOK. `lightning-button` does NOT take its
- * styling from the global SLDS stylesheet. It sets `data-render-mode="shadow"`
- * on itself and imports its own copy of the button styles into its shadow root
- * (`button.lbc.native.css` -> `button.slds.css`). Custom properties inherit
- * across that boundary, so hooks still work — but it is that sheet, not
- * `.slds-button` in the global stylesheet, that decides WHICH hook is read.
+ * Scale: Figma maps font/scale/base to --slds-g-font-size-base. SLDS defines
+ * that as var(--slds-g-font-scale-base), so the step to set is font-scale-base,
+ * and the alias follows. Fix the code syntax in Figma.
  *
- * The two differ, and picking from the global sheet gets you a no-op:
+ * Weight: Figma defines four weights. 3, 4 and 7 (Light 300, Regular 400,
+ * Bold 700) equal SLDS, so they are listed in section A, not declared. Only
+ * weight 6 differs: Figma's value is the style "Medium" (500), SLDS's is 600.
+ * The Figma text styles named "Semibold" all use it. Declared as Figma has it —
+ * confirm with design which is intended.
  *
- *   font-weight   global reads --slds-c-button-font-weight
- *                 SHADOW reads --slds-s-button-font-weight     <- the real one
- *   font-size     global declares none at all
- *                 SHADOW reads --slds-s-button-font-size
- *   line-height   global hardcodes 1.875rem
- *                 SHADOW reads --slds-s-button-font-lineheight
- *
- * Brand colour is the other way round: the shadow sheet reads the
- * `--slds-c-button-brand-*` hooks, and the shared --slds-s-button-color-*
- * family is for the base variant only.
- *
- * And one decoy: --slds-c-button-brand-spacing-inline-start/-end exist and look
- * right, but nothing in either path reads them — they belong to
- * `.slds-button_dual-stateful.slds-is-pressed`.
- *
- * Verified by reading the computed style off the rendered button, not by
- * reading the stylesheet. If you change one of these, do the same.
- *
- * These win because this file is unlayered and SLDS declares its defaults in
- * `@layer shared`.
- * -------------------------------------------------------------------------- */
-
-/* [OFF — custom button styles] ------------------------------------------------
- * Commented out to show the default Lightning styling. To restore: delete
- * this line block and its END line, and un-escape every `*\/` below.
-:root {
-    /* Geometry, type and elevation — shared, so every button moves together. *\/
-    --slds-s-button-radius-border: var(--site-radius-pill);
-    --slds-s-button-spacing-block: var(--slds-g-spacing-3);
-    --slds-s-button-spacing-inline: 1.25rem;
-    --slds-s-button-font-size: var(--site-font-body);
-    --slds-s-button-font-lineheight: 1.33;
-    --slds-s-button-font-weight: var(--slds-g-font-weight-5);
-
-    /* SLDS ships no block padding for buttons at all — the 32px default height
-       is line-height plus the 1px border. The 12px added top and bottom is what
-       takes it to the SEP size. *\/
-
-    /* Elevation — deliberately NOT set across the board.
-     *
-     * --slds-s-button-shadow and --slds-s-button-shadow-hover are shared by
-     * every button, including the bare menu trigger in the global header and
-     * the sort buttons inside a datatable header. Giving those a drop shadow
-     * makes them read as floating white boxes on a bar that has no boxes.
-     * The primary button's own shadow is in site.css, scoped to brand.
-     *
-     * -shadow-active stays: it sets `none`, which is what SEP wants on press
-     * and is harmless anywhere else. -brand-shadow-hover stays too — its name
-     * scopes it to the brand variants. *\/
-    --slds-s-button-brand-shadow-hover: var(--site-shadow-overlay);
-    --slds-s-button-shadow-active: none;
-
-    /* Brand, default. The border matches the fill: SEP draws none, but
-       --slds-s-button-sizing-border is shared, and zeroing it would erase the
-       border a neutral button depends on to be visible at all. Costs 2px of
-       height against the design — see the note in the build report. *\/
-    --slds-c-button-brand-color-background: var(--site-color-brand-blue);
-    --slds-c-button-brand-color-border: var(--site-color-brand-blue);
-    --slds-c-button-brand-text-color: var(--slds-g-color-on-accent-1);
-
-    /* Brand, hover. The fill is a gradient, which cannot travel through a hook
-       feeding `background`/`background-color` — see site.css. This is the flat
-       colour beneath it. *\/
-    --slds-c-button-brand-color-background-hover: var(--site-color-brand-blue);
-    /* Transparent, not navy: the border paints on top of the gradient and a
-       navy ring against a blue-to-navy fill reads as an outline the design does
-       not have. `.slds-button` clips its background to the border box, so the
-       gradient fills the border area instead. *\/
-    --slds-c-button-brand-color-border-hover: transparent;
-    --slds-c-button-brand-text-color-hover: var(--slds-g-color-on-accent-1);
-
-    /* Brand, active. *\/
-    --slds-c-button-brand-color-background-active: var(--site-color-brand-navy);
-    --slds-c-button-brand-color-border-active: var(--site-color-brand-navy);
-    --slds-c-button-brand-text-color-active: var(--slds-g-color-on-accent-1);
-}
- * [END OFF — custom button styles] */
-
-/* -----------------------------------------------------------------------------
- * SEP type scale
- *
- * The sizes from the SEP Foundations library, read off the Figma variables:
- * Mobile / Tablet / Desktop, stepping at the same breakpoints as the content
- * cap. Declared mobile-first, so each block only restates what changes.
- *
- * These are `--site-*` because SLDS genuinely has no equivalent. Its ramp tops
- * out at --slds-g-font-scale-8 (2.625rem / 42px) with -9 and -10 aliased back
- * to it, so 48px and 60px have no step at all; and its base is 13px against
- * SEP's 17px, because Lightning is a dense data app and SEP is a content site.
- *
- * Line heights are part of the scale, not a separate decision: SEP tightens
- * them as the size grows (1.05 at 60px, 1.3 at 20px, 1.6 for body). SLDS ships
- * 1, 1.25, 1.375, 1.5, 1.75, 2 — only 1.25 lands, so these are ours too.
+ * Family: Atkinson Hyperlegible Next, with SLDS's own stack as the fallback.
+ * fonts.css loads the variable webfont under the name below.
+ * font/family/mobile has no code syntax and the same value — not imported.
  * -------------------------------------------------------------------------- */
 
 :root {
-    /* Headings — Mobile */
-    --site-font-heading-2xl: 2.5rem;    /* 40 */
-    --site-font-heading-xl: 2.25rem;    /* 36 */
-    --site-font-heading-lg: 2rem;       /* 32 */
-    --site-font-heading-md: 1.5rem;     /* 24 */
-    --site-font-heading-sm: 1.25rem;    /* 20 */
-    --site-font-heading-xs: 1.125rem;   /* 18 */
-    --site-font-subtitle: 1.5rem;       /* 24, weight 300 */
+    --slds-g-font-scale-neg-2: 0.75rem;
+    --slds-g-font-scale-neg-1: 0.875rem;
+    --slds-g-font-scale-base: 1rem;
+    --slds-g-font-scale-1: 1.125rem;
+    --slds-g-font-scale-2: 1.25rem;
+    --slds-g-font-scale-3: 1.5rem;
+    --slds-g-font-scale-4: 2rem;
+    --slds-g-font-scale-5: 2.25rem;
+    --slds-g-font-scale-6: 2.5rem;
+    --slds-g-font-scale-7: 3rem;
+    --slds-g-font-scale-8: 3.75rem;
 
-    /* Strap titles (the eyebrow above a heading) — Mobile */
-    --site-font-strap-lg: 1.75rem;      /* 28 */
-    --site-font-strap: 1.25rem;         /* 20 */
-    --site-font-strap-sm: 0.875rem;     /* 14 */
+    /* The only weight that differs from SLDS — see the note above. */
+    --slds-g-font-weight-6: 500;
 
-    /* Body — one size at every breakpoint in the design */
-    --site-font-body-lg: 1.25rem;       /* 20 */
-    --site-font-body: 1.0625rem;        /* 17 */
-    --site-font-body-sm: 0.875rem;      /* 14 */
+    --slds-g-font-family-base:
+        'Atkinson Hyperlegible Next Variable', 'Atkinson Hyperlegible Next',
+        system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'Helvetica Neue', Arial, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 
-    /* The page's default text size.
-     *
-     * DELIBERATELY NOT --site-font-body. 15px is not on the SEP scale at all
-     * (its body steps are 20 / 17 / 14) — this is a project decision to run
-     * page copy a step smaller than the controls.
-     *
-     * The split matters: --site-font-body is still 17px and still drives the
-     * buttons, the nav links and the input text, which were set to 17px
-     * deliberately. Collapsing the two would drag all three down with the body
-     * copy. Change this one to move page text; change --site-font-body to move
-     * the controls. */
-    --site-font-page-base: 0.875rem;   /* 14 */
-
-    /* Line heights, tightening as the size grows */
-    --site-lineheight-heading-2xl: 1.05;
-    --site-lineheight-heading-xl: 1.1;
-    --site-lineheight-heading-lg: 1.15;
-    --site-lineheight-heading-md: 1.2;
-    --site-lineheight-heading-sm: 1.25;
-    --site-lineheight-heading-xs: 1.3;
-    --site-lineheight-strap: 1;
-    --site-lineheight-body: 1.6;
-}
-
-
-
-
-
-/* -----------------------------------------------------------------------------
- * Mapping the SEP scale onto SLDS — component hooks and the body size only
- *
- * The SLDS GLOBAL heading steps are no longer remapped. This block used to set
- * --slds-g-font-scale-4 and -6 to SEP sizes so `.slds-text-heading_medium` and
- * `_large` would grow — but a global step is read far beyond those two
- * classes, so the remap resized other Lightning UI too, and SLDS 2 reserves
- * its global hooks for theming tools. The heading classes now run at SLDS's
- * own sizes (scale-4 1.25rem, scale-6 1.75rem). The SEP heading scale lives in
- * the --dxp block below, where Experience Cloud puts it.
- *
- * What stays:
- *
- *   --slds-g-font-scale-base   The body size. Still a global remap — kept
- *       because the page copy depends on it; a candidate for the same fix.
- *   --slds-c-card-heading-font-size, --slds-s-pageheader-title-font-size
- *       Component hooks, scoped to one component each, now fed from the
- *       --dxp heading levels so the Theme panel would drive them too.
- * -------------------------------------------------------------------------- */
-
-/* [OFF — custom type scale] ------------------------------------------------
- * Commented out to show the default Lightning styling. To restore: delete
- * this line block and its END line, and un-escape every `*\/` below.
-:root {
-    --slds-g-font-scale-base: var(--site-font-page-base);
-    --slds-g-font-line-height-base: var(--site-lineheight-body);
-
-    /* A card title is a heading, and the reset leaves a bare <h2> at 1em.
-       This is the public hook `.slds-card__header-title` reads. Heading 6. *\/
-    --slds-c-card-heading-font-size: var(--dxp-s-text-heading-extra-extra-small-font-size);
-
-    /* The page title — the H1 on every list and record page — takes the top
-       step of the scale. Heading 1. *\/
-    --slds-s-pageheader-title-font-size: var(--dxp-s-text-heading-extra-large-font-size);
-}
- * [END OFF — custom type scale] */
-
-/* -----------------------------------------------------------------------------
- * Experience Cloud heading styles — a STAND-IN for the Theme panel
- *
- * In a real Experience Cloud LWR site these hooks are set by an admin in
- * Experience Builder's Theme panel (Text tab, Heading 1–6), and the platform
- * serves them. This prototype has no Theme panel and loads no DXP stylesheet,
- * so they are declared here. ON LIFT, DELETE THIS BLOCK and enter the same
- * values in the Theme panel — components that read these hooks then follow
- * the site's branding unchanged.
- *
- * Source of the names: Salesforce's "Experience Cloud LWR Sites" guide (Brand
- * Your LWR Site → Text --dxp Styling Hooks): "Heading 1 … Heading 6 … You can
- * configure each of these text styles declaratively in the Theme panel or
- * programmatically via --dxp styling hooks." The guide names
- * `--dxp-s-text-heading-<level>-color` for all six levels and
- * `-font-size` / `-font-family` with them; `--dxp-g-root-font-family` and
- * `--dxp-g-heading-font-family` are from the platform's own
- * dxp-styling-hooks.min.css. Weight and line-height hooks exist in the Theme
- * panel too but their names are unconfirmed, so they are NOT declared — the
- * heading weight and line-heights stay in site.css and the --site-* tokens.
- *
- * Heading N maps to SEP's six sizes, largest first:
- *
- *   Heading 1  extra-large        --site-font-heading-2xl  40px
- *   Heading 2  large              --site-font-heading-xl   36px
- *   Heading 3  medium             --site-font-heading-lg   32px
- *   Heading 4  small              --site-font-heading-md   24px
- *   Heading 5  extra-small        --site-font-heading-sm   20px
- *   Heading 6  extra-extra-small  --site-font-heading-xs   18px
- *
- * Every value points at a --site-* or SLDS token, so this block holds no
- * numbers of its own and cannot drift from the SEP scale.
- * -------------------------------------------------------------------------- */
-
-/* [OFF — Experience Cloud heading hooks] ------------------------------------------------
- * Commented out to show the default Lightning styling. To restore: delete
- * this line block and its END line, and un-escape every `*\/` below.
-:root {
-    --dxp-g-root-font-family: var(--slds-g-font-family-base);
-    --dxp-g-heading-font-family: var(--slds-g-font-family-base);
-
-    --dxp-s-text-heading-extra-large-font-size: var(--site-font-heading-2xl);
-    --dxp-s-text-heading-extra-large-font-family: var(--dxp-g-heading-font-family);
-    --dxp-s-text-heading-extra-large-color: var(--site-color-brand-navy);
-
-    --dxp-s-text-heading-large-font-size: var(--site-font-heading-xl);
-    --dxp-s-text-heading-large-font-family: var(--dxp-g-heading-font-family);
-    --dxp-s-text-heading-large-color: var(--site-color-brand-navy);
-
-    --dxp-s-text-heading-medium-font-size: var(--site-font-heading-lg);
-    --dxp-s-text-heading-medium-font-family: var(--dxp-g-heading-font-family);
-    --dxp-s-text-heading-medium-color: var(--site-color-brand-navy);
-
-    --dxp-s-text-heading-small-font-size: var(--site-font-heading-md);
-    --dxp-s-text-heading-small-font-family: var(--dxp-g-heading-font-family);
-    --dxp-s-text-heading-small-color: var(--site-color-brand-navy);
-
-    --dxp-s-text-heading-extra-small-font-size: var(--site-font-heading-sm);
-    --dxp-s-text-heading-extra-small-font-family: var(--dxp-g-heading-font-family);
-    --dxp-s-text-heading-extra-small-color: var(--site-color-brand-navy);
-
-    --dxp-s-text-heading-extra-extra-small-font-size: var(--site-font-heading-xs);
-    --dxp-s-text-heading-extra-extra-small-font-family: var(--dxp-g-heading-font-family);
-    --dxp-s-text-heading-extra-extra-small-color: var(--site-color-brand-navy);
-}
- * [END OFF — Experience Cloud heading hooks] */
-
-/* =============================================================================
- * SEP COLOUR — three layers, as the Figma library has them
- *
- *   1. Primitives   the raw palette. Never referenced by a component.
- *   2. Semantic     what a colour is FOR. Named by role, aliases a primitive.
- *   3. Mapping      SLDS's global colour tokens pointed at the semantic layer.
- *
- * Layer 3 is why this works at all. Unlike the type scale — where SLDS's steps
- * carry Lightning's UI chrome and remapping them wholesale would have resized
- * every label — colour tokens mean the SAME THING in both systems.
- * `surface-container-1` is "the primary surface" in SLDS and `Background/
- * Primary` in SEP. Pointing one at the other preserves the role and only
- * changes the value, which is exactly what theming is.
- *
- * To restyle the site, change layer 2. Layer 1 is the palette and should only
- * change when the brand does; layer 3 is plumbing.
- * ============================================================================= */
-
-/* -----------------------------------------------------------------------------
- * 1. Primitives — the SEP palette
- * -------------------------------------------------------------------------- */
-
-:root {
-    /* Brand. --site-color-brand-blue / -navy are declared further up, with the
-       button skin that first needed them; they belong to this set. */
-    --site-color-brand-dark-navy: #162c45;
-    --site-color-brand-blue-accessible: #0071bb;
-    --site-color-brand-teal: #35c0ba;
-    --site-color-brand-teal-accessible: #1b7a75;
-    --site-color-brand-purple: #3a54a1;
-    --site-color-brand-salmon: #f75c58;
-    --site-color-brand-green: #06b271;
-    --site-color-brand-grey: #696969;
-
-    /* Greys */
-    --site-color-black-80: #333333;
-    --site-color-black-60: #666666;
-    --site-color-black-40: #999999;
-    --site-color-black-20: #cccccc;
-    --site-color-black-10: #dddddd;
-    --site-color-black-05: #f2f2f2;
-    --site-color-white: #ffffff;
-
-    /* Blues */
-    --site-color-blue-76: #3d99d6;
-    --site-color-blue-60: #67afdf;
-    --site-color-blue-40: #99cae9;
-    --site-color-blue-25: #bfdef1;
-    --site-color-blue-15: #d9ebf7;
-    --site-color-blue-10: #e6f2fa;
-    --site-color-blue-04: #f5fafd;
-
-    /* Navies */
-    --site-color-navy-90: #465565;
-    --site-color-navy-70: #5a7b9f;
-    --site-color-navy-60: #718ead;
-    --site-color-navy-40: #a1b3c8;
-    --site-color-navy-30: #b8c6d6;
-    --site-color-navy-20: #d0d9e4;
-
-    /* Feedback */
-    --site-color-red: #d03633;
-    --site-color-red-15: #f8e1e0;
-    --site-color-red-05: #fdf5f5;
-    --site-color-green-90: #2d750a;
-    --site-color-green-70: #388314;
-    --site-color-green-05: #f5fbf4;
-    --site-color-orange: #fa7f14;
-    --site-color-orange-dark: #e87512;
-    --site-color-pink: #b53cde;
+    --slds-g-font-family-monospace:
+        'SF Mono', Consolas, Menlo, Monaco, Courier, monospace;
 }
 
 /* -----------------------------------------------------------------------------
- * 2. Semantic — what each colour is for
+ * C2. Global hooks — colour ramps
  *
- * These are SEP's own names, from the Semantic Colours page of the library.
+ * Each ramp ends with its Figma-only steps (85, 35, 5) as --sep-* tokens —
+ * SLDS has no name for them. C3 reads three: container-3, border-accent-2,
+ * on-error-1.
+ *
+ * MSD's own ramps, on the SLDS names Figma gives them. Values are Figma's
+ * Default mode.
+ *
+ * Steps Figma does not define are listed in place, marked "unchanged from
+ * Cosmos — not set in Figma", so each ramp reads complete: 45 and 55 on every
+ * ramp, and 100 on brand, error, warning and success. They hold Cosmos's own
+ * light values, so declaring them changes nothing on screen. If Figma adds
+ * one of these steps, replace the value and drop the label.
+ * neutral-base-0 and -100 are set in Figma and equal Cosmos (section A).
+ *
+ * success-base-65: Figma's code syntax is garbled
+ * ("color/success-base/65 (Teal 65)--slds-g-color-success-base-65"). Mapped by
+ * its name.
+ *
+ * Palettes green and hot-orange are MSD's teal and salmon, and differ from
+ * Salesforce's at every step. Their 35/85/5 steps carry the code syntax of
+ * 40/90/10 in Figma, which would overwrite those — they sit after each ramp as --sep-* tokens
+ * under their real step instead.
  * -------------------------------------------------------------------------- */
 
 :root {
-    /* Text */
-    /* --site-text-primary: var(--site-color-black-80);
-    --site-text-secondary: var(--site-color-black-60);
-    --site-text-accent-primary: var(--site-color-brand-blue-accessible);
-    --site-text-accent-secondary: var(--site-color-brand-navy);
-    --site-text-inverse-primary: var(--site-color-white);
-    --site-text-inverse-disabled: var(--site-color-blue-10);
-    --site-text-disabled: var(--site-color-navy-40);
-    --site-text-error: var(--site-color-red);
-    --site-text-success: var(--site-color-green-90); */
+    --slds-g-color-neutral-base-95: #f8f8f8;
+    --slds-g-color-neutral-base-90: #e7e7e7;
+    --slds-g-color-neutral-base-80: #c5c5c5;
+    --slds-g-color-neutral-base-70: #a4a4a4;
+    --slds-g-color-neutral-base-65: #949494;
+    --slds-g-color-neutral-base-60: #848484;
+    --slds-g-color-neutral-base-55: #848484; /* unchanged from Cosmos — not set in Figma */
+    --slds-g-color-neutral-base-50: #666666;
+    --slds-g-color-neutral-base-45: #696969; /* unchanged from Cosmos — not set in Figma */
+    --slds-g-color-neutral-base-40: #545454;
+    --slds-g-color-neutral-base-30: #434343;
+    --slds-g-color-neutral-base-20: #323232;
+    --slds-g-color-neutral-base-15: #2a2a2a;
+    --slds-g-color-neutral-base-10: #222222;
+    /* Figma-only steps — SLDS has no 85, 35 or 5, so they are --sep- tokens */
+    --sep-color-neutral-base-85: #d6d6d6;
+    --sep-color-neutral-base-35: #4b4b4b;
+    --sep-color-neutral-base-5:  #1b1b1b;
 
-    /* Background */
-    /* --site-bg-primary: var(--site-color-white);
-    --site-bg-secondary: var(--site-color-blue-04);
-    --site-bg-tertiary: var(--site-color-blue-10);
-    --site-bg-accent-primary: var(--site-color-brand-blue);
-    --site-bg-accent-secondary: var(--site-color-brand-navy);
-    --site-bg-disabled: var(--site-color-navy-40);
-    --site-bg-error: var(--site-color-red-05);
-    --site-bg-success-primary: var(--site-color-green-70);
-    --site-bg-success-secondary: var(--site-color-green-05);
-    --site-bg-warning: var(--site-color-orange);
-    --site-bg-overlay: #00000099; */
+    --slds-g-color-brand-base-100: #ffffff; /* unchanged from Cosmos — not set in Figma */
+    --slds-g-color-brand-base-95: #dfeef8;
+    --slds-g-color-brand-base-90: #bfddf1;
+    --slds-g-color-brand-base-80: #80bce4;
+    --slds-g-color-brand-base-70: #60abdd;
+    --slds-g-color-brand-base-65: #409bd6;
+    --slds-g-color-brand-base-60: #208acf;
+    --slds-g-color-brand-base-55: #287efe; /* unchanged from Cosmos — not set in Figma */
+    --slds-g-color-brand-base-50: #017ac9;
+    --slds-g-color-brand-base-45: #045dec; /* unchanged from Cosmos — not set in Figma */
+    --slds-g-color-brand-base-40: #006aaf;
+    --slds-g-color-brand-base-30: #134276;
+    --slds-g-color-brand-base-20: #0e345e;
+    --slds-g-color-brand-base-15: #092647;
+    --slds-g-color-brand-base-10: #051a32;
+    /* Figma-only steps — SLDS has no 85, 35 or 5, so they are --sep- tokens */
+    --sep-color-brand-base-85: #9fcdea;
+    --sep-color-brand-base-35: #005b96;
+    --sep-color-brand-base-5:  #020d1e;
 
-    /* Icon */
-    /* --site-icon-primary: var(--site-color-black-80);
-    --site-icon-secondary: var(--site-color-black-60);
-    --site-icon-accent-primary: var(--site-color-brand-blue-accessible);
-    --site-icon-accent-secondary: var(--site-color-brand-navy);
-    --site-icon-inverse-primary: var(--site-color-white);
-    --site-icon-disabled: var(--site-color-navy-40);
-    --site-icon-error: var(--site-color-red);
-    --site-icon-success: var(--site-color-green-70);
-    --site-icon-warning: var(--site-color-orange); */
+    --slds-g-color-error-base-100: #ffffff; /* unchanged from Cosmos — not set in Figma */
+    --slds-g-color-error-base-95: #faebeb;
+    --slds-g-color-error-base-90: #f6d7d6;
+    --slds-g-color-error-base-80: #ecafad;
+    --slds-g-color-error-base-70: #e38685;
+    --slds-g-color-error-base-65: #de7270;
+    --slds-g-color-error-base-60: #d95e5c;
+    --slds-g-color-error-base-55: #f42f7c; /* unchanged from Cosmos — not set in Figma */
+    --slds-g-color-error-base-50: #d03633;
+    --slds-g-color-error-base-45: #ce055f; /* unchanged from Cosmos — not set in Figma */
+    --slds-g-color-error-base-40: #a62b29;
+    --slds-g-color-error-base-30: #7d201f;
+    --slds-g-color-error-base-20: #531614;
+    --slds-g-color-error-base-15: #3e100f;
+    --slds-g-color-error-base-10: #2a0b0a;
+    /* Figma-only steps — SLDS has no 85, 35 or 5, so they are --sep- tokens */
+    --sep-color-error-base-85: #f1c3c2;
+    --sep-color-error-base-35: #922624;
+    --sep-color-error-base-5:  #150505;
 
-    /* Stroke */
-    /* --site-stroke-primary: var(--site-color-navy-60);
-    --site-stroke-secondary: var(--site-color-navy-20);
-    --site-stroke-tertiary: var(--site-color-navy-40);
-    --site-stroke-accent-primary: var(--site-color-brand-blue);
-    --site-stroke-accent-secondary: var(--site-color-brand-navy);
-    --site-stroke-error: var(--site-color-red);
-    --site-stroke-success: var(--site-color-green-70);
-    --site-stroke-focus: var(--site-color-pink); */
+    --slds-g-color-warning-base-100: #ffffff; /* unchanged from Cosmos — not set in Figma */
+    --slds-g-color-warning-base-95: #fef2e8;
+    --slds-g-color-warning-base-90: #fee5d0;
+    --slds-g-color-warning-base-80: #fdcca1;
+    --slds-g-color-warning-base-70: #fcb272;
+    --slds-g-color-warning-base-65: #fca55a;
+    --slds-g-color-warning-base-60: #fb9943;
+    --slds-g-color-warning-base-55: #ba7503; /* unchanged from Cosmos — not set in Figma */
+    --slds-g-color-warning-base-50: #fa7f14;
+    --slds-g-color-warning-base-45: #9a5803; /* unchanged from Cosmos — not set in Figma */
+    --slds-g-color-warning-base-40: #c86610;
+    --slds-g-color-warning-base-30: #964c0c;
+    --slds-g-color-warning-base-20: #643308;
+    --slds-g-color-warning-base-15: #4b2606;
+    --slds-g-color-warning-base-10: #321904;
+    /* Figma-only steps — SLDS has no 85, 35 or 5, so they are --sep- tokens */
+    --sep-color-warning-base-85: #fed9b8;
+    --sep-color-warning-base-35: #af590e;
+    --sep-color-warning-base-5:  #190d02;
+
+    --slds-g-color-success-base-100: #ffffff; /* unchanged from Cosmos — not set in Figma */
+    --slds-g-color-success-base-95: #f5fbf4;
+    --slds-g-color-success-base-90: #d7f2d2;
+    --slds-g-color-success-base-80: #abd7a2;
+    --slds-g-color-success-base-70: #83bc75;
+    --slds-g-color-success-base-65: #70ad5f;
+    --slds-g-color-success-base-60: #5d9f49;
+    --slds-g-color-success-base-55: #09948b; /* unchanged from Cosmos — not set in Figma */
+    --slds-g-color-success-base-50: #388314;
+    --slds-g-color-success-base-45: #087570; /* unchanged from Cosmos — not set in Figma */
+    --slds-g-color-success-base-40: #256d00;
+    --slds-g-color-success-base-30: #175600;
+    --slds-g-color-success-base-20: #0e4100;
+    --slds-g-color-success-base-15: #0a3600;
+    --slds-g-color-success-base-10: #082c01;
+    /* Figma-only steps — SLDS has no 85, 35 or 5, so they are --sep- tokens */
+    --sep-color-success-base-85: #c0e5b9;
+    --sep-color-success-base-35: #1e6200;
+    --sep-color-success-base-5:  #062102;
+
+    --slds-g-color-palette-green-95: #ebf9f8;
+    --slds-g-color-palette-green-90: #d7f2f1;
+    --slds-g-color-palette-green-80: #aee6e3;
+    --slds-g-color-palette-green-70: #86d9d6;
+    --slds-g-color-palette-green-65: #72d3cf;
+    --slds-g-color-palette-green-60: #5dcdc8;
+    --slds-g-color-palette-green-50: #35c0ba;
+    --slds-g-color-palette-green-40: #2a9a95;
+    --slds-g-color-palette-green-30: #207370;
+    --slds-g-color-palette-green-20: #154d4a;
+    --slds-g-color-palette-green-15: #103a38;
+    --slds-g-color-palette-green-10: #0b2625;
+    /* Figma-only steps — SLDS has no 85, 35 or 5, so they are --sep- tokens */
+    --sep-color-palette-green-85: #c2ecea;
+    --sep-color-palette-green-35: #258682;
+    --sep-color-palette-green-5:  #051313;
+
+    --slds-g-color-palette-hot-orange-95: #feefee;
+    --slds-g-color-palette-hot-orange-90: #fddede;
+    --slds-g-color-palette-hot-orange-80: #fcbebc;
+    --slds-g-color-palette-hot-orange-70: #fa9d9b;
+    --slds-g-color-palette-hot-orange-65: #f98d8a;
+    --slds-g-color-palette-hot-orange-60: #f97d79;
+    --slds-g-color-palette-hot-orange-50: #f75c58;
+    --slds-g-color-palette-hot-orange-40: #c64a46;
+    --slds-g-color-palette-hot-orange-30: #943735;
+    --slds-g-color-palette-hot-orange-20: #632523;
+    --slds-g-color-palette-hot-orange-15: #4a1c1a;
+    --slds-g-color-palette-hot-orange-10: #311212;
+    /* Figma-only steps — SLDS has no 85, 35 or 5, so they are --sep- tokens */
+    --sep-color-palette-hot-orange-85: #fdcecd;
+    --sep-color-palette-hot-orange-35: #ad403e;
+    --sep-color-palette-hot-orange-5:  #190909;
 }
 
 /* -----------------------------------------------------------------------------
- * 3. Mapping — SLDS global colour tokens onto the semantic layer
+ * C3. Global hooks — semantic colours
  *
- * The number after each line is how many declarations in the shipped stylesheet
- * read that token, so the reach of each line is visible. Roles line up, so the
- * mapping is by meaning, not by matching hex values.
+ * Each aliases the ramp step its Figma variable points at in Default mode:
+ * var(<alias>), so the semantics follow the ramps in C2.
  *
- * Note the direction of SLDS's `on-surface` ramp: -1 is the LIGHTEST (#757575)
- * and -3 the darkest (#181818), so -1 takes SEP's secondary text and -2/-3 take
- * its primary. Getting that backwards would wash out every body copy on site.
+ * Every SLDS semantic colour hook Figma defines is here (57). Cosmos's own
+ * values stand for anything not listed.
+ *
+ * Trust the alias, not the label. Several Figma names carry a step in brackets
+ * that the alias does not use; the alias is what is imported:
+ *   border/2 "(Neutral 40)" is Neutral 60     container/3 "(Neutral 90)" is 85
+ *   border-accent-2 "(EB 40)" is EB 35        border-accent-3 "(EB 30)" is 20
+ *   on-error-1 "(Pink 40)" is Pink 35         on-error-2 "(Pink 30)" is 40
+ *   on-warning-1 "(Yellow 40)" is Yellow 30   on-success-1 "(Teal 40)" is 30
+ *   info-1, on-info-1 "(Blue 40)" are Electric Blue 30
+ *   on-disabled-2 "(Neutral 50)" is 30        border-disabled-1 "(Neutral 50)" is 80
+ *
+ * SLDS's on-surface ramp is lightest at -1, so -1 is secondary text and -2
+ * / -3 are primary. Figma agrees (Neutral 40 / 20 / Blue 15).
+ *
+ * The report (_docs/figma-tokens-report-2026-10-15.md §6) lists the 14
+ * semantics that point at a different step from SLDS's own mapping.
  * -------------------------------------------------------------------------- */
 
-/* [OFF — SEP colour mapping onto SLDS hooks] ------------------------------------------------
- * Commented out to show the default Lightning styling. To restore: delete
- * this line block and its END line, and un-escape every `*\/` below.
 :root {
-    /* Surfaces *\/
-    --slds-g-color-surface-1: var(--site-bg-primary);              /* 12 *\/
-    --slds-g-color-surface-2: var(--site-bg-secondary);            /* 13 *\/
-    --slds-g-color-surface-3: var(--site-bg-tertiary);             /*  1 *\/
-    --slds-g-color-surface-container-1: var(--site-bg-primary);    /* 127 *\/
-    --slds-g-color-surface-container-2: var(--site-bg-secondary);  /* 90 *\/
-    --slds-g-color-surface-container-3: var(--site-bg-tertiary);   /*  7 *\/
+    --slds-g-color-surface-1: var(--slds-g-color-neutral-base-100);
+    --slds-g-color-surface-2: var(--slds-g-color-neutral-base-95);
+    --slds-g-color-surface-inverse-1: var(--slds-g-color-brand-base-20);
+    --slds-g-color-surface-inverse-2: var(--slds-g-color-brand-base-15);
+    --slds-g-color-surface-container-1: var(--slds-g-color-neutral-base-100);
+    --slds-g-color-surface-container-2: var(--slds-g-color-neutral-base-95);
+    --slds-g-color-surface-container-3: var(--sep-color-neutral-base-85);
+    --slds-g-color-surface-container-inverse-1: var(--slds-g-color-brand-base-20);
+    --slds-g-color-surface-container-inverse-2: var(--slds-g-color-brand-base-15);
 
-    /* Text on those surfaces *\/
-    --slds-g-color-on-surface-1: var(--site-text-secondary);       /* 71 *\/
-    --slds-g-color-on-surface-2: var(--site-text-primary);         /* 39 *\/
-    --slds-g-color-on-surface-3: var(--site-text-primary);         /* 56 *\/
+    --slds-g-color-on-surface-1: var(--slds-g-color-neutral-base-40);
+    --slds-g-color-on-surface-2: var(--slds-g-color-neutral-base-20);
+    --slds-g-color-on-surface-3: var(--slds-g-color-brand-base-15);
+    --slds-g-color-on-surface-inverse-1: var(--slds-g-color-neutral-base-100);
+    --slds-g-color-on-surface-inverse-2: var(--slds-g-color-brand-base-80);
 
-    /* Accent — links and brand fills *\/
-    --slds-g-color-accent-1: var(--site-text-accent-primary);      /* 48 *\/
-    --slds-g-color-accent-2: var(--site-text-accent-secondary);    /* 49 *\/
-    --slds-g-color-accent-3: var(--site-text-accent-secondary);    /* 26 *\/
-    --slds-g-color-accent-container-1: var(--site-bg-accent-primary);   /* 38 *\/
-    --slds-g-color-accent-container-2: var(--site-bg-accent-secondary); /* 25 *\/
-    --slds-g-color-accent-container-3: var(--site-bg-accent-secondary); /*  7 *\/
-    --slds-g-color-on-accent-1: var(--site-text-inverse-primary);  /* 29 *\/
-    --slds-g-color-on-accent-2: var(--site-text-inverse-primary);  /* 12 *\/
+    --slds-g-color-accent-1: var(--slds-g-color-brand-base-50);
+    --slds-g-color-accent-2: var(--slds-g-color-brand-base-40);
+    --slds-g-color-accent-3: var(--slds-g-color-brand-base-30);
+    --slds-g-color-accent-container-1: var(--slds-g-color-brand-base-50);
+    --slds-g-color-accent-container-2: var(--slds-g-color-brand-base-40);
+    --slds-g-color-accent-container-3: var(--slds-g-color-brand-base-30);
+    --slds-g-color-on-accent-1: var(--slds-g-color-neutral-base-100);
+    --slds-g-color-on-accent-2: var(--slds-g-color-neutral-base-100);
+    --slds-g-color-on-accent-3: var(--slds-g-color-neutral-base-100);
+    --slds-g-color-border-accent-1: var(--slds-g-color-brand-base-50);
+    --slds-g-color-border-accent-2: var(--sep-color-brand-base-35);
+    --slds-g-color-border-accent-3: var(--slds-g-color-brand-base-20);
 
-    /* Borders *\/
-    --slds-g-color-border-1: var(--site-stroke-secondary);         /* 122 *\/
-    --slds-g-color-border-2: var(--site-stroke-primary);           /* 36 *\/
+    --slds-g-color-border-1: var(--slds-g-color-neutral-base-80);
+    --slds-g-color-border-2: var(--slds-g-color-neutral-base-60);
+    --slds-g-color-border-inverse-1: var(--slds-g-color-neutral-base-95);
+    --slds-g-color-border-inverse-2: var(--slds-g-color-brand-base-20);
 
-    /* Status *\/
-    --slds-g-color-error-1: var(--site-text-error);                /* 40 *\/
-    --slds-g-color-success-1: var(--site-bg-success-primary);      /* 19 *\/
-    /* NOT mapped under Cosmos: --slds-g-color-on-error-1 / -on-success-1.
-     * Lightning Blue paired them with SOLID fills, so they were white and so
-     * was this mapping. Cosmos pairs them with the pale `-container-1` fills
-     * (`slds-alert_error`, `slds-theme_error`, `slds-theme_success`), where
-     * they are the dark tinted text — forcing white made those unreadable.
-     * Cosmos's own values stand. *\/
-    --slds-g-color-warning-1: var(--site-bg-warning);              /*  4 *\/
+    --slds-g-color-error-1: var(--slds-g-color-error-base-40);
+    --slds-g-color-error-container-1: var(--slds-g-color-error-base-90);
+    --slds-g-color-error-container-2: var(--slds-g-color-error-base-80);
+    --slds-g-color-on-error-1: var(--sep-color-error-base-35);
+    --slds-g-color-on-error-2: var(--slds-g-color-error-base-40);
+    --slds-g-color-border-error-1: var(--slds-g-color-error-base-40);
+    --slds-g-color-border-error-2: var(--slds-g-color-error-base-30);
 
-    /* Links.
-     *
-     * These need the shared hook set directly, NOT just --slds-g-color-accent-*.
-     * `--slds-s-link-color` resolves as
-     *   var(--lwc-brandTextLink, var(--slds-g-color-accent-2))
-     * and the theme defines --lwc-brandTextLink (Lightning Blue did; Cosmos
-     * sets it with !important to its brand-base-50), so the fallback never runs and remapping accent-2 alone leaves every link on the old
-     * #0176d3. Measured, not assumed. *\/
-    --slds-s-link-color: var(--site-text-accent-primary);
-    --slds-s-link-color-hover: var(--site-text-accent-secondary);
-    --slds-s-link-color-active: var(--site-text-accent-secondary);
-    --slds-s-link-color-focus: var(--site-text-accent-secondary);
-    --slds-s-link-outline-color: var(--site-stroke-focus);
+    --slds-g-color-warning-1: var(--slds-g-color-warning-base-40);
+    --slds-g-color-warning-container-1: var(--slds-g-color-warning-base-90);
+    --slds-g-color-on-warning-1: var(--slds-g-color-warning-base-30);
+    --slds-g-color-border-warning-1: var(--slds-g-color-warning-base-40);
 
-    /* Disabled *\/
-    --slds-g-color-disabled-1: var(--site-text-disabled);          /* 16 *\/
-    --slds-g-color-on-disabled-1: var(--site-text-disabled);       /* 14 *\/
-    --slds-g-color-on-disabled-2: var(--site-text-disabled);       /* 23 *\/
-    --slds-g-color-disabled-container-1: var(--site-bg-primary);   /* 14 *\/
-    --slds-g-color-disabled-container-2: var(--site-bg-disabled);  /* 18 *\/
+    --slds-g-color-success-1: var(--slds-g-color-success-base-40);
+    --slds-g-color-success-container-1: var(--slds-g-color-success-base-90);
+    --slds-g-color-success-container-2: var(--slds-g-color-success-base-80);
+    --slds-g-color-on-success-1: var(--slds-g-color-success-base-30);
+    --slds-g-color-on-success-2: var(--slds-g-color-success-base-30);
+    --slds-g-color-border-success-1: var(--slds-g-color-success-base-40);
+    --slds-g-color-border-success-2: var(--slds-g-color-success-base-30);
+
+    --slds-g-color-info-1: var(--slds-g-color-brand-base-30);
+    --slds-g-color-info-container-1: var(--slds-g-color-brand-base-90);
+    --slds-g-color-on-info-1: var(--slds-g-color-brand-base-30);
+
+    --slds-g-color-disabled-1: var(--slds-g-color-neutral-base-50);
+    --slds-g-color-disabled-container-1: var(--slds-g-color-neutral-base-90);
+    --slds-g-color-disabled-container-2: var(--slds-g-color-neutral-base-80);
+    --slds-g-color-on-disabled-1: var(--slds-g-color-neutral-base-50);
+    --slds-g-color-on-disabled-2: var(--slds-g-color-neutral-base-30);
+    --slds-g-color-border-disabled-1: var(--slds-g-color-neutral-base-80);
 }
- * [END OFF — SEP colour mapping onto SLDS hooks] */
 
 /* -----------------------------------------------------------------------------
- * Form inputs
+ * C4. Global hooks — elevation and focus
  *
- * `--slds-s-input-*` covers every state the design names, and there are NO
- * private input hooks at all — so the colours, radius and backgrounds are all
- * reachable. Labels and hint text have their own shared hooks.
+ * These come from Figma EFFECT STYLES, which bind the shadow-colour variables
+ * in section B. Elevation N matches --slds-g-shadow-N layer for layer (offsets
+ * and blurs identical); only the colour differs, so these are SLDS's geometry
+ * with MSD's tint:
  *
- * WHERE THE BORDER LIVES. Not on the <input>. `lightning-input` renders
- * `<div class="slds-form-element__control">` inside a nested shadow root and
- * puts the border, radius and background there; the <input> itself is
- * borderless and transparent and only carries the text. Reading the <input>'s
- * computed border to check this work will show `0px` and look broken — measure
- * the control div instead.
+ *   Figma style                  SLDS hook
+ *   Elevation/N - down ⬇         --slds-g-shadow-N  (block-end-N aliases it)
+ *   Elevation/N - up ⬆           --slds-g-shadow-block-start-N
+ *   Elevation/N - left ⬅         --slds-g-shadow-inline-start-N
+ *   Elevation/N - right ⮕        --slds-g-shadow-inline-end-N
  *
- * That also means the `.slds-input` rule in the BUNDLED SLDS stylesheet is a
- * red herring: it cannot reach into the shadow root, so its hardcoded
- * `border: 1px` and its missing font-size say nothing about what renders here.
+ * Elevation/1 - right is a copy of Elevation/1 - left in Figma (both throw the
+ * shadow left). inline-end-1 below is the mirror of left, as levels 2–4 are —
+ * fix the style in Figma.
  *
- * WHICH FAMILY TO USE — isolated by neutralising each and re-measuring:
+ *   Focus/Outline        --slds-g-shadow-outline-focus-1   2px accent-1. SLDS
+ *                        uses brand-base-15 (navy); Figma uses MSD blue.
+ *   Focus/Outset         --slds-g-shadow-outset-focus-1
+ *   Focus/Inset          --slds-g-shadow-inset-focus-1
+ *   Focus/Inset-inverse  --slds-g-shadow-inset-inverse-focus-1
  *
- *   Colours    --slds-s-input-*   (shared)
- *   Geometry   --slds-c-input-*   (component) — radius, border width, height
- *
- * They do NOT overlap. `--slds-c-input-radius-border` sets the radius and
- * `--slds-s-input-radius-border` does nothing; `--slds-s-input-color-border`
- * sets the colour. `--slds-c-inputtext-*` drives nothing from here at all — the
- * compat layer that would map onto it is `:host([data-render-mode="shadow"])`
- * scoped, and `lightning-input` never sets that attribute.
- *
- * Verify a change by measuring the control div, not the <input>.
+ * The three non-outline focus rings bind semantic tokens in Figma
+ * (on-surface-3, surface-container-1) where SLDS binds ramp steps. With C2 and
+ * C3 live they resolve to the same colours.
  * -------------------------------------------------------------------------- */
 
-/* [OFF — custom input styles] ------------------------------------------------
- * Commented out to show the default Lightning styling. To restore: delete
- * this line block and its END line, and un-escape every `*\/` below.
 :root {
-    /* Field *\/
-    --slds-s-input-radius-border: var(--site-radius-mid);
-    --slds-s-input-color-background: var(--site-bg-primary);
-    --slds-s-input-color-background-disabled: var(--site-bg-tertiary);
-    --slds-s-input-color: var(--site-text-primary);
-    --slds-s-input-color-disabled: var(--site-text-secondary);
-    --slds-s-input-color-invalid: var(--site-text-primary);
+    --slds-g-shadow-1: 0 0 2px 0 var(--sep-color-shadow-1), 0 2px 2px 0 var(--sep-color-shadow-1), 0 -1px 2px 0 var(--sep-color-shadow-1-edge);
+    --slds-g-shadow-2: 0 0 5px 0 var(--sep-color-shadow-2), 0 3px 3px 0 var(--sep-color-shadow-2), 0 -1px 2px 0 var(--sep-color-shadow-2-edge);
+    --slds-g-shadow-3: 0 0 7px 0 var(--sep-color-shadow-3), 0 5px 5px 0 var(--sep-color-shadow-3), 0 -1px 2px 0 var(--sep-color-shadow-3-edge);
+    --slds-g-shadow-4: 0 0 10px 0 var(--sep-color-shadow-4), 0 7px 7px 0 var(--sep-color-shadow-4), 0 -1px 3px 0 var(--sep-color-shadow-4-edge);
 
-    /* Borders, one per state *\/
-    --slds-s-input-color-border: var(--site-stroke-primary);
-    --slds-s-input-color-border-hover: var(--site-stroke-accent-primary);
-    --slds-s-input-color-border-focus: var(--site-stroke-accent-primary);
-    --slds-s-input-color-border-invalid: var(--site-stroke-error);
-    --slds-s-input-color-border-disabled: var(--site-stroke-tertiary);
+    --slds-g-shadow-block-start-1: 0 0 2px 0 var(--sep-color-shadow-1), 0 -2px 2px 0 var(--sep-color-shadow-1), 0 1px 2px 0 var(--sep-color-shadow-1-edge);
+    --slds-g-shadow-block-start-2: 0 0 5px 0 var(--sep-color-shadow-2), 0 -3px 3px 0 var(--sep-color-shadow-2), 0 1px 2px 0 var(--sep-color-shadow-2-edge);
+    --slds-g-shadow-block-start-3: 0 0 7px 0 var(--sep-color-shadow-3), 0 -5px 5px 0 var(--sep-color-shadow-3), 0 1px 2px 0 var(--sep-color-shadow-3-edge);
+    --slds-g-shadow-block-start-4: 0 0 10px 0 var(--sep-color-shadow-4), 0 -7px 7px 0 var(--sep-color-shadow-4), 0 1px 3px 0 var(--sep-color-shadow-4-edge);
 
-    /* Label — 20px Medium, in the primary text colour. *\/
-    --slds-s-label-font-size: 15px; /* to do *\/
-    /* var(--site-font-body-lg); *\/
-    --slds-s-label-font-weight: var(--slds-g-font-weight-5);
-    --slds-s-label-color: var(--site-text-primary);
+    --slds-g-shadow-inline-start-1: 0 0 2px 0 var(--sep-color-shadow-1), -2px 0 2px 0 var(--sep-color-shadow-1), 1px 0 2px 0 var(--sep-color-shadow-1-edge);
+    --slds-g-shadow-inline-start-2: 0 0 5px 0 var(--sep-color-shadow-2), -3px 0 3px 0 var(--sep-color-shadow-2), 1px 0 2px 0 var(--sep-color-shadow-2-edge);
+    --slds-g-shadow-inline-start-3: 0 0 7px 0 var(--sep-color-shadow-3), -5px 0 5px 0 var(--sep-color-shadow-3), 1px 0 2px 0 var(--sep-color-shadow-3-edge);
+    --slds-g-shadow-inline-start-4: 0 0 10px 0 var(--sep-color-shadow-4), -7px 0 7px 0 var(--sep-color-shadow-4), 1px 0 3px 0 var(--sep-color-shadow-4-edge);
 
-    /* Hint text below the label — 17px, secondary. *\/
-    --slds-s-helptext-font-size: var(--site-font-body);
-    --slds-s-helptext-color: var(--site-text-secondary);
+    --slds-g-shadow-inline-end-1: 0 0 2px 0 var(--sep-color-shadow-1), 2px 0 2px 0 var(--sep-color-shadow-1), -1px 0 2px 0 var(--sep-color-shadow-1-edge);
+    --slds-g-shadow-inline-end-2: 0 0 5px 0 var(--sep-color-shadow-2), 3px 0 3px 0 var(--sep-color-shadow-2), -1px 0 2px 0 var(--sep-color-shadow-2-edge);
+    --slds-g-shadow-inline-end-3: 0 0 7px 0 var(--sep-color-shadow-3), 5px 0 5px 0 var(--sep-color-shadow-3), -1px 0 2px 0 var(--sep-color-shadow-3-edge);
+    --slds-g-shadow-inline-end-4: 0 0 10px 0 var(--sep-color-shadow-4), 7px 0 7px 0 var(--sep-color-shadow-4), -1px 0 3px 0 var(--sep-color-shadow-4-edge);
 
-    /* Geometry — the component family only. *\/
-    --slds-c-input-radius-border: var(--site-radius-mid);
-    --slds-c-input-sizing-border: 2px;
-    /* Matched to the button (--slds-s-button-font-size), so a field and a
-       button sitting on one row read at the same weight. Smaller than SEP's
-       Input text style, which specifies 20px. *\/
-    --slds-c-input-font-size: var(--site-font-body);
-
-    /* Field height. The default is --slds-g-sizing-9 (2rem / 32px), Lightning's
-       dense data-app size. 3rem gives the field the same presence as the SEP
-       controls beside it — and is within a pixel of the 48.6px button, so a
-       field and a button on one row line up. *\/
-    --slds-c-input-sizing-height: 3rem;
+    --slds-g-shadow-outline-focus-1: 0 0 0 2px var(--slds-g-color-accent-1);
+    --slds-g-shadow-outset-focus-1: 0 0 0 2px var(--slds-g-color-surface-container-1), 0 0 0 4px var(--slds-g-color-on-surface-3);
+    --slds-g-shadow-inset-focus-1: 0 0 0 2px var(--slds-g-color-on-surface-3) inset;
+    --slds-g-shadow-inset-inverse-focus-1: 0 0 0 2px var(--slds-g-color-on-surface-3) inset, 0 0 0 4px var(--slds-g-color-surface-container-1) inset;
 }
- * [END OFF — custom input styles] */
+
+/* -----------------------------------------------------------------------------
+ * C5. Global hooks — every other SLDS global, from Cosmos or SLDS default
+ *
+ * The public --slds-g-* hooks Figma does not define, so the whole set is
+ * visible in one file. Every line is labelled with where its value comes from:
+ *
+ *   cosmos — default X   Cosmos sets it; SLDS's base theme (Lightning Blue) has X
+ *   default              SLDS's own value — Cosmos and Lightning Blue agree
+ *
+ * Everything defined above this block is NOT repeated here: the Figma values
+ * in C1–C4, and the 127 Figma variables section A lists at SLDS's own value
+ * (those render from the shipped stylesheet).
+ *
+ * GENERATED — do not hand-edit. Re-run after an SLDS upgrade:
+ *   node .claude/skills/lwc-figma-ds-tokens-import/sync-slds-globals.mjs
+ * Light values only: Cosmos's light-dark() pairs are written as their light
+ * value, and its private --slds-r-* references as literals. References to
+ * another --slds-g-* token stay as var(), so a Figma override still flows
+ * through. Nothing here changes what renders today.
+ *
+ * Trade-off: declaring a token pins it. Without this block an SLDS upgrade
+ * would move these values on its own; with it, they move only when this script
+ * is re-run.
+ * -------------------------------------------------------------------------- */
+
+/* @generated slds-globals:start */
+:root {
+
+    /* duration */
+    --slds-g-duration-immediately: 0.05s;                               /* default */
+    --slds-g-duration-instantly: 0s;                                    /* default */
+    --slds-g-duration-paused: 3.2s;                                     /* default */
+    --slds-g-duration-promptly: 0.2s;                                   /* default */
+    --slds-g-duration-quickly: 0.1s;                                    /* default */
+    --slds-g-duration-slowly: 0.4s;                                     /* default */
+    --slds-g-duration-toast-medium: 9.6s;                               /* default */
+    --slds-g-duration-toast-short: 4.8s;                                /* default */
+
+    /* ratio */
+    --slds-g-ratio-square: 1;                                           /* default */
+    --slds-g-ratio-landscape: 4/3;                                      /* default */
+    --slds-g-ratio-portrait: 3/4;                                       /* default */
+    --slds-g-ratio-wide: 16/9;                                          /* default */
+    --slds-g-ratio-ultrawide: 18/5;                                     /* default */
+
+    /* sizing */
+    --slds-g-sizing-base: 1rem;                                         /* default */
+    --slds-g-sizing-content-1: 20ch;                                    /* default */
+    --slds-g-sizing-content-2: 45ch;                                    /* default */
+    --slds-g-sizing-content-3: 60ch;                                    /* default */
+    --slds-g-sizing-heading-1: 20ch;                                    /* default */
+    --slds-g-sizing-heading-2: 25ch;                                    /* default */
+    --slds-g-sizing-heading-3: 35ch;                                    /* default */
+
+    /* spacing */
+    --slds-g-spacing-var-1: var(--slds-g-spacing-1);                    /* default */
+    --slds-g-spacing-var-2: var(--slds-g-spacing-2);                    /* default */
+    --slds-g-spacing-var-3: var(--slds-g-spacing-3);                    /* default */
+    --slds-g-spacing-var-4: var(--slds-g-spacing-4);                    /* default */
+    --slds-g-spacing-var-5: var(--slds-g-spacing-5);                    /* default */
+    --slds-g-spacing-var-6: var(--slds-g-spacing-6);                    /* default */
+    --slds-g-spacing-var-7: var(--slds-g-spacing-7);                    /* default */
+    --slds-g-spacing-var-8: var(--slds-g-spacing-8);                    /* default */
+    --slds-g-spacing-var-9: var(--slds-g-spacing-9);                    /* default */
+    --slds-g-spacing-var-10: var(--slds-g-spacing-10);                  /* default */
+    --slds-g-spacing-var-11: var(--slds-g-spacing-11);                  /* default */
+    --slds-g-spacing-var-12: var(--slds-g-spacing-12);                  /* default */
+    --slds-g-spacing-var-block-1: var(--slds-g-spacing-1);              /* default */
+    --slds-g-spacing-var-block-2: var(--slds-g-spacing-2);              /* default */
+    --slds-g-spacing-var-block-3: var(--slds-g-spacing-3);              /* default */
+    --slds-g-spacing-var-block-4: var(--slds-g-spacing-4);              /* default */
+    --slds-g-spacing-var-block-5: var(--slds-g-spacing-5);              /* default */
+    --slds-g-spacing-var-block-6: var(--slds-g-spacing-6);              /* default */
+    --slds-g-spacing-var-block-7: var(--slds-g-spacing-7);              /* default */
+    --slds-g-spacing-var-block-8: var(--slds-g-spacing-8);              /* default */
+    --slds-g-spacing-var-block-9: var(--slds-g-spacing-9);              /* default */
+    --slds-g-spacing-var-block-10: var(--slds-g-spacing-10);            /* default */
+    --slds-g-spacing-var-block-11: var(--slds-g-spacing-11);            /* default */
+    --slds-g-spacing-var-block-12: var(--slds-g-spacing-12);            /* default */
+    --slds-g-spacing-var-inline-1: var(--slds-g-spacing-1);             /* default */
+    --slds-g-spacing-var-inline-2: var(--slds-g-spacing-2);             /* default */
+    --slds-g-spacing-var-inline-3: var(--slds-g-spacing-3);             /* default */
+    --slds-g-spacing-var-inline-4: var(--slds-g-spacing-4);             /* default */
+    --slds-g-spacing-var-inline-5: var(--slds-g-spacing-5);             /* default */
+    --slds-g-spacing-var-inline-6: var(--slds-g-spacing-6);             /* default */
+    --slds-g-spacing-var-inline-7: var(--slds-g-spacing-7);             /* default */
+    --slds-g-spacing-var-inline-8: var(--slds-g-spacing-8);             /* default */
+    --slds-g-spacing-var-inline-9: var(--slds-g-spacing-9);             /* default */
+    --slds-g-spacing-var-inline-10: var(--slds-g-spacing-10);           /* default */
+    --slds-g-spacing-var-inline-11: var(--slds-g-spacing-11);           /* default */
+    --slds-g-spacing-var-inline-12: var(--slds-g-spacing-12);           /* default */
+
+    /* radius */
+    --slds-g-radius-border-pill: 15rem;                                 /* default */
+
+    /* font-family */
+    --slds-g-font-family: var(--slds-g-font-family-base);               /* default */
+
+    /* font-weight */
+    --slds-g-font-weight-1: 100;                                        /* default */
+    --slds-g-font-weight-2: 200;                                        /* default */
+    --slds-g-font-weight-5: 500;                                        /* default */
+    --slds-g-font-weight-bold: bold;                                    /* default */
+
+    /* font-line */
+    --slds-g-font-line-height-1: 1;                                     /* default */
+    --slds-g-font-line-height-2: 1.25;                                  /* default */
+    --slds-g-font-line-height-3: 1.375;                                 /* default */
+    --slds-g-font-line-height-4: 1.5;                                   /* default */
+    --slds-g-font-line-height-5: 1.75;                                  /* default */
+    --slds-g-font-line-height-6: 2;                                     /* default */
+    --slds-g-font-line-height-base: 1.5;                                /* default */
+    --slds-g-font-line-height-var-base: var(--slds-g-font-line-height-base); /* default */
+    --slds-g-font-line-clamp: 3;                                        /* default */
+
+    /* font-lineheight */
+    --slds-g-font-lineheight-1: var(--slds-g-font-line-height-1);       /* default */
+    --slds-g-font-lineheight-2: var(--slds-g-font-line-height-2);       /* default */
+    --slds-g-font-lineheight-3: var(--slds-g-font-line-height-3);       /* default */
+    --slds-g-font-lineheight-4: var(--slds-g-font-line-height-4);       /* default */
+    --slds-g-font-lineheight-5: var(--slds-g-font-line-height-5);       /* default */
+    --slds-g-font-lineheight-6: var(--slds-g-font-line-height-6);       /* default */
+    --slds-g-font-lineheight-base: var(--slds-g-font-line-height-base); /* default */
+    --slds-g-font-lineheight-var-base: var(--slds-g-font-line-height-var-base); /* default */
+
+    /* font-scale */
+    --slds-g-font-scale-9: var(--slds-g-font-scale-8);                  /* cosmos — default 2.625rem */
+    --slds-g-font-scale-10: var(--slds-g-font-scale-8);                 /* cosmos — default 2.625rem */
+    --slds-g-font-scale-ratio: 1.15;                                    /* default */
+    --slds-g-font-scale-neg-3: var(--slds-g-font-scale-neg-2);          /* default */
+    --slds-g-font-scale-neg-4: var(--slds-g-font-scale-neg-3);          /* default */
+    --slds-g-font-scale-var-1: var(--slds-g-font-scale-1);              /* default */
+    --slds-g-font-scale-var-2: var(--slds-g-font-scale-2);              /* default */
+    --slds-g-font-scale-var-3: var(--slds-g-font-scale-3);              /* cosmos — default 1.125rem */
+    --slds-g-font-scale-var-4: var(--slds-g-font-scale-4);              /* cosmos — default 1.25rem */
+    --slds-g-font-scale-var-5: var(--slds-g-font-scale-5);              /* cosmos — default 1.5rem */
+    --slds-g-font-scale-var-6: var(--slds-g-font-scale-6);              /* cosmos — default 1.75rem */
+    --slds-g-font-scale-var-7: var(--slds-g-font-scale-7);              /* cosmos — default 2rem */
+    --slds-g-font-scale-var-8: var(--slds-g-font-scale-8);              /* cosmos — default 2.625rem */
+    --slds-g-font-scale-var-9: var(--slds-g-font-scale-var-8);          /* cosmos — default 2.625rem */
+    --slds-g-font-scale-var-10: var(--slds-g-font-scale-var-8);         /* cosmos — default 2.625rem */
+    --slds-g-font-scale-var-base: var(--slds-g-font-scale-base);        /* default */
+    --slds-g-font-scale-var-neg-1: var(--slds-g-font-scale-neg-1);      /* default */
+    --slds-g-font-scale-var-neg-2: var(--slds-g-font-scale-neg-2);      /* default */
+    --slds-g-font-scale-var-neg-3: var(--slds-g-font-scale-var-neg-2);  /* default */
+    --slds-g-font-scale-var-neg-4: var(--slds-g-font-scale-var-neg-3);  /* default */
+
+    /* font-size */
+    --slds-g-font-size-base: var(--slds-g-font-scale-base);             /* default */
+
+    /* color-palette-neutral */
+    --slds-g-color-palette-neutral-0: #000;                             /* default */
+    --slds-g-color-palette-neutral-10: #181818;                         /* default */
+    --slds-g-color-palette-neutral-15: #242424;                         /* default */
+    --slds-g-color-palette-neutral-20: #2e2e2e;                         /* default */
+    --slds-g-color-palette-neutral-30: #444;                            /* default */
+    --slds-g-color-palette-neutral-40: #5c5c5c;                         /* default */
+    --slds-g-color-palette-neutral-50: #757575;                         /* default */
+    --slds-g-color-palette-neutral-60: #939393;                         /* default */
+    --slds-g-color-palette-neutral-65: #a0a0a0;                         /* default */
+    --slds-g-color-palette-neutral-70: #aeaeae;                         /* default */
+    --slds-g-color-palette-neutral-80: #c9c9c9;                         /* default */
+    --slds-g-color-palette-neutral-90: #e5e5e5;                         /* default */
+    --slds-g-color-palette-neutral-95: #f3f3f3;                         /* default */
+    --slds-g-color-palette-neutral-100: #fff;                           /* default */
+
+    /* color-palette-blue */
+    --slds-g-color-palette-blue-10: #001639;                            /* default */
+    --slds-g-color-palette-blue-15: #03234d;                            /* default */
+    --slds-g-color-palette-blue-20: #032d60;                            /* default */
+    --slds-g-color-palette-blue-30: #014486;                            /* default */
+    --slds-g-color-palette-blue-40: #0b5cab;                            /* default */
+    --slds-g-color-palette-blue-50: #0176d3;                            /* default */
+    --slds-g-color-palette-blue-60: #1b96ff;                            /* default */
+    --slds-g-color-palette-blue-65: #57a3fd;                            /* default */
+    --slds-g-color-palette-blue-70: #78b0fd;                            /* default */
+    --slds-g-color-palette-blue-80: #aacbff;                            /* default */
+    --slds-g-color-palette-blue-90: #d8e6fe;                            /* default */
+    --slds-g-color-palette-blue-95: #eef4ff;                            /* default */
+
+    /* color-palette-electric */
+    --slds-g-color-palette-electric-blue-10: #001642;                   /* default */
+    --slds-g-color-palette-electric-blue-15: #001e5b;                   /* default */
+    --slds-g-color-palette-electric-blue-20: #002775;                   /* default */
+    --slds-g-color-palette-electric-blue-30: #022ac0;                   /* default */
+    --slds-g-color-palette-electric-blue-40: #0250d9;                   /* default */
+    --slds-g-color-palette-electric-blue-50: #066afe;                   /* default */
+    --slds-g-color-palette-electric-blue-60: #4992fe;                   /* default */
+    --slds-g-color-palette-electric-blue-65: #5f9ffe;                   /* default */
+    --slds-g-color-palette-electric-blue-70: #7cb1fe;                   /* default */
+    --slds-g-color-palette-electric-blue-80: #a8cbff;                   /* default */
+    --slds-g-color-palette-electric-blue-90: #d6e6ff;                   /* default */
+    --slds-g-color-palette-electric-blue-95: #edf4ff;                   /* default */
+
+    /* color-palette-pink */
+    --slds-g-color-palette-pink-10: #370114;                            /* default */
+    --slds-g-color-palette-pink-15: #4b0620;                            /* default */
+    --slds-g-color-palette-pink-20: #61022a;                            /* default */
+    --slds-g-color-palette-pink-30: #8a033e;                            /* default */
+    --slds-g-color-palette-pink-40: #b60554;                            /* default */
+    --slds-g-color-palette-pink-50: #e3066a;                            /* default */
+    --slds-g-color-palette-pink-60: #ff538a;                            /* default */
+    --slds-g-color-palette-pink-65: #fe7298;                            /* default */
+    --slds-g-color-palette-pink-70: #fe8aa7;                            /* default */
+    --slds-g-color-palette-pink-80: #fdb6c5;                            /* default */
+    --slds-g-color-palette-pink-90: #fddde3;                            /* default */
+    --slds-g-color-palette-pink-95: #fef0f3;                            /* default */
+
+    /* color-palette-teal */
+    --slds-g-color-palette-teal-10: #071b12;                            /* default */
+    --slds-g-color-palette-teal-15: #072825;                            /* default */
+    --slds-g-color-palette-teal-20: #023434;                            /* default */
+    --slds-g-color-palette-teal-30: #024d4c;                            /* default */
+    --slds-g-color-palette-teal-40: #056764;                            /* default */
+    --slds-g-color-palette-teal-50: #0b827c;                            /* default */
+    --slds-g-color-palette-teal-60: #06a59a;                            /* default */
+    --slds-g-color-palette-teal-65: #03b4a7;                            /* default */
+    --slds-g-color-palette-teal-70: #01c3b3;                            /* default */
+    --slds-g-color-palette-teal-80: #04e1cb;                            /* default */
+    --slds-g-color-palette-teal-90: #acf3e4;                            /* default */
+    --slds-g-color-palette-teal-95: #def9f3;                            /* default */
+
+    /* color-palette-yellow */
+    --slds-g-color-palette-yellow-10: #281202;                          /* default */
+    --slds-g-color-palette-yellow-15: #371e03;                          /* default */
+    --slds-g-color-palette-yellow-20: #4f2100;                          /* default */
+    --slds-g-color-palette-yellow-30: #6f3400;                          /* default */
+    --slds-g-color-palette-yellow-40: #8c4b02;                          /* default */
+    --slds-g-color-palette-yellow-50: #a96504;                          /* default */
+    --slds-g-color-palette-yellow-60: #ca8501;                          /* default */
+    --slds-g-color-palette-yellow-65: #da9401;                          /* default */
+    --slds-g-color-palette-yellow-70: #e4a201;                          /* default */
+    --slds-g-color-palette-yellow-80: #fcc003;                          /* default */
+    --slds-g-color-palette-yellow-90: #f9e3b6;                          /* default */
+    --slds-g-color-palette-yellow-95: #fbf3e0;                          /* default */
+
+    /* color-surface */
+    --slds-g-color-surface-3: #f3f3f3;                                  /* cosmos — default #e5e5e5 */
+
+    /* color-border */
+    --slds-g-color-border-disabled-2: var(--slds-g-color-neutral-base-40); /* cosmos — default #aeaeae */
+
+    /* color-accent */
+    --slds-g-color-accent-light-1: #edf4ff;                             /* cosmos — default var(--slds-g-color-brand-base-95) */
+    --slds-g-color-accent-light-2: #d6e6ff;                             /* cosmos — default var(--slds-g-color-brand-base-90) */
+    --slds-g-color-accent-dark-1: #002775;                              /* cosmos — default var(--slds-g-color-brand-base-20) */
+    --slds-g-color-accent-dark-2: #001642;                              /* cosmos — default var(--slds-g-color-brand-base-10) */
+
+    /* color-info-base */
+    --slds-g-color-info-base-45: #0469c1;                               /* cosmos — not in Lightning Blue */
+    --slds-g-color-info-base-55: #0684ef;                               /* cosmos — not in Lightning Blue */
+    --slds-g-color-info-base-100: var(--slds-g-color-neutral-base-100); /* default */
+
+    /* color-disabled */
+    --slds-g-color-disabled-2: var(--slds-g-color-neutral-base-40);     /* cosmos — default #aeaeae */
+
+    /* shadow */
+    --slds-g-shadow-5: var(--slds-g-shadow-4);                          /* cosmos — default 0px 2px 5px 0px #00000027 */
+    --slds-g-shadow-6: var(--slds-g-shadow-4);                          /* cosmos — default 0px 2px 5px 0px #00000027 */
+    --slds-g-shadow-inverse-1: 0 0 3px #f3f3f3;                         /* default */
+    --slds-g-shadow-insetinverse-focus-1: var(--slds-g-shadow-inset-inverse-focus-1); /* cosmos — default differs */
+    --slds-g-shadow-block-end-1: var(--slds-g-shadow-1);                /* cosmos — default 0px 2px 2px 0px #0000001a */
+    --slds-g-shadow-block-end-2: var(--slds-g-shadow-2);                /* cosmos — default 0px 2px 3px 0px #00000027 */
+    --slds-g-shadow-block-end-3: var(--slds-g-shadow-3);                /* cosmos — default 0px 2px 4px 0px #00000027 */
+    --slds-g-shadow-block-end-4: var(--slds-g-shadow-4);                /* cosmos — default 0px 2px 5px 0px #00000027 */
+    --slds-g-shadow-blockstart-1: var(--slds-g-shadow-block-start-1);   /* cosmos — default 0px -2px 2px 0px #0000001a */
+    --slds-g-shadow-blockstart-2: var(--slds-g-shadow-block-start-2);   /* cosmos — default 0px -2px 3px 0px #00000027 */
+    --slds-g-shadow-blockstart-3: var(--slds-g-shadow-block-start-3);   /* cosmos — default 0px -2px 4px 0px #00000027 */
+    --slds-g-shadow-blockstart-4: var(--slds-g-shadow-block-start-4);   /* cosmos — default 0px -2px 4px 0px #00000027 */
+    --slds-g-shadow-blockend-1: var(--slds-g-shadow-block-end-1);       /* cosmos — default 0px 2px 2px 0px #0000001a */
+    --slds-g-shadow-blockend-2: var(--slds-g-shadow-block-end-2);       /* cosmos — default 0px 2px 3px 0px #00000027 */
+    --slds-g-shadow-blockend-3: var(--slds-g-shadow-block-end-3);       /* cosmos — default 0px 2px 4px 0px #00000027 */
+    --slds-g-shadow-blockend-4: var(--slds-g-shadow-block-end-4);       /* cosmos — default 0px 2px 5px 0px #00000027 */
+    --slds-g-shadow-inlinestart-1: var(--slds-g-shadow-inline-start-1); /* cosmos — default -2px 0px 2px 0px #0000001a */
+    --slds-g-shadow-inlinestart-2: var(--slds-g-shadow-inline-start-2); /* cosmos — default -2px 0px 3px 0px #00000027 */
+    --slds-g-shadow-inlinestart-3: var(--slds-g-shadow-inline-start-3); /* cosmos — default -2px 0px 4px 0px #00000027 */
+    --slds-g-shadow-inlinestart-4: var(--slds-g-shadow-inline-start-4); /* cosmos — default -2px 0px 4px 0px #00000027 */
+    --slds-g-shadow-inlineend-1: var(--slds-g-shadow-inline-end-1);     /* cosmos — default 2px 0px 2px 0px #0000001a */
+    --slds-g-shadow-inlineend-2: var(--slds-g-shadow-inline-end-2);     /* cosmos — default 2px 0px 3px 0px #00000027 */
+    --slds-g-shadow-inlineend-3: var(--slds-g-shadow-inline-end-3);     /* cosmos — default 2px 0px 4px 0px #00000027 */
+    --slds-g-shadow-inlineend-4: var(--slds-g-shadow-inline-end-4);     /* cosmos — default 2px 0px 4px 0px #00000027 */
+}
+/* @generated slds-globals:end */
+
+/* -----------------------------------------------------------------------------
+ * D. Component hooks — listed, not declared
+ *
+ * Figma's "color/component hooks" group (14 variables, no code syntax) and the
+ * button effect styles. A component hook is set on the component's tag in
+ * site.css § Component skins, never here at :root (rules-skinning.md).
+ *
+ * lightning-button does NOT read --slds-c-button-destructive-* or -success-*.
+ * Those exist only in the global sheet, for SLDS's light-DOM button markup.
+ * Its destructive and success variants compute their colours inside the
+ * shadow root from --slds-g-color-error-* / success-* — reached by re-pointing
+ * those tokens on the variant's host (rung 5). Measured with
+ * .claude/skills/lwc-component-review/hook-map.mjs; full detail in
+ * _docs/component-review-button-2026-10-19.md.
+ *
+ *   Figma variable / style (light value)      What reaches it in lightning-button
+ *   destructive-button-container-1  Pink 50   --slds-g-color-error-container-1 (+ border-error-1),
+ *                                             scoped to [variant='destructive']
+ *   destructive-button-container-2  Pink 40   --slds-g-color-error-container-2 (+ border-error-2)
+ *   on-destructive-button-1 / -2  Neutral 100 --slds-g-color-on-error-1 (one value, all states)
+ *   success-button-container-1 / -2  Teal 50 / 40
+ *   on-success-button-1 / -2  Neutral 100     the same pattern with --slds-g-color-success-*
+ *   destructive / success-button-bevel        Hover shadows — private hook only
+ *   modal backdrop  Neutral 20 (Global)       --slds-c-modalbase-backdrop-color-background
+ *                                             (lightning-modal maps it onto --slds-c-backdrop-*)
+ *   neutral-button-bevel  Neutral 20          Shadow/Buttons/Hover/Neutral and /Inverse.
+ *                                             No public hover hook — see F.
+ *   brand-button-bevel  Electric Blue 20      Bound by no style in the file.
+ *   list item drag  #134276cc                 No hook found.
+ * -------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
+ * E. --dxp hooks — listed, none in the Figma file
+ *
+ * No Figma variable has a --dxp code syntax: the library is authored at the
+ * SLDS global tier. On an Experience Cloud site, though, site-wide values are
+ * entered in the Theme panel and published as --dxp hooks, and the
+ * platform feeds those into --slds-g-* — so these are the imports that would
+ * move to the Theme panel on lift:
+ *
+ *   Figma                          Theme panel / --dxp hook
+ *   font/family/base               --dxp-g-root-font-family, --dxp-g-heading-font-family
+ *   font/scale/6, 5, 4, 3, 2, 1    Heading 1–6: --dxp-s-text-heading-{extra-large ..
+ *     40 36 32 24 20 18px          extra-extra-small}-font-size. site.css reads these.
+ *   accent-container-1 / on-accent-1   --dxp-g-brand / --dxp-g-brand-contrast
+ *   surface-1 / on-surface-2           Theme panel background and text colours
+ *   error / success / warning -1       Theme panel status colours
+ *
+ * Only the heading and font-family names above are confirmed in this repo
+ * (_docs/customisation-tiers.md). The colour hook names are the ones the LWR
+ * guide's Theme panel uses but have not been checked here — confirm before
+ * declaring any.
+ * -------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
+ * F. Private hooks — listed, none used
+ *
+ * --slds-r-color-{brand,error,warning,success,info}-N   Cosmos's raw "reference"
+ *     ramps; every semantic and base colour above is built from them. Setting
+ *     these would re-theme everything in about 80 lines, but the tier is
+ *     undocumented outside the shipped CSS, so this import sets the public
+ *     --slds-g-* names instead.
+ * --slds-s-button-shadow, -shadow-hover, -brand-shadow-hover, -shadow-active
+ *     The only hooks for Shadow/Buttons/Default, /Hover/Brand, /Hover/Neutral,
+ *     /Hover/Inverse and /Active. Private per the SLDS Linter. Not declared.
+ * Shadow/Inputs/Checked, /Active   No hook, public or private.
+ *
+ * -------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
+ * Not imported — and why
+ *
+ *   spacing/0                   names --slds-g-spacing-0, which SLDS does not ship
+ *   font/family/mobile          same value as base, no code syntax
+ *   Salesforce ramp steps       35, 85 and 5 of the six Salesforce palettes, 85
+ *                               and 5 of info — no SLDS name, nothing aliases them
+ *   _Style Guide/* text styles  Figma documentation styles (SF Pro, Courier)
+ *   text-style line heights     hard-coded px per style, not variables. SLDS's
+ *                               --slds-g-font-line-height-1..6 (1 to 2) exist,
+ *                               but Figma's ratios (e.g. 16/18) land on none
+ * -------------------------------------------------------------------------- */

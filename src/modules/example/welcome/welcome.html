@@ -1,0 +1,61 @@
+<template lwc:render-mode="light">
+    <ui-site-header id="welcome-site-header" current="home"></ui-site-header>
+
+    <div class="site__body" id="welcome-body">
+        <main class="site__main" id="welcome-main">
+            <template lwc:if={isSignedIn}>
+                <!-- The design's full-bleed grey band, kept in the content
+                     column as on the homepage: the SLDS box blueprint with the
+                     shade theme. No project CSS. -->
+                <section id="welcome-panel" class="slds-box slds-theme_shade slds-p-vertical_xx-large sep-page-header_spaced">
+                    <h1 id="welcome-title" class="sep-font-scale-7 sep-text-accent-secondary slds-text-align_center">
+                        Welcome to your employer portal
+                    </h1>
+
+                    <h2 id="welcome-subtitle" class="sep-font-scale-4 slds-m-top_xx-large slds-m-bottom_medium">
+                        Let’s find the right candidate for the job
+                    </h2>
+
+                    <!-- Three orientation tiles. The design labels them "Visual
+                         Picker", but SLDS's visual picker is a selection control
+                         and these select nothing — so they are static boxes:
+                         SLDS box + media object, one per column. -->
+                    <lightning-layout id="welcome-tiles" multiple-rows pull-to-boundary="small">
+                        <template for:each={tiles} for:item="tile">
+                            <lightning-layout-item key={tile.key} size="12" medium-device-size="4" padding="around-small">
+                                <div class="slds-box slds-theme_default slds-media slds-media_center">
+                                    <div class="slds-media__figure">
+                                        <lightning-icon icon-name={tile.icon} size="small" alternative-text=""></lightning-icon>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <h3 class="slds-text-heading_small">{tile.title}</h3>
+                                        <p class="slds-text-body_small">{tile.description}</p>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </template>
+                    </lightning-layout>
+
+                    <div class="slds-align_absolute-center slds-m-top_large">
+                        <a id="welcome-continue-button" class="slds-button slds-button_brand" href="/">Continue</a>
+                    </div>
+                </section>
+            </template>
+
+            <!-- Signed out: a welcome page has no one to welcome. -->
+            <lightning-card lwc:else id="welcome-signed-out-card">
+                <div class="slds-p-around_large slds-align_absolute-center slds-text-align_center">
+                    <div id="welcome-signed-out-body">
+                        <lightning-icon id="welcome-signed-out-icon" icon-name="utility:lock" size="small"></lightning-icon>
+                        <h1 id="welcome-signed-out-title" class="slds-m-top_x-small">Log in to get started</h1>
+                        <div class="slds-m-top_medium">
+                            <a id="welcome-signed-out-login-button" class="slds-button slds-button_brand" href="/login">Log in</a>
+                        </div>
+                    </div>
+                </div>
+            </lightning-card>
+        </main>
+    </div>
+
+    <ui-site-footer></ui-site-footer>
+</template>

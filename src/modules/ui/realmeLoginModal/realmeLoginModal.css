@@ -5,7 +5,7 @@
  * stylesheets do not cross a native shadow boundary. So every `slds-*` utility
  * class is INERT in here, and the spacing has to be declared rather than
  * borrowed. That is only true of class-based styling: custom properties are
- * inherited, so `--slds-g-*` and `--site-*` tokens still resolve, which is why
+ * inherited, so `--slds-g-*` tokens still resolve, which is why
  * the values below are tokens and not numbers.
  *
  * The `lightning-*` children are unaffected — each ships its own stylesheet and
@@ -19,7 +19,7 @@
     justify-content: center;
     padding-block-end: var(--slds-g-spacing-4);
     margin-block-end: var(--slds-g-spacing-4);
-    border-block-end: 1px solid var(--site-stroke-secondary);
+    border-block-end: 1px solid var(--slds-g-color-border-1);
 }
 
 /* The supplied wordmark is 166x33. Height is pinned so the band keeps its own
@@ -45,10 +45,10 @@
 .realme__error {
     margin-block-end: var(--slds-g-spacing-3);
     padding: var(--slds-g-spacing-3);
-    border-inline-start: 4px solid var(--site-stroke-error);
+    border-inline-start: 4px solid var(--slds-g-color-border-error-1);
     border-radius: var(--slds-g-radius-border-2, 0.25rem);
-    background: var(--site-bg-error);
-    color: var(--site-text-error);
+    background: var(--slds-g-color-error-container-1);
+    color: var(--slds-g-color-error-1);
 }
 
 /* The shipped `slds-assistive-text` pattern, which cannot reach in here. */
@@ -66,7 +66,7 @@
 
 .realme__links {
     margin: var(--slds-g-spacing-4) 0 0;
-    font-size: var(--site-font-body-sm, 0.875rem);
+    font-size: var(--slds-g-font-scale-neg-1, 0.875rem);
 }
 
 .realme__links_tight {
@@ -77,11 +77,11 @@
 .realme__hint {
     margin-block-start: var(--slds-g-spacing-4);
     padding: var(--slds-g-spacing-3);
-    border: 1px solid var(--site-stroke-secondary);
+    border: 1px solid var(--slds-g-color-border-1);
     border-radius: var(--slds-g-radius-border-2, 0.25rem);
-    background: var(--site-bg-secondary);
-    font-size: var(--site-font-body-sm, 0.875rem);
-    color: var(--site-text-secondary);
+    background: var(--slds-g-color-surface-container-2);
+    font-size: var(--slds-g-font-scale-neg-1, 0.875rem);
+    color: var(--slds-g-color-on-surface-1);
 }
 
 .realme__hint p {

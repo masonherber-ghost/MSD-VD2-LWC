@@ -3084,7 +3084,7 @@ export const COMPONENT_HOOKS = [
 
 export const PROJECT_TOKENS = [
     {
-        "name": "--site-content-max-width",
+        "name": "--sep-content-max-width",
         "value": "none",
         "steps": [
             "80rem",
@@ -3092,535 +3092,155 @@ export const PROJECT_TOKENS = [
         ]
     },
     {
-        "name": "--site-content-gutter",
+        "name": "--sep-content-gutter",
         "value": "var(--slds-g-spacing-4, 1rem)",
         "steps": [
             "var(--slds-g-spacing-5, 1.5rem)"
         ]
     },
     {
-        "name": "--site-color-brand-blue",
-        "value": "#017ac9",
+        "name": "--sep-color-shadow-1",
+        "value": "#162c4533",
         "steps": []
     },
     {
-        "name": "--site-color-brand-navy",
-        "value": "#134276",
+        "name": "--sep-color-shadow-1-edge",
+        "value": "#162c451a",
         "steps": []
     },
     {
-        "name": "--site-color-brand-disabled",
-        "value": "#a1b3c8",
+        "name": "--sep-color-shadow-2",
+        "value": "#162c4529",
         "steps": []
     },
     {
-        "name": "--site-color-on-brand-disabled",
-        "value": "#e6f2fa",
+        "name": "--sep-color-shadow-2-edge",
+        "value": "#162c4517",
         "steps": []
     },
     {
-        "name": "--site-shadow-raised",
-        "value": "0 4px 8px 0 #162c4533",
+        "name": "--sep-color-shadow-3",
+        "value": "#162c4524",
         "steps": []
     },
     {
-        "name": "--site-shadow-overlay",
-        "value": "0 8px 16px 0 #162c4533",
+        "name": "--sep-color-shadow-3-edge",
+        "value": "#162c4514",
         "steps": []
     },
     {
-        "name": "--site-radius-pill",
-        "value": "999px",
+        "name": "--sep-color-shadow-4",
+        "value": "#162c451f",
         "steps": []
     },
     {
-        "name": "--site-radius-mid",
-        "value": "0.5rem",
+        "name": "--sep-color-shadow-4-edge",
+        "value": "#162c4512",
         "steps": []
     },
     {
-        "name": "--site-color-page-background",
-        "value": "var(--site-bg-secondary)",
+        "name": "--sep-color-neutral-base-85",
+        "value": "#d6d6d6",
         "steps": []
     },
     {
-        "name": "--site-font-heading-2xl",
-        "value": "2.5rem",
+        "name": "--sep-color-neutral-base-35",
+        "value": "#4b4b4b",
         "steps": []
     },
     {
-        "name": "--site-font-heading-xl",
-        "value": "2.25rem",
+        "name": "--sep-color-neutral-base-5",
+        "value": "#1b1b1b",
         "steps": []
     },
     {
-        "name": "--site-font-heading-lg",
-        "value": "2rem",
+        "name": "--sep-color-brand-base-85",
+        "value": "#9fcdea",
         "steps": []
     },
     {
-        "name": "--site-font-heading-md",
-        "value": "1.5rem",
+        "name": "--sep-color-brand-base-35",
+        "value": "#005b96",
         "steps": []
     },
     {
-        "name": "--site-font-heading-sm",
-        "value": "1.25rem",
+        "name": "--sep-color-brand-base-5",
+        "value": "#020d1e",
         "steps": []
     },
     {
-        "name": "--site-font-heading-xs",
-        "value": "1.125rem",
+        "name": "--sep-color-error-base-85",
+        "value": "#f1c3c2",
         "steps": []
     },
     {
-        "name": "--site-font-subtitle",
-        "value": "1.5rem",
+        "name": "--sep-color-error-base-35",
+        "value": "#922624",
         "steps": []
     },
     {
-        "name": "--site-font-strap-lg",
-        "value": "1.75rem",
+        "name": "--sep-color-error-base-5",
+        "value": "#150505",
         "steps": []
     },
     {
-        "name": "--site-font-strap",
-        "value": "1.25rem",
+        "name": "--sep-color-warning-base-85",
+        "value": "#fed9b8",
         "steps": []
     },
     {
-        "name": "--site-font-strap-sm",
-        "value": "0.875rem",
+        "name": "--sep-color-warning-base-35",
+        "value": "#af590e",
         "steps": []
     },
     {
-        "name": "--site-font-body-lg",
-        "value": "1.25rem",
+        "name": "--sep-color-warning-base-5",
+        "value": "#190d02",
         "steps": []
     },
     {
-        "name": "--site-font-body",
-        "value": "1.0625rem",
+        "name": "--sep-color-success-base-85",
+        "value": "#c0e5b9",
         "steps": []
     },
     {
-        "name": "--site-font-body-sm",
-        "value": "0.875rem",
+        "name": "--sep-color-success-base-35",
+        "value": "#1e6200",
         "steps": []
     },
     {
-        "name": "--site-font-page-base",
-        "value": "0.875rem",
+        "name": "--sep-color-success-base-5",
+        "value": "#062102",
         "steps": []
     },
     {
-        "name": "--site-lineheight-heading-2xl",
-        "value": "1.05",
+        "name": "--sep-color-palette-green-85",
+        "value": "#c2ecea",
         "steps": []
     },
     {
-        "name": "--site-lineheight-heading-xl",
-        "value": "1.1",
+        "name": "--sep-color-palette-green-35",
+        "value": "#258682",
         "steps": []
     },
     {
-        "name": "--site-lineheight-heading-lg",
-        "value": "1.15",
+        "name": "--sep-color-palette-green-5",
+        "value": "#051313",
         "steps": []
     },
     {
-        "name": "--site-lineheight-heading-md",
-        "value": "1.2",
+        "name": "--sep-color-palette-hot-orange-85",
+        "value": "#fdcecd",
         "steps": []
     },
     {
-        "name": "--site-lineheight-heading-sm",
-        "value": "1.25",
+        "name": "--sep-color-palette-hot-orange-35",
+        "value": "#ad403e",
         "steps": []
     },
     {
-        "name": "--site-lineheight-heading-xs",
-        "value": "1.3",
-        "steps": []
-    },
-    {
-        "name": "--site-lineheight-strap",
-        "value": "1",
-        "steps": []
-    },
-    {
-        "name": "--site-lineheight-body",
-        "value": "1.6",
-        "steps": []
-    },
-    {
-        "name": "--site-color-brand-dark-navy",
-        "value": "#162c45",
-        "steps": []
-    },
-    {
-        "name": "--site-color-brand-blue-accessible",
-        "value": "#0071bb",
-        "steps": []
-    },
-    {
-        "name": "--site-color-brand-teal",
-        "value": "#35c0ba",
-        "steps": []
-    },
-    {
-        "name": "--site-color-brand-teal-accessible",
-        "value": "#1b7a75",
-        "steps": []
-    },
-    {
-        "name": "--site-color-brand-purple",
-        "value": "#3a54a1",
-        "steps": []
-    },
-    {
-        "name": "--site-color-brand-salmon",
-        "value": "#f75c58",
-        "steps": []
-    },
-    {
-        "name": "--site-color-brand-green",
-        "value": "#06b271",
-        "steps": []
-    },
-    {
-        "name": "--site-color-brand-grey",
-        "value": "#696969",
-        "steps": []
-    },
-    {
-        "name": "--site-color-black-80",
-        "value": "#333333",
-        "steps": []
-    },
-    {
-        "name": "--site-color-black-60",
-        "value": "#666666",
-        "steps": []
-    },
-    {
-        "name": "--site-color-black-40",
-        "value": "#999999",
-        "steps": []
-    },
-    {
-        "name": "--site-color-black-20",
-        "value": "#cccccc",
-        "steps": []
-    },
-    {
-        "name": "--site-color-black-10",
-        "value": "#dddddd",
-        "steps": []
-    },
-    {
-        "name": "--site-color-black-05",
-        "value": "#f2f2f2",
-        "steps": []
-    },
-    {
-        "name": "--site-color-white",
-        "value": "#ffffff",
-        "steps": []
-    },
-    {
-        "name": "--site-color-blue-76",
-        "value": "#3d99d6",
-        "steps": []
-    },
-    {
-        "name": "--site-color-blue-60",
-        "value": "#67afdf",
-        "steps": []
-    },
-    {
-        "name": "--site-color-blue-40",
-        "value": "#99cae9",
-        "steps": []
-    },
-    {
-        "name": "--site-color-blue-25",
-        "value": "#bfdef1",
-        "steps": []
-    },
-    {
-        "name": "--site-color-blue-15",
-        "value": "#d9ebf7",
-        "steps": []
-    },
-    {
-        "name": "--site-color-blue-10",
-        "value": "#e6f2fa",
-        "steps": []
-    },
-    {
-        "name": "--site-color-blue-04",
-        "value": "#f5fafd",
-        "steps": []
-    },
-    {
-        "name": "--site-color-navy-90",
-        "value": "#465565",
-        "steps": []
-    },
-    {
-        "name": "--site-color-navy-70",
-        "value": "#5a7b9f",
-        "steps": []
-    },
-    {
-        "name": "--site-color-navy-60",
-        "value": "#718ead",
-        "steps": []
-    },
-    {
-        "name": "--site-color-navy-40",
-        "value": "#a1b3c8",
-        "steps": []
-    },
-    {
-        "name": "--site-color-navy-30",
-        "value": "#b8c6d6",
-        "steps": []
-    },
-    {
-        "name": "--site-color-navy-20",
-        "value": "#d0d9e4",
-        "steps": []
-    },
-    {
-        "name": "--site-color-red",
-        "value": "#d03633",
-        "steps": []
-    },
-    {
-        "name": "--site-color-red-15",
-        "value": "#f8e1e0",
-        "steps": []
-    },
-    {
-        "name": "--site-color-red-05",
-        "value": "#fdf5f5",
-        "steps": []
-    },
-    {
-        "name": "--site-color-green-90",
-        "value": "#2d750a",
-        "steps": []
-    },
-    {
-        "name": "--site-color-green-70",
-        "value": "#388314",
-        "steps": []
-    },
-    {
-        "name": "--site-color-green-05",
-        "value": "#f5fbf4",
-        "steps": []
-    },
-    {
-        "name": "--site-color-orange",
-        "value": "#fa7f14",
-        "steps": []
-    },
-    {
-        "name": "--site-color-orange-dark",
-        "value": "#e87512",
-        "steps": []
-    },
-    {
-        "name": "--site-color-pink",
-        "value": "#b53cde",
-        "steps": []
-    },
-    {
-        "name": "--site-text-primary",
-        "value": "var(--site-color-black-80)",
-        "steps": []
-    },
-    {
-        "name": "--site-text-secondary",
-        "value": "var(--site-color-black-60)",
-        "steps": []
-    },
-    {
-        "name": "--site-text-accent-primary",
-        "value": "var(--site-color-brand-blue-accessible)",
-        "steps": []
-    },
-    {
-        "name": "--site-text-accent-secondary",
-        "value": "var(--site-color-brand-navy)",
-        "steps": []
-    },
-    {
-        "name": "--site-text-inverse-primary",
-        "value": "var(--site-color-white)",
-        "steps": []
-    },
-    {
-        "name": "--site-text-inverse-disabled",
-        "value": "var(--site-color-blue-10)",
-        "steps": []
-    },
-    {
-        "name": "--site-text-disabled",
-        "value": "var(--site-color-navy-40)",
-        "steps": []
-    },
-    {
-        "name": "--site-text-error",
-        "value": "var(--site-color-red)",
-        "steps": []
-    },
-    {
-        "name": "--site-text-success",
-        "value": "var(--site-color-green-90)",
-        "steps": []
-    },
-    {
-        "name": "--site-bg-primary",
-        "value": "var(--site-color-white)",
-        "steps": []
-    },
-    {
-        "name": "--site-bg-secondary",
-        "value": "var(--site-color-blue-04)",
-        "steps": []
-    },
-    {
-        "name": "--site-bg-tertiary",
-        "value": "var(--site-color-blue-10)",
-        "steps": []
-    },
-    {
-        "name": "--site-bg-accent-primary",
-        "value": "var(--site-color-brand-blue)",
-        "steps": []
-    },
-    {
-        "name": "--site-bg-accent-secondary",
-        "value": "var(--site-color-brand-navy)",
-        "steps": []
-    },
-    {
-        "name": "--site-bg-disabled",
-        "value": "var(--site-color-navy-40)",
-        "steps": []
-    },
-    {
-        "name": "--site-bg-error",
-        "value": "var(--site-color-red-05)",
-        "steps": []
-    },
-    {
-        "name": "--site-bg-success-primary",
-        "value": "var(--site-color-green-70)",
-        "steps": []
-    },
-    {
-        "name": "--site-bg-success-secondary",
-        "value": "var(--site-color-green-05)",
-        "steps": []
-    },
-    {
-        "name": "--site-bg-warning",
-        "value": "var(--site-color-orange)",
-        "steps": []
-    },
-    {
-        "name": "--site-bg-overlay",
-        "value": "#00000099",
-        "steps": []
-    },
-    {
-        "name": "--site-icon-primary",
-        "value": "var(--site-color-black-80)",
-        "steps": []
-    },
-    {
-        "name": "--site-icon-secondary",
-        "value": "var(--site-color-black-60)",
-        "steps": []
-    },
-    {
-        "name": "--site-icon-accent-primary",
-        "value": "var(--site-color-brand-blue-accessible)",
-        "steps": []
-    },
-    {
-        "name": "--site-icon-accent-secondary",
-        "value": "var(--site-color-brand-navy)",
-        "steps": []
-    },
-    {
-        "name": "--site-icon-inverse-primary",
-        "value": "var(--site-color-white)",
-        "steps": []
-    },
-    {
-        "name": "--site-icon-disabled",
-        "value": "var(--site-color-navy-40)",
-        "steps": []
-    },
-    {
-        "name": "--site-icon-error",
-        "value": "var(--site-color-red)",
-        "steps": []
-    },
-    {
-        "name": "--site-icon-success",
-        "value": "var(--site-color-green-70)",
-        "steps": []
-    },
-    {
-        "name": "--site-icon-warning",
-        "value": "var(--site-color-orange)",
-        "steps": []
-    },
-    {
-        "name": "--site-stroke-primary",
-        "value": "var(--site-color-navy-60)",
-        "steps": []
-    },
-    {
-        "name": "--site-stroke-secondary",
-        "value": "var(--site-color-navy-20)",
-        "steps": []
-    },
-    {
-        "name": "--site-stroke-tertiary",
-        "value": "var(--site-color-navy-40)",
-        "steps": []
-    },
-    {
-        "name": "--site-stroke-accent-primary",
-        "value": "var(--site-color-brand-blue)",
-        "steps": []
-    },
-    {
-        "name": "--site-stroke-accent-secondary",
-        "value": "var(--site-color-brand-navy)",
-        "steps": []
-    },
-    {
-        "name": "--site-stroke-error",
-        "value": "var(--site-color-red)",
-        "steps": []
-    },
-    {
-        "name": "--site-stroke-success",
-        "value": "var(--site-color-green-70)",
-        "steps": []
-    },
-    {
-        "name": "--site-stroke-focus",
-        "value": "var(--site-color-pink)",
+        "name": "--sep-color-palette-hot-orange-5",
+        "value": "#190909",
         "steps": []
     }
 ];

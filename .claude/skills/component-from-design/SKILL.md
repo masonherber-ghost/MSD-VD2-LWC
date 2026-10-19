@@ -33,7 +33,7 @@ Write down, before touching code:
 
 - **Anatomy** — label, field, icons, helper text, counter, dropdown, items, sections…
 - **States** — every column the design draws (default, hover, focus, filled, error, disabled, …).
-- **Values** — each one *by its design token name*, then find the `--site-*` token that holds it
+- **Values** — each one *by its design token name*, then find the `--sep-*` token that holds it
   (`grep -n "<hex>" src/assets/css/design-tokens.css`). A value with no token is a finding, not a
   literal to paste.
 
@@ -61,7 +61,7 @@ and its private children's. For each hook, note the state it covers. List the do
 
 One table, one row per design property × state:
 
-| Design property | State | Design token → `--site-*` | Lever (rung) | Hook / class | Reachable? |
+| Design property | State | Design token → `--sep-*` | Lever (rung) | Hook / class | Reachable? |
 |---|---|---|---|---|---|
 
 Fill "Reachable?" honestly: **yes**, **no — no hook**, **no — internal state**, **on the line —

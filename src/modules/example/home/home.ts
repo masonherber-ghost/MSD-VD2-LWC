@@ -1,6 +1,6 @@
 import { LightningElement } from 'lwc';
 import api, { ApiError, type Row } from 'data/api';
-import { currentUser, displayName, onChange, type SessionUser } from 'data/session';
+import { currentUser, displayName, needsWelcome, onChange, type SessionUser } from 'data/session';
 import { toListingCard, type ListingCard } from 'data/vacancyRules';
 
 /**
@@ -43,6 +43,13 @@ export default class Home extends LightningElement {
     private unsubscribe: (() => void) | null = null;
 
     async connectedCallback(): Promise<void> {
+        // A first-time visitor sees the welcome page before the dashboard,
+        // however they arrived here. `replace`, so Back does not loop.
+        if (needsWelcome()) {
+            window.location.replace('/welcome');
+            return;
+        }
+
         this.user = currentUser();
         this.unsubscribe = onChange(() => {
             this.user = currentUser();

@@ -82,7 +82,7 @@ How to use them:
   wins depends on load order. Where an SLDS class is identical (steps 6, 4, 2), either is fine;
   prefer the SLDS one when the design matches it exactly.
 
-**Text colour — `site.css`, `sep-text-*`.** Each class maps one-to-one to a `--site-text-*` token
+**Text colour — `site.css`, `sep-text-*`.** Each class maps one-to-one to a `--sep-text-*` token
 in `design-tokens.css`: `sep-text-primary`, `-secondary`, `-accent-primary`, `-accent-secondary`,
 `-inverse-primary`, `-inverse-disabled`, `-disabled`, `-error`, `-success`. Use these for brand
 heading colours (e.g. the MSD blue headline is `sep-text-accent-primary`) before reaching for a
