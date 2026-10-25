@@ -1,16 +1,16 @@
 /* Docked to the viewport so the toggle is reachable from anywhere on a page.
-   `.site__body` reserves the matching space — see site.css. */
+   `.site__body` reserves the matching space — see site/base.css. */
 .site-footer {
     position: fixed;
     inset-block-end: 0;
     inset-inline: 0;
     z-index: 5;
     background: var(--slds-g-color-surface-1, #fff);
-    border-block-start: 1px solid var(--slds-g-color-border-1, #e5e5e5);
+    border-block-start: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-1, #e5e5e5);
 }
 
 /* The bar is full-bleed; its contents sit in the same content column as the
-   page and the header. Both custom properties are defined in site.css. */
+   page and the header. Both custom properties are defined in design-tokens.css. */
 .site-footer__inner {
     max-width: var(--sep-content-max-width);
     margin-inline: auto;

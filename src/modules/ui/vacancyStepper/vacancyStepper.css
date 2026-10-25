@@ -30,8 +30,8 @@
     justify-content: center;
     inline-size: 0;
     white-space: nowrap;
-    font-size: var(--slds-g-font-scale-neg-1);
-    color: var(--slds-g-color-on-surface-2);
+    font-size: var(--slds-g-font-scale-neg-1, 0.75rem);
+    color: var(--slds-g-color-on-surface-2, #2e2e2e);
 }
 
 /* `visibility`, never `display: none` — see the getter's comment. */

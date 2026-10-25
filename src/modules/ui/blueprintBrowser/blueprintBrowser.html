@@ -6,9 +6,9 @@
 
         <!-- Asked often enough to belong on the page: there are no rendered
              previews here, and there cannot be without inventing them. -->
-        <div id="blueprint-browser-no-previews" class="slds-scoped-notification sep-scoped-notification slds-m-bottom_medium">
-            <p class="sep-scoped-notification__title">Why there are no previews here</p>
-            <p class="sep-scoped-notification__body">
+        <div id="blueprint-browser-no-previews" class="slds-scoped-notification slds-m-bottom_medium">
+            <p>Why there are no previews here</p>
+            <p>
                 The Components tab renders live examples because
                 <code>lightning-base-components</code> ships them. SLDS 2 ships its
                 blueprints as <strong>stylesheets only</strong> — 134 CSS files and, across
@@ -98,9 +98,9 @@
                         <!-- A class in the blueprint's own file but not in the
                              bundle main.njk loads cannot be written on this
                              build, whatever the package documents. -->
-                        <div lwc:if={hasMissing} id="blueprint-browser-missing" class="slds-scoped-notification sep-scoped-notification slds-m-bottom_medium">
-                            <p class="sep-scoped-notification__title">Not in the bundled stylesheet</p>
-                            <p class="sep-scoped-notification__body">
+                        <div lwc:if={hasMissing} id="blueprint-browser-missing" class="slds-scoped-notification slds-m-bottom_medium">
+                            <p>Not in the bundled stylesheet</p>
+                            <p>
                                 These are declared in the blueprint's own CSS file but do not
                                 appear in <code>slds2.cosmos.css</code>, which is the
                                 stylesheet this site loads. Writing one renders unstyled markup.
@@ -114,9 +114,9 @@
                             </ul>
                         </div>
 
-                        <div lwc:if={current.deprecated} id="blueprint-browser-deprecated" class="slds-scoped-notification sep-scoped-notification slds-m-bottom_medium">
-                            <p class="sep-scoped-notification__title">Ships a deprecated stylesheet</p>
-                            <p class="sep-scoped-notification__body">
+                        <div lwc:if={current.deprecated} id="blueprint-browser-deprecated" class="slds-scoped-notification slds-m-bottom_medium">
+                            <p>Ships a deprecated stylesheet</p>
+                            <p>
                                 This blueprint also ships a <code>.deprecated.css</code> file.
                                 Classes only found there are on their way out — check before relying on one.
                             </p>
@@ -232,8 +232,10 @@
                         <template lwc:if={hasPrivate}>
                             <h3 class="slds-text-title_caps slds-m-bottom_x-small">Off limits</h3>
                             <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_x-small">
-                                Private hooks. The leading underscore is the contract: internal,
-                                unannounced, and free to change on any upgrade.
+                                Private hooks: <code>--_slds-*</code> and <code>--slds-s-*</code>, per the
+                                SLDS Linter's <code>no-slds-private-var</code>. Internal, unannounced, and
+                                free to change on any upgrade. Where no public hook exists, set the real
+                                property on a <code>sep-</code> class instead.
                             </p>
                             <ul id="blueprint-browser-private" class="slds-m-bottom_medium">
                                 <template for:each={privateList} for:item="h">

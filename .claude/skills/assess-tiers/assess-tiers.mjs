@@ -13,7 +13,8 @@
  *     — run `npm run compositions` / `npm run tokens` first if they are stale;
  *   - every component in `src/modules/example/*` (pages) and `src/modules/ui/*`
  *     (wrappers): template, script, stylesheet;
- *   - the three global stylesheets in `src/assets/css/`.
+ *   - the global stylesheets in `src/assets/css/`: fonts, tokens, and the
+ *     site bundle's sources in `site/` (not the generated `site.css`).
  *
  * How a component is tiered — the HIGHEST tier anything in it reaches:
  *   T4   script owns behaviour: imports `data/api` / `data/session`, assigns to
@@ -31,6 +32,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { sources } from '../../../scripts/build-css.mjs';
 
 const ROOT = process.cwd();
 const asJson = process.argv.includes('--json');
@@ -213,7 +215,11 @@ const modules = [
     ...componentDirs('ui').map((d) => analyseComponent('wrapper', d))
 ];
 
-const globals = ['fonts.css', 'design-tokens.css', 'site.css'].map((f) => {
+// The global stylesheets: fonts, tokens, and the SOURCES of the site bundle
+// (src/assets/css/site/**, scripts/build-css.mjs) — never the generated
+// site.css, which would count every rule twice.
+const siteSources = sources().map((f) => `site/${f}`);
+const globals = ['fonts.css', 'design-tokens.css', ...siteSources].map((f) => {
     const raw = read(path.join(ROOT, 'src/assets/css', f));
     return { file: f, ...analyseCss(raw) };
 });
@@ -231,7 +237,7 @@ const used = {
     ]).length,
     dxpHooksSet: uniq(globals.flatMap((g) => g.setsDxp)).length,
     parts: modules.reduce((n, m) => n + (m.css?.parts ?? 0), 0) + globals.reduce((n, g) => n + g.parts, 0),
-    sepClasses: uniq((read(path.join(ROOT, 'src/assets/css/site.css')).match(/\.sep-[a-z0-9_-]+/g) ?? []).map((c) => c.replace(/_.*$/, (x) => x))).length
+    sepClasses: uniq(siteSources.flatMap((f) => read(path.join(ROOT, 'src/assets/css', f)).match(/\.sep-[a-z0-9_-]+/g) ?? [])).length
 };
 
 const utilityUses = modules.flatMap((m) => m.utilities);

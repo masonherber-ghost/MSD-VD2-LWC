@@ -1,6 +1,6 @@
 .stage__toolbar {
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+    padding: var(--slds-g-spacing-2, 0.5rem) var(--slds-g-spacing-3, 0.75rem);
+    border-bottom: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-base-1, #e5e5e5);
 }
 
 .stage__canvas {
@@ -8,10 +8,14 @@
     min-height: 6rem;
 }
 
+/* The source viewer is a dark code panel on a light page. SLDS ships no
+ * code-surface tokens and this site sets no dark scheme, so its four colours
+ * are deliberate literals (rules-skinning.md: a value with no hook, commented
+ * as intentional). The /design-system tool only; no product screen uses it. */
 .stage__tabs {
     display: flex;
-    gap: 0.25rem;
-    padding: 0.5rem 0.75rem 0;
+    gap: var(--slds-g-spacing-1, 0.25rem);
+    padding: var(--slds-g-spacing-2, 0.5rem) var(--slds-g-spacing-3, 0.75rem) 0;
     background: #1b1b1f;
 }
 
@@ -19,10 +23,10 @@
     border: 0;
     background: transparent;
     color: #9a9aa2;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: 0.75rem;
+    font-family: var(--slds-g-font-family-monospace, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+    font-size: var(--slds-g-font-scale-neg-2, 0.625rem);
     padding: 0.35rem 0.6rem;
-    border-radius: 0.25rem 0.25rem 0 0;
+    border-radius: var(--slds-g-radius-border-1, 0.25rem) var(--slds-g-radius-border-1, 0.25rem) 0 0;
     cursor: pointer;
 }
 
@@ -33,11 +37,11 @@
 
 .stage__code {
     margin: 0;
-    padding: 0.75rem;
+    padding: var(--slds-g-spacing-3, 0.75rem);
     background: #1b1b1f;
     color: #e6e6e6;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: 0.75rem;
+    font-family: var(--slds-g-font-family-monospace, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+    font-size: var(--slds-g-font-scale-neg-2, 0.625rem);
     line-height: 1.5;
     white-space: pre;
     max-height: 26rem;

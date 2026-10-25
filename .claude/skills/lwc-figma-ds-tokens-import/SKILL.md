@@ -46,14 +46,14 @@ Figma effect styles ──(step 1)──▶ hand-written C2 (elevation, focus) +
 | Decision | Why |
 |---|---|
 | **All 524 public globals are declared** in `design-tokens.css` | User's rule (2026-10-19): the file is the complete record of the site's tokens |
-| **Figma's value wins** for every hook Figma defines — including ones equal to SLDS | User's rule (2026-10-19). Labels say which equal SLDS: `figma = default`, `figma = cosmos` |
+| **Figma's value wins** for every hook Figma defines — including ones equal to SLDS | User's rule (2026-10-19). Labels say which equal SLDS: `figma = default`, `figma = cosmos`. **One exception**, C1a: the weight palette (2026-10-23) |
 | What is declared above the C3 block is the source of truth; **C3 never repeats it** | User's rule (2026-10-19) |
 | The import is **live** — no `[OFF]` blocks | Superseded the 2026-10-15 "off by default". The user switched every block on, then asked for Figma's values to replace the file's |
 | Project tokens are **`--sep-*`**. Never `--slds-*` for a name SLDS does not ship | User's rule |
 | **Light values only** — Figma's Default mode. No `light-dark()` | User's decision. Dark Mode BETA is not imported |
 | A `--sep-*` token only when something reads it | Today: the 8 shadow tints. Figma-only steps nothing aliases are *not imported* |
 | Semantic tokens **alias** ramp steps with `var()`, as Figma does | Change a ramp, every role follows |
-| Component hooks (`--slds-c-*`) are **listed only** (section D) | They live on the component's tag in `site.css` (`rules-skinning.md`) |
+| Component hooks (`--slds-c-*`) are **listed only** (section D) | They live on the component's tag in `src/assets/css/site/components/<tag>.css` (`rules-skinning.md`) |
 | `--slds-r-*` and `--slds-s-*` are **never set or read** | Undocumented / private. C3 writes `--slds-r-*` references as literals |
 | Content width and gutter (`--sep-content-*`) are **not** Figma tokens | Layout. Never delete them in an import |
 
@@ -203,6 +203,7 @@ defects that matter, and which of them are now live on the site.
 | Content width (`--sep-content-max-width`, `--sep-content-gutter`) | Live — layout, not from Figma |
 | B — 8 `--sep-color-shadow-*` | Live, hand-written from Figma `shadows/level N/*` |
 | C1 — 299 Figma variables on public hooks | Live, **generated** by `import-figma.mjs` from the 2026-10-19 snapshot. 176 differ from Cosmos, 4 = Cosmos, 119 = SLDS default |
+| C1a — weight palette | Live, **hand-written**, after C1 so it wins. `--slds-g-font-weight-6` → `var(--slds-g-font-weight-5)` (500, over Figma's 600). The site's weights are 300 / 400 / 500 / 700. Not generated — a re-import keeps it; delete it if Figma's SemiBold becomes 500 |
 | C2 — 20 shadow and focus hooks | Live, hand-written from Figma effect styles (unchanged 2026-10-19) |
 | C3 — 205 other globals | Live, **generated** by `sync-slds-globals.mjs`. 41 `cosmos — default X`, 164 `default` |
 | D, E, F, Not imported | Comment only |
@@ -225,3 +226,4 @@ Border widths 1.5 / 2 / 3px (SLDS 2 / 3 / 4): 1.5px is deliberate — the button
 | 2026-10-19 | **Re-import.** Figma file revised (346 variables; ramps on SLDS steps; weights 5/6 fixed). User's rule: all globals defined, Figma values for every hook Figma defines. Hand-written A and C1–C3 replaced by **generated C1** (`import-figma.mjs`, `figma-variables.txt`). Old C4 → C2, old C5 → C3. The 21 `--sep-*` ramp steps dropped (Figma removed 5/35/85 from its ramps; nothing read them). `sync-slds-globals.mjs` no longer special-cases section A. `[OFF]` convention retired. Report `_docs/figma-tokens-report-2026-10-19.md`. 114 resolved values changed, incl. border widths 2→1.5px (Figma defect, live) |
 | 2026-10-19 | Palettes titled one per palette in both generated blocks (`Palette: <name>`; C3 adds "— not in Figma"). Fixed `sync-slds-globals.mjs` splitting hyphenated palette names (`electric-blue` read as "electric"). Only the neutral palette has steps 0 and 100 — hue palettes run 10–95 in SLDS |
 | 2026-10-19 | **Second read, same day.** Change detection added to step 1 practice: hash each collection in the snapshot's own line format and compare before dumping; if they differ, diff line-by-line (send the snapshot's line hashes into `use_figma`, return only lines not in it) and **patch** the snapshot rather than re-transcribe it. 10 lines changed: `font/scale/base` and `error-base/100` code syntax fixed; `on-error-1/-2` re-pointed (30 / 20); green and hot-orange swapped 35/85/5 for 100/55/45 — not SLDS palette steps, so not imported. 2 rendered values changed. Report `_docs/figma-tokens-report-2026-10-19-b.md` (a delta report — same-day reports take a `-b` suffix rather than overwrite) |
+| 2026-10-23 | **Weight palette 300 / 400 / 500 / 700** (user). Hand-written **C1a** after C1 re-points `--slds-g-font-weight-6` to weight 5 (500) — the first deliberate deviation from Figma's value; labels, alerts and table headers follow. SLDS's hard-coded navigation 600 is unreachable. Weight 3 (300 Light) is in the palette and unchanged. `fonts.css` keeps `font-weight: 200 800` — the descriptor describes the file's axis, not the palette (a three-value list had been tried; it is invalid and drops the descriptor) |

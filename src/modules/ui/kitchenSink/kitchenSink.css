@@ -1,14 +1,14 @@
 .sink {
     align-items: stretch;
-    border: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
-    border-radius: 0.25rem;
+    border: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-base-1, #e5e5e5);
+    border-radius: var(--slds-g-radius-border-1, 0.25rem);
     background: var(--slds-g-color-surface-1, #fff);
     overflow: hidden;
 }
 
 .sink__rail {
-    flex: 0 0 15rem;
-    border-right: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+    flex: 0 0 var(--slds-g-sizing-14, 15rem);
+    border-right: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-base-1, #e5e5e5);
     display: flex;
     flex-direction: column;
     max-height: 75vh;
@@ -26,15 +26,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--slds-g-spacing-2, 0.5rem);
     width: 100%;
     border: 0;
     background: transparent;
     text-align: left;
-    padding: 0.4rem 0.75rem;
+    padding: 0.4rem var(--slds-g-spacing-3, 0.75rem);
     cursor: pointer;
     font-size: 0.8125rem;
-    border-left: 3px solid transparent;
+    border-left: var(--slds-g-sizing-border-4, 4px) solid transparent;
 }
 
 .sink__item:hover {
@@ -44,7 +44,7 @@
 .sink__item_active {
     background: var(--slds-g-color-surface-container-1, #f3f3f3);
     border-left-color: var(--slds-g-color-accent-container-1, #0176d3);
-    font-weight: 600;
+    font-weight: var(--slds-g-font-weight-6, 600);
 }
 
 .sink__tag {
@@ -70,8 +70,8 @@
 .sink__meta {
     display: grid;
     grid-template-columns: 6rem 1fr;
-    gap: 0.15rem 0.75rem;
-    margin: 0.5rem 0 0;
+    gap: 0.15rem var(--slds-g-spacing-3, 0.75rem);
+    margin: var(--slds-g-spacing-2, 0.5rem) 0 0;
 }
 
 .sink__meta dt {
@@ -86,21 +86,21 @@
 .sink__examples {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.25rem;
-    margin-bottom: 0.75rem;
+    gap: var(--slds-g-spacing-1, 0.25rem);
+    margin-bottom: var(--slds-g-spacing-3, 0.75rem);
 }
 
 .sink__example {
-    border: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+    border: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-base-1, #e5e5e5);
     background: transparent;
-    border-radius: 999px;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.75rem;
+    border-radius: var(--slds-g-radius-border-pill, 15rem);
+    padding: var(--slds-g-spacing-1, 0.25rem) var(--slds-g-spacing-3, 0.75rem);
+    font-size: var(--slds-g-font-scale-neg-2, 0.625rem);
     cursor: pointer;
 }
 
 .sink__example_active {
     background: var(--slds-g-color-accent-container-1, #0176d3);
     border-color: var(--slds-g-color-accent-container-1, #0176d3);
-    color: #fff;
+    color: var(--slds-g-color-on-accent-1, #ffffff);
 }

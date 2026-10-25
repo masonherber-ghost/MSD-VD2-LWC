@@ -1,7 +1,7 @@
 .data-form__grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: 0.75rem 1rem;
+    gap: var(--slds-g-spacing-3, 0.75rem) var(--slds-g-spacing-4, 1rem);
 }
 
 /* Long-form fields earn the full width of the dialog. */

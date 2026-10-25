@@ -15,8 +15,11 @@
  * Run with `npm run dev` (tsx). `lwr build` / `lwr start` are untouched and
  * still produce a purely static site with no API.
  */
+import fs from 'node:fs';
 import express from 'express';
 import { createServer } from 'lwr';
+
+import { writeBundle } from './build-css.mjs';
 
 import { accountsRouter } from '../server/routes/accounts.ts';
 import { authRouter } from '../server/routes/auth.ts';
@@ -46,6 +49,22 @@ api.use('/jobs', jobsRouter);
 // A miss under /api is a JSON 404, never the LWC shell.
 api.use(notFoundHandler);
 api.use(errorHandler);
+
+// The site stylesheet is bundled from src/assets/css/site/ (scripts/build-css.mjs).
+// `predev` wrote it; rewrite it whenever a source changes, so editing a
+// component's .css shows on the next reload. Debounced: an editor save can
+// fire several events.
+let cssTimer: NodeJS.Timeout | undefined;
+fs.watch('src/assets/css/site', { recursive: true }, () => {
+    clearTimeout(cssTimer);
+    cssTimer = setTimeout(() => {
+        try {
+            if (writeBundle()) console.log('css: rebuilt src/assets/css/site.css');
+        } catch (e) {
+            console.error('css: bundle failed —', e instanceof Error ? e.message : e);
+        }
+    }, 100);
+});
 
 const app = createServer({ serverMode: 'dev' });
 app.getInternalServer<'express'>().use('/api', api);

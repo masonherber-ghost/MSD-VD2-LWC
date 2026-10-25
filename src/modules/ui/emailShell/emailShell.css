@@ -14,42 +14,42 @@
 
 .email {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 1rem;
+    font-size: var(--slds-g-font-scale-base, 0.8125rem);
     line-height: var(--slds-g-font-line-height-base, 1.6);
-    color: var(--slds-g-color-on-surface-2);
-    background: var(--slds-g-color-surface-container-1);
+    color: var(--slds-g-color-on-surface-2, #2e2e2e);
+    background: var(--slds-g-color-surface-container-1, #ffffff);
     text-align: left;
 }
 
 /* --- Masthead --------------------------------------------------------- */
 
 .email__masthead {
-    padding: var(--slds-g-spacing-5) var(--slds-g-spacing-5);
+    padding: var(--slds-g-spacing-5, 1.5rem) var(--slds-g-spacing-5, 1.5rem);
     border-block-end: 4px solid var(--slds-g-color-brand-base-50);
 }
 
 .email__logo {
     display: block;
-    height: 2rem;
+    height: var(--slds-g-sizing-9, 2rem);
     width: auto;
 }
 
 /* --- Body ------------------------------------------------------------- */
 
 .email__body {
-    padding: var(--slds-g-spacing-6) var(--slds-g-spacing-5);
+    padding: var(--slds-g-spacing-6, 2rem) var(--slds-g-spacing-5, 1.5rem);
 }
 
 .email__heading {
-    margin: 0 0 var(--slds-g-spacing-4);
+    margin: 0 0 var(--slds-g-spacing-4, 1rem);
     font-size: var(--slds-g-font-scale-2, 1.25rem);
     line-height: var(--slds-g-font-line-height-1, 1.25);
     font-weight: 700;
-    color: var(--slds-g-color-accent-3);
+    color: var(--slds-g-color-accent-3, #014486);
 }
 
 .email__body p {
-    margin: 0 0 var(--slds-g-spacing-4);
+    margin: 0 0 var(--slds-g-spacing-4, 1rem);
 }
 
 .email__body p:last-child {
@@ -57,16 +57,16 @@
 }
 
 .email__body a {
-    color: var(--slds-g-color-accent-2);
+    color: var(--slds-g-color-accent-2, #0b5cab);
 }
 
 .email__list {
-    margin: 0 0 var(--slds-g-spacing-4);
-    padding-inline-start: var(--slds-g-spacing-5);
+    margin: 0 0 var(--slds-g-spacing-4, 1rem);
+    padding-inline-start: var(--slds-g-spacing-5, 1.5rem);
 }
 
 .email__list li {
-    margin-block-end: var(--slds-g-spacing-2);
+    margin-block-end: var(--slds-g-spacing-2, 0.5rem);
 }
 
 /* --- The call to action ----------------------------------------------- */
@@ -74,45 +74,48 @@
 /* A real send would build this as a table cell with a background colour, so it
    survives Outlook. In a browser mockup an anchor is the honest equivalent. */
 .email__cta {
-    margin: var(--slds-g-spacing-6) 0;
+    margin: var(--slds-g-spacing-6, 2rem) 0;
     text-align: center;
 }
 
 /* The standard primary button, as a link.
  *
- * It reads the same hooks design-tokens.css sets for every button on the site
- * rather than restating their values, so the email CTA moves when the button
- * style does instead of drifting from it.
+ * The same tokens as the site's brand button (Figma ⚡ Button - Brand:
+ * accent container-1 fill, on-accent-1 text, spacing-3 / spacing-5, Body
+ * font-scale-1 Medium at 137.5%, pill radius — components/button.css). It used
+ * to read the button's PRIVATE --slds-s-button-* hooks, which nothing sets any
+ * more, so every value resolved to nothing and the CTA rendered as a plain
+ * link (found 2026-10-26).
  *
  * The selector carries `.email__body` because `.email__body a` sets the link
  * colour and would otherwise win on specificity — which is what left the label
  * navy on the blue fill. */
 .email__body a.email__cta-button {
     display: inline-block;
-    padding: var(--slds-s-button-spacing-block) var(--slds-s-button-spacing-inline);
-    background: var(--slds-c-button-brand-color-background);
-    color: var(--slds-c-button-brand-text-color);
-    font-size: var(--slds-s-button-font-size);
-    line-height: var(--slds-s-button-font-lineheight);
-    font-weight: var(--slds-s-button-font-weight);
+    padding: var(--slds-g-spacing-3, 0.75rem) var(--slds-g-spacing-5, 1.5rem);
+    background: var(--slds-g-color-accent-container-1, #066afe);
+    color: var(--slds-g-color-on-accent-1, #ffffff);
+    font-size: var(--slds-g-font-scale-1, 0.875rem);
+    line-height: var(--slds-g-font-line-height-3, 1.375);
+    font-weight: var(--slds-g-font-weight-5, 500);
     text-decoration: none;
-    border-radius: var(--slds-s-button-radius-border);
+    border-radius: var(--slds-g-radius-border-pill, 15rem);
 }
 
 /* The fallback link under the button, for clients that strip the anchor. */
 .email__cta-fallback {
-    margin-block-start: var(--slds-g-spacing-3);
+    margin-block-start: var(--slds-g-spacing-3, 0.75rem);
     font-size: var(--slds-g-font-scale-neg-1, 0.875rem);
-    color: var(--slds-g-color-on-surface-1);
+    color: var(--slds-g-color-on-surface-1, #747474);
     word-break: break-all;
 }
 
 /* --- Callout ---------------------------------------------------------- */
 
 .email__callout {
-    margin: var(--slds-g-spacing-5) 0;
-    padding: var(--slds-g-spacing-4);
-    background: var(--slds-g-color-surface-container-2);
+    margin: var(--slds-g-spacing-5, 1.5rem) 0;
+    padding: var(--slds-g-spacing-4, 1rem);
+    background: var(--slds-g-color-surface-container-2, #f3f3f3);
     border-inline-start: 4px solid var(--slds-g-color-brand-base-50);
     font-size: var(--slds-g-font-scale-neg-1, 0.875rem);
 }
@@ -128,15 +131,15 @@
 /* --- Footer ----------------------------------------------------------- */
 
 .email__footer {
-    padding: var(--slds-g-spacing-5);
-    border-block-start: 1px solid var(--slds-g-color-border-1);
-    background: var(--slds-g-color-surface-container-2);
+    padding: var(--slds-g-spacing-5, 1.5rem);
+    border-block-start: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-1, #e5e5e5);
+    background: var(--slds-g-color-surface-container-2, #f3f3f3);
     font-size: var(--slds-g-font-scale-neg-1, 0.875rem);
-    color: var(--slds-g-color-on-surface-1);
+    color: var(--slds-g-color-on-surface-1, #747474);
 }
 
 .email__footer p {
-    margin: 0 0 var(--slds-g-spacing-2);
+    margin: 0 0 var(--slds-g-spacing-2, 0.5rem);
 }
 
 .email__footer p:last-child {
@@ -144,10 +147,10 @@
 }
 
 .email__footer a {
-    color: var(--slds-g-color-accent-2);
+    color: var(--slds-g-color-accent-2, #0b5cab);
 }
 
 .email__footer-sep {
-    margin-inline: var(--slds-g-spacing-2);
-    color: var(--slds-g-color-border-disabled-1);
+    margin-inline: var(--slds-g-spacing-2, 0.5rem);
+    color: var(--slds-g-color-border-disabled-1, #c9c9c9);
 }

@@ -1,0 +1,283 @@
+<!doctype html><html lang="en"><head>
+<!-- Source for skinning-what-not-to-do.pdf. The BODY is generated from
+     skinning-what-not-to-do.md: edit the .md, then rebuild the body and the PDF.
+
+       npx marked@12.0.2 --gfm -i _docs/skinning-what-not-to-do.md -o /tmp/body.html
+       (replace the contents of the real BODY element below with /tmp/body.html —
+        match the closing HEAD tag, not text in this comment)
+       "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --no-pdf-header-footer --virtual-time-budget=8000 \
+         --print-to-pdf=_docs/skinning-what-not-to-do.pdf "file://$PWD/_docs/skinning-what-not-to-do.html"
+--><meta charset="utf-8"><title>Skinning LWC components: what not to do</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Atkinson+Hyperlegible+Mono:wght@400;500&display=swap">
+<style>
+@page { size: A4; margin: 16mm 16mm 16mm; @bottom-right { content: counter(page) " / " counter(pages); font: 8pt "Atkinson Hyperlegible Next", sans-serif; color: #5a6474; } }
+:root { --ink:#18202b; --muted:#5a6474; --rule:#dde1e8; --accent:#0b5cab; --tint:#f3f6fa; --never:#b4231b; }
+body { margin:0; color:var(--ink); font: 9.6pt/1.5 "Atkinson Hyperlegible Next", "Segoe UI", system-ui, sans-serif; }
+h1 { font-size: 22pt; line-height:1.15; margin: 0 0 4pt; padding-bottom: 8pt; border-bottom: 2pt solid var(--ink); }
+h1 + p { color: var(--muted); font-size: 8.5pt; letter-spacing: .06em; text-transform: uppercase; margin: 0 0 14pt; }
+h2 { font-size: 13pt; margin: 20pt 0 6pt; color: var(--ink); break-after: avoid; padding-top: 6pt; border-top: .75pt solid var(--rule); }
+h2 + p { font-size: 10pt; }
+p { margin: 0 0 7pt; }
+p > strong:only-child { display:block; margin-top: 10pt; color: var(--accent); font-size: 9pt; letter-spacing: .05em; text-transform: uppercase; }
+ul { margin: 0 0 8pt; padding-left: 14pt; } li { margin: 0 0 3pt; }
+table { width:100%; border-collapse: collapse; margin: 4pt 0 10pt; font-size: 8.6pt; break-inside: auto; }
+tr { break-inside: avoid; }
+th { text-align:left; font-weight:600; font-size: 7.6pt; letter-spacing:.06em; text-transform: uppercase; color: var(--muted); border-bottom: 1pt solid var(--ink); padding: 3pt 6pt; }
+td { vertical-align: top; padding: 4pt 6pt; border-bottom: .6pt solid var(--rule); }
+code { font: 8.2pt "Atkinson Hyperlegible Mono", ui-monospace, Menlo, monospace; background: var(--tint); padding: 0 2pt; border-radius: 2pt; overflow-wrap: anywhere; }
+pre { background: var(--tint); padding: 6pt 8pt; border-left: 2pt solid var(--accent); break-inside: avoid; } pre code { background: none; padding:0; }
+a { color: var(--accent); text-decoration: none; }
+em { color: #2c3646; }
+</style></head><body>
+<h1>Skinning LWC components: what not to do</h1>
+<p>MSD VD2 LWC prototype · team reference · 26 October 2026</p>
+<h2>Why these rules exist</h2>
+<p>Skin a shipped component only through what Salesforce documents, so the skin survives Salesforce&#39;s automatic upgrades. That means attributes, utility classes, styling hooks and our own <code>sep-</code> classes. Salesforce upgrades every org three times a year and promises only the documented parts of a component: <em>&quot;We document changes to the features and behavior of components, but don&#39;t document changes to their internals.&quot;</em></p>
+<p>This applies to anyone skinning a <code>lightning-*</code> component in the MSD VD2 prototype, or reviewing someone else&#39;s skin. Everything below is a &quot;don&#39;t&quot;. The positive procedure is the <code>component-from-design</code> skill.</p>
+<h2>1. Don&#39;t reach inside a component</h2>
+<p>Anything past the component&#39;s host element is out of bounds at every tier, because Salesforce can change it in any release.</p>
+<table>
+<thead>
+<tr>
+<th>Never</th>
+<th>Why</th>
+<th>Linter rule</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Set or read a private hook: <code>--slds-s-*</code> or <code>--_slds-*</code></td>
+<td>The SLDS Linter reserves them &quot;for internal Salesforce use&quot;. Existing uses are debt (<code>_docs/teirs-adherance.md</code>); add no more</td>
+<td><code>no-slds-private-var</code></td>
+</tr>
+<tr>
+<td>Write a selector that names an SLDS class, e.g. a bare <code>.slds-page-header { … }</code></td>
+<td>Restyles every instance with no opt-out. Put an opt-in <code>sep-</code> class beside it instead</td>
+<td><code>no-slds-class-overrides</code></td>
+</tr>
+<tr>
+<td>Chain a descendant selector into a component&#39;s internal markup</td>
+<td>The shadow DOM it targets is undocumented and changes between releases</td>
+<td><code>no-slds-class-overrides</code></td>
+</tr>
+<tr>
+<td>Set an undocumented or &quot;reserved for internal use&quot; attribute to unlock a hook</td>
+<td>Not part of the component&#39;s API. Check the catalog&#39;s <code>properties</code> first</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Script a class onto a component to fake a state (hover, filled)</td>
+<td>The shadow root owns that state. Record it as a gap</td>
+<td>none</td>
+</tr>
+</tbody></table>
+<p>A selector stops at the host: the tag (<code>lightning-button</code>), the tag narrowed by a reflected attribute (<code>[variant=&#39;neutral&#39;]</code>), or a <code>sep-</code> class.</p>
+<h2>2. Don&#39;t skip down the ladder</h2>
+<p>Stop at the first rung that reaches the property. Jumping to a lower rung because it is quicker is the most common mistake.</p>
+<table>
+<thead>
+<tr>
+<th>Rung</th>
+<th>Lever</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>A documented attribute or <code>variant</code></td>
+<td><code>variant=&quot;label-stacked&quot;</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>An SLDS utility class on the host</td>
+<td><code>slds-m-bottom_small</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>A <code>--dxp-*</code> hook (Theme panel), for site branding</td>
+<td>heading sizes</td>
+</tr>
+<tr>
+<td>4</td>
+<td>The component&#39;s own <code>--slds-c-*</code> hook</td>
+<td><code>--slds-c-inputtext-color-border</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td>A global <code>--slds-g-*</code> hook, scoped to the host</td>
+<td><code>--slds-g-color-border-error-1</code> on <code>lightning-grouped-combobox</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td>A real property on our own <code>sep-</code> class</td>
+<td><code>.sep-listing-chip { … }</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td>A documented <code>::part()</code></td>
+<td><code>lightning-button::part(button)</code></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Don&#39;t expect a utility to reach inside.</strong> On a <code>lightning-*</code> host it styles only the host&#39;s own box. Padding, border, radius and shadow inside the shadow root need a hook.</li>
+<li><strong>A utility only gets in through inheritance.</strong> It works for type, such as <code>slds-text-heading_small</code> on a label, and for placement. It never closes a gap inside the component.</li>
+</ul>
+<h2>3. Don&#39;t hard-code values</h2>
+<p>Every value comes from a token, so a theme change still reaches it.</p>
+<ul>
+<li><strong>No raw hex, px, rem or font values.</strong> Use <code>--slds-g-*</code> or <code>--sep-*</code> tokens. A raw value is allowed only as a <code>var()</code> fallback, e.g. <code>var(--slds-g-spacing-3, 0.75rem)</code>, or where no hook exists, with a comment saying so (<code>no-hardcoded-values-slds2</code>).</li>
+<li><strong>Every <code>--slds-g-*</code> reference carries a fallback,</strong> and the fallback is SLDS&#39;s light default, not our Figma value (<code>no-slds-var-without-fallback</code>).</li>
+<li><strong>No <code>!important</code>.</strong> Our stylesheets already win: SLDS rules are either layered, or unlayered and loaded before ours.</li>
+<li><strong>No <code>--lwc-*</code> tokens</strong> as a primary value (<code>lwc-token-to-slds-hook</code>).</li>
+<li><strong>No SLDS 1 classes that SLDS 2 dropped.</strong> Grep the shipped stylesheet first; <code>slds-page-header_record-home</code> is the known trap (<code>no-deprecated-classes-slds2</code>).</li>
+<li><strong>No relative <code>url()</code> in a stylesheet.</strong> It passes dev and the build, then 404s in the built site. Use the absolute <code>/public/assets/…</code> path.</li>
+</ul>
+<h2>4. Don&#39;t put a skin in the wrong place</h2>
+<p>Each kind of skin has one home. Put it anywhere else and it either leaks to other components or can&#39;t be found at handover.</p>
+<table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Lives in</th>
+<th>Selector</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Every instance of one shipped component</td>
+<td><code>src/assets/css/site/components/&lt;tag&gt;.css</code> — one file per component (<code>button.css</code>)</td>
+<td>The tag: <code>lightning-button</code></td>
+</tr>
+<tr>
+<td>An opt-in variant</td>
+<td>That component&#39;s file in <code>site/components/</code></td>
+<td>A <code>sep-</code> class</td>
+</tr>
+<tr>
+<td>A site-wide skin of an SLDS blueprint</td>
+<td><code>src/assets/css/site/blueprints/&lt;name&gt;.css</code></td>
+<td>A <code>sep-</code> class beside the SLDS one</td>
+</tr>
+<tr>
+<td>Only inside one of our wrappers</td>
+<td>That wrapper&#39;s own <code>.css</code></td>
+<td>The wrapper&#39;s class</td>
+</tr>
+<tr>
+<td>A site-wide token or branding value</td>
+<td><code>src/assets/css/design-tokens.css</code></td>
+<td><code>:root</code></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Never edit <code>src/assets/css/site.css</code>.</strong> It is the bundle, generated from <code>src/assets/css/site/</code> by <code>npm run css</code> (and on every save under <code>npm run dev</code>).</li>
+<li><strong>Don&#39;t leave switched-off CSS as a commented block.</strong> Delete it; git keeps the history.</li>
+<li><strong>Don&#39;t put component hooks in <code>design-tokens.css</code> at <code>:root</code>.</strong> They belong on the component&#39;s tag.</li>
+<li><strong>Don&#39;t set a <code>--slds-g-*</code> global anywhere except <code>design-tokens.css</code>.</strong> Re-pointing one on a single host (rung 5) is a commented, listed exception.</li>
+<li><strong>Don&#39;t build spacing into a <code>sep-</code> class.</strong> The class says what the element <em>is</em>; where it sits stays a utility in the markup.</li>
+<li><strong>Open every skin block with a comment</strong> naming the design source, the component, the states covered, and the states not covered and why.</li>
+</ul>
+<h2>5. Don&#39;t rebuild or fake it</h2>
+<p>When the skin can&#39;t reach a property, record the gap. Don&#39;t work around it.</p>
+<ul>
+<li><strong>Never rebuild a shipped control</strong> (dropdown, modal, combobox, tabs, pill, toggle) because its skin falls short. That is out of bounds.</li>
+<li><strong>Never build a new custom component without asking first.</strong> Building one is the user&#39;s decision, not the developer&#39;s.</li>
+<li><strong>Never fake a state</strong> the design draws but no hook reaches. &quot;Filled&quot; and &quot;hover&quot; are the usual gaps.</li>
+<li><strong>Never remove SLDS.</strong> Salesforce: <em>&quot;Don&#39;t remove SLDS if you plan to use flexible layouts or any of the Lightning base components.&quot;</em></li>
+</ul>
+<p>There are two gates, and passing one doesn&#39;t pass the other:</p>
+<table>
+<thead>
+<tr>
+<th>Gate</th>
+<th>Asks</th>
+<th>Decided by</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Upgrade gate</td>
+<td>Does this rely only on what Salesforce documents?</td>
+<td>The rules: no exceptions</td>
+</tr>
+<tr>
+<td>Custom-component gate</td>
+<td>Should we build a control the library doesn&#39;t ship?</td>
+<td>The user, asked before any code</td>
+</tr>
+</tbody></table>
+<p>An approved new component is still built only from documented parts.</p>
+<h2>6. Blueprints: the extra don&#39;ts</h2>
+<p>Use SLDS blueprint markup only for one of the 37 structures no shipped component renders, such as the page header, path, timeline or tiles. That is the approved way to build those, but it is our code to maintain: <em>&quot;If SLDS updates the related blueprint, your component code isn&#39;t updated automatically.&quot;</em></p>
+<p><strong>Choosing a blueprint</strong></p>
+<ul>
+<li><strong>Don&#39;t hand-write a blueprint that a component already renders.</strong> Check <code>/design-system</code> → Blueprints first. It lists only the 37 with no component behind them; the other 52 are rendered by a <code>lightning-*</code> component, so use that component.</li>
+<li><strong>Don&#39;t use a class without checking that it ships</strong> in <code>slds2.cosmos.css</code>. Two classes are declared by their blueprint but missing from the bundled stylesheet: <code>slds-table_column</code> and <code>slds-setup-assistant__step</code>. SLDS 1 classes such as <code>slds-page-header_record-home</code> are gone.</li>
+<li><strong>Don&#39;t reach for a blueprint until you&#39;ve ruled out every other option.</strong> Salesforce: <em>&quot;Before you create a component from a blueprint, make sure that there&#39;s no other way to meet your use case.&quot;</em></li>
+</ul>
+<p><strong>Restyling a blueprint</strong></p>
+<ul>
+<li><strong>Never override the SLDS class itself.</strong> A bare <code>.slds-page-header { border: none }</code> changes every page header on the site. Put an opt-in <code>sep-</code> class beside it: <code>class=&quot;slds-page-header sep-page-header&quot;</code>.</li>
+<li><strong>Reach for things in this order:</strong> the blueprint&#39;s own public <code>--slds-c-*</code> hook, then a real property on the <code>sep-</code> class, then an SLDS utility in the markup for a one-off.</li>
+<li><strong>Style an element inside the blueprint through its own <code>sep-</code> class</strong>, set in the markup beside the SLDS one. <code>.sep-page-header .slds-page-header__title</code> still names an SLDS class and is flagged by <code>no-slds-class-overrides</code>.</li>
+<li><strong>Don&#39;t build spacing into the <code>sep-</code> class.</strong> Placement stays a utility in the markup. SLDS has no responsive spacing utilities, so a breakpoint margin becomes a <code>sep-</code> modifier. Use it instead of <code>slds-m-*</code>, never alongside: the utility carries <code>!important</code> and wins at every width.</li>
+<li><strong>Don&#39;t &quot;fix&quot; a blueprint that behaves oddly</strong> without checking first. A completed path step hiding its label (<code>slds-is-complete</code> flips it with <code>rotateX</code>) is correct.</li>
+</ul>
+<p><strong>Adding behaviour</strong></p>
+<ul>
+<li><strong>Don&#39;t treat an interactive blueprint as simple markup.</strong> The blueprint gives <em>&quot;HTML and CSS … but doesn&#39;t provide logic&quot;</em>. Adding state, keyboard handling or accessibility makes it Tier 4, our code to maintain.</li>
+<li><strong>Never hand-roll a blueprint for a control that ships.</strong> Dropdown, modal, combobox, tabs, pill and toggle all have a <code>lightning-*</code> component, and rebuilding one is out of bounds.</li>
+<li><strong>Don&#39;t give a structural wrapper (Tier 2B) its own stylesheet or state.</strong> It takes <code>@api</code> properties and SLDS utilities only.</li>
+</ul>
+<p><strong>The one sanctioned exception: badges</strong></p>
+<p>Every badge on the site is <code>&lt;span class=&quot;slds-badge …&quot;&gt;</code> blueprint markup, not <code>lightning-badge</code>, by the user&#39;s decision. <code>lightning-badge</code> renders a bold full pill that doesn&#39;t match Cosmos, and a theme class on its host can&#39;t reach inside. Status classes come from <code>data/vacancyRules</code> (<code>statusThemeClass</code>, <code>statusTagClass</code>).</p>
+<p><strong>Page-header hooks: resolved 2026-10-24</strong></p>
+<p>The page header has <strong>no public hooks</strong>. Every hook its rule reads is <code>--slds-s-pageheader-*</code>, which the SLDS Linter reserves <em>&quot;for internal Salesforce use&quot;</em> (<code>no-slds-private-var</code>). So restyle it with real properties on the <code>sep-</code> class:</p>
+<pre><code class="language-css">.sep-page-header { border: 0; box-shadow: none; padding: 0; }
+</code></pre>
+<p>Style an element inside it through its own <code>sep-</code> class in the markup, e.g. <code>class=&quot;slds-page-header__title sep-page-header__title&quot;</code>, never <code>.sep-page-header .slds-page-header__title</code>. <code>rules-lwc-layout.md</code>, <code>site.css</code>, <code>jobs3.css</code> and the Blueprints tab generator have been corrected to match.</p>
+<h2>7. Don&#39;t hide the risks</h2>
+<p>Three levers work in this prototype but aren&#39;t production-safe. On 2026-10-20 we agreed to use them here only, and to list every use for the developer at handover.</p>
+<table>
+<thead>
+<tr>
+<th>Lever</th>
+<th>Why it&#39;s a risk</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>--slds-c-*</code> component hooks (rung 4)</td>
+<td>A developer preview in SLDS 2: <em>&quot;Don&#39;t implement functionality in production with these.&quot;</em></td>
+<td>Use, and list in the register</td>
+</tr>
+<tr>
+<td>Re-pointing a <code>--slds-g-*</code> global on one host (rung 5)</td>
+<td><em>&quot;Value assignment is reserved for theming tools.&quot;</em> The linter doesn&#39;t flag it</td>
+<td>Comment each use; list in the register</td>
+</tr>
+<tr>
+<td>Legacy <code>--sds-c-*</code> hooks</td>
+<td>The beta namespace, unsupported. Some names were never published</td>
+<td>Ask first; list in the register</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Regenerate the register after any skin change:</strong> <code>node .claude/skills/component-from-design/styling-register.mjs</code> writes <code>_docs/handover-styling-register.md</code>.</li>
+<li><strong>Lint every skin</strong> with the SLDS Linter. The new block must raise no <code>no-slds-var-without-fallback</code>, <code>no-slds-class-overrides</code> or private-hook findings.</li>
+<li><strong>Don&#39;t call a skin done because it compiles.</strong> Three hooks in this project compiled and did nothing. Read the computed value off the rendered element for each state, or report the skin as unverified.</li>
+</ul>
+<h2>Where it&#39;s written</h2>
+<p>In the repository:</p>
+<ul>
+<li><code>.claude/rules/rules-skinning.md</code>: the ladder, the never list, where a skin lives</li>
+<li><code>.claude/skills/component-from-design/SKILL.md</code>: selectors, values, hook status, linting</li>
+<li><code>_docs/customisation-tiers.md</code>: the tiers and <em>Out of bounds</em>, with Salesforce&#39;s wording</li>
+<li><code>.claude/rules/rules-lwc-layout.md</code>: <em>Restyling a shipped blueprint</em> (<code>sep-</code> classes)</li>
+<li><code>_docs/handover-styling-register.md</code>: every prototype-only lever in use</li>
+</ul>
+<p>Salesforce sources:</p>
+<ul>
+<li><a href="https://github.com/salesforce-ux/slds-linter/blob/main/packages/eslint-plugin-slds/src/config/rule-messages.yml">SLDS Linter rule descriptions</a></li>
+<li><a href="https://developer.salesforce.com/docs/platform/lwc/guide/create-components-css-custom-properties.html">LWC guide: styling hooks</a></li>
+<li><a href="https://developer.salesforce.com/docs/platform/lwc/guide/create-components-css-antipatterns.html">LWC guide: CSS anti-patterns</a></li>
+</ul>
+<p>Quotes from developer.salesforce.com were taken from archived copies (April–July 2026). Re-check the wording before quoting it outside the team.</p>
+</body></html>

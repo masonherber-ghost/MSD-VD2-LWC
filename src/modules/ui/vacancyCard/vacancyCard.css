@@ -22,9 +22,9 @@
  *   radius  --slds-g-radius-border-3 is 0.5rem, 8px. */
 .vacancy-card {
     --slds-c-card-color-border: var(--slds-g-color-brand-base-50);
-    --slds-c-card-sizing-border: calc(var(--slds-g-sizing-border-4) * 2)
-        var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2) var(--slds-g-sizing-border-2);
-    --slds-c-card-radius-border: var(--slds-g-radius-border-3);
+    --slds-c-card-sizing-border: calc(var(--slds-g-sizing-border-4, 4px) * 2)
+        var(--slds-g-sizing-border-2, 2px) var(--slds-g-sizing-border-2, 2px) var(--slds-g-sizing-border-2, 2px);
+    --slds-c-card-radius-border: var(--slds-g-radius-border-3, 0.5rem);
 }
 
 /* The title link. The card title is an <h4> — Heading 4's size from the
@@ -62,7 +62,7 @@
  *       zeroed below and the gap owns the spacing. */
 .vacancy-card__heading {
     align-items: center;
-    gap: var(--slds-g-spacing-3);
+    gap: var(--slds-g-spacing-3, 0.75rem);
 }
 
 /* The title is the flexible half; the icon never shrinks to make room. */
@@ -82,14 +82,14 @@
  * the icon a few pixels low against the title. */
 .vacancy-card__icon {
     display: block;
-    width: 2rem;
-    height: 2rem;
+    width: var(--slds-g-sizing-9, 2rem);
+    height: var(--slds-g-sizing-9, 2rem);
 }
 
 /* The subtitle sits under the title rather than inline with it. */
 .vacancy-card__subtitle {
     display: block;
-    font-weight: var(--slds-g-font-weight-4);
+    font-weight: var(--slds-g-font-weight-4, 400);
 }
 
 /* Icon + value pairs, one per line.
@@ -104,13 +104,13 @@
 .vacancy-card__meta {
     display: flex;
     flex-direction: column;
-    row-gap: var(--slds-g-spacing-1);
+    row-gap: var(--slds-g-spacing-1, 0.25rem);
 }
 
 .vacancy-card__meta-item {
     display: inline-flex;
     align-items: center;
-    gap: var(--slds-g-spacing-2);
+    gap: var(--slds-g-spacing-2, 0.5rem);
     min-width: 0;
 }
 
@@ -127,7 +127,7 @@
 }
 
 .vacancy-card__meta-value {
-    color: var(--slds-g-color-on-surface-1);
+    color: var(--slds-g-color-on-surface-1, #747474);
     min-width: 0;
     /* font-size: var(--slds-g-font-scale-neg-1); */
 }

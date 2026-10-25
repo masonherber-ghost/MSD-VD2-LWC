@@ -1,4 +1,4 @@
 /* The note under the nav explaining what sends the selected template. */
 .emails__trigger {
-    margin-block-start: var(--slds-g-spacing-2);
+    margin-block-start: var(--slds-g-spacing-2, 0.5rem);
 }

@@ -36,11 +36,12 @@ export const BLUEPRINTS = [
             "--slds-c-accordion-section-spacing-block-start",
             "--slds-c-accordion-section-spacing-inline-end",
             "--slds-c-accordion-section-spacing-inline-start",
-            "--slds-c-accordion-summary-color-background",
+            "--slds-c-accordion-summary-color-background"
+        ],
+        "privateHooks": [
             "--slds-s-container-heading-font-weight",
             "--slds-s-container-heading-var-font-size"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -109,12 +110,12 @@ export const BLUEPRINTS = [
             "--slds-c-alert-spacing-inline-end",
             "--slds-c-alert-spacing-inline-start",
             "--slds-c-alert-text-color",
-            "--slds-c-alert-text-color-active",
+            "--slds-c-alert-text-color-active"
+        ],
+        "privateHooks": [
             "--slds-s-alert-close-button-hover"
         ],
-        "privateHooks": [],
         "usedIn": [
-            "src/assets/css/design-tokens.css",
             "src/modules/ui/alert/alert.ts",
             "src/modules/ui/blueprintBrowser/blueprintBrowser.ts"
         ],
@@ -185,8 +186,7 @@ export const BLUEPRINTS = [
             "--slds-c-avatar-inverse-text-color",
             "--slds-c-avatar-radius-border",
             "--slds-c-avatar-text-color",
-            "--slds-c-icon-color-background",
-            "--slds-s-avatar-radius-border"
+            "--slds-c-icon-color-background"
         ],
         "privateHooks": [
             "--_slds-c-avatar-color-background",
@@ -196,7 +196,8 @@ export const BLUEPRINTS = [
             "--_slds-c-avatar-user-image-large",
             "--_slds-c-avatar-user-image-medium",
             "--_slds-c-avatar-user-image-small",
-            "--_slds-c-icon-sizing"
+            "--_slds-c-icon-sizing",
+            "--slds-s-avatar-radius-border"
         ],
         "usedIn": [],
         "missing": [],
@@ -225,10 +226,10 @@ export const BLUEPRINTS = [
             "slds-avatar-group_x-small",
             "slds-icon"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-avatar-radius-border"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -269,14 +270,16 @@ export const BLUEPRINTS = [
         ],
         "privateHooks": [],
         "usedIn": [
-            "src/assets/css/site.css",
             "src/modules/data/vacancyRules/vacancyRules.ts",
+            "src/modules/example/jobs3/jobs3.ts",
             "src/modules/example/manageOrg/manageOrg.html",
             "src/modules/ui/blueprintBrowser/blueprintBrowser.html",
             "src/modules/ui/blueprintBrowser/blueprintBrowser.ts",
             "src/modules/ui/compositionBrowser/compositionBrowser.html",
             "src/modules/ui/jobListingPreview/jobListingPreview.html",
+            "src/modules/ui/jobListingPreview/jobListingPreview.ts",
             "src/modules/ui/jobManageHeader/jobManageHeader.html",
+            "src/modules/ui/jobManageHeader/jobManageHeader.ts",
             "src/modules/ui/vacancyCard/vacancyCard.html",
             "src/modules/ui/vacancyListingCard/vacancyListingCard.html"
         ],
@@ -372,10 +375,11 @@ export const BLUEPRINTS = [
             "slds-media__body"
         ],
         "hooks": [
-            "--slds-c-button-radius-border",
+            "--slds-c-button-radius-border"
+        ],
+        "privateHooks": [
             "--slds-s-header-sizing-height"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -493,7 +497,9 @@ export const BLUEPRINTS = [
             "--slds-c-button-text-color",
             "--slds-c-button-text-color-active",
             "--slds-c-button-text-color-hover",
-            "--slds-c-icon-color-foreground",
+            "--slds-c-icon-color-foreground"
+        ],
+        "privateHooks": [
             "--slds-s-button-bordered-shadow-hover",
             "--slds-s-button-bordered-transform-hover",
             "--slds-s-button-brand-shadow-hover",
@@ -508,9 +514,9 @@ export const BLUEPRINTS = [
             "--slds-s-button-spacing-block",
             "--slds-s-button-spacing-inline"
         ],
-        "privateHooks": [],
         "usedIn": [
-            "src/assets/css/design-tokens.css",
+            "src/modules/example/home/home.html",
+            "src/modules/example/welcome/welcome.html",
             "src/modules/ui/dataForm/dataForm.html",
             "src/modules/ui/exampleStage/exampleStage.html",
             "src/modules/ui/realmeLoginModal/realmeLoginModal.css"
@@ -574,9 +580,7 @@ export const BLUEPRINTS = [
             "--slds-c-button-text-color-hover"
         ],
         "privateHooks": [],
-        "usedIn": [
-            "src/assets/css/design-tokens.css"
-        ],
+        "usedIn": [],
         "missing": [],
         "bundled": true,
         "deprecated": false,
@@ -639,13 +643,15 @@ export const BLUEPRINTS = [
             "slds-is-selected"
         ],
         "hooks": [
-            "--slds-c-button-shadow-focus",
+            "--slds-c-button-shadow-focus"
+        ],
+        "privateHooks": [
             "--slds-s-button-radius-border",
             "--slds-s-link-outline-color"
         ],
-        "privateHooks": [],
         "usedIn": [
-            "src/assets/css/design-tokens.css",
+            "src/modules/example/home/home.html",
+            "src/modules/example/welcome/welcome.html",
             "src/modules/ui/dataForm/dataForm.html",
             "src/modules/ui/exampleStage/exampleStage.html",
             "src/modules/ui/realmeLoginModal/realmeLoginModal.css"
@@ -720,7 +726,12 @@ export const BLUEPRINTS = [
             "--slds-c-button-inverse-shadow-hover",
             "--slds-c-button-inverse-text-color-hover",
             "--slds-c-button-shadow-focus",
-            "--slds-c-button-sizing-border",
+            "--slds-c-button-sizing-border"
+        ],
+        "privateHooks": [
+            "--_slds-c-buttonicon-bare-radius-focus",
+            "--_slds-c-buttonicon-brand-color-background-active",
+            "--_slds-c-buttonicon-brand-sizing-border-active",
             "--slds-s-button-bordered-shadow-hover",
             "--slds-s-button-bordered-transform-hover",
             "--slds-s-button-brand-shadow-hover",
@@ -729,13 +740,9 @@ export const BLUEPRINTS = [
             "--slds-s-button-color-hover",
             "--slds-s-button-shadow-active"
         ],
-        "privateHooks": [
-            "--_slds-c-buttonicon-bare-radius-focus",
-            "--_slds-c-buttonicon-brand-color-background-active",
-            "--_slds-c-buttonicon-brand-sizing-border-active"
-        ],
         "usedIn": [
-            "src/assets/css/design-tokens.css",
+            "src/modules/example/home/home.html",
+            "src/modules/example/welcome/welcome.html",
             "src/modules/ui/dataForm/dataForm.html",
             "src/modules/ui/exampleStage/exampleStage.html",
             "src/modules/ui/realmeLoginModal/realmeLoginModal.css"
@@ -801,12 +808,14 @@ export const BLUEPRINTS = [
             "--slds-c-button-stateful-color-border-selected-hover",
             "--slds-c-button-text-color",
             "--slds-c-button-text-color-active",
-            "--slds-c-button-text-color-hover",
+            "--slds-c-button-text-color-hover"
+        ],
+        "privateHooks": [
             "--slds-s-button-color",
             "--slds-s-button-color-hover"
         ],
-        "privateHooks": [],
         "usedIn": [
+            "src/modules/example/home/home.html",
             "src/modules/ui/exampleStage/exampleStage.html"
         ],
         "missing": [],
@@ -879,7 +888,10 @@ export const BLUEPRINTS = [
             "--slds-c-card-spacing-block-start",
             "--slds-c-card-spacing-inline-end",
             "--slds-c-card-spacing-inline-start",
-            "--slds-c-card-text-color",
+            "--slds-c-card-text-color"
+        ],
+        "privateHooks": [
+            "--_slds-c-card-radius-border",
             "--slds-s-container-color",
             "--slds-s-container-color-border",
             "--slds-s-container-heading-font-weight",
@@ -887,12 +899,7 @@ export const BLUEPRINTS = [
             "--slds-s-container-radius-border",
             "--slds-s-container-shadow"
         ],
-        "privateHooks": [
-            "--_slds-c-card-radius-border"
-        ],
-        "usedIn": [
-            "src/assets/css/design-tokens.css"
-        ],
+        "usedIn": [],
         "missing": [],
         "bundled": true,
         "deprecated": true,
@@ -923,11 +930,11 @@ export const BLUEPRINTS = [
             "slds-button__icon",
             "slds-is-active"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-container-radius-border",
             "--slds-s-mark-shadow-checked"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -984,11 +991,11 @@ export const BLUEPRINTS = [
             "slds-icon-typing",
             "slds-icon-utility-redo"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-link-color",
             "--slds-s-link-color-focus"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -1022,7 +1029,9 @@ export const BLUEPRINTS = [
             "--slds-c-checkbox-color-border-focus",
             "--slds-c-checkbox-radius-border",
             "--slds-c-checkbox-shadow",
-            "--slds-c-checkbox-shadow-focus",
+            "--slds-c-checkbox-shadow-focus"
+        ],
+        "privateHooks": [
             "--slds-s-input-color-border-checked",
             "--slds-s-input-color-border-focus",
             "--slds-s-label-font-size",
@@ -1035,7 +1044,6 @@ export const BLUEPRINTS = [
             "--slds-s-mark-shadow-checked",
             "--slds-s-mark-sizing-border"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -1061,7 +1069,9 @@ export const BLUEPRINTS = [
             "slds-icon"
         ],
         "hooks": [
-            "--slds-c-icon-color-foreground",
+            "--slds-c-icon-color-foreground"
+        ],
+        "privateHooks": [
             "--slds-s-button-bordered-shadow-hover",
             "--slds-s-button-bordered-transform-hover",
             "--slds-s-button-brand-shadow-hover",
@@ -1071,7 +1081,6 @@ export const BLUEPRINTS = [
             "--slds-s-button-shadow-active",
             "--slds-s-mark-shadow-checked"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -1095,7 +1104,8 @@ export const BLUEPRINTS = [
             "slds-button_last",
             "slds-checkbox_button__label"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-button-bordered-shadow-hover",
             "--slds-s-button-bordered-transform-hover",
             "--slds-s-button-brand-shadow-hover",
@@ -1104,7 +1114,6 @@ export const BLUEPRINTS = [
             "--slds-s-button-shadow-active",
             "--slds-s-link-outline-color"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -1139,10 +1148,11 @@ export const BLUEPRINTS = [
             "--slds-c-checkbox-toggle-radius-border",
             "--slds-c-checkbox-toggle-shadow",
             "--slds-c-checkbox-toggle-switch-color-background",
-            "--slds-c-checkbox-toggle-switch-color-background-checked",
+            "--slds-c-checkbox-toggle-switch-color-background-checked"
+        ],
+        "privateHooks": [
             "--slds-s-mark-shadow-checked"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -1185,12 +1195,11 @@ export const BLUEPRINTS = [
             "slds-swatch",
             "slds-tabs_default__content"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
+            "--_slds-c-color-picker-half-spacing",
             "--slds-s-container-color-border",
             "--slds-s-input-radius-border"
-        ],
-        "privateHooks": [
-            "--_slds-c-color-picker-half-spacing"
         ],
         "usedIn": [],
         "missing": [],
@@ -1271,7 +1280,10 @@ export const BLUEPRINTS = [
             "--slds-c-input-color-background",
             "--slds-c-input-color-border",
             "--slds-c-input-shadow",
-            "--slds-c-input-text-color",
+            "--slds-c-input-text-color"
+        ],
+        "privateHooks": [
+            "--_slds-c-icon-sizing",
             "--slds-s-input-color",
             "--slds-s-input-color-background",
             "--slds-s-input-color-background-disabled",
@@ -1284,9 +1296,6 @@ export const BLUEPRINTS = [
             "--slds-s-input-shadow-invalid",
             "--slds-s-menu-item-color-active",
             "--slds-s-menu-item-color-background-active"
-        ],
-        "privateHooks": [
-            "--_slds-c-icon-sizing"
         ],
         "usedIn": [],
         "missing": [],
@@ -1391,7 +1400,14 @@ export const BLUEPRINTS = [
             "slds-th__action_form",
             "slds-truncate"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
+            "--_slds-c-datatable-color-background-edit",
+            "--_slds-c-datatable-color-background-error",
+            "--_slds-c-datatable-color-border",
+            "--_slds-c-datatable-radius-border",
+            "--_slds-c-datatable-row-color-border-hover",
+            "--_slds-c-datatable-row-shadow-hover",
             "--slds-s-container-shadow",
             "--slds-s-link-color",
             "--slds-s-link-color-hover",
@@ -1405,15 +1421,8 @@ export const BLUEPRINTS = [
             "--slds-s-table-row-color-background-selected",
             "--slds-s-table-row-color-border-selected-hover"
         ],
-        "privateHooks": [
-            "--_slds-c-datatable-color-background-edit",
-            "--_slds-c-datatable-color-background-error",
-            "--_slds-c-datatable-color-border",
-            "--_slds-c-datatable-radius-border",
-            "--_slds-c-datatable-row-color-border-hover",
-            "--_slds-c-datatable-row-shadow-hover"
-        ],
         "usedIn": [
+            "src/modules/ui/foundationsBrowser/foundationsBrowser.html",
             "src/modules/ui/tokenBrowser/tokenBrowser.html"
         ],
         "missing": [
@@ -1451,11 +1460,11 @@ export const BLUEPRINTS = [
             "slds-select",
             "slds-table"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-button-color",
             "--slds-s-input-color"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -1528,7 +1537,8 @@ export const BLUEPRINTS = [
             "slds-modal__content",
             "slds-rich-text-editor"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-container-color-border",
             "--slds-s-container-footer-color-background",
             "--slds-s-container-heading-font-size",
@@ -1537,7 +1547,6 @@ export const BLUEPRINTS = [
             "--slds-s-container-sizing-border",
             "--slds-s-link-outline-color"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -1553,10 +1562,10 @@ export const BLUEPRINTS = [
             "slds-docked-form-footer"
         ],
         "borrowed": [],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-container-footer-color-background"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -1587,11 +1596,7 @@ export const BLUEPRINTS = [
             "slds-utility-panel__body",
             "slds-utility-panel__header"
         ],
-        "hooks": [
-            "--slds-s-container-heading-font-size",
-            "--slds-s-container-heading-font-weight",
-            "--slds-s-container-radius-border"
-        ],
+        "hooks": [],
         "privateHooks": [
             "--_slds-c-globalnavigation-item-color-background-active",
             "--_slds-c-utilitybar-color",
@@ -1602,7 +1607,10 @@ export const BLUEPRINTS = [
             "--_slds-c-utilitybar-color-hover",
             "--_slds-c-utilitybar-font-weight",
             "--_slds-c-utilitybar-sizing-border-active",
-            "--_slds-c-utilitybar-sizing-border-hover"
+            "--_slds-c-utilitybar-sizing-border-hover",
+            "--slds-s-container-heading-font-size",
+            "--slds-s-container-heading-font-weight",
+            "--slds-s-container-radius-border"
         ],
         "usedIn": [],
         "missing": [],
@@ -1770,11 +1778,12 @@ export const BLUEPRINTS = [
             "slds-section-title_divider"
         ],
         "hooks": [
-            "--slds-c-button-radius-border",
+            "--slds-c-button-radius-border"
+        ],
+        "privateHooks": [
             "--slds-s-container-heading-font-weight",
             "--slds-s-container-heading-var-font-size"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -1812,10 +1821,10 @@ export const BLUEPRINTS = [
             "slds-is-locked",
             "slds-is-new"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-button-color"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -1849,10 +1858,10 @@ export const BLUEPRINTS = [
             "slds-region--narrow",
             "slds-region_narrow"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-link-color-hover"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -1947,10 +1956,11 @@ export const BLUEPRINTS = [
             "slds-icon-text-default"
         ],
         "hooks": [
-            "--slds-c-icon-color-foreground",
+            "--slds-c-icon-color-foreground"
+        ],
+        "privateHooks": [
             "--slds-s-container-color-border"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -2021,7 +2031,8 @@ export const BLUEPRINTS = [
             "slds-required",
             "slds-text-longform"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-helptext-color",
             "--slds-s-helptext-font-size",
             "--slds-s-label-color",
@@ -2029,9 +2040,8 @@ export const BLUEPRINTS = [
             "--slds-s-label-font-weight",
             "--slds-s-label-spacing-gap"
         ],
-        "privateHooks": [],
         "usedIn": [
-            "src/assets/css/design-tokens.css",
+            "src/assets/css/site/components/combobox.css",
             "src/modules/example/createJobStep3/createJobStep3.html",
             "src/modules/example/createJobStep5/createJobStep5.html",
             "src/modules/example/createJobStep7/createJobStep7.html",
@@ -2087,8 +2097,7 @@ export const BLUEPRINTS = [
             "--slds-c-button-color-background-hover",
             "--slds-c-button-text-color",
             "--slds-c-button-text-color-active",
-            "--slds-c-button-text-color-hover",
-            "--slds-s-header-sizing-height"
+            "--slds-c-button-text-color-hover"
         ],
         "privateHooks": [
             "--_slds-c-globalheader-buttonicon-color",
@@ -2107,7 +2116,8 @@ export const BLUEPRINTS = [
             "--_slds-c-globalheader-notificationbadge-color-background",
             "--_slds-c-globalheader-task-color-background",
             "--_slds-c-globalheader-task-color-background-active",
-            "--_slds-c-globalheader-task-color-background-hover"
+            "--_slds-c-globalheader-task-color-background-hover",
+            "--slds-s-header-sizing-height"
         ],
         "usedIn": [],
         "missing": [],
@@ -2172,9 +2182,7 @@ export const BLUEPRINTS = [
         ],
         "hooks": [
             "--slds-c-icon-color-background",
-            "--slds-c-icon-color-foreground",
-            "--slds-s-link-outline-color",
-            "--slds-s-navigation-sizing-height"
+            "--slds-c-icon-color-foreground"
         ],
         "privateHooks": [
             "--_slds-c-globalnavigation-app-font-weight",
@@ -2194,7 +2202,9 @@ export const BLUEPRINTS = [
             "--_slds-c-globalnavigation-item-sizing-width-max",
             "--_slds-c-globalnavigation-sizing-border",
             "--_slds-c-globalnavigation-spacing-block",
-            "--_slds-c-globalnavigation-spacing-gap"
+            "--_slds-c-globalnavigation-spacing-gap",
+            "--slds-s-link-outline-color",
+            "--slds-s-navigation-sizing-height"
         ],
         "usedIn": [
             "src/modules/ui/siteHeader/siteHeader.html",
@@ -2259,7 +2269,10 @@ export const BLUEPRINTS = [
             "--slds-c-icon-color-background",
             "--slds-c-icon-color-foreground",
             "--slds-c-icon-color-foreground-default",
-            "--slds-c-icon-radius-border",
+            "--slds-c-icon-radius-border"
+        ],
+        "privateHooks": [
+            "--_slds-c-icon-sizing",
             "--slds-s-icon-color-background",
             "--slds-s-icon-color-border",
             "--slds-s-icon-color-foreground",
@@ -2268,11 +2281,7 @@ export const BLUEPRINTS = [
             "--slds-s-icon-sizing-border",
             "--slds-s-icon-spacing"
         ],
-        "privateHooks": [
-            "--_slds-c-icon-sizing"
-        ],
         "usedIn": [
-            "src/assets/css/site.css",
             "src/modules/ui/alert/alert.html",
             "src/modules/ui/alert/alert.ts",
             "src/modules/ui/welcomeMat/welcomeMat.html"
@@ -2356,7 +2365,9 @@ export const BLUEPRINTS = [
             "--slds-c-input-spacing-inline-end",
             "--slds-c-input-spacing-inline-start",
             "--slds-c-input-text-color",
-            "--slds-c-input-text-color-focus",
+            "--slds-c-input-text-color-focus"
+        ],
+        "privateHooks": [
             "--slds-s-input-color",
             "--slds-s-input-color-background-disabled",
             "--slds-s-input-color-background-invalid",
@@ -2368,10 +2379,7 @@ export const BLUEPRINTS = [
             "--slds-s-input-radius-border",
             "--slds-s-input-spacing"
         ],
-        "privateHooks": [],
-        "usedIn": [
-            "src/assets/css/design-tokens.css"
-        ],
+        "usedIn": [],
         "missing": [],
         "bundled": true,
         "deprecated": false,
@@ -2410,10 +2418,10 @@ export const BLUEPRINTS = [
             "slds-media",
             "slds-text-link"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-menu-item-color-background-active"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -2431,7 +2439,9 @@ export const BLUEPRINTS = [
         "borrowed": [],
         "hooks": [],
         "privateHooks": [],
-        "usedIn": [],
+        "usedIn": [
+            "src/assets/css/site/utilities.css"
+        ],
         "missing": [],
         "bundled": true,
         "deprecated": false,
@@ -2493,10 +2503,11 @@ export const BLUEPRINTS = [
             "slds-is-selected"
         ],
         "hooks": [
-            "--slds-c-icon-color-foreground",
+            "--slds-c-icon-color-foreground"
+        ],
+        "privateHooks": [
             "--slds-s-menu-item-color-background-active"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -2583,7 +2594,9 @@ export const BLUEPRINTS = [
             "--slds-c-modal-heading-font-weight",
             "--slds-c-modal-radius-border",
             "--slds-c-modal-sizing-border",
-            "--slds-c-modal-text-color",
+            "--slds-c-modal-text-color"
+        ],
+        "privateHooks": [
             "--slds-s-backdrop-color-background",
             "--slds-s-container-content-color",
             "--slds-s-container-footer-color-background",
@@ -2591,8 +2604,8 @@ export const BLUEPRINTS = [
             "--slds-s-container-heading-font-weight",
             "--slds-s-container-radius-border"
         ],
-        "privateHooks": [],
         "usedIn": [
+            "src/assets/css/site/base.css",
             "src/modules/ui/dataBrowser/dataBrowser.html",
             "src/modules/ui/dataForm/dataForm.html"
         ],
@@ -2617,11 +2630,11 @@ export const BLUEPRINTS = [
             "slds-media__body",
             "slds-notification-container"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-container-color-border",
             "--slds-s-container-sizing-border"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -2664,7 +2677,8 @@ export const BLUEPRINTS = [
             "slds-icon",
             "slds-media"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-container-radius-border",
             "--slds-s-pageheader-action-bottom-spacing",
             "--slds-s-pageheader-color-background",
@@ -2676,21 +2690,20 @@ export const BLUEPRINTS = [
             "--slds-s-pageheader-title-font-size",
             "--slds-s-pageheader-title-font-weight"
         ],
-        "privateHooks": [],
         "usedIn": [
-            "src/assets/css/site.css",
+            "src/assets/css/site/base.css",
             "src/modules/example/data/data.html",
             "src/modules/example/designSystem/designSystem.html",
             "src/modules/example/emails/emails.html",
-            "src/modules/example/home/home.html",
             "src/modules/example/jobs/jobs.html",
             "src/modules/example/jobs2/jobs2.html",
-            "src/modules/example/jobs3/jobs3.css",
             "src/modules/example/jobs3/jobs3.html",
             "src/modules/example/manageOrg/manageOrg.html",
             "src/modules/example/profile/profile.html",
             "src/modules/example/vacancies/vacancies.html",
             "src/modules/ui/jobManageHeader/jobManageHeader.html",
+            "src/modules/ui/jobSummary/jobSummary.html",
+            "src/modules/ui/jobSummary/jobSummary.ts",
             "src/modules/ui/pagePlaceholder/pagePlaceholder.html"
         ],
         "missing": [],
@@ -2726,11 +2739,11 @@ export const BLUEPRINTS = [
             "slds-is-open",
             "slds-tabs-mobile__container"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-container-color",
             "--slds-s-container-heading-font-size"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -2892,11 +2905,12 @@ export const BLUEPRINTS = [
             "--slds-c-pill-spacing-block-end",
             "--slds-c-pill-spacing-block-start",
             "--slds-c-pill-spacing-inline-end",
-            "--slds-c-pill-spacing-inline-start",
+            "--slds-c-pill-spacing-inline-start"
+        ],
+        "privateHooks": [
             "--slds-s-input-color-border",
             "--slds-s-pill-color-background-hover"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -3019,7 +3033,15 @@ export const BLUEPRINTS = [
         ],
         "hooks": [
             "--slds-c-icon-color-foreground",
-            "--slds-c-popover-position-zindex",
+            "--slds-c-popover-position-zindex"
+        ],
+        "privateHooks": [
+            "--_slds-c-popover-bottom-nubbin-shadow",
+            "--_slds-c-popover-box-shadow",
+            "--_slds-c-popover-close-btn-color",
+            "--_slds-c-popover-left-nubbin-shadow",
+            "--_slds-c-popover-right-nubbin-shadow",
+            "--_slds-c-popover-top-nubbin-shadow",
             "--slds-s-alert-close-button-hover",
             "--slds-s-container-color",
             "--slds-s-container-color-border",
@@ -3030,14 +3052,6 @@ export const BLUEPRINTS = [
             "--slds-s-container-heading-font-weight",
             "--slds-s-container-sizing-border",
             "--slds-s-icon-color-foreground"
-        ],
-        "privateHooks": [
-            "--_slds-c-popover-bottom-nubbin-shadow",
-            "--_slds-c-popover-box-shadow",
-            "--_slds-c-popover-close-btn-color",
-            "--_slds-c-popover-left-nubbin-shadow",
-            "--_slds-c-popover-right-nubbin-shadow",
-            "--_slds-c-popover-top-nubbin-shadow"
         ],
         "usedIn": [],
         "missing": [],
@@ -3176,14 +3190,14 @@ export const BLUEPRINTS = [
             "slds-modal_prompt"
         ],
         "borrowed": [],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-container-footer-font-align",
             "--slds-s-container-footer-sizing-border",
             "--slds-s-container-heading-font-align",
             "--slds-s-container-heading-font-size",
             "--slds-s-container-heading-font-weight"
         ],
-        "privateHooks": [],
         "usedIn": [
             "src/modules/ui/dataBrowser/dataBrowser.html",
             "src/modules/ui/dataForm/dataForm.html"
@@ -3211,10 +3225,10 @@ export const BLUEPRINTS = [
             "slds-has-focus",
             "slds-is-active"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-label-color"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -3240,7 +3254,9 @@ export const BLUEPRINTS = [
             "slds-radio_button__label"
         ],
         "hooks": [
-            "--slds-c-button-spacing-inline",
+            "--slds-c-button-spacing-inline"
+        ],
+        "privateHooks": [
             "--slds-s-button-bordered-shadow-hover",
             "--slds-s-button-bordered-transform-hover",
             "--slds-s-button-brand-shadow-hover",
@@ -3249,7 +3265,6 @@ export const BLUEPRINTS = [
             "--slds-s-button-shadow-active",
             "--slds-s-link-outline-color"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -3281,7 +3296,9 @@ export const BLUEPRINTS = [
             "--slds-c-radio-color-border",
             "--slds-c-radio-color-border-focus",
             "--slds-c-radio-shadow",
-            "--slds-c-radio-shadow-focus",
+            "--slds-c-radio-shadow-focus"
+        ],
+        "privateHooks": [
             "--slds-s-input-color-border",
             "--slds-s-input-color-border-focus",
             "--slds-s-input-color-border-invalid",
@@ -3294,7 +3311,6 @@ export const BLUEPRINTS = [
             "--slds-s-mark-color-foreground-invalid",
             "--slds-s-mark-shadow-checked"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -3356,13 +3372,13 @@ export const BLUEPRINTS = [
         "hooks": [
             "--slds-c-icon-color-foreground",
             "--slds-c-textarea-sizing-max-height",
-            "--slds-c-textarea-sizing-min-height",
-            "--slds-s-button-color",
-            "--slds-s-input-color-background"
+            "--slds-c-textarea-sizing-min-height"
         ],
         "privateHooks": [
             "--_slds-c-richtexteditor-sizing-height-max",
-            "--_slds-c-richtexteditor-sizing-height-min"
+            "--_slds-c-richtexteditor-sizing-height-min",
+            "--slds-s-button-color",
+            "--slds-s-input-color-background"
         ],
         "usedIn": [],
         "missing": [],
@@ -3384,12 +3400,11 @@ export const BLUEPRINTS = [
             "slds-icon_container",
             "slds-theme_warning"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-alert-font-weight"
         ],
-        "privateHooks": [],
         "usedIn": [
-            "src/assets/css/site.css",
             "src/modules/example/createJobStep2/createJobStep2.html",
             "src/modules/example/createJobStep3/createJobStep3.html",
             "src/modules/example/createJobStep4/createJobStep4.html",
@@ -3427,7 +3442,9 @@ export const BLUEPRINTS = [
             "--slds-c-select-radius-border",
             "--slds-c-select-shadow",
             "--slds-c-select-text-color",
-            "--slds-c-select-text-color-focus",
+            "--slds-c-select-text-color-focus"
+        ],
+        "privateHooks": [
             "--slds-s-input-color",
             "--slds-s-input-color-background",
             "--slds-s-input-color-background-invalid",
@@ -3442,7 +3459,6 @@ export const BLUEPRINTS = [
             "--slds-s-input-spacing",
             "--slds-s-menu-item-color-background-active"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -3682,7 +3698,12 @@ export const BLUEPRINTS = [
             "--slds-c-tabs-panel-spacing-block-start",
             "--slds-c-tabs-panel-spacing-inline",
             "--slds-c-tabs-panel-spacing-inline-end",
-            "--slds-c-tabs-panel-spacing-inline-start",
+            "--slds-c-tabs-panel-spacing-inline-start"
+        ],
+        "privateHooks": [
+            "--_slds-c-globalnavigation-item-color-active",
+            "--_slds-c-globalnavigation-subtab-color-background-active",
+            "--_slds-c-globalnavigation-subtab-color-background-hover",
             "--slds-s-link-outline-color",
             "--slds-s-navigation-color",
             "--slds-s-navigation-color-active",
@@ -3699,11 +3720,6 @@ export const BLUEPRINTS = [
             "--slds-s-navigation-sizing-border-active",
             "--slds-s-navigation-sizing-border-hover",
             "--slds-s-navigation-sizing-height"
-        ],
-        "privateHooks": [
-            "--_slds-c-globalnavigation-item-color-active",
-            "--_slds-c-globalnavigation-subtab-color-background-active",
-            "--_slds-c-globalnavigation-subtab-color-background-hover"
         ],
         "usedIn": [
             "src/modules/ui/accountTabs/accountTabs.html"
@@ -3771,7 +3787,9 @@ export const BLUEPRINTS = [
             "--slds-c-textarea-spacing-inline-start",
             "--slds-c-textarea-text-color",
             "--slds-c-textarea-text-color-error-focus",
-            "--slds-c-textarea-text-color-focus",
+            "--slds-c-textarea-text-color-focus"
+        ],
+        "privateHooks": [
             "--slds-s-input-color",
             "--slds-s-input-color-background-disabled",
             "--slds-s-input-color-background-invalid",
@@ -3783,7 +3801,6 @@ export const BLUEPRINTS = [
             "--slds-s-input-radius-border",
             "--slds-s-input-shadow"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -3841,11 +3858,12 @@ export const BLUEPRINTS = [
             "--slds-c-toast-spacing-block-start",
             "--slds-c-toast-spacing-inline-end",
             "--slds-c-toast-spacing-inline-start",
-            "--slds-c-toast-text-color",
+            "--slds-c-toast-text-color"
+        ],
+        "privateHooks": [
             "--slds-s-alert-close-button-hover",
             "--slds-s-alert-font-weight"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -3896,11 +3914,12 @@ export const BLUEPRINTS = [
             "--slds-c-tooltip-color-background",
             "--slds-c-tooltip-font-size",
             "--slds-c-tooltip-sizing-max-width",
-            "--slds-c-tooltip-text-color",
+            "--slds-c-tooltip-text-color"
+        ],
+        "privateHooks": [
             "--slds-s-button-color",
             "--slds-s-button-color-hover"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -3924,10 +3943,10 @@ export const BLUEPRINTS = [
             "slds-table_tree",
             "slds-tree__item"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-link-color"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -3959,10 +3978,11 @@ export const BLUEPRINTS = [
             "slds-tree-container"
         ],
         "hooks": [
-            "--slds-c-tree-sizing-max-width",
+            "--slds-c-tree-sizing-max-width"
+        ],
+        "privateHooks": [
             "--slds-s-table-row-color-background-selected"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -3991,10 +4011,10 @@ export const BLUEPRINTS = [
             "slds-icon",
             "slds-trial-header"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-header-sizing-height"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -4013,9 +4033,11 @@ export const BLUEPRINTS = [
         "hooks": [],
         "privateHooks": [],
         "usedIn": [
+            "src/modules/example/home/home.html",
             "src/modules/example/manageOrg/manageOrg.html",
             "src/modules/example/profile/profile.html",
-            "src/modules/example/register/register.html"
+            "src/modules/example/register/register.html",
+            "src/modules/example/welcome/welcome.html"
         ],
         "missing": [],
         "bundled": true,
@@ -4045,7 +4067,8 @@ export const BLUEPRINTS = [
             "slds-button__icon",
             "slds-is-active"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-link-color",
             "--slds-s-link-color-hover",
             "--slds-s-navigation-color",
@@ -4053,7 +4076,6 @@ export const BLUEPRINTS = [
             "--slds-s-navigation-color-hover",
             "--slds-s-navigation-font-weight"
         ],
-        "privateHooks": [],
         "usedIn": [],
         "missing": [],
         "bundled": true,
@@ -4084,11 +4106,11 @@ export const BLUEPRINTS = [
             "slds-is-selected",
             "slds-text-title"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
             "--slds-s-container-heading-font-weight",
             "--slds-s-container-shadow"
         ],
-        "privateHooks": [],
         "usedIn": [
             "src/modules/ui/radioBoxGroup/radioBoxGroup.ts"
         ],
@@ -4134,14 +4156,14 @@ export const BLUEPRINTS = [
             "slds-progress-bar",
             "slds-progress-bar__value"
         ],
-        "hooks": [
+        "hooks": [],
+        "privateHooks": [
+            "--_slds-c-welcomemat-image-background",
             "--slds-s-container-radius-border"
         ],
-        "privateHooks": [
-            "--_slds-c-welcomemat-image-background"
-        ],
         "usedIn": [
-            "src/assets/css/site.css",
+            "src/assets/css/site/utilities.css",
+            "src/modules/ui/welcomeMat/welcomeMat.css",
             "src/modules/ui/welcomeMat/welcomeMat.html"
         ],
         "missing": [],

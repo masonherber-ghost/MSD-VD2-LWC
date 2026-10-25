@@ -1,7 +1,7 @@
 /* Registration is a single narrow column, centred in the canvas. */
 .auth {
-    max-width: 30rem;
-    margin: 2rem auto 0;
+    max-width: var(--slds-g-sizing-16, 30rem);
+    margin: var(--slds-g-spacing-6, 2rem) auto 0;
 }
 
 .auth__submit {

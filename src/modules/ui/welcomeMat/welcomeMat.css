@@ -1,0 +1,48 @@
+/* SEP's welcome mat — the SLDS blueprint, adjusted for a dashboard block.
+ *
+ * Selected by this wrapper's own classes, set in the markup BESIDE the SLDS
+ * ones — never by the SLDS class (linter `no-slds-class-overrides`).
+ *
+ * The blueprint is built around a background illustration, and THIS PACKAGE
+ * SHIPS NO IMAGES — not one png, jpg or svg anywhere in
+ * @salesforce-ux/design-system-2. Its stylesheet still points at
+ * `url('../../public/bg-info@2x.png')`, a file that is not in the dist. That
+ * default lives behind `--_slds-c-welcomemat-image-background`, a PRIVATE
+ * hook, so it is off limits. The supported seam is the public fallback inside
+ * it, `--lwc-welcomeMatBackgroundImageInfo`, which SLDS never declares — it
+ * exists purely to be set. To put a real illustration behind the info panel,
+ * set it on `.welcome-mat__info` to an ABSOLUTE url (rules-architecture.md
+ * § `url()` inside a stylesheet must be absolute):
+ *
+ *     --lwc-welcomeMatBackgroundImageInfo: url(/public/assets/<file>);
+ *
+ * Two consequences of having no image, both fixed below. */
+
+/* `_info-only` pins the content to `height: 37.5rem`, and the base rule adds
+ * `max-height: 37.5rem`. That suits the fixed modal the mat was designed for,
+ * not a dashboard block that wraps to one column on a phone, so both are
+ * released (`min-height: 25rem` is left alone). Releasing only the height
+ * leaves the box capped at 600px and `__tiles` grows an inner scrollbar the
+ * moment a fourth tile is added.
+ *
+ * `align-items: stretch` undoes a problem WE introduced: `slds-wrap` is not
+ * part of the stock markup — it is here so the halves stack on a phone — and
+ * SLDS's `.slds-wrap` also sets `align-items: flex-start`, which leaves the
+ * info panel at its content height. Stretch (the flex default) restores the
+ * full height and keeps the wrapping.
+ *
+ * Two classes on purpose: SLDS sets the 37.5rem height with
+ * `.slds-welcome-mat_info-only .slds-welcome-mat__content`, unlayered, so a
+ * single class would lose. Both of ours match it; loaded later, they win. */
+.welcome-mat .welcome-mat__content {
+    height: auto;
+    max-height: none;
+    align-items: stretch;
+}
+
+/* The info panel reserves 7.75rem of bottom padding for the illustration.
+ * With nothing there it is a hole, so it comes back to the 3rem the sides
+ * already use. */
+.welcome-mat .welcome-mat__info {
+    padding-block-end: var(--slds-g-spacing-8, 3rem);
+}

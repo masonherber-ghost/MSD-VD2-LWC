@@ -4,7 +4,7 @@
 //   mkdir -p <scratch>/pw && cd <scratch>/pw && npm install playwright-core --cache <scratch>/npmcache
 //   cp <repo>/.claude/skills/component-from-design/measure-states.mjs . && node measure-states.mjs button 3321
 // Uses the installed Google Chrome. The examples render inside a SHADOW ROOT, where
-// site.css cannot reach — so the script moves each component host into a fixed light-DOM
+// the site stylesheet cannot reach — so the script moves each component host into a fixed light-DOM
 // box first (as a real page renders it), then forces :hover / :focus-visible / :active
 // through CDP CSS.forcePseudoState. Synthetic mouse events proved unreliable for :active.
 // Edit the property list in the page.evaluate() to read what your skin sets.

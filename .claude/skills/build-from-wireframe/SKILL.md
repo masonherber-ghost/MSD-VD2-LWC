@@ -53,7 +53,7 @@ scale steps 6, 4 and 2) and no text-colour classes for the site's brand palette.
 ask for the steps in between. These project classes already exist, are approved, and **using them
 in markup is not new CSS** — reach for them before concluding a heading size or colour is a gap.
 
-**Type size — `src/assets/css/sep-utilities.css`**, loaded by `main.njk` after `site.css`. That
+**Type size — `src/assets/css/site/utilities.css`**, the last file in the site bundle. That
 file is the only place these classes are declared:
 
 | Class | Token | Size | Same as |
@@ -82,15 +82,16 @@ How to use them:
   wins depends on load order. Where an SLDS class is identical (steps 6, 4, 2), either is fine;
   prefer the SLDS one when the design matches it exactly.
 
-**Text colour — `site.css`, `sep-text-*`.** Each class maps one-to-one to a `--sep-text-*` token
-in `design-tokens.css`: `sep-text-primary`, `-secondary`, `-accent-primary`, `-accent-secondary`,
+**Text colour — `site/utilities.css`, `sep-text-*`.** Each class maps one-to-one to an SLDS
+semantic colour hook, themed in `design-tokens.css`: `sep-text-primary`, `-secondary`, `-accent-primary`, `-accent-secondary`,
 `-inverse-primary`, `-inverse-disabled`, `-disabled`, `-error`, `-success`. Use these for brand
 heading colours (e.g. the MSD blue headline is `sep-text-accent-primary`) before reaching for a
 hook or a new rule. For neutral weak text, SLDS's own `slds-text-color_weak` is still first choice.
 
-Anything beyond these two families, plus the existing `sep-` blueprint skins in `site.css`
-(`sep-page-header`, `sep-welcome-mat`, `sep-scoped-notification`, …, browsable at
-`/design-system` → Compositions), is new CSS and falls under hard constraint 3.
+Anything beyond these two families, plus the existing component skins in
+`src/assets/css/site/components/` (browsable at `/design-system` → Compositions), is new CSS and
+falls under hard constraint 3. No `sep-` blueprint skins are live today: the page-header,
+scoped-notification and status-tag skins were removed on 2026-10-26, classes and all.
 
 ---
 

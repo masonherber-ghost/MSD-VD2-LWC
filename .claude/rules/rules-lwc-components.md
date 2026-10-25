@@ -72,7 +72,7 @@ cat node_modules/lightning-base-components/src/lightning/<name>/<name>.html
 | `lightning-input` only fires `change` on blur | **No.** Measured on this build, `type="search"` and `type="email"` both fire `change` on every keystroke; `search` also fires `commit` on blur. So a filter-as-you-type box needs no `onkeyup` — `ui/jobFilterBar` relies on this. What `change` cannot tell you is that *Enter* was pressed, which is the one thing `onkeyup` is still for (`example/login`) |
 | A getter re-runs when the module state it reads changes | **No.** LWC re-renders only when a *field* read during the last render changes. A getter reaching into a module records no dependency — see `rules-app-logic.md` § *The reactivity rule* |
 | A `lightning-combobox` flips its dropdown up near the viewport bottom | **No.** It opens downward off-screen. In a docked bar use `lightning-radio-group type="button"` or a `bottom-*` `menu-alignment` |
-| A margin utility on a `lightning-*` tag spaces it out | **Only if the host is a block.** A custom element is `display:inline` by default and `lightning-card` sets no `:host` display, so a vertical margin computes but never applies. `site.css` makes `lightning-card` a block — see `rules-lwc-layout.md` § *Stacked cards* |
+| A margin utility on a `lightning-*` tag spaces it out | **Only if the host is a block.** A custom element is `display:inline` by default and `lightning-card` sets no `:host` display, so a vertical margin computes but never applies. `src/assets/css/site/components/card.css` makes `lightning-card` a block — see `rules-lwc-layout.md` § *Stacked cards* |
 
 ---
 
@@ -148,7 +148,7 @@ By the user's decision, every badge on the site is `<span class="slds-badge …"
 not match the Cosmos badge (4px radius, regular weight), and a `slds-theme_*` class on its host
 cannot reach the inner pill. On the blueprint the class and the pill are one element, so the
 Cosmos status themes work with no project CSS. Status classes come from `data/vacancyRules`
-(`statusThemeClass`, `statusTagClass` — both return the full string, `slds-badge` included). The
+(`statusThemeClass` — it returns the full string, `slds-badge` included). The
 Components tab still documents `lightning-badge` itself.
 
 ### Antipattern

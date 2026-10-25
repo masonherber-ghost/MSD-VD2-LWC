@@ -13,19 +13,19 @@ A second review of the MSD button design. It's written **after** the skin was bu
 
 ## Summary
 
-**The coded button matches the design on 119 of the 142 values compared** (84%). 4 more are near-matches. 19 differ, and every one of those has a known cause:
+**The coded button matches the design on 122 of the 142 values compared** (86%). 4 more are near-matches. 16 differ, and every one of those has a known cause. *Updated 2026-10-20: side padding and the hover lift now match, through legacy, unsupported `--sds-c-*` variables (§8).*
 
 | | Values | Cause |
 |---|---:|---|
-| **Match** | 119 | — |
+| **Match** | 122 | — |
 | **≈ Near** | 4 | Inverse border: white vs `#f0f0f0`; height: 50.75 vs 49px. Accepted |
-| **Differs — decided** | 18 | Gaps you chose to accept (2026-10-19): no hover lift, 1px outline, and the base, destructive, destructive-text and inverse details |
-| **Differs — new** | 1 | **Side padding 16px, not 24px**: the public hook is broken in SLDS. Affects all variants except base |
+| **Differs — decided** | 16 | Gaps you chose to accept (2026-10-19): 1px outline, and the base, destructive, destructive-text and inverse details |
+| **Differs — new** | 0 | Side padding was the one new gap; it now matches (§8) |
 | **Total** | **142** | |
 
 **Questions that remain** (§6):
-1. **Side padding:** accept 16px, or reach 24px with `::part`?
-2. **Update the Figma file to what ships**, for the 18 accepted gaps, so design and site stop disagreeing?
+1. ~~**Side padding:** accept 16px, or reach 24px with `::part`?~~ Answered 2026-10-20: legacy `--sds-c-*` variables, unsupported (§8).
+2. **Update the Figma file to what ships**, for the 16 accepted gaps, so design and site stop disagreeing?
 3. **Inverse disabled** is drawn identical to inverse default. Is that a mistake?
 
 ---
@@ -48,13 +48,13 @@ A second review of the MSD button design. It's written **after** the skin was bu
 |---|---|---|---|
 | Font | Atkinson, Medium, 18px | Atkinson, 500, 18px | ✓ |
 | Line height | 137.5% | 24.75px (1.375) | ✓ |
-| Block padding | 12px (`spacing-3`) | 12px | ✓ |
-| **Inline padding** | **24px (`spacing-5`)** | **16px** | **✗ new.** `--slds-c-button-neutral-spacing-inline` is read by the component but never applies: SLDS ships the declaration with a stray `;` |
+| Block padding | 12px (`spacing-3`) | 10.5px + 1.5px border | ✓ via `::part(button)` (2026-10-26): the padding gives back the border width, as Figma's inside stroke does |
+| Inline padding | 24px (`spacing-5`); base 4px | 22.5px + 1.5px border; base 2.5px + 1.5px | ✓ via `::part(button)` (2026-10-26), replacing the legacy `--sds-c-button-spacing-inlinestart`/`-inlineend`. The public `--slds-c-button-neutral-spacing-inline` never applies: SLDS ships its declaration with a stray `;` |
 | Gap, icon to label | 8px | 8px | ✓ |
 | Icon size and colour (slots hidden in the design) | 14px, label colour | 14px (`0.875rem`), `currentColor` | ✓ |
 | Radius | pill | pill (`--slds-g-radius-border-pill`) | ✓ |
-| Height | 49px | 50.75px | ≈ (CSS borders add 2px that Figma's inside strokes don't; there's no 49px line height) |
-| Outline width (neutral, destructive-text, inverse) | 1.5px | 1px | ✗d (private hook only) |
+| Height | 49px | 48.75px on 2x screens; 47.75px on 1x | ✓ on Retina, 1px short on 1x — accepted, option A (2026-10-26; was 50.75px) |
+| Outline width (neutral, destructive-text, inverse) | 1.5px | 1.5px on 2x screens; 1px on 1x | ✓ via `::part(button)` (2026-10-26). Browsers snap borders to whole screen pixels, so a 1x screen floors it to 1px. Headless Chrome measures as 1x, so the 2x value is arithmetic, not measured |
 
 ## 3. Per variant: design vs rendered
 
@@ -64,7 +64,7 @@ A second review of the MSD button design. It's written **after** the skin was bu
 | State | Fill | Border | Text | Shadow / ring |
 |---|---|---|---|---|
 | Default | `#017ac9` ✓ | none (= fill) ✓ | white ✓ | 0 4px 8px navy 20% ✓ |
-| Hover | `#0a5ea0` ✓ | none ✓ | white ✓ | lift 0 8px 16px: **none** ✗d |
+| Hover | `#0a5ea0` ✓ | none ✓ | white ✓ | lift 0 8px 16px ✓ (legacy `--sds-c-*`, §8) |
 | Focus | `#017ac9` ✓ | none ✓ | white ✓ | Inset-inverse ✓ |
 | Active | `#0a5ea0` ✓ | none ✓ | white ✓ | inset press ✓ |
 | Disabled | `#e0e0e0` ✓ | none ✓ | `#666666` ✓ | — |
@@ -73,7 +73,7 @@ A second review of the MSD button design. It's written **after** the skin was bu
 | State | Fill | Border | Text | Shadow / ring |
 |---|---|---|---|---|
 | Default | white ✓ | `#017ac9` ✓ | `#292929` ✓ | resting shadow ✓ |
-| Hover | `#f0f0f0` ✓ | `#134276` ✓ | `#0a213b` ✓ | lift: **none** ✗d |
+| Hover | `#f0f0f0` ✓ | `#134276` ✓ | `#0a213b` ✓ | lift 0 8px 16px ✓ (legacy `--sds-c-*`, §8) |
 | Focus | white ✓ | `#858585` ✓ | `#0a5ea0` ✓ | Inset ✓ |
 | Active | `#f0f0f0` ✓ | `#134276` ✓ | `#134276` ✓ | inset press ✓ |
 | Disabled | `#e0e0e0` ✓ | `#c2c2c2` ✓ | `#666666` ✓ | — |
@@ -87,7 +87,7 @@ A second review of the MSD button design. It's written **after** the skin was bu
 | Active | none ✓ | **`#0a5ea0`** ✗d | `#134276` ✓ | **inset press** ✗d |
 | Disabled | none ✓ | none ✓ | `#666666` ✓ | — |
 
-Base's side padding is 0, where the design has 4px (✗d, counted under "inline padding" in §2).
+Base's side padding is 4px, as drawn (counted under "inline padding" in §2).
 
 ### Destructive
 | State | Fill | Border | Text | Shadow / ring |
@@ -125,7 +125,7 @@ Base's side padding is 0, where the design has 4px (✗d, counted under "inline 
 | Active | `#f0f0f0` ✓ | white ≈ | **`#0a5ea0`** (design `#134276`) ✗d | inset press ✓ |
 | Disabled | none ✓ | **`#525252`** (design: as default) ✗d | **`#525252`** (design: white) ✗d | — |
 
-**Tally**, counted mark by mark from §2 and §3: 119 ✓, 4 ≈, 18 ✗d, 1 ✗ (inline padding), 142 in total. The 7 "—" cells are disabled states, which have no ring.
+**Tally**, counted mark by mark from §2 and §3: 122 ✓, 4 ≈, 16 ✗d, 0 ✗, 142 in total (2026-10-20; was 119 / 4 / 18 / 1). The 7 "—" cells are disabled states, which have no ring.
 
 ## 4. Assumptions the bindings still invite
 
@@ -147,7 +147,7 @@ New this time:
 
 ## 6. Questions
 
-**1. Side padding: accept 16px, or reach 24px?**
+**1. Side padding: accept 16px, or reach 24px?** *Answered 2026-10-20: neither option below. A third lever was found, the legacy `--sds-c-*` variables, and chosen (§8).*
 The only public hook is broken in SLDS. The options:
 - **(a) Accept 16px.**
 - **(b) `lightning-button::part(button) { padding-inline: var(--slds-g-spacing-5) }`**: rung 7, on the line, like the font-family rule already in `site.css`.
@@ -156,8 +156,7 @@ The only public hook is broken in SLDS. The options:
 *Recommendation:* **(b)**, if the 24px matters to the design, since it's a single documented part and property. Otherwise (a). Not (c).
 
 **2. Should the Figma file be updated to what ships?**
-Eighteen values differ by decision. Until Figma draws them as they render, every review will flag them again. They are:
-- hover: no lift
+Sixteen values differ by decision. Until Figma draws them as they render, every review will flag them again. They are:
 - outline: 1px
 - base: pressed border and press shadow
 - destructive and success: focus uses the hover fill
@@ -169,7 +168,7 @@ Eighteen values differ by decision. Until Figma draws them as they render, every
 **3. Inverse disabled.** The design draws it identical to default; the site renders it grey.
 *Recommendation:* treat the design as an oversight and keep the grey.
 
-## 7. If question 1 is answered (b)
+## 7. If question 1 is answered (b) — superseded by §8
 
 ```css
 /* site.css, inside the MSD Button skin. */
@@ -179,3 +178,24 @@ lightning-button:not([variant='base'])::part(button) {
 ```
 
 Not applied.
+
+## 8. Update 2026-10-20: legacy `--sds-c-*` hooks, and production status
+
+**Legacy hooks, by decision.** No public hook reaches the side padding or the hover lift, and utility classes don't either. Measured: `slds-p-horizontal_large` pads the host outside the pill, and the button inside keeps 16px. The component still reads an older hook set, `--sds-c-button-*`, and two of those reach:
+
+| Property | Hook | On | Value |
+|---|---|---|---|
+| Side padding | `--sds-c-button-spacing-inlinestart`, `-inlineend` | every variant | `spacing-5` (24px) |
+| | | base | `spacing-1` (4px) |
+| Hover lift | `--sds-c-button-shadow-hover` | brand, neutral | `0 8px 16px` in the resting shadow's tint (`Shadow/Buttons/Hover/Brand`) |
+
+These are **not supported**. `--sds-*` was the beta name for styling hooks (Winter '21), renamed `--slds-*` when they became generally available (Spring '22), and Salesforce's linter converts any it finds. These two names were never even published: the linter's list of old public hooks spells the padding one `-inline-start` and has no `-shadow-hover`. They're the button's own internal variables, which work only because this build reads them. They may stop working in any release and are the first lines to retest. Nothing, deprecated or public, reaches the 1.5px outline.
+
+**Production status of the whole skin.** Salesforce's *SLDS 2 Best Practices* treats the skin's levers as follows:
+- Component hooks (`--slds-c-*`) are a **developer preview** in SLDS 2, not for production.
+- Assigning a global hook is **reserved for theming tools**, which rules out the solid destructive and success fills and the disabled pair.
+- The SLDS Linter also flags 15 of the button's component-hook lines as hooks SLDS 2 doesn't publish.
+
+By decision (2026-10-20), all of these stay as **prototype-only levers**. Each one is listed for the developer in [handover-styling-register.md](handover-styling-register.md).
+
+**Also new:** every global-hook reference in the skin now carries the fallback the linter names. Re-measured in headless Chrome after both changes: every variant and state renders as before, apart from the side padding and the hover lift, which now match.

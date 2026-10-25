@@ -5,15 +5,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
         <title>{{ page.title }}</title>
         <link rel="stylesheet" href="/public/slds/slds2.cosmos.css" />
-        {# [OFF — custom typeface] Default Lightning type. Restore with the
-           --slds-g-font-family-base block in design-tokens.css.
+        {# The typeface: fonts.css declares Atkinson Hyperlegible Next; the
+           --slds-g-font-family-base token in design-tokens.css selects it.
+           Both halves are needed — with this off, the token still names the
+           family and every browser silently falls back to its system font.
+           Check what actually renders with
+           .claude/skills/component-from-design/check-fonts.mjs. #}
         <link rel="preload" as="font" type="font/woff2" crossorigin
               href="/public/assets/fonts/atkinson-hyperlegible-next-latin-wght-normal.woff2" />
         <link rel="stylesheet" href="/public/assets/css/fonts.css" />
-        #}
         <link rel="stylesheet" href="/public/assets/css/design-tokens.css" />
+        {# One bundle, GENERATED from src/assets/css/site/ by scripts/build-css.mjs
+           (base, one file per component skin, utilities). Edit the sources,
+           never site.css. #}
         <link rel="stylesheet" href="/public/assets/css/site.css" />
-        <link rel="stylesheet" href="/public/assets/css/sep-utilities.css" />
     </head>
     <body>
         {{ body | safe }}

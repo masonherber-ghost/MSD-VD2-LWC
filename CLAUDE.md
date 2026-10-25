@@ -69,7 +69,9 @@ lego allows and say where it falls short.
 ### Skin a component to a design
 **Use the `component-from-design` skill** for one component (a Figma frame or an HTML page): it finds
 the shipped match, skins it with only the levers `rules-skinning.md` allows, and updates the design
-system. A whole page still goes through `build-from-wireframe`.
+system. A whole page still goes through `build-from-wireframe`. Each shipped component's skin is
+one file, `src/assets/css/site/components/<tag>.css` (`button.css` for `lightning-button`),
+bundled into `site.css` — see `rules-architecture.md` § *Stylesheets*.
 
 ### Review a component design before building it
 **Use the `lwc-component-review` skill** when given a Figma component (all its variants and
@@ -116,7 +118,7 @@ from this project's own source. Nothing on that page is hand-maintained.
 | **Foundations** | Typography: every class that sets type, the full `--slds-g-font-scale-*` scale with the classes that reach each step (and the CSS a classless step needs), and the weights | `npm run foundations` |
 | **Components** | Every shipped `lightning-*` example, rendered live — plus project examples from `src/examples/<component>/<name>/`, tabbed "(project)" | `npm run catalog` |
 | **Blueprints** | The 37 blueprints **no shipped component renders** — the ones you write by hand. Classes declared, whether they are in the stylesheet we actually load, hooks you may set, private ones you may not, and where this site uses each. A checkbox reveals the other 52 | `npm run blueprints` |
-| **Compositions** | Every wrapper in `src/modules/ui/`, ordered by how much CSS it needed, with what that CSS touches — plus the `sep-` classes in `site.css` | `npm run compositions` |
+| **Compositions** | Every wrapper in `src/modules/ui/`, ordered by how much CSS it needed, with what that CSS touches — plus the `sep-` classes in `src/assets/css/site/` | `npm run compositions` |
 | **Tokens** | Every design token with its resolved value: this project's `--sep-*` and the SLDS globals by family | `npm run tokens` |
 | **Component hooks** | The `--slds-c-*` hooks you may set, grouped by component | `npm run tokens` |
 
@@ -195,5 +197,8 @@ LWR renders client-side, so a template error only appears at runtime.
 - Build a custom component without asking first.
 - Let a screen call the database directly, or trust the client for a business rule.
 - Commit a `data/*.db` change that is only a side effect of testing.
+- Edit `src/assets/css/site.css` by hand. It is generated from `src/assets/css/site/` by
+  `npm run css` (and on every save under `npm run dev`).
+- Leave switched-off CSS behind as a commented block. Delete it; git keeps the history.
 - Write a relative `url()` in a stylesheet. It works in dev, survives the build, and 404s in the
   built site — use the `/public/assets/…` path the `assets[]` mapping serves.

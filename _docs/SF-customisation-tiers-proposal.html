@@ -55,28 +55,29 @@
 <div class="eyebrow">Salesforce Experience Cloud</div>
 <h1>Customisation tiers for Salesforce websites</h1>
 <p class="lede">Where design work ends, where developer effort begins, and where customisation starts to put Salesforce upgrades at risk.</p>
-<p class="version">October 2026 · informed by importing the MSD Figma design system into SLDS&nbsp;2 tokens and skinning seven standard components in an LWR prototype.</p>
+<p class="version">October 2026 · informed by importing the MSD Figma design system into SLDS&nbsp;2 tokens, skinning seven standard components in an LWR prototype, and conversations with two Salesforce architects.</p>
 
 <div class="keyfacts">
   <div><b>Five tiers</b><span>Configure, Style, Layout, Component, Override. Each tier adds capability and cost.</span></div>
-  <div><b>Developer gate</b><span>Between Style and Layout. Beyond it, changes are code: built, tested and deployed.</span></div>
+  <div><b>Developer gate</b><span>Between Style and Layout. Beyond it, changes are code. Expected for client work, and sized by effort.</span></div>
   <div><b>Upgrade gate</b><span>Between Component and Override. Beyond it, each Salesforce release can break the site.</span></div>
 </div>
 
 <h2>Summary</h2>
-<p>A Salesforce website can be customised at five levels. Designers prototype designs as Lightning web components in the Lightning Web Runtime (LWR) and hand those prototypes to developers to build in Salesforce. The first two tiers, configuring in Experience Builder and styling through published tokens, hooks and utility classes, are designer work: no new CSS rules are written, and Salesforce maintains everything underneath.</p>
-<p><b>Tier 2 is narrower than it looks.</b> It covers setting values and naming published classes; new CSS classes sit past the developer gate. Components also honour only some of the hooks Salesforce publishes, and many visual properties have none. Measured in a browser, the skinned button matched 84% of its design's values and the form controls 70%. The rest needs a design change, a Tier 4 build or a Tier 5 override. Most brand requirements can still be met below the gate, but only if the <b>design system is drawn to what the standard components can do</b>.</p>
-<p>Custom layouts and components need developers, but use supported APIs and survive upgrades. Tier 5, overriding standard components, is where upgrade risk sits. We recommend aligning the design system first, treating the developer gate as a funding decision, and treating the upgrade gate as an architecture approval.</p>
+<p>A Salesforce website can be customised at five levels. Designers prototype designs as Lightning web components in the Lightning Web Runtime (LWR) and hand those prototypes to developers to build in Salesforce.</p>
+<p><b>Client-facing Experience Cloud work is custom by default.</b> Both Salesforce architects we consulted said so: standard components are a starting point, and screens are composed from them with a layer of CSS on top. Tiers 1 and 2 are the base every build stands on, not the goal. The useful questions are how much effort a screen takes, and whether it restructures or reaches into a standard component. Composing standard components with data mapped in is low effort. Restructuring one means building a different component. Reaching into its internals is where upgrade risk sits.</p>
+<p><b>Styling has hard limits.</b> Components honour only some of the hooks Salesforce publishes, and many visual properties have none. Measured in a browser, the skinned button matched 86% of its design's values and the form controls 70%. Component hooks are also a developer preview in SLDS&nbsp;2. The fidelity gap closes only through a design change or a rebuild, so the <b>design system must be drawn to what the standard components can do</b>.</p>
+<p>We recommend aligning the design system first, budgeting for composed components from the start, treating rebuilds and the upgrade gate as explicit decisions, and handing over the LWR prototype with its styling register.</p>
 
 <div class="glance"><h2>The tiers at a glance</h2>
 <table>
   <thead><tr><th></th><th>Tier</th><th>What changes</th><th>Who</th><th>Upgrade risk</th></tr></thead>
   <tbody>
     <tr><td class="n">1</td><td><b>Configure</b></td><td>Pages, standard components, navigation, audiences, and the Theme panel's brand colours, fonts and heading styles in Experience Builder</td><td>Admin, designer</td><td>None</td></tr>
-    <tr><td class="n">2</td><td><b>Style</b></td><td>Values and published names only: the theme as global tokens, per-component styling hooks, and SLDS utility classes. No new CSS rules</td><td>Designer, working from a verified hook inventory</td><td>Low: re-verify each release</td></tr>
-    <tr class="gate"><td colspan="5"><b>DEVELOPER GATE</b>Code, source control, testing and deployment from here down</td></tr>
+    <tr><td class="n">2</td><td><b>Style</b></td><td>Values and published names only: the theme as global tokens, per-component styling hooks (a developer preview in SLDS&nbsp;2), and SLDS utility classes. No new CSS rules</td><td>Designer, working from a verified hook inventory</td><td>Low: re-verify each release</td></tr>
+    <tr class="gate"><td colspan="5"><b>DEVELOPER GATE</b>Code, source control, testing and deployment from here down. Expected for client work</td></tr>
     <tr><td class="n">3</td><td><b>Layout</b></td><td>Custom theme, page and component layouts built using standard base components, and the CSS classes we write to style them</td><td>Developer, designer</td><td>Low</td></tr>
-    <tr><td class="n">4</td><td><b>Component</b></td><td>New components with their own markup, data, logic and Builder properties, including a rebuild of a standard component whose look no hook reaches</td><td>Developer</td><td>Low, owned by us</td></tr>
+    <tr><td class="n">4</td><td><b>Component</b></td><td><b>Compose:</b> new components assembled from standard ones, with data mapped in. <b>Rebuild:</b> a standard component restructured, or rebuilt because no hook reaches its look</td><td>Developer</td><td>Low, owned by us</td></tr>
     <tr class="gate up"><td colspan="5"><b>UPGRADE GATE</b>Depends on Salesforce internals that can change without notice</td></tr>
     <tr><td class="n risk">5</td><td><b>Override</b></td><td>Changing how standard components look or behave by reaching into their internal markup or <b>private styling hooks</b></td><td>Developer</td><td><span class="high">High</span></td></tr>
   </tbody>
@@ -85,6 +86,7 @@
 
 <h2>Tier 1 · Configure</h2>
 <p>Everything set in Experience Builder without code: the LWR template, pages, standard components, navigation, audiences, and the Theme panel's colours, fonts and spacing. Theme values are published as <code>--dxp</code> styling hooks, which map onto the Lightning design tokens. Anything an admin should change later, such as the brand colour or heading sizes, belongs here rather than in CSS.</p>
+<p>Record detail and list pages for an object give the components placed on them the record's context and standard data retrieval. Tier 4 builds on this, so screens designed around them cost less.</p>
 <p><b>Constraints.</b> Only the options Salesforce exposes: the template's theme layouts, the standard section and column components, and each component's Builder properties.</p>
 
 <div class="box new">
@@ -109,9 +111,11 @@
   </tbody>
 </table>
 <p><b>Constraints.</b> Standard components encapsulate their markup, so CSS reaches only what their hooks expose. In the components tested, field label size and weight, checkbox and radio size, border width, input padding, focus-ring shape and hover elevation have no hook. A hook can also exist and do nothing (one button hook is broken in Salesforce's own stylesheet), so only the rendered value in a browser proves it.</p>
+<p><b>Production status.</b> Salesforce's SLDS&nbsp;2 guidance sets three limits. Component hooks are a developer preview, not for production. Assigning values to global hooks is reserved for theming tools. The newest global hooks are not supported on Experience Cloud sites. The prototype uses component hooks, and re-points globals on single components, to match the design; every such line is listed for the build team in a styling register.</p>
 <p>Utilities change between SLDS versions (SLDS&nbsp;2 removed classes SLDS&nbsp;1 had) and have gaps, such as responsive spacing and gap. Filling one takes a class of our own, which is Tier 3.</p>
 <p>Values the Theme panel does not cover live in a site stylesheet. It holds values, not rules, so it stays at this tier, but it needs one owner, version control and review.</p>
 <p><b>The test for the gate:</b> if a change sets a value or names something Salesforce publishes, it is Tier 2. If it writes a new CSS rule, class or selector, it is Tier 3.</p>
+<p><b>The test for structure:</b> restyling a standard component (colour, spacing, type) stays within Tiers 2 and 3. Changing its structure, meaning what it shows, where and in what order, means building a different component: Tier 4. Reaching into its internals is Tier 5.</p>
 
 <div class="box">
   <h4>The developer gate</h4>
@@ -124,7 +128,7 @@
     <li>A new CSS rule, class or selector, including a responsive rule SLDS has no utility for</li>
     <li>A look no hook reaches, which the design cannot drop</li>
   </ul>
-  <p>From here, work is code: source-controlled, tested and deployed. Designers still own the visual specification.</p>
+  <p>From here, work is code: source-controlled, tested and deployed. For client-facing screens this is the normal case, so budget for it from the start and size each item by effort. Designers still own the visual specification.</p>
 </div>
 
 <h2>Tier 3 · Layout</h2>
@@ -133,8 +137,14 @@
 <p><b>Constraints.</b> Deployed as metadata, not edited in Builder. Responsiveness and accessibility become ours. Built on public APIs, so upgrade risk is low.</p>
 
 <h2>Tier 4 · Component</h2>
-<p>New Lightning web components with their own markup, styling, data (including Apex), integrations and Builder properties. This includes rebuilding a standard control when the design needs a look no hook reaches: the supported alternative to Tier 5.</p>
-<p><b>Constraints.</b> Code runs under Salesforce's browser security model, and third-party scripts and domains must be allowed. Performance, accessibility and caching become ours, and a rebuilt control takes on the keyboard behaviour, validation and screen-reader support the standard one provided. Upgrade-safe, but ours to maintain.</p>
+<p>New Lightning web components with their own markup, styling, data (including Apex), integrations and Builder properties. They come in two kinds, very different in effort:</p>
+<table class="levers">
+  <tbody>
+    <tr><td>Compose</td><td>Standard components assembled into a new one, with data mapped in: a card repeater for a list of records, or a two-column detail view of badges, fields and text. The standard parts bring their own structure, behaviour and accessibility, so most of the work is layout and data. The normal case, and low effort.</td></tr>
+    <tr><td>Rebuild</td><td>A standard component restructured, or rebuilt because the design needs a look no hook reaches. The supported alternative to Tier 5, but the new control takes on the keyboard behaviour, validation and screen-reader support the standard one provided. Higher effort, so decide it explicitly.</td></tr>
+  </tbody>
+</table>
+<p><b>Constraints.</b> Code runs under Salesforce's browser security model, and third-party scripts and domains must be allowed. Performance, accessibility and caching become ours. Upgrade-safe, but ours to maintain.</p>
 
 <div class="box up">
   <h4>The upgrade gate</h4>
@@ -153,15 +163,23 @@
 <p>Reaching past a standard component's supported interface: CSS aimed at internal markup, private styling hooks, scripts that alter the page after load, or undocumented behaviour.</p>
 <p><b>Constraints.</b> These often work at first and fail later: a release renames an internal class or retires a private hook, and the live site breaks silently. Salesforce support does not cover them. Each needs regression testing against every release preview.</p>
 
+<div class="box">
+  <h4>Decisions open</h4>
+  <ul>
+    <li><b>Custom icons or the SLDS icon set.</b> <code>lightning-icon</code> renders SLDS's icon library as standard. MSD's own icon suite would be an asset we deliver and maintain. Being checked with the architect.</li>
+    <li><b>Component hooks in production.</b> They are a developer preview in SLDS&nbsp;2, and the prototype relies on them. The build team decides, line by line from the styling register, whether to keep each one, replace it, or accept the component's default.</li>
+  </ul>
+</div>
+
 <h2>Recommendations</h2>
 <ol>
   <li><b>Align the design system before designing screens.</b> Keep the Figma library on SLDS's names, steps and roles, and audit every import. Most Tier 2 failures start as a variable that names no real hook.</li>
   <li><b>Design to what ships.</b> Designers work from a <b>verified hook inventory</b>: the hooks each component actually reads and the states they cover, plus the SLDS utilities. Designs it covers are delivered without code.</li>
   <li><b>Review before building, measure after.</b> Before skinning, map every design value to a lever or to "no lever", and settle the gaps with the designer. After, read the rendered values in a browser.</li>
   <li><b>Decide the fidelity gap explicitly.</b> For each value no hook reaches: accept the component, change the design, or fund a Tier 4 rebuild. Never drift into Tier 5.</li>
-  <li><b>Treat the developer gate as a funding decision.</b> Estimate and prioritise each Tier 3 or 4 item as development work, with an owner for maintenance.</li>
+  <li><b>Budget for the developer gate.</b> Composed Tier 3 and 4 work is expected for client-facing screens: plan it from the start, sized by effort, with an owner for maintenance. Rebuilds are the exception and are approved one by one.</li>
   <li><b>Treat the upgrade gate as an architecture approval.</b> Tier 5, including any private styling hook, needs sign-off and a documented reason. Prefer a Tier 4 rebuild.</li>
-  <li><b>Keep a register</b> of every token and hook set, and anything past the upgrade gate, with what was verified. Retest it against each release preview.</li>
+  <li><b>Hand over the prototype and its styling register.</b> The LWR prototype is built from the same base components a Salesforce build uses, and the architect expects no major translation. The register lists every token and hook set and anything past the upgrade gate; retest it against each release preview.</li>
 </ol>
 
 </body>

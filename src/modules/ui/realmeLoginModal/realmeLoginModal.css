@@ -17,38 +17,38 @@
 .realme__brand {
     display: flex;
     justify-content: center;
-    padding-block-end: var(--slds-g-spacing-4);
-    margin-block-end: var(--slds-g-spacing-4);
-    border-block-end: 1px solid var(--slds-g-color-border-1);
+    padding-block-end: var(--slds-g-spacing-4, 1rem);
+    margin-block-end: var(--slds-g-spacing-4, 1rem);
+    border-block-end: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-1, #e5e5e5);
 }
 
 /* The supplied wordmark is 166x33. Height is pinned so the band keeps its own
    sizing whatever the file's intrinsic size; width follows the ratio. */
 .realme__wordmark {
     display: block;
-    height: 1.75rem;
+    height: var(--slds-g-sizing-8, 1.75rem);
     width: auto;
 }
 
 .realme__intro {
-    margin: 0 0 var(--slds-g-spacing-4);
+    margin: 0 0 var(--slds-g-spacing-4, 1rem);
 }
 
 /* The field after the first needs separating; the inputs carry no outer
    margin of their own. */
 .realme__field {
-    margin-block-start: var(--slds-g-spacing-3);
+    margin-block-start: var(--slds-g-spacing-3, 0.75rem);
 }
 
 /* Form-level error. `slds-notify_alert` would have done this, so the tokens
    below are the ones that theme drives. */
 .realme__error {
-    margin-block-end: var(--slds-g-spacing-3);
-    padding: var(--slds-g-spacing-3);
-    border-inline-start: 4px solid var(--slds-g-color-border-error-1);
+    margin-block-end: var(--slds-g-spacing-3, 0.75rem);
+    padding: var(--slds-g-spacing-3, 0.75rem);
+    border-inline-start: 4px solid var(--slds-g-color-border-error-1, #ba0517);
     border-radius: var(--slds-g-radius-border-2, 0.25rem);
-    background: var(--slds-g-color-error-container-1);
-    color: var(--slds-g-color-error-1);
+    background: var(--slds-g-color-error-container-1, #ba0517);
+    color: var(--slds-g-color-error-1, #ba0517);
 }
 
 /* The shipped `slds-assistive-text` pattern, which cannot reach in here. */
@@ -65,23 +65,23 @@
 }
 
 .realme__links {
-    margin: var(--slds-g-spacing-4) 0 0;
+    margin: var(--slds-g-spacing-4, 1rem) 0 0;
     font-size: var(--slds-g-font-scale-neg-1, 0.875rem);
 }
 
 .realme__links_tight {
-    margin-block-start: var(--slds-g-spacing-2);
+    margin-block-start: var(--slds-g-spacing-2, 0.5rem);
 }
 
 /* Prototype furniture — deliberately looks like a note, not like the form. */
 .realme__hint {
-    margin-block-start: var(--slds-g-spacing-4);
-    padding: var(--slds-g-spacing-3);
-    border: 1px solid var(--slds-g-color-border-1);
+    margin-block-start: var(--slds-g-spacing-4, 1rem);
+    padding: var(--slds-g-spacing-3, 0.75rem);
+    border: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-1, #e5e5e5);
     border-radius: var(--slds-g-radius-border-2, 0.25rem);
-    background: var(--slds-g-color-surface-container-2);
+    background: var(--slds-g-color-surface-container-2, #f3f3f3);
     font-size: var(--slds-g-font-scale-neg-1, 0.875rem);
-    color: var(--slds-g-color-on-surface-1);
+    color: var(--slds-g-color-on-surface-1, #747474);
 }
 
 .realme__hint p {
@@ -89,8 +89,8 @@
 }
 
 .realme__hint ul {
-    margin: var(--slds-g-spacing-1) 0;
-    padding-inline-start: var(--slds-g-spacing-5);
+    margin: var(--slds-g-spacing-1, 0.25rem) 0;
+    padding-inline-start: var(--slds-g-spacing-5, 1.5rem);
     list-style: disc;
 }
 
@@ -107,5 +107,5 @@
        because LWC also strips the whitespace text node that would otherwise
        put a few pixels between two inline-level tags. spacing-4 is the gap the
        design shows. */
-    margin-inline-start: var(--slds-g-spacing-4);
+    margin-inline-start: var(--slds-g-spacing-4, 1rem);
 }

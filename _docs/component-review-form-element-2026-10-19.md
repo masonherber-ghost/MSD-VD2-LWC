@@ -157,3 +157,26 @@ lightning-input { --slds-c-inputtext-text-color-placeholder: var(--slds-g-color-
 Question 6 would be a new `sep-form-element-readonly` class in `site.css`, via `component-from-design`.
 
 Not applied.
+
+## 9. Update 2026-10-20: legacy hooks, fallbacks and production status
+
+**The design is unchanged** since the build: 18px Medium labels, a 52px input with 16px padding, 1.5px outlines, and 28px checkboxes and radios.
+
+**Legacy `--sds-c-*` variables don't close the gaps.** On the button, two of these unsupported variables reached side padding and the hover lift. Here, 17 candidates were tried live on the five controls, and only one moved:
+
+| Gap | Legacy variable tried | Moved? |
+|---|---|---|
+| Label size 18px | `--sds-c-inputtext-label-font-size`, `--sds-c-inputcheckbox-label-font-size` | No |
+| Label weight Medium | `--sds-c-inputtext-label-font-weight` | **Yes, but only on text-type `lightning-input`.** The textarea, checkbox and radio groups, dual listbox and combobox labels don't read it |
+| Outline 1.5px | `--sds-c-inputtext-sizing-border`, `--sds-c-inputcheckbox-sizing-border` | No |
+| Input text indent 16px | `--sds-c-inputtext-spacing-inlinestart` | No |
+| Focus ring shape | `--sds-c-inputtext-shadow-focus` | No |
+| Checkbox and radio 28px, radius 8px | `--sds-c-inputcheckbox-sizing`, `-radius-border` | No |
+| Textarea focus text colour | `--sds-c-textarea-text-color-focus` | No |
+| Error text colour | `--sds-c-inputtext-helptext-text-color` | No |
+
+The label weight is **not applied**. Medium on input labels alone would make the form's labels disagree with each other, which is worse than the current consistent 600. Question 1 (§7) is unchanged.
+
+**Fallbacks.** Every global-hook reference in the form skin now carries the fallback the SLDS Linter names (29 lines). Re-measured in headless Chrome: every value is as before.
+
+**Production status.** The skin's component hooks are a developer preview in SLDS 2. Its re-pointed globals (the textarea and listbox borders, the selected listbox row) assign global hooks outside a theming tool. Both stay as prototype-only levers, by decision (2026-10-20). Every line is listed for the developer in [handover-styling-register.md](handover-styling-register.md).

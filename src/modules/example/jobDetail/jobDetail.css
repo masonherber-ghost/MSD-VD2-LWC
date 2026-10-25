@@ -11,6 +11,6 @@
  * with a few pixels of descender space beneath it. */
 .job-detail__icon {
     display: block;
-    width: 2rem;
-    height: 2rem;
+    width: var(--slds-g-sizing-9, 2rem);
+    height: var(--slds-g-sizing-9, 2rem);
 }

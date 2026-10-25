@@ -92,7 +92,7 @@ Cloud: the Theme panel's maximum content width, which compiles to
 set to `none`. Production LWR sites run 1440px or 1800px.
 
 This project follows the Experience Cloud model — fluid on small screens, capped from the large
-breakpoint up. Two custom properties in `site.css` are the only authority:
+breakpoint up. Two custom properties in `design-tokens.css` are the only authority:
 
 | Property | Holds |
 |---|---|
@@ -163,7 +163,7 @@ each card **except the last**. Put the margin on the *preceding* card, not `slds
 one after — the rule reads as "a card leaves space beneath it", and it keeps the first card of a
 conditionally-rendered stack from opening with a stray gap.
 
-**The margin only works because `site.css` makes the host a block:**
+**The margin only works because `site/components/card.css` makes the host a block:**
 
 ```css
 lightning-card { display: block; }
@@ -225,7 +225,7 @@ source of truth*. Re-run `npm run catalog` **and** `npm run tokens` after upgrad
 ### Defining a project token
 
 `src/assets/css/design-tokens.css` is the **only** file that declares `--sep-*` tokens, and
-`main.njk` loads it before `site.css` so everything can consume them. Its header carries the rules;
+`main.njk` loads it before the `site.css` bundle so everything can consume them. Its header carries the rules;
 the short version:
 
 - Prefer an SLDS token. Define a `--sep-*` one only where SLDS has no equivalent. A project token
@@ -296,9 +296,16 @@ custom control — it does **not** need the custom component gate.
 
 ## Restyling a shipped blueprint: `sep-` classes, never a bare override
 
-A bare `.slds-page-header { border: none }` in `site.css` restyles **every** page header on the
+A bare `.slds-page-header { border: none }` anywhere in our CSS restyles **every** page header on the
 site, including ones that wanted the Lightning default, and there is no way to opt out. So our
 changes to a shipped SLDS blueprint go on an opt-in class of our own, prefixed **`sep-`**.
+
+A blueprint skin used across the site lives in `src/assets/css/site/blueprints/<name>.css`; one used
+by a single wrapper lives in that wrapper's own `.css` (`rules-skinning.md` § *Where the skin
+lives*). **The `.sep-page-header` examples below are the pattern, not live code:** the page-header
+skin was switched off to show the stock Lightning header and removed on 2026-10-26, with its
+`sep-page-header` classes taken out of the markup. Bringing it back means a
+`site/blueprints/page-header.css` written as shown here.
 
 ```html
 <div class="slds-page-header sep-page-header slds-m-bottom_medium">
@@ -306,43 +313,68 @@ changes to a shipped SLDS blueprint go on an opt-in class of our own, prefixed *
 
 ### The order to reach for things
 
-1. **Set the component's own hook**, if it has one. This is not an override — SLDS's own rule reads
-   `var()` on it, so you are using the published API. It cannot be broken by a specificity change
-   and it survives an upgrade.
-2. **Declare the property on the `sep-` class**, only where no hook exists.
+1. **Set the blueprint's own public hook**, if it has one — a `--slds-c-*` hook its rule reads
+   through `var()`. Never a `--slds-s-*` or `--_slds-*` one: those are private (see below).
+2. **Declare the real property on the `sep-` class**, where no public hook exists.
 3. **An SLDS utility in the markup**, for a one-off deviation on a single screen.
 
-`.sep-page-header` is the worked example of all three:
+`.sep-page-header` is the worked example of rung 2, because the page header has no public hook:
 
 ```css
 .sep-page-header {
-    /* 1. Hooks — SLDS reads these itself. */
-    --slds-s-pageheader-sizing-border: 0;
-    --slds-s-pageheader-shadow: none;
-
-    /* 2. Override — there is no page-header padding hook. SLDS reads the
-       GLOBAL --slds-g-spacing-var-*-4, which is used far beyond this
-       component, so redefining that is not an option. */
+    /* No public page-header hook exists — every one SLDS reads is the
+       private --slds-s-pageheader-*. So: real properties, values from
+       tokens where the design needs one. Padding reads the GLOBAL
+       --slds-g-spacing-var-*-4, used far beyond this component, so
+       redefining that is not an option either. */
+    border: 0;
+    box-shadow: none;
     padding: 0;
 }
 ```
 
+**An element inside the blueprint gets its own `sep-` class, beside the SLDS one.** Never select it
+by the SLDS class, even scoped under ours: `.sep-page-header .slds-page-header__title` is still a
+selector naming an SLDS class, which the linter's `no-slds-class-overrides` flags. Its prescribed
+fix is a namespaced class in the markup:
+
+```html
+<h1 class="slds-page-header__title sep-page-header__title">My jobs</h1>
+```
+
+```css
+.sep-page-header__title { color: var(--slds-g-color-brand-base-30); }
+```
+
 ### Finding the hooks — the trap
 
-Page-header hooks are `--slds-s-pageheader-*`: the **shared** tier, and **no hyphen in
-"pageheader"**. Grepping for the obvious `--slds-c-page-header-*` returns nothing and makes it look
-like the component has no hooks at all. It has nine. Search both tiers and both spellings:
+The stylesheet holds two tiers that look alike, and only one is yours to set:
+
+| Prefix | Status |
+|---|---|
+| `--slds-c-*` | Public component hook (a developer preview in SLDS 2 — see `rules-skinning.md`) |
+| `--slds-s-*` | **Private.** The SLDS Linter's `no-slds-private-var`: *"reserved only for internal Salesforce use"* |
+| `--_slds-*` | **Private** |
+
+The page header is the trap: its rules read nine `--slds-s-pageheader-*` hooks, so a grep makes it
+look well hooked. It has **no public hooks at all**. Search for the public tier only, under both
+spellings (no hyphen in "pageheader"):
 
 ```bash
 C=node_modules/@salesforce-ux/design-system-2/dist/css/bundled/slds2.cosmos.css
-grep -o -- "--slds-[sc]-pageheader-[a-z-]*" $C | sort -u
+grep -o -- "--slds-c-page-\?header-[a-z-]*" $C | sort -u     # empty → rung 2
 ```
 
-### Why the padding override needs no `!important`
+`/design-system` → Blueprints lists each blueprint's public hooks and, under *Off limits*, its
+private ones.
 
-SLDS declares `.slds-page-header` inside `@layer component`. This project's stylesheets are
-unlayered, and **unlayered always beats layered**, whatever the specificity or the load order. It is
-the same mechanism `design-tokens.css` relies on for `--slds-g-font-family-base`. Reaching for
+### Why the override needs no `!important`
+
+`.slds-page-header` is **unlayered** in this build (SLDS's `@layer component` block spans only a
+handful of rules near the top of the bundle) and one class deep. `.sep-page-header` is also one
+class deep, and the `site.css` bundle loads after the SLDS stylesheet in `main.njk`, so on equal specificity
+the later rule wins. Where an SLDS rule *is* layered, our unlayered stylesheet wins regardless —
+the mechanism `design-tokens.css` relies on for `--slds-g-font-family-base`. Either way,
 `!important` here would be cargo cult.
 
 ### Identity versus placement

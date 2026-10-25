@@ -15,6 +15,14 @@
  * One variable axis, wght 200-800, which covers every weight SLDS names
  * (--slds-g-font-weight-1..7 are 100..700; 100 renders at the 200 floor).
  *
+ * `font-weight: 200 800` DESCRIBES THE FILE — it is the axis the woff2 carries,
+ * and must stay that range. It is not where the design's weights are chosen:
+ * narrowing it saves no bytes (one variable file either way) and only makes the
+ * browser clamp or fake-bold anything outside it. The descriptor takes one
+ * value or a two-value range — a list like `400 500 700` is invalid, the whole
+ * descriptor is dropped and every face is treated as 400 only. The site's
+ * weight palette (300 / 400 / 500 / 700) is set in `design-tokens.css`.
+ *
  * The `url()`s are ABSOLUTE, and must stay that way.
  *
  * A relative `../fonts/` passes `npm run dev` and then breaks the static build,

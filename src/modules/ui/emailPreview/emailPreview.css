@@ -1,8 +1,8 @@
 /* The mail-client frame. The email itself is styled by ui/emailShell. */
 
 .email-preview {
-    border: 1px solid var(--slds-g-color-border-1, #e5e5e5);
-    border-radius: var(--slds-g-radius-border-2);
+    border: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-1, #e5e5e5);
+    border-radius: var(--slds-g-radius-border-2, 0.25rem);
     overflow: hidden;
     background: var(--slds-g-color-surface-1, #fff);
 }
@@ -12,10 +12,10 @@
 .email-preview__meta {
     display: grid;
     grid-template-columns: max-content minmax(0, 1fr);
-    gap: var(--slds-g-spacing-1) var(--slds-g-spacing-4);
+    gap: var(--slds-g-spacing-1, 0.25rem) var(--slds-g-spacing-4, 1rem);
     margin: 0;
-    padding: var(--slds-g-spacing-4);
-    border-block-end: 1px solid var(--slds-g-color-border-1, #e5e5e5);
+    padding: var(--slds-g-spacing-4, 1rem);
+    border-block-end: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-1, #e5e5e5);
     font-size: var(--slds-g-font-scale-neg-1, 0.875rem);
 }
 
@@ -41,7 +41,7 @@
 
 /* The recessed grey a mail client shows around a fixed-width message. */
 .email-preview__canvas {
-    padding: var(--slds-g-spacing-6) var(--slds-g-spacing-4);
+    padding: var(--slds-g-spacing-6, 2rem) var(--slds-g-spacing-4, 1rem);
     background: var(--slds-g-color-surface-container-2, #f3f3f3);
 }
 
@@ -53,6 +53,6 @@
 .email-preview__sheet {
     max-width: 600px;
     margin-inline: auto;
-    background: var(--slds-g-color-surface-container-1);
-    box-shadow: var(--slds-g-shadow-2);
+    background: var(--slds-g-color-surface-container-1, #ffffff);
+    box-shadow: var(--slds-g-shadow-2, 0px 2px 3px 0px #00000027);
 }

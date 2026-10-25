@@ -1,14 +1,14 @@
 .browser {
     align-items: stretch;
-    border: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
-    border-radius: 0.25rem;
+    border: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-base-1, #e5e5e5);
+    border-radius: var(--slds-g-radius-border-1, 0.25rem);
     background: var(--slds-g-color-surface-1, #fff);
     overflow: hidden;
 }
 
 .browser__rail {
-    flex: 0 0 15rem;
-    border-right: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+    flex: 0 0 var(--slds-g-sizing-14, 15rem);
+    border-right: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-base-1, #e5e5e5);
     display: flex;
     flex-direction: column;
     max-height: 78vh;
@@ -26,15 +26,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--slds-g-spacing-2, 0.5rem);
     width: 100%;
     border: 0;
     background: transparent;
     text-align: left;
-    padding: 0.35rem 0.75rem;
+    padding: 0.35rem var(--slds-g-spacing-3, 0.75rem);
     cursor: pointer;
     font-size: 0.8125rem;
-    border-left: 3px solid transparent;
+    border-left: var(--slds-g-sizing-border-4, 4px) solid transparent;
 }
 
 .browser__item:hover {
@@ -44,7 +44,7 @@
 .browser__item_active {
     background: var(--slds-g-color-surface-container-1, #f3f3f3);
     border-left-color: var(--slds-g-color-accent-container-1, #0176d3);
-    font-weight: 600;
+    font-weight: var(--slds-g-font-weight-6, 600);
 }
 
 .browser__name {
@@ -68,7 +68,7 @@
 }
 
 .browser__tools {
-    gap: 0.5rem;
+    gap: var(--slds-g-spacing-2, 0.5rem);
 }
 
 .browser__loading {
@@ -82,7 +82,7 @@
 
 /* Separates the pinned tables from the alphabetical remainder. */
 .browser__item_divided {
-    border-top: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
-    margin-top: 0.25rem;
+    border-top: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-base-1, #e5e5e5);
+    margin-top: var(--slds-g-spacing-1, 0.25rem);
     padding-top: 0.6rem;
 }

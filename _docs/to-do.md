@@ -1,58 +1,16 @@
 
-What is a blue =rpint vs custom compionents that a made up of a few things (like the vacancy card)
 
-What is a hook?
+Tidy up the design-tokens
+-  /* Semantic colours */ seperate with space and commented title for each type of colors
+- shadow colors move from it's own section to be part of the main block
+- instead of structuing the file based on the report. Structure it as a logical tokens file broken down by different types of tokens.
+Instead of seperating the figma imported values and non-figma.
+Groupt hem together in a logical structure ensuring that the items that are defined in Figma and the items that are from the default / cosmos are clearly commented.
+- remove verbose comments or redundant notes. Just include the most important comments worth noting - ie if there are issues that need resolving. 
+Simply point to the docs where relevant
 
-#Header 
-Header and navigation logged in
-Header and nav unauth
-basic skinning explore for header
-Mobile header skinning explore
+- Is there an issue with loading custom font libraries in LWR?
 
-Invite email:
+- Performance review and analysis - what is causing it to be so slow. fix where we can
 
-
-----
-
-#Register: (later)
-Flow needs re-creating based on the designs:
-https://www.figma.com/design/6wkGNlvgmIRjE0GM1JZDex/SEP---VD2---Conceptual-UX?node-id=1107-71174&m=dev
-https://www.figma.com/design/6wkGNlvgmIRjE0GM1JZDex/SEP---VD2---Conceptual-UX?node-id=1107-71312&m=dev
-https://www.figma.com/design/6wkGNlvgmIRjE0GM1JZDex/SEP---VD2---Conceptual-UX?node-id=1107-71549&m=dev
-
-/build-from-wireframe
-
-
-
------
-
-#Text styles:
-font-family included on login and register headings (need a mixin thing for this)
-
------
-
-
-Login for 1.1
-
-Dashboard / homepage
-Fix build dashboard to have empty state
-
-Vacancies page
-Vacancy detail
-Fix jobs page to have empty state
-
-Contact page
-Request support page
-
-Send invite e-mail flow
-Otp flow
-Email verification flow
-Auth modal - triggered from blank page for invite link
-
-Build accept t&cs into user page (test both scenarios)
-
-
-job card:
-check how the icon is stored on live site.
-Include field for icon and display inplace of the icon there
-status tags - align with DS styles
+- change so that creates commits for any large piece of work

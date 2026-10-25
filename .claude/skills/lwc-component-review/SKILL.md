@@ -76,7 +76,7 @@ Then classify against the design:
 | Verdict | Meaning | Work |
 |---|---|---|
 | **OOTB** | Already renders the design value | None |
-| **Hook** | An OPEN `--slds-c-*` reaches it | One line in `site.css` § Component skins |
+| **Hook** | An OPEN `--slds-c-*` reaches it | One line in that component's `src/assets/css/site/components/<tag>.css` |
 | **Scoped global** | Only via a `--slds-g-*` re-pointed on the host | Allowed, but say what else on that host reads the token |
 | **Host property** | Inheritance reaches it | Allowed (rung 6) |
 | **::part** | Only `::part` reaches it | On the line — ask |

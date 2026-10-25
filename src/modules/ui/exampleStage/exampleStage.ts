@@ -19,14 +19,14 @@ function fetchSources(): Promise<Record<string, SourceFile[]>> {
 let pageSheetsPromise: Promise<CSSStyleSheet[]> | undefined;
 
 /**
- * The page's own stylesheets (SLDS, fonts, design tokens, site.css, utilities),
+ * The page's own stylesheets (SLDS, fonts, design tokens, the site.css bundle),
  * as constructed sheets — built once, shared by every example.
  *
  * WHY. The shipped examples are native shadow-DOM components, and the global
  * stylesheets cannot reach inside a shadow root. On a real org synthetic shadow
  * lets them through, so the examples' own utility classes work there
  * (`slds-m-left_x-small` is what spaces the buttons in button/basic) — here
- * they did nothing, and neither did our component skins in site.css. Adopting
+ * they did nothing, and neither did our component skins (site/components/*.css). Adopting
  * the page's sheets into the example's root restores both.
  *
  * Custom properties need none of this: they inherit through the shadow

@@ -180,21 +180,6 @@ export function closingText(status: string, value: unknown): string {
 }
 
 /**
- * The status tag's classes. SEP gives each status its own fill, text and
- * border rather than one neutral badge, so the colour has to travel with the
- * record. The styles are `sep-status-tag` in `site.css`; this only names them.
- * A state the lifecycle does not name falls back to the draft style.
- *
- * Returns the FULL class string for the SLDS badge blueprint
- * (`<span class="slds-badge …">`), so `slds-badge` is included. The blueprint
- * reads the same `--slds-c-badge-*` hooks the `sep-status-tag` skin sets.
- */
-export function statusTagClass(status: string): string {
-    const mod = JOB_STATUS_ORDER.includes(status) ? status.replace('_', '-') : 'draft';
-    return `slds-badge sep-status-tag sep-status-tag_${mod}`;
-}
-
-/**
  * The status badge's full class string: the SLDS badge blueprint plus its
  * Cosmos status theme. Under Cosmos `slds-theme_*` is a pale tinted fill with
  * coloured text, matching the LDS2 Badge examples (Base / Informational /

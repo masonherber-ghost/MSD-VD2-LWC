@@ -17,7 +17,6 @@ import {
     actionsFor,
     closingText,
     filterJobs,
-    statusTagClass,
     noActionsReason
 } from 'data/vacancyRules';
 
@@ -195,7 +194,8 @@ export default class Jobs3 extends LightningElement {
                 subtitle: String(j.subtitle ?? ''),
                 href: `/jobs/job-detail?id=${j.id}`,
                 statusLabel: JOB_STATUS_LABELS[status] ?? status,
-                statusClass: statusTagClass(status),
+                // The plain badge blueprint: this variant shows status unthemed.
+                statusClass: 'slds-badge',
                 iconUrl: iconUrl(j.icon),
                 isInReview: status === 'in_review',
                 reviewNotice: IN_REVIEW_NOTICE,

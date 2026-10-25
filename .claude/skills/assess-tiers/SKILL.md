@@ -38,7 +38,7 @@ Read-only, exits 0. It prints:
 - **Utility classes by family** — the SLDS utility classes (Tier 2) available in the stylesheet we load against those our templates use.
 - **Built here** — pages and wrappers counted by the highest tier each reaches.
 - **Per component** — tier, base components used, hand-written blueprints, CSS lines, flags.
-- **Global stylesheets** — what `fonts.css`, `design-tokens.css` and `site.css` set site-wide.
+- **Global stylesheets** — what `fonts.css`, `design-tokens.css` and the site bundle's sources (`src/assets/css/site/**`: `base.css`, one file per component in `components/`, `utilities.css`) set site-wide. Never the generated `site.css`, which would double-count.
 
 How it tiers a component (highest wins): **T4** script owns behaviour (data, `this.*` state,
 lifecycle, `window`/`navigator`) · **T3B** stylesheet sets real properties, `::part`, or element

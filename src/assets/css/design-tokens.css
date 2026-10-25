@@ -17,6 +17,7 @@
  *   Figma import
  *     B  Project tokens ...... --sep-* shadow tints
  *     C1 Figma variables ..... generated — every Figma variable on a public hook
+ *     C1a Weight palette ..... hand-written — weight 6 → 500, over Figma's 600
  *     C2 Elevation and focus . from Figma effect styles
  *     C3 Every other global .. generated — Cosmos or SLDS default
  *     D  Component hooks ..... listed only
@@ -251,6 +252,7 @@
     --slds-g-font-scale-7: 3rem;                                        /* figma — cosmos 2.5rem */
     --slds-g-font-family-monospace: 'SF Mono', Consolas, Menlo, Monaco, Courier, monospace; /* figma — cosmos differs */
     --slds-g-font-scale-8: 3.75rem;                                     /* figma — cosmos 3rem */
+    /* Font-weight */
     --slds-g-font-weight-3: 300;                                        /* figma = default */
     --slds-g-font-weight-4: 400;                                        /* figma = default */
     --slds-g-font-weight-5: 500;                                        /* figma = default */
@@ -532,6 +534,29 @@
     --slds-g-color-border-warning-1: var(--slds-g-color-warning-base-40); /* figma — cosmos #ca8501 */
 }
 /* @generated figma:end */
+
+/* -----------------------------------------------------------------------------
+ * C1a. Weight palette — a deliberate deviation from Figma (user, 2026-10-23)
+ *
+ * The site uses four weights: 300 Light, 400, 500, 700. Figma still defines
+ * font/weight/6 "SemiBold" as 600, so C1 above carries 600; this block, being
+ * declared after it, wins. A re-import regenerates C1 but leaves this alone.
+ *
+ *   --slds-g-font-weight-6  600 → 500   SLDS reads weight 6 for form labels,
+ *                                       alerts and table headers (through its
+ *                                       private --slds-s-* hooks) — those now
+ *                                       render Medium, which is also what the
+ *                                       form-element design asks of labels.
+ *
+ * Not reached: SLDS hard-codes 600 for navigation
+ * (--slds-s-navigation-font-weight, private) — no public hook sets it.
+ *
+ * --slds-g-font-weight-3 (300, Light) is in the palette and stays as Figma
+ * has it. Remove this block if Figma drops SemiBold to 500 itself.
+ * -------------------------------------------------------------------------- */
+:root {
+    --slds-g-font-weight-6: var(--slds-g-font-weight-5);
+}
 
 /* -----------------------------------------------------------------------------
  * C2. Global hooks — elevation and focus (from Figma effect styles)

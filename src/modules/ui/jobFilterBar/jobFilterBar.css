@@ -12,39 +12,32 @@
     gap: var(--slds-g-spacing-3, 0.75rem);
 }
 
-/* A custom element is display:inline unless told otherwise. */
+/* A filter chip is not a call to action.
+ *
+ * The site's button skin (site/components/button.css) gives every
+ * lightning-button the SEP CTA box — 18px Medium, ~48px tall — so five chips
+ * read as five calls to action beside the one "List a job" button. The chips
+ * go back to stock Lightning size instead (user, 2026-10-26), keeping the
+ * skin's colours, focus rings and shadows.
+ *
+ * The values are what a stock button renders with, measured with the site
+ * bundle switched off (2026-10-26): 16px regular, 30px line, no block padding,
+ * 16px sides, 1px border = 32px tall. Type is on the host (rung 6, inherits
+ * in); the box is on the documented `part="button"` (rung 7). One class plus
+ * the part outranks the skin's `lightning-button::part(button)`, so no
+ * !important.
+ *
+ * A custom element is display:inline unless told otherwise. */
 .job-filter-bar__filter {
     display: inline-block;
-
-    /* A filter chip is not a call to action.
-     *
-     * The site-wide button hooks in design-tokens.css give every button the SEP
-     * primary size, which measured 48.6px here — exactly the height of the
-     * "List a job" CTA on the same screen. Five chips carrying the same weight
-     * as the one action on the page reads as five calls to action.
-     *
-     * These are the same shared hooks, redeclared on the host. Custom
-     * properties inherit into the component's shadow root, so setting them here
-     * scopes the size to this bar and nothing else — the CTA beside it is
-     * untouched.
-     *
-     * The inline padding steps down the SLDS scale rather than inventing
-     * values. (It read 16px / --slds-g-spacing-4 until a946d9b moved it to
-     * --slds-g-spacing-5; the comment said 16px for a while after it did not.)
-     *
-     * NOTE: it has to be `--slds-s-button-sizing-border`, not `border-width`.
-     * A plain `border-width` on the host does nothing: the host carries no
-     * border (its border-style is `none`) and the element you can actually see
-     * is the <button> inside the shadow root, which a light-DOM declaration
-     * cannot reach. Measured — the host stayed at 0px and the button at 1px.
-     * The hook works because it is a custom property, and those do cross the
-     * shadow boundary. */
-    /* [OFF — custom button styles] Default Lightning button size instead.
-    --slds-s-button-font-size: var(--slds-g-font-scale-2);
-    --slds-s-button-spacing-block: var(--slds-g-spacing-3);
-    --slds-s-button-spacing-inline: var(--slds-g-spacing-5);
-    --slds-s-button-sizing-border: 2px;
-    */
+    font-size: var(--slds-g-font-scale-base, 0.8125rem);
+    font-weight: var(--slds-g-font-weight-4, 400);
+}
+.job-filter-bar__filter::part(button) {
+    border-width: var(--slds-g-sizing-border-1, 1px);
+    padding-block: 0;
+    padding-inline: var(--slds-g-spacing-4, 1rem);
+    line-height: calc(var(--slds-g-sizing-9, 2rem) - 2 * var(--slds-g-sizing-border-1, 1px));
 }
 
 /* The search takes the rest of the row but should not collapse to nothing when

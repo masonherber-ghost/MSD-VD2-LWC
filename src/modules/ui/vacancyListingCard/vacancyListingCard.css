@@ -9,7 +9,7 @@
  *
  * Scoped to this wrapper's class, so no other card on the site moves. */
 .vacancy-listing-card__card {
-    --slds-c-card-body-spacing-inline-start: var(--slds-g-spacing-4);
-    --slds-c-card-body-spacing-inline-end: var(--slds-g-spacing-4);
-    --slds-c-card-body-spacing-block-end: var(--slds-g-spacing-4);
+    --slds-c-card-body-spacing-inline-start: var(--slds-g-spacing-4, 1rem);
+    --slds-c-card-body-spacing-inline-end: var(--slds-g-spacing-4, 1rem);
+    --slds-c-card-body-spacing-block-end: var(--slds-g-spacing-4, 1rem);
 }

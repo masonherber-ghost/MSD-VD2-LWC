@@ -27,6 +27,28 @@ Experience Cloud layer added:
 **Stop at the first rung that reaches the property.** Skipping to a lower rung because it is
 quicker is the failure mode.
 
+**Rung 7 is allowed, not ruled out — ask first.** When rungs 1–6 cannot reach a property and the
+component exposes a `part="…"` for that element, propose the `::part()` rule and ask the user
+before writing it. Once agreed it is a normal skin: tokens only, scoped by tag / reflected
+attribute / `sep-` class, listed in the handover register. Prefer it to a legacy `--sds-c-*` or an
+unpublished `--slds-c-*` hook: the part is documented API, those are not. (`lightning-button`, user
+2026-10-26: border width, padding and line height moved from hooks to `::part(button)`.)
+
+**A lever can reach a property the browser will not render.** Browsers snap `border-width` and
+`outline-width` to whole *screen* pixels: a 1.5px border draws true on a 2x (Retina) screen and
+floors to 1px on a 1x one. Headless Chrome renders as 1x whatever scale it is given, so it always
+reads 1px (Chrome 156, 2026-10-26). A fractional stroke is a screen-density question, not a
+Salesforce gap — say which screens it holds on. (`lightning-button` keeps the design's 1.5px; on
+1x screens the button is 1px short, accepted by the user 2026-10-26.)
+
+**Production status (Salesforce, *SLDS 2 Best Practices*):** rung 4 `--slds-c-*` hooks are a
+**developer preview** in SLDS 2 — not for production — and rung 5 assigns a value to a global hook,
+which Salesforce reserves for theming tools. **Decision (user, 2026-10-20): both stay as
+prototype-only levers, listed for the developer at handover** in `_docs/handover-styling-register.md`
+(generated: `node .claude/skills/component-from-design/styling-register.mjs`). Deprecated
+`--sds-c-*` hooks are used where nothing public reaches (user, 2026-10-20) and are listed there too. A utility on a shipped component styles its host only — it reaches inside solely
+through inherited properties. Detail: `component-from-design` § 4a.
+
 ## Never — the gate
 
 - `--slds-s-*` or `--_slds-*` — private per the SLDS Linter (`no-slds-private-var`). Existing uses
@@ -65,10 +87,20 @@ does not expose are out of reach.
 
 | Scope | Where | Selector |
 |---|---|---|
-| **Every instance on the site** of one shipped component | `src/assets/css/site.css` § *Component skins* | The tag: `lightning-grouped-combobox { … }` |
-| **An opt-in variant** of a shipped component | `src/assets/css/site.css` | A `sep-` class: `.sep-listing-chip { … }` |
+| **Every instance on the site** of one shipped component | `src/assets/css/site/components/<tag>.css` — one file per component, named by its tag without `lightning-` (`button.css`) | The tag: `lightning-button { … }`, `lightning-button[variant='brand']::part(button)` |
+| **An opt-in variant** of a shipped component | That component's file in `site/components/` | A `sep-` class: `.sep-listing-chip { … }` |
+| **A site-wide skin of an SLDS blueprint** | `src/assets/css/site/blueprints/<name>.css` | A `sep-` class beside the SLDS one |
 | **Only inside one of our wrappers** | That wrapper's own `.css` | The wrapper's class |
 | **A site-wide branding value** (type scale, brand colour) | `src/assets/css/design-tokens.css` | `:root`, as a `--dxp-*` stand-in |
+
+**Never edit `src/assets/css/site.css`** — it is the bundle, generated from `site/` by
+`npm run css` (`rules-architecture.md` § *Stylesheets*). A new component file needs no
+registration; the bundler picks it up, and `npm run dev` re-bundles on save.
+
+**Delete, don't comment out.** A skin that is switched off is removed, not left as a commented
+`[OFF]` block: dead CSS in comments reads as live to the next person, drifts from the rules, and
+git keeps the history. (2026-10-26: 21 such blocks removed from the old `site.css`; a copy is in
+`_docs/archive/css-before-split-2026-10-26/`.)
 
 Component hooks do **not** go in `design-tokens.css` at `:root` — that file is for tokens and the
 Theme-panel stand-in (`rules-lwc-layout.md` § *Defining a project token*). Setting a component's

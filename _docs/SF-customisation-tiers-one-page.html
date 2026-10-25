@@ -4,16 +4,16 @@
 <meta charset="utf-8">
 <title>Customisation tiers — one page</title>
 <style>
-  @page { size: A4; margin: 11mm 14mm 9mm; }
+  @page { size: A4; margin: 9mm 14mm 7mm; }
   :root { --ink: #1d2433; --muted: #4a5468; --rule: #d5d9e0; --teal: #2d5b6b; --teal-bg: #eef4f4; --rust: #8a4a1f; --rust-bg: #f8efe8; --green: #3b6b3b; --green-bg: #eef5ee; }
   * { box-sizing: border-box; }
-  body { margin: 0; color: var(--ink); font: 8.4pt/1.36 -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif; }
+  body { margin: 0; color: var(--ink); font: 8.1pt/1.33 -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif; }
   .eyebrow { color: var(--teal); letter-spacing: .14em; font-size: 7.5pt; text-transform: uppercase; }
   h1 { font: 600 19pt/1.15 Georgia, "Times New Roman", serif; margin: 3pt 0 3pt; }
   .lede { color: var(--muted); font-size: 9.5pt; margin: 0 0 6pt; }
   table { width: 100%; border-collapse: collapse; }
   th { text-align: left; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; font-size: 6.8pt; color: var(--muted); border-bottom: 1pt solid var(--ink); padding: 0 5pt 4pt; }
-  td { vertical-align: top; padding: 5pt 5pt; border-bottom: .6pt solid var(--rule); }
+  td { vertical-align: top; padding: 4pt 5pt; border-bottom: .6pt solid var(--rule); }
   td.n { font: 15pt/1 Georgia, serif; color: var(--teal); width: 16pt; padding-top: 7pt; }
   td.n.r { color: var(--rust); }
   td.t { width: 15%; }
@@ -34,7 +34,7 @@
   tr.gate.up b { color: var(--rust); }
   tr.pre td { background: var(--green-bg); border-top: 1.3pt solid var(--green); border-bottom: none; padding: 5pt 7pt; font-size: 7.8pt; }
   tr.pre b { letter-spacing: .12em; color: var(--green); margin-right: 6pt; font-size: 7.4pt; }
-  .foot { display: grid; grid-template-columns: 1fr 1fr; gap: 12pt; margin-top: 7pt; }
+  .foot { display: grid; grid-template-columns: 1fr 1fr; gap: 12pt; margin-top: 5pt; }
   .foot h2 { font: 600 10.5pt/1.2 Georgia, serif; margin: 0 0 3pt; }
   .foot ol { margin: 0; padding-left: 13pt; }
   .foot li { margin-bottom: 2pt; }
@@ -49,7 +49,7 @@
 
 <div class="eyebrow">Salesforce Experience Cloud · one-page summary · October 2026</div>
 <h1>Customisation tiers for Salesforce websites</h1>
-<p class="lede">Where design work ends, where developer effort begins, and where customisation starts to put Salesforce upgrades at risk.</p>
+<p class="lede">Where design work ends, where developer effort begins, and where customisation starts to put Salesforce upgrades at risk. Client work is custom by default: the questions are effort, and whether a screen restructures or reaches into a standard component.</p>
 
 <table>
   <thead><tr><th></th><th>Tier · who</th><th>What changes</th><th>Constraints · watch for</th><th>Upgrade risk</th></tr></thead>
@@ -69,17 +69,18 @@
         <span class="k">Values and published names only, no new CSS rules</span>
         <ul>
           <li><b>Global tokens</b> <code>--slds-g-*</code>: the theme. Reach every component at once</li>
-          <li><b>Component hooks</b> <code>--slds-c-*</code>: per component. Only the ones its own stylesheet reads work</li>
+          <li><b>Component hooks</b> <code>--slds-c-*</code>: per component. Only the ones its own stylesheet reads work. A developer preview in SLDS&nbsp;2</li>
           <li><b>SLDS utility classes</b> <code>slds-*</code>: spacing, text, grid, named in markup</li>
         </ul>
       </td>
       <td class="c">
         <span class="k">No hook exists for</span>label size and weight, checkbox size, border width, input padding, focus-ring shape, hover elevation.
         <span class="k">Prove it</span>A hook can exist and do nothing: read the rendered value. Utilities have no responsive spacing or gap.
+        <span class="k">Production</span>Component hooks and re-pointed globals: prototype-only, in the styling register.
       </td>
       <td class="risk">Low: re-verify each release</td>
     </tr>
-    <tr class="gate"><td colspan="5"><b>DEVELOPER GATE</b>Code, source control, testing and deployment from here down. A funding decision. <b style="letter-spacing:0;margin:0 0 0 6pt;color:inherit">Test:</b> sets a value or names something published → Tier 2; writes a new CSS rule, class or selector → Tier 3.</td></tr>
+    <tr class="gate"><td colspan="5"><b>DEVELOPER GATE</b>Code from here down. Expected for client work: budget from the start, sized by effort. <b style="letter-spacing:0;margin:0 0 0 6pt;color:inherit">Tests:</b> sets a value or names something published → Tier 2; writes a new CSS rule, class or selector → Tier 3; changes a component's structure → Tier 4; reaches into its internals → Tier 5.</td></tr>
     <tr>
       <td class="n">3</td>
       <td class="t"><b>Layout</b><span>Developer, designer</span></td>
@@ -90,7 +91,7 @@
     <tr>
       <td class="n">4</td>
       <td class="t"><b>Component</b><span>Developer</span></td>
-      <td class="w">New Lightning web components with their own markup, data (including Apex), logic and Builder properties, including a <b>rebuild</b> of a standard control when the design needs a look no hook reaches.</td>
+      <td class="w"><b>Compose</b> (the normal case, low effort): standard components assembled into a new one with data mapped in, such as a card repeater or a two-column detail view. <b>Rebuild</b> (the exception, decided explicitly): a standard component restructured, or rebuilt because no hook reaches its look.</td>
       <td class="c">Browser security model and allow-lists. Performance, accessibility and caching become ours. A rebuild also takes on keyboard behaviour, validation and screen-reader support.</td>
       <td class="risk">Low, owned by us</td>
     </tr>
@@ -111,9 +112,9 @@
   <div>
     <h2>What building it showed</h2>
     <div class="stat">
-      <div><b>84%</b><span>of the button design's values reached with supported levers</span></div>
+      <div><b>86%</b><span>of the button design's values reached</span></div>
       <div><b>70%</b><span>of the form controls' values reached</span></div>
-      <div><b>26</b><span>Figma variables named a wrong or non-existent hook on first import</span></div>
+      <div><b>26</b><span>Figma variables named a wrong hook on first import</span></div>
     </div>
     <p style="margin:0">The gap is not effort: it is properties no hook reaches. Decide it per value: <b>accept</b> the component, <b>change</b> the design, or <b>fund</b> a Tier 4 rebuild. Never drift into Tier 5.</p>
   </div>
@@ -123,13 +124,13 @@
       <li><b>Align the design system</b> before designing screens, and audit each import.</li>
       <li><b>Design to what ships</b>, from a verified hook inventory, not the published list.</li>
       <li><b>Review before building, measure after:</b> read rendered values in a browser.</li>
-      <li><b>Developer gate = funding decision;</b> upgrade gate = architecture approval.</li>
-      <li><b>Keep a register</b> of every token and hook set, and anything past the upgrade gate. Retest each release.</li>
+      <li><b>Budget for the developer gate</b> from the start; rebuilds and the upgrade gate need explicit approval.</li>
+      <li><b>Hand over the prototype and its styling register:</b> every token and hook set, retested each release.</li>
     </ol>
   </div>
 </div>
 
-<p class="src">Summary of <i>Customisation tiers for Salesforce websites</i>. Evidence from the MSD LWR prototype: Figma design-system import and skinning of lightning-button and five form controls, measured in headless Chrome.</p>
+<p class="src">Summary of <i>Customisation tiers for Salesforce websites</i>. Evidence from the MSD LWR prototype: Figma design-system import and skinning of lightning-button and five form controls, measured in headless Chrome; conversations with two Salesforce architects.</p>
 
 </body>
 </html>

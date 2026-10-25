@@ -1,0 +1,236 @@
+<!doctype html><html lang="en"><head>
+<!-- Source for skinning-never-list-one-page.pdf. Edit this file directly (it is the
+     layout; skinning-never-list-one-page.md is the plain-text twin, so keep both in
+     step). Must stay on ONE A4 page: if it spills, lower the html zoom below.
+
+       "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --no-pdf-header-footer --virtual-time-budget=8000 \
+         --print-to-pdf=_docs/skinning-never-list-one-page.pdf "file://$PWD/_docs/skinning-never-list-one-page.html"
+--><meta charset="utf-8"><title>LWC Skinning Never List</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Atkinson+Hyperlegible+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one sheet. Header strip, the ladder as a rung rail on the left, six "never" panels in a 2-col grid, a check strip at the foot. */
+:root {
+  --bg: #f5f6f8;
+  --sheet: #ffffff;
+  --ink: #18202b;
+  --muted: #5a6474;
+  --rule: #dde1e8;
+  --accent: #0b5cab;
+  --accent-tint: #e6f0fa;
+  --never: #b4231b;
+  --never-tint: #fbeceb;
+  --caution: #8a5a00;
+  --caution-tint: #fdf3df;
+  --font-body: "Atkinson Hyperlegible Next", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Atkinson Hyperlegible Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f141b; --sheet: #161d26; --ink: #e7ebf1; --muted: #9aa5b5; --rule: #2a3442;
+    --accent: #6fb1f2; --accent-tint: #13283d; --never: #ff8a80; --never-tint: #3a1a19;
+    --caution: #f2c063; --caution-tint: #352a12; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f141b; --sheet: #161d26; --ink: #e7ebf1; --muted: #9aa5b5; --rule: #2a3442;
+  --accent: #6fb1f2; --accent-tint: #13283d; --never: #ff8a80; --never-tint: #3a1a19;
+  --caution: #f2c063; --caution-tint: #352a12; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 14px; line-height: 1.45;
+  padding-block: 24px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+code { font-family: var(--font-mono); font-size: 0.86em; background: var(--bg); padding: 0 4px; border-radius: 3px; overflow-wrap: anywhere; }
+
+.sheet {
+  max-width: 1080px; margin: 0 auto; background: var(--sheet);
+  border: 1px solid var(--rule); border-radius: 6px;
+  padding: 28px 32px; display: grid; gap: 22px;
+}
+
+header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px 24px; border-bottom: 2px solid var(--ink); padding-bottom: 14px; }
+.eyebrow { font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 4px; }
+h1 { margin: 0; font-size: 28px; line-height: 1.1; font-weight: 700; text-wrap: balance; }
+.lede { margin: 6px 0 0; max-width: 62ch; color: var(--muted); }
+.meta { font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); text-align: right; line-height: 1.6; }
+
+.body { display: grid; grid-template-columns: 290px 1fr; gap: 24px; }
+.body > * { min-width: 0; }
+
+/* Ladder */
+.ladder h2, .nevers h2 { font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 10px; }
+.ladder p.note { margin: 0 0 12px; color: var(--muted); font-size: 12.5px; }
+ol.rungs { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; position: relative; }
+ol.rungs::before { content: ""; position: absolute; left: 13px; top: 8px; bottom: 8px; width: 2px; background: var(--rule); }
+.rung { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; position: relative; }
+.rung .n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 13px; background: var(--accent-tint); color: var(--accent); border: 2px solid var(--accent); font-variant-numeric: tabular-nums; }
+.rung.proto .n { background: var(--caution-tint); color: var(--caution); border-color: var(--caution); }
+.rung .t { font-weight: 600; font-size: 13px; }
+.rung .e { display: block; color: var(--muted); font-size: 12px; }
+.tag { display: inline-block; font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 1px 6px; border-radius: 3px; margin-left: 4px; vertical-align: 1px; background: var(--caution-tint); color: var(--caution); }
+.stop { margin-top: 12px; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--accent-tint); font-size: 12.5px; }
+
+/* Never panels */
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.panel { border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px; }
+.panel h3 { margin: 0 0 8px; font-size: 14.5px; display: flex; gap: 8px; align-items: baseline; }
+.panel h3 .k { font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); font-weight: 500; }
+.panel ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 5px; }
+.panel li { display: grid; grid-template-columns: 14px 1fr; gap: 6px; font-size: 12.8px; }
+.panel li::before { content: "×"; color: var(--never); font-weight: 700; line-height: 1.35; }
+.panel li.do::before { content: "→"; color: var(--accent); }
+.panel li.warn::before { content: "!"; color: var(--caution); }
+.panel.wide { grid-column: 1 / -1; }
+.panel ul.cols { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 18px; }
+.lint { font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); }
+
+/* Foot */
+footer { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; border-top: 1px solid var(--rule); padding-top: 14px; font-size: 12.5px; }
+footer h4 { margin: 0 0 4px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+footer p { margin: 0; }
+
+@media (max-width: 860px) {
+  .body { grid-template-columns: 1fr; }
+  footer { grid-template-columns: 1fr; }
+  .meta { text-align: left; }
+}
+@media (max-width: 600px) {
+  .sheet { padding: 20px 16px; }
+  .grid, .panel ul.cols { grid-template-columns: 1fr; }
+  h1 { font-size: 23px; }
+}
+
+@page { size: A4; margin: 8mm; }
+html { zoom: 0.69; }
+body { padding: 0; background: #fff; }
+.sheet { border: 0; padding: 0; max-width: 1040px; width: 1040px; }
+.body { grid-template-columns: 290px 1fr; }
+.grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.panel ul.cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+footer { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.meta { text-align: right; }
+h1 { font-size: 28px; }
+.panel { break-inside: avoid; }
+</style>
+
+<main class="sheet">
+  <header>
+    <div>
+      <p class="eyebrow">MSD VD2 · LWC prototype · team reference</p>
+      <h1>Skinning shipped components: the never list</h1>
+      <p class="lede">Skin only through what Salesforce documents. It upgrades every org three times a year and promises nothing about a component's internals.</p>
+    </div>
+    <div class="meta">As of 26 Oct 2026<br>Source: rules-skinning.md<br>component-from-design · customisation-tiers.md</div>
+  </header>
+
+  <div class="body">
+    <section class="ladder" aria-labelledby="ladder-h">
+      <h2 id="ladder-h">The ladder</h2>
+      <p class="note">Try each rung in order. Stop at the first one that reaches the property.</p>
+      <ol class="rungs">
+        <li class="rung"><span class="n">1</span><span><span class="t">Attribute or <code>variant</code></span><span class="e"><code>variant="label-stacked"</code></span></span></li>
+        <li class="rung"><span class="n">2</span><span><span class="t">SLDS utility on the host</span><span class="e">Placement and inherited type only</span></span></li>
+        <li class="rung"><span class="n">3</span><span><span class="t"><code>--dxp-*</code> hook</span><span class="e">Site branding (Theme panel)</span></span></li>
+        <li class="rung proto"><span class="n">4</span><span><span class="t"><code>--slds-c-*</code> hook <span class="tag">proto</span></span><span class="e">Dev preview in SLDS 2</span></span></li>
+        <li class="rung proto"><span class="n">5</span><span><span class="t">Global <code>--slds-g-*</code> on the host <span class="tag">proto</span></span><span class="e">Assignment is for theming tools</span></span></li>
+        <li class="rung"><span class="n">6</span><span><span class="t">Property on a <code>sep-</code> class</span><span class="e"><code>.sep-listing-chip { … }</code></span></span></li>
+        <li class="rung"><span class="n">7</span><span><span class="t">Documented <code>::part()</code></span><span class="e">On the line; last resort</span></span></li>
+      </ol>
+      <p class="stop"><strong>Proto</strong> levers stay in the prototype only. List every use in <code>_docs/handover-styling-register.md</code>.</p>
+    </section>
+
+    <section class="nevers" aria-labelledby="never-h">
+      <h2 id="never-h">Never</h2>
+      <div class="grid">
+        <div class="panel">
+          <h3>Reach inside a component <span class="k">upgrade gate</span></h3>
+          <ul>
+            <li><span>Private hooks <code>--slds-s-*</code> or <code>--_slds-*</code> <span class="lint">no-slds-private-var</span></span></li>
+            <li><span>A selector naming an SLDS class, e.g. bare <code>.slds-page-header</code> <span class="lint">no-slds-class-overrides</span></span></li>
+            <li><span>Descendant chains into a component's internal markup</span></li>
+            <li><span>Undocumented or "internal use" attributes to unlock a hook</span></li>
+            <li class="do"><span>Stop at the host: tag, reflected attribute, or <code>sep-</code> class</span></li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Hard-code values</h3>
+          <ul>
+            <li><span>Raw hex, px, rem or font values, except as a <code>var()</code> fallback <span class="lint">no-hardcoded-values-slds2</span></span></li>
+            <li><span>A <code>--slds-g-*</code> reference with no fallback <span class="lint">no-slds-var-without-fallback</span></span></li>
+            <li><span><code>!important</code>. Ours are unlayered; they already win</span></li>
+            <li><span><code>--lwc-*</code> tokens or SLDS 1 classes (<code>slds-page-header_record-home</code>)</span></li>
+            <li><span>A relative <code>url()</code>. It 404s in the built site</span></li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Put a skin in the wrong place</h3>
+          <ul>
+            <li class="do"><span>All instances: the tag, in <code>site/components/&lt;tag&gt;.css</code></span></li>
+            <li class="do"><span>Opt-in variant: a <code>sep-</code> class in that component's file</span></li>
+            <li><span>Editing <code>site.css</code>. It is generated by <code>npm run css</code></span></li>
+            <li><span>Component hooks at <code>:root</code> in <code>design-tokens.css</code></span></li>
+            <li><span>Setting a <code>--slds-g-*</code> global outside <code>design-tokens.css</code></span></li>
+            <li><span>Spacing baked into a <code>sep-</code> class. Placement stays a utility</span></li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Rebuild or fake it <span class="k">custom-component gate</span></h3>
+          <ul>
+            <li><span>Rebuild a shipped control (combobox, modal, tabs, pill, toggle) because the skin falls short</span></li>
+            <li><span>Build a new custom component without asking the user first</span></li>
+            <li><span>Script a class on to fake a state the shadow root owns (hover, filled)</span></li>
+            <li><span>Remove SLDS</span></li>
+            <li class="do"><span>Record the gap and say what is off</span></li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Hide the risks</h3>
+          <ul>
+            <li class="warn"><span><code>--slds-c-*</code> hooks: dev preview, not for production</span></li>
+            <li class="warn"><span>Re-pointed globals: comment each use</span></li>
+            <li class="warn"><span>Legacy <code>--sds-c-*</code>: unsupported, ask first</span></li>
+            <li class="do"><span>Regenerate the register after any skin change</span></li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Call it done because it compiles</h3>
+          <ul>
+            <li><span>Assume a hook works. Three in this project compiled and did nothing</span></li>
+            <li class="do"><span>Read the computed value off the element, per state</span></li>
+            <li class="do"><span>No browser? Report the skin as unverified</span></li>
+            <li class="do"><span>Lint the block: no fallback, class-override or private findings</span></li>
+          </ul>
+        </div>
+        <div class="panel wide">
+          <h3>Misuse a blueprint <span class="k">the 37 no component renders</span></h3>
+          <ul class="cols">
+            <li><span>Hand-write a blueprint a <code>lightning-*</code> component already renders. Check <code>/design-system</code> → Blueprints</span></li>
+            <li><span>Use a class without grepping the shipped CSS. <code>slds-table_column</code> and <code>slds-setup-assistant__step</code> don't ship</span></li>
+            <li><span>Override the blueprint's SLDS class. Add a <code>sep-</code> class beside it</span></li>
+            <li><span>Use <code>--slds-s-pageheader-*</code>. The page header has no public hooks: set real properties on <code>.sep-page-header</code></span></li>
+            <li><span>Select an inner element by its SLDS class. Add <code>sep-page-header__title</code> beside <code>slds-page-header__title</code></span></li>
+            <li><span>Put a responsive <code>sep-</code> modifier alongside <code>slds-m-*</code>. The utility's <code>!important</code> wins</span></li>
+            <li><span>Add state or keyboard to a blueprint without treating it as Tier 4, or hand-roll one for a control that ships</span></li>
+            <li class="warn"><span>Blueprints aren't auto-updated by SLDS. They're our code to maintain</span></li>
+            <li class="do"><span>Badges: always <code>slds-badge</code> blueprint markup, never <code>lightning-badge</code></span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div><h4>Regenerate the register</h4><p><code>node .claude/skills/component-from-design/styling-register.mjs</code></p></div>
+    <div><h4>Two gates</h4><p>Upgrade gate: documented parts only. Custom-component gate: the user decides. Passing one doesn't pass the other.</p></div>
+    <div><h4>Read in full</h4><p><code>rules-skinning.md</code> · <code>component-from-design/SKILL.md</code> · <code>_docs/customisation-tiers.md</code></p></div>
+  </footer>
+</main>
+</html>

@@ -1,8 +1,8 @@
 /* =============================================================================
- * Type size utilities — display and heading
+ * Type utilities — display and heading size, and the heading weight exception
  *
- * Loaded by `main.njk` after `site.css`. This file is the only place these
- * classes are declared.
+ * The last file in the site bundle (scripts/build-css.mjs), so it follows
+ * every component skin. This file is the only place these classes are declared.
  *
  * Eight opt-in classes, read straight off SLDS's own type ramp. NOT ONE SIZE IS
  * WRITTEN HERE: every value is a shipped `--slds-g-font-scale-*` step, so a
@@ -29,8 +29,9 @@
  * SIZE AND LINE-HEIGHT ONLY, as SLDS's own heading utilities do — line-height
  * is the same `--slds-g-font-lineheight-2` (1.25) they use. Weight and colour
  * stay separate decisions: SLDS resets h1–h6 to inherit both. Colour pairs with
- * a `.sep-text-*` class in `site.css`; SLDS ships no weight-only utility, so a
- * bold heading is still a weight declaration of its own.
+ * a `.sep-text-*` class below. Weight: headings are bold by default
+ * (the h1–h6 rule in `base.css`), and SLDS ships no weight-only utility, so the
+ * exception is the one weight class at the end of this file.
  *
  * THE CLASS SETS THE SIZE, THE TAG SETS THE LEVEL. SLDS resets h1–h6 to 1em,
  * so pick the element for the document outline and the class for the look:
@@ -40,11 +41,75 @@
  * Don't stack one on an `slds-text-heading_*` class anyway — both are a single
  * class, so which wins comes down to load order, not intent.
  * ========================================================================== */
-.sep-font-scale-8 { font-size: var(--slds-g-font-scale-8); line-height: var(--slds-g-font-lineheight-2); }
-.sep-font-scale-7 { font-size: var(--slds-g-font-scale-7); line-height: var(--slds-g-font-lineheight-2); }
-.sep-font-scale-6 { font-size: var(--slds-g-font-scale-6); line-height: var(--slds-g-font-lineheight-2); }
-.sep-font-scale-5 { font-size: var(--slds-g-font-scale-5); line-height: var(--slds-g-font-lineheight-2); }
-.sep-font-scale-4 { font-size: var(--slds-g-font-scale-4); line-height: var(--slds-g-font-lineheight-2); }
-.sep-font-scale-3 { font-size: var(--slds-g-font-scale-3); line-height: var(--slds-g-font-lineheight-2); }
-.sep-font-scale-2 { font-size: var(--slds-g-font-scale-2); line-height: var(--slds-g-font-lineheight-2); }
-.sep-font-scale-1 { font-size: var(--slds-g-font-scale-1); line-height: var(--slds-g-font-lineheight-2); }
+.sep-font-scale-8 { font-size: var(--slds-g-font-scale-8, 2.625rem); line-height: var(--slds-g-font-lineheight-2, 1.25); }
+.sep-font-scale-7 { font-size: var(--slds-g-font-scale-7, 2rem); line-height: var(--slds-g-font-lineheight-2, 1.25); }
+.sep-font-scale-6 { font-size: var(--slds-g-font-scale-6, 1.75rem); line-height: var(--slds-g-font-lineheight-2, 1.25); }
+.sep-font-scale-5 { font-size: var(--slds-g-font-scale-5, 1.5rem); line-height: var(--slds-g-font-lineheight-2, 1.25); }
+.sep-font-scale-4 { font-size: var(--slds-g-font-scale-4, 1.25rem); line-height: var(--slds-g-font-lineheight-2, 1.25); }
+.sep-font-scale-3 { font-size: var(--slds-g-font-scale-3, 1.125rem); line-height: var(--slds-g-font-lineheight-2, 1.25); }
+.sep-font-scale-2 { font-size: var(--slds-g-font-scale-2, 1rem); line-height: var(--slds-g-font-lineheight-2, 1.25); }
+.sep-font-scale-1 { font-size: var(--slds-g-font-scale-1, 0.875rem); line-height: var(--slds-g-font-lineheight-2, 1.25); }
+
+/* Weight — the exception to bold headings.
+ *
+ * Every h1–h6 is bold (`base.css`). Put this on a heading the design draws at
+ * regular weight: `<h2 class="sep-font-scale-4 sep-font-weight-regular">`. One
+ * class beats the element rule, so no `!important`. Regular is
+ * `--slds-g-font-weight-4`, the body weight. */
+.sep-font-weight-regular { font-weight: var(--slds-g-font-weight-4, 400); }
+
+/* Medium — for markup WE write that the design draws at Medium, such as an
+ * error-summary link (Figma Components/Error link). Not for a `lightning-*`
+ * component: on its host a class reaches inside only by inheritance, and a
+ * component-wide weight is a skin on the tag in its
+ * components/<tag>.css (rules-skinning.md § Where the skin lives). */
+.sep-font-weight-medium { font-weight: var(--slds-g-font-weight-5, 500); }
+
+
+/* =============================================================================
+ * Text colour utilities
+ *
+ * The nine text colours from the Semantic Colours page of the SEP Foundations
+ * library, as opt-in classes. Read out of the Figma file rather than eyeballed:
+ *
+ *   Semantic/Text/Primary            #333333   Semantic/Text/Disabled         #a1b3c8
+ *   Semantic/Text/Secondary          #666666   Semantic/Text/Status/Error     #d03633
+ *   Semantic/Text/Accent/Primary     #0071bb   Semantic/Text/Status/Success   #2d750a
+ *   Semantic/Text/Accent/Secondary   #134276   Semantic/Text/Inverse/Primary  #ffffff
+ *   Semantic/Text/Inverse/Disabled   #e6f2fa
+ *
+ * NOT ONE HEX IS WRITTEN HERE. All nine read the SLDS semantic colour hooks the
+ * Figma import in design-tokens.css themes, so these are
+ * pure consumers — a colour change is still a one-line edit in the tokens file
+ * and it reaches these for free. Adding the hexes again would have created a
+ * second source of truth that drifts silently.
+ *
+ * WHY THESE ARE NEEDED AT ALL. SLDS 2 ships seven text-colour utilities —
+ * `slds-text-color_default`, `_weak`, `_inverse`, `_inverse-weak`, `_error`,
+ * `_success`, `_destructive` — and only four of them mean the same thing as one
+ * of the nine above. There is no SLDS utility for the accent colours, the
+ * disabled pair or the secondary grey, and those are the ones a SEP screen
+ * reaches for most.
+ *
+ * PREFER THE SLDS UTILITY WHERE THE MEANING MATCHES. `slds-text-color_weak` and
+ * `.sep-text-secondary` resolve to the same value, because design-tokens.css
+ * maps the SLDS token onto the same semantic layer. Reach for these where SLDS
+ * has no equivalent, not as a default.
+ *
+ * NO `!important`, deliberately. SLDS declares its text-colour utilities inside
+ * a cascade layer and — unlike its spacing utilities — without `!important`.
+ * This file is unlayered, and unlayered beats layered, so a `sep-` class wins
+ * over an SLDS one on the same element with no specificity fight.
+ *
+ * Each class name mirrors its token exactly: `.sep-text-accent-primary` sets
+ * `--slds-g-color-accent-2`. One-to-one, so neither can be renamed quietly.
+ * ========================================================================== */
+.sep-text-primary { color: var(--slds-g-color-on-surface-2, #2e2e2e); }
+.sep-text-secondary { color: var(--slds-g-color-on-surface-1, #747474); }
+.sep-text-accent-primary { color: var(--slds-g-color-accent-2, #0b5cab); }
+.sep-text-accent-secondary { color: var(--slds-g-color-accent-3, #014486); }
+.sep-text-inverse-primary { color: var(--slds-g-color-on-accent-1, #ffffff); }
+.sep-text-inverse-disabled { color: var(--slds-g-color-on-surface-inverse-2, #aeaeae); }
+.sep-text-disabled { color: var(--slds-g-color-on-disabled-1, #c9c9c9); }
+.sep-text-error { color: var(--slds-g-color-error-1, #ba0517); }
+.sep-text-success { color: var(--slds-g-color-success-1, #2e844a); }
