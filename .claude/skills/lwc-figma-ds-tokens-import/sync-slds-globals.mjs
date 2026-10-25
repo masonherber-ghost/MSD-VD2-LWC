@@ -1,33 +1,23 @@
 #!/usr/bin/env node
-// Writes every --slds-g-* global the Figma import does NOT set into design-tokens.css,
-// between the markers
+// The SLDS half of design-tokens.css: every public --slds-g-* global that nothing else declares,
+// at the value SLDS ships. A MODULE — write-tokens.mjs imports `sldsEntries(declared)` and writes
+// the whole token block. Each entry is labelled:
 //
-//   /* @generated slds-globals:start */  …  /* @generated slds-globals:end */
+//   default              SLDS 2's own value — the Cosmos and Lightning Blue themes agree
+//   cosmos — default X   the Cosmos theme's value; Lightning Blue (SLDS's base) has X
 //
-// each labelled with where its value comes from:
-//
-//   default   SLDS 2's own value — the Cosmos and Lightning Blue themes agree
-//   cosmos    the Cosmos theme's value — it differs from Lightning Blue, which is shown
-//
-// Skipped: every token declared above the block (the generated Figma block C1, and C2).
-// So this never overrides or repeats a Figma value. Re-run after upgrading @salesforce-ux/design-system-2 —
-// the block is generated, never hand-edited.
-//
-//   node .claude/skills/lwc-figma-ds-tokens-import/sync-slds-globals.mjs
-//
-// Values are written light-only (this project imports no dark mode): light-dark(a, b)
-// becomes a. References to Cosmos's private --slds-r-* reference ramps are resolved to
-// their literal value; references to another --slds-g-* token are KEPT as var(), so a
-// Figma override of the referenced token still flows through.
+// Values are written light-only (this project imports no dark mode): light-dark(a, b) becomes a.
+// References to Cosmos's private --slds-r-* reference ramps are resolved to their literal value;
+// references to another --slds-g-* token are KEPT as var(), so a Figma override of the
+// referenced token still flows through. Re-run write-tokens.mjs after upgrading
+// @salesforce-ux/design-system-2.
 
-import { readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { readFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = process.cwd();
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../../..');
 const DIST = join(ROOT, 'node_modules/@salesforce-ux/design-system-2/dist/css/bundled');
-const TOKENS = join(ROOT, 'src/assets/css/design-tokens.css');
-const START = '/* @generated slds-globals:start */';
-const END = '/* @generated slds-globals:end */';
 
 const props = (file) => {
     const m = new Map();
@@ -95,61 +85,22 @@ const resolved = (map, name, seen = new Set()) => {
     return v.replace(/\s+/g, ' ').toLowerCase();
 };
 
-// Names the Figma import declares — everything live outside the generated block.
-let file = readFileSync(TOKENS, 'utf8');
-const outside = file.includes(START)
-    ? file.slice(0, file.indexOf(START)) + file.slice(file.indexOf(END) + END.length)
-    : file;
-const figma = new Set(
-    [...outside.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/(--slds-g-[a-z0-9-]+)\s*:/g)].map((m) => m[1]),
-);
-
-// Family = the name up to its first numeric or state segment.
-const family = (n) => {
-    const p = n.replace(/^--slds-g-/, '').split('-');
-    if (p[0] === 'color' && p[1] === 'palette') return 'Palette: ' + n.replace(/^--slds-g-color-palette-/, '').replace(/-\d+$/, '') + ' — not in Figma';
-    if (p[0] === 'color' && /-base-/.test(n)) return p.slice(0, 3).join('-');
-    if (p[0] === 'color') return 'color-' + p[1];
-    if (p[0] === 'font') return 'font-' + p[1];
-    if (p[0] === 'shadow') return 'shadow';
-    return p[0];
-};
-
-const groups = new Map();
-let nCosmos = 0, nDefault = 0;
-for (const name of cosmos.keys()) {
-    if (!name.startsWith('--slds-g-') || figma.has(name)) continue;
-    const value = written(cosmos, name);
-    const rc = resolved(cosmos, name);
-    const rb = blue.has(name) ? resolved(blue, name) : null;
-    const isDefault = rb !== null && rc === rb;
-    isDefault ? nDefault++ : nCosmos++;
-    const note = isDefault
-        ? 'default'
-        : rb === null ? 'cosmos — not in Lightning Blue'
-        : rb.length <= 48 ? `cosmos — default ${rb}` : 'cosmos — default differs';
-    const fam = family(name);
-    if (!groups.has(fam)) groups.set(fam, []);
-    groups.get(fam).push({ name, value, note });
-}
-
-const lines = [START, ':root {'];
-for (const [fam, rows] of groups) {
-    lines.push('', `    /* ${fam} */`);
-    for (const r of rows) {
-        const decl = `    ${r.name}: ${r.value};`;
-        lines.push(decl.length < 72 ? `${decl.padEnd(72)}/* ${r.note} */` : `${decl} /* ${r.note} */`);
+/** Every shipped --slds-g-* global NOT in `declared`, in the order Cosmos declares them. */
+export function sldsEntries(declared) {
+    const out = [];
+    for (const name of cosmos.keys()) {
+        if (!name.startsWith('--slds-g-') || declared.has(name)) continue;
+        const value = written(cosmos, name);
+        const rc = resolved(cosmos, name);
+        const rb = blue.has(name) ? resolved(blue, name) : null;
+        const label = rb !== null && rc === rb
+            ? 'default'
+            : rb === null ? 'cosmos — not in Lightning Blue'
+            : rb.length <= 48 ? `cosmos — default ${rb}` : 'cosmos — default differs';
+        out.push({ hook: name, value, label, source: label === 'default' ? 'default' : 'cosmos' });
     }
+    return out;
 }
-lines.push('}', END);
-const block = lines.join('\n');
 
-if (file.includes(START)) {
-    file = file.slice(0, file.indexOf(START)) + block + file.slice(file.indexOf(END) + END.length);
-} else {
-    const anchor = file.indexOf('/* -----------------------------------------------------------------------------\n * D. Component hooks');
-    if (anchor < 0) throw new Error('section D not found — place the markers by hand');
-    file = file.slice(0, anchor) + block + '\n\n' + file.slice(anchor);
-}
-writeFileSync(TOKENS, file);
-console.log(`declared above (C1 Figma + C2 effect styles): ${figma.size}   cosmos: ${nCosmos}  default: ${nDefault}  total: ${figma.size + nCosmos + nDefault}`);
+/** Every public global SLDS ships — the 524 the file must declare. */
+export const shippedGlobals = [...cosmos.keys()].filter((n) => n.startsWith('--slds-g-'));

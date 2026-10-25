@@ -358,7 +358,7 @@ lightning-input[type='checkbox'] {
  *
  * Why this one needs a rule: a text input's label reads the label weight
  * (`[part='label']` → --slds-s-label-font-weight → weight 6, which
- * design-tokens.css C1a makes 500). `lightning-combobox` draws its own
+ * design-tokens.css's weight-6 override makes 500). `lightning-combobox` draws its own
  * `<label part="label">` with a `.slds-form-element__label` rule that sets NO
  * weight, so it inherited the page's 400 (measured 2026-10-23).
  *
@@ -418,7 +418,7 @@ lightning-dual-listbox {
  *   labels    18px → 16px: they read the private --slds-s-label-font-size,
  *             resolved at the root from font-size-base, so a scoped global
  *             cannot move it. WEIGHT is reached (2026-10-23): the label weight
- *             resolves from weight-6, which design-tokens.css C1a re-points to
+ *             resolves from weight-6, which design-tokens.css re-points to
  *             500, so labels render Medium. Applies to every form control.
  *   outline   1.5px → 1px; text indent 16px → 32px; focus ring is a 2px blur
  *             in accent-2, not the design's solid 2px accent-1 outline;

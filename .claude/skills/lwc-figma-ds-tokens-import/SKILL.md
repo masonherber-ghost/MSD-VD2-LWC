@@ -24,22 +24,28 @@ checked updates this file in the same piece of work — *Current state* and the 
 
 ---
 
-## The pipeline — three files, two generators
+## The pipeline — one generated block, three sources
 
 ```
-Figma ──(step 1, use_figma)──▶ figma-variables.txt ──import-figma.mjs──▶ C1 (generated)
-                                                    sync-slds-globals.mjs──▶ C3 (generated)
-Figma effect styles ──(step 1)──▶ hand-written C2 (elevation, focus) + B (--sep shadow tints)
+Figma variables ──(step 1, use_figma)──▶ figma-variables.txt ──import-figma.mjs──┐
+Figma effect styles + project decisions ──(by hand)──▶ hand-tokens.mjs ──────────┼─▶ write-tokens.mjs ─▶ token block
+SLDS stylesheet (installed) ──────────────────────────▶ sync-slds-globals.mjs ───┘
 ```
 
 | File in this folder | Role |
 |---|---|
 | `figma-variables.txt` | The snapshot: one Figma variable per line — `name ; code syntax ; Default-mode value or →alias`. Committed, so an import is reviewable as a diff |
-| `import-figma.mjs` | Writes **C1** between `@generated figma:start/end`: every variable that lands on a shipped `--slds-g-*` hook, with Figma's value. Prints every set-up problem it had to work around — that output is the core of the report |
-| `sync-slds-globals.mjs` | Writes **C3** between `@generated slds-globals:start/end`: every global **not declared above it**, at Cosmos's value, labelled `cosmos — default X` or `default` |
+| `import-figma.mjs` | Module: every variable that lands on a shipped `--slds-g-*` hook, with Figma's value and label. Run directly, it prints the **findings** — every set-up problem it worked around; that output is the core of the report |
+| `hand-tokens.mjs` | Data, edited by hand: the 8 `--sep-color-shadow-*` tints, the 20 elevation and focus shadows (Figma effect styles), and deliberate deviations from Figma (`msd — figma X`). **An entry here wins** over a Figma variable for the same hook |
+| `sync-slds-globals.mjs` | Module: every public global nothing above declares, at Cosmos's value, labelled `cosmos — default X` or `default` |
+| `write-tokens.mjs` | Merges the three (hand > Figma > SLDS), **groups by token type** — spacing, sizing, type, colour ramps, palettes, semantic colours (surface, on surface, border, accent, error, warning, success, info, disabled), shadows, motion — and writes between `/* @generated tokens:start/end */`. Group notes (issues worth knowing) live in its `GROUPS` table |
 | `check-tokens.mjs` | Verifies the file (step 4) |
 
-**Never hand-edit C1 or C3.** Change the snapshot (or the scripts) and regenerate.
+**Never hand-edit the token block.** Change the snapshot, `hand-tokens.mjs` or the scripts and run
+`write-tokens.mjs`. Outside the block, the file is hand-written and short: the header (label
+legend, pointers to the docs), the layout tokens (`--sep-content-*`), and a "Not in this file" note.
+**Comments stay brief** (user, 2026-10-26): a note only for an issue worth knowing, otherwise a
+pointer to the report or a review doc.
 
 ## Decisions already made — do not re-litigate
 
@@ -47,14 +53,14 @@ Figma effect styles ──(step 1)──▶ hand-written C2 (elevation, focus) +
 |---|---|
 | **All 524 public globals are declared** in `design-tokens.css` | User's rule (2026-10-19): the file is the complete record of the site's tokens |
 | **Figma's value wins** for every hook Figma defines — including ones equal to SLDS | User's rule (2026-10-19). Labels say which equal SLDS: `figma = default`, `figma = cosmos`. **One exception**, C1a: the weight palette (2026-10-23) |
-| What is declared above the C3 block is the source of truth; **C3 never repeats it** | User's rule (2026-10-19) |
+| Each hook is declared **once**: hand > Figma > SLDS default | User's rule (2026-10-19); one merged block since 2026-10-26 |
 | The import is **live** — no `[OFF]` blocks | Superseded the 2026-10-15 "off by default". The user switched every block on, then asked for Figma's values to replace the file's |
 | Project tokens are **`--sep-*`**. Never `--slds-*` for a name SLDS does not ship | User's rule |
 | **Light values only** — Figma's Default mode. No `light-dark()` | User's decision. Dark Mode BETA is not imported |
 | A `--sep-*` token only when something reads it | Today: the 8 shadow tints. Figma-only steps nothing aliases are *not imported* |
 | Semantic tokens **alias** ramp steps with `var()`, as Figma does | Change a ramp, every role follows |
-| Component hooks (`--slds-c-*`) are **listed only** (section D) | They live on the component's tag in `src/assets/css/site/components/<tag>.css` (`rules-skinning.md`) |
-| `--slds-r-*` and `--slds-s-*` are **never set or read** | Undocumented / private. C3 writes `--slds-r-*` references as literals |
+| Component hooks (`--slds-c-*`) are **not declared** — the file's closing note points to them | They live on the component's tag in `src/assets/css/site/components/<tag>.css` (`rules-skinning.md`) |
+| `--slds-r-*` and `--slds-s-*` are **never set or read** | Undocumented / private. `sync-slds-globals.mjs` writes `--slds-r-*` references as literals |
 | Content width and gutter (`--sep-content-*`) are **not** Figma tokens | Layout. Never delete them in an import |
 
 ---
@@ -105,14 +111,14 @@ vanished), then **patch** `figma-variables.txt`. Re-hash to confirm; a match up 
 enough. Hash the effect styles the same way.
 
 Also read the **effect styles** (`getLocalEffectStylesAsync()`, with each effect's bound variable).
-They feed C2 and B by hand — check whether geometry or tints changed.
+They feed `hand-tokens.mjs` by hand — check whether geometry or tints changed.
 
 ## 2. Generate
 
 ```bash
-node .claude/skills/lwc-figma-ds-tokens-import/import-figma.mjs --dry-run   # findings only — read them
-node .claude/skills/lwc-figma-ds-tokens-import/import-figma.mjs             # write C1
-node .claude/skills/lwc-figma-ds-tokens-import/sync-slds-globals.mjs        # rewrite C3
+node .claude/skills/lwc-figma-ds-tokens-import/import-figma.mjs              # findings — read them
+node .claude/skills/lwc-figma-ds-tokens-import/write-tokens.mjs --dry-run    # counts: 524/524, by source
+node .claude/skills/lwc-figma-ds-tokens-import/write-tokens.mjs              # write the token block
 ```
 
 What `import-figma.mjs` decides — **the hook Figma means**, not always the syntax it exports:
@@ -129,7 +135,7 @@ Units: spacing, sizing, radius, font scale → rem (÷16); border widths → px;
 → px as Figma gives it. Weights: style names → numbers (Medium 500, SemiBold 600…). Family: `'<name>
 Variable', '<name>', <SLDS stack>` (fonts.css registers the `Variable` face).
 
-Labels on every C1 line: `figma — cosmos X` (differs; X is what Cosmos ships), `figma = cosmos`,
+Labels on every Figma line: `figma — cosmos X` (differs; X is what Cosmos ships), `figma = cosmos`,
 `figma = default`. Comparison is on **resolved light values** in both themes, never names.
 
 If a generated value looks wrong, the bug is in the snapshot or the script — fix there, regenerate.
@@ -138,16 +144,15 @@ rule must not fold ramp steps), and a resolver that lowercases values must never
 
 ## 3. The hand-written parts
 
-| Section | Holds | Update when |
+| Where | Holds | Update when |
 |---|---|---|
-| Header + contents | What the file is, the section list | Sections change |
-| FIGMA IMPORT banner | Source, read date, collection counts, the tally (must sum to the Figma total), 524 = C1 + C2 + C3 | Every import |
-| B | `--sep-color-shadow-*` — Figma `shadows/level N/*` | Effect tints change |
-| C2 | `--slds-g-shadow-*`, `-focus-1` from Figma effect styles | Effect styles change |
-| D, E, F | Component hooks, `--dxp`, private hooks — comment tables | Component colours change |
-| Not imported | Every variable the importer skipped, with why | Every import |
+| File header | The label legend; pointers to the rules, this skill and the latest report | The report changes |
+| Layout | `--sep-content-*` and its breakpoints | Layout changes — never in an import |
+| `hand-tokens.mjs` | Shadow tints, elevation and focus shadows, deviations from Figma | Effect styles change; a deviation is decided or dropped |
+| `write-tokens.mjs` → `GROUPS` | The grouping and its notes | A new token family; an issue is found or fixed |
+| "Not in this file" | Pointers: component hooks, `--dxp`, private hooks, what was not imported | Rarely |
 
-Inside a live block a comment closes with a plain `*/`.
+The import's tally, collection counts and every finding go in the **report**, not the file.
 
 ## 4. Verify
 
@@ -198,16 +203,14 @@ defects that matter, and which of them are now live on the site.
 
 ## Current state of design-tokens.css
 
-| Section | State |
+| Part | State |
 |---|---|
-| Content width (`--sep-content-max-width`, `--sep-content-gutter`) | Live — layout, not from Figma |
-| B — 8 `--sep-color-shadow-*` | Live, hand-written from Figma `shadows/level N/*` |
-| C1 — 299 Figma variables on public hooks | Live, **generated** by `import-figma.mjs` from the 2026-10-19 snapshot. 176 differ from Cosmos, 4 = Cosmos, 119 = SLDS default |
-| C1a — weight palette | Live, **hand-written**, after C1 so it wins. `--slds-g-font-weight-6` → `var(--slds-g-font-weight-5)` (500, over Figma's 600). The site's weights are 300 / 400 / 500 / 700. Not generated — a re-import keeps it; delete it if Figma's SemiBold becomes 500 |
-| C2 — 20 shadow and focus hooks | Live, hand-written from Figma effect styles (unchanged 2026-10-19) |
-| C3 — 205 other globals | Live, **generated** by `sync-slds-globals.mjs`. 41 `cosmos — default X`, 164 `default` |
-| D, E, F, Not imported | Comment only |
-| **Total `--slds-g-*` declared** | **524 of 524** |
+| Layout (`--sep-content-max-width`, `--sep-content-gutter`) | Hand-written — layout, not from Figma |
+| Token block | **Generated** by `write-tokens.mjs`, grouped by type. 524 of 524 globals + 8 `--sep-color-shadow-*` |
+| — Figma variables | 298 on public hooks (299 imported; weight 6 is overridden). From the 2026-10-19 snapshot: 176 differ from Cosmos, 4 = Cosmos, 119 = SLDS default |
+| — Figma effect styles | 20 elevation and focus shadows + 8 tints, in `hand-tokens.mjs` |
+| — Deviations | 1: `--slds-g-font-weight-6` → `var(--slds-g-font-weight-5)` (500 over Figma's 600). The site's weights are 300 / 400 / 500 / 700. Delete it from `hand-tokens.mjs` if Figma's SemiBold becomes 500 |
+| — SLDS | 205: 41 `cosmos — default X`, 164 `default` |
 
 Border widths 1.5 / 2 / 3px (SLDS 2 / 3 / 4): 1.5px is deliberate — the button design draws its outline at sizing-border-2; the labels are wrong, /3 and /4 to confirm. Snapshot re-read 2026-10-19 (second read): 10 lines changed.
 
@@ -227,3 +230,4 @@ Border widths 1.5 / 2 / 3px (SLDS 2 / 3 / 4): 1.5px is deliberate — the button
 | 2026-10-19 | Palettes titled one per palette in both generated blocks (`Palette: <name>`; C3 adds "— not in Figma"). Fixed `sync-slds-globals.mjs` splitting hyphenated palette names (`electric-blue` read as "electric"). Only the neutral palette has steps 0 and 100 — hue palettes run 10–95 in SLDS |
 | 2026-10-19 | **Second read, same day.** Change detection added to step 1 practice: hash each collection in the snapshot's own line format and compare before dumping; if they differ, diff line-by-line (send the snapshot's line hashes into `use_figma`, return only lines not in it) and **patch** the snapshot rather than re-transcribe it. 10 lines changed: `font/scale/base` and `error-base/100` code syntax fixed; `on-error-1/-2` re-pointed (30 / 20); green and hot-orange swapped 35/85/5 for 100/55/45 — not SLDS palette steps, so not imported. 2 rendered values changed. Report `_docs/figma-tokens-report-2026-10-19-b.md` (a delta report — same-day reports take a `-b` suffix rather than overwrite) |
 | 2026-10-23 | **Weight palette 300 / 400 / 500 / 700** (user). Hand-written **C1a** after C1 re-points `--slds-g-font-weight-6` to weight 5 (500) — the first deliberate deviation from Figma's value; labels, alerts and table headers follow. SLDS's hard-coded navigation 600 is unreachable. Weight 3 (300 Light) is in the palette and unchanged. `fonts.css` keeps `font-weight: 200 800` — the descriptor describes the file's axis, not the palette (a three-value list had been tried; it is invalid and drops the descriptor) |
+| 2026-10-26 | **Restructured, no value changed** (user, `_docs/to-do.md`). The file is grouped by token **type**, not by source: one generated block replaces C1 and C3, written by the new `write-tokens.mjs` from `import-figma.mjs` and `sync-slds-globals.mjs` (both now modules) and the new `hand-tokens.mjs` (the old B, C1a and C2). Semantic colours split into titled groups; shadow tints sit with the shadows. Every token keeps its source label. Comments cut to issues worth knowing plus doc pointers — the import tally, sections D/E/F and "Not imported" now live in the reports. Verified: all 537 effective declarations identical before and after; `check-tokens.mjs` ok |

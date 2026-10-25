@@ -1,199 +1,70 @@
 /* =============================================================================
  * DESIGN TOKENS
  *
- * Two things live here:
+ * Every public --slds-g-* global SLDS 2 ships (524), with MSD's values wherever
+ * Figma ("LDS2 | MSD | Components for Web") defines them, plus the project's
+ * own --sep-* tokens. Loaded before the site.css bundle (src/layouts/main.njk).
  *
- *   1. The project's own `--sep-*` tokens — values SLDS has no name for.
- *   2. The Figma import — MSD's values on SLDS's global hooks (`--slds-g-*`),
- *      which is what themes the site.
+ * Each token says where its value comes from:
  *
- * All 524 public --slds-g-* global hooks SLDS 2 ships are declared here, so
- * this file is the complete record of the site's tokens. Where Figma defines a
- * hook, Figma's value is used; every other hook carries Cosmos's or SLDS's own.
- * (Component hooks, --slds-c-*, are not here — see section D.)
+ *   figma — cosmos X    MSD's value from Figma; Cosmos ships X
+ *   figma = cosmos      Figma's value, the same as Cosmos
+ *   figma = default     Figma's value, the same as SLDS's own default
+ *   figma — <name>      a Figma effect style or variable with no SLDS name
+ *   msd — figma X       a deliberate deviation from Figma (noted in its group)
+ *   cosmos — default X  not in Figma: Cosmos's value; SLDS's base theme has X
+ *   default             not in Figma: SLDS's own value
  *
- * Contents
- *   Content width ............ page cap and gutter (layout, not from Figma)
- *   Figma import
- *     B  Project tokens ...... --sep-* shadow tints
- *     C1 Figma variables ..... generated — every Figma variable on a public hook
- *     C1a Weight palette ..... hand-written — weight 6 → 500, over Figma's 600
- *     C2 Elevation and focus . from Figma effect styles
- *     C3 Every other global .. generated — Cosmos or SLDS default
- *     D  Component hooks ..... listed only
- *     E  --dxp hooks ......... listed only
- *     F  Private hooks ....... listed only
- *     Not imported ........... and why
+ * Light values only (Figma's Default mode); no dark mode is imported.
  *
- * Maintained by the `lwc-figma-ds-tokens-import` skill; run its
- * check-tokens.mjs after any edit.
- *
- * THE RULES
- *
- * 1. Prefer an SLDS token. Define one here only when SLDS has no equivalent.
- *    A project token that duplicates `--slds-g-spacing-4` is a liability: it
- *    will drift from the design system and nobody will notice.
- * 2. Every token here is prefixed `--sep-`, so a grep can always separate what
- *    we own from what we inherit.
- * 3. Values are expressed in SLDS tokens wherever one fits, so a theme change
- *    still reaches them.
- * 4. This is the ONLY file that defines `--sep-*` tokens. Component stylesheets
- *    consume them; they do not declare new ones. A value used in one component
- *    is not a token — it is just a value, and belongs in that component's CSS.
- * 5. Loaded before `site.css` in `src/layouts/main.njk`, so everything can
- *    consume these.
- *
- * Overriding a shipped `--slds-g-*` GLOBAL hook belongs here, under a comment
- * saying what it changes — that is the Figma import. Overriding a shipped
- * `--slds-c-*` COMPONENT hook does not: it is a component-level decision and
- * lives with that component in site.css.
- * See `.claude/rules/rules-lwc-layout.md` § Defining a project token.
- * ============================================================================= */
+ * Adding a token: .claude/rules/rules-lwc-layout.md § Defining a project token.
+ * Changing one: the lwc-figma-ds-tokens-import skill — the token block below is
+ * generated; run check-tokens.mjs after any edit.
+ * What in the Figma file does not line up with SLDS:
+ * _docs/figma-tokens-report-2026-10-19.md (and -b, the same-day delta).
+ * ========================================================================== */
 
-/* -----------------------------------------------------------------------------
- * CONTENT WIDTH
- *
- * Lightning Experience itself is fluid — a record page fills the browser at any
- * width. An Experience Cloud site is not: the Theme panel's maximum content
- * width compiles to --dxp-s-section-columns-max-width (plus the matching header
- * and footer hooks), with its -mobile variants set to `none`. Production LWR
- * sites run 1440px or 1800px.
- *
- * This follows that model: fluid on phones and tablets, capped from the large
- * breakpoint up. `.site__main`, `.site-header__inner` and `.site-footer__inner`
- * all read these, so the wordmark, the page and the release toggle share one
- * content column.
- *
- * Breakpoints are the SLDS ones (48em / 64em), so the page steps at the same
- * widths the grid does.
- * -------------------------------------------------------------------------- */
+/* ==== Layout ================================================================
+ * The content column: fluid on phones and tablets, capped from the SLDS large
+ * breakpoint up, as an Experience Cloud site's Theme panel max width is. Not
+ * from Figma. Read by .site__main and the header and footer rows
+ * (rules-lwc-layout.md § Content width). */
 
 :root {
-    /* The page's maximum content width. `none` = fluid. */
-    --sep-content-max-width: none;
-
-    /* The horizontal page gutter, inside the cap. */
+    --sep-content-max-width: none;                      /* fluid */
     --sep-content-gutter: var(--slds-g-spacing-4, 1rem);
 }
 
-/* 48em / 768px — the SLDS medium breakpoint. Still fluid, wider gutter. */
+/* 48em — SLDS medium: still fluid, wider gutter. */
 @media (min-width: 48em) {
     :root {
         --sep-content-gutter: var(--slds-g-spacing-5, 1.5rem);
     }
 }
 
-/* 64em / 1024px — the SLDS large breakpoint. 80rem is slds-container_x-large,
-   the widest cap SLDS ships. */
+/* 64em — SLDS large: 80rem, slds-container_x-large, the widest cap SLDS ships. */
 @media (min-width: 64em) {
     :root {
         --sep-content-max-width: 80rem;
     }
 }
 
-/* 100em / 1600px — 90rem (1440px) is the cap the production LWR sites use, and
-   at this viewport it still leaves a real margin either side. */
+/* 100em — 90rem (1440px), the cap production LWR sites use. */
 @media (min-width: 100em) {
     :root {
         --sep-content-max-width: 90rem;
     }
 }
 
-/* #############################################################################
- * FIGMA IMPORT — "LDS2 | MSD | Components for Web"
- *
- * Source   figma.com/design/3FTyjvu0JC5UtYqnoLqDFh, local variables, read
- *          2026-10-19 through the Plugin API, re-read the same day. Snapshot:
- *          .claude/skills/lwc-figma-ds-tokens-import/figma-variables.txt
- * Report   _docs/figma-tokens-report-2026-10-19-b.md — what in the Figma file
- *          does not line up with SLDS, and the fixes
- *
- * 346 variables in three collections:
- *
- *   Spacing/Sizing   37   one mode
- *   Typography       19   Mac/iOS | Windows/Android — identical values
- *   Color Mode      290   Default | Dark Mode BETA
- *
- * Checked against the SLDS stylesheet this site actually loads
- * (slds2.cosmos.css 2.264.2) — not against what a name implies.
- *
- *   Where                                        Count
- *   -------------------------------------------  -----
- *   C1  on a public --slds-g-* hook, Figma value    299  (176 differ from Cosmos,
- *                                                        4 = Cosmos, 119 = SLDS default)
- *   B   shadow tints, no SLDS name -> --sep-*          8
- *   D   component colours, listed only               14
- *       not imported (see the end of the file)       25  18 palette steps 35/85/5,
- *                                                        6 green/hot-orange steps
- *                                                        SLDS does not ship (100/55/45),
- *                                                        font/family/mobile
- *                                                   ---
- *                                                   346
- *
- * All 524 public --slds-g-* hooks are declared: 299 in C1 (Figma), 20 in C2
- * (Figma effect styles), 205 in C3 (41 Cosmos, 164 SLDS default).
- *
- * LIGHT VALUES ONLY. Every colour is Figma's Default mode; "Dark Mode BETA" is
- * not imported. Cosmos writes its own colour hooks as light-dark(<light>,
- * <dark>); these declarations are single values, so they stay light even if
- * <body> gets `slds-color-scheme_dark`. This site does not set that class.
- * ########################################################################## */
+/* ==== Tokens ================================================================
+ * GENERATED by .claude/skills/lwc-figma-ds-tokens-import/write-tokens.mjs from
+ * the Figma snapshot, hand-tokens.mjs and the installed SLDS stylesheet. Do
+ * not edit by hand. */
 
-/* -----------------------------------------------------------------------------
- * B. Project tokens — shadow tints
- *
- * Figma variables shadows/level N/1+2 and /3. Lightning components cannot
- * reach --sep-* tokens; only C2 and our own CSS read these.
- *
- * Shadow colours: Figma tints elevation with MSD dark navy (#162c45); SLDS
- * uses black. The geometry is identical — see C2.
- * -------------------------------------------------------------------------- */
-
-:root {
-    /* Shadow tints. Figma: shadows/level N/1+2 (the ambient and key layers)
-       and shadows/level N/3 (the reverse edge). */
-    --sep-color-shadow-1:      #162c4533;
-    --sep-color-shadow-1-edge: #162c451a;
-    --sep-color-shadow-2:      #162c4529;
-    --sep-color-shadow-2-edge: #162c4517;
-    --sep-color-shadow-3:      #162c4524;
-    --sep-color-shadow-3-edge: #162c4514;
-    --sep-color-shadow-4:      #162c451f;
-    --sep-color-shadow-4-edge: #162c4512;
-}
-
-/* -----------------------------------------------------------------------------
- * C1. Figma variables — every Figma variable that lands on a public hook
- *
- * GENERATED from the Figma snapshot — do not hand-edit. To update:
- *   1. re-read the Figma file into .claude/skills/lwc-figma-ds-tokens-import/
- *      figma-variables.txt (SKILL.md step 1)
- *   2. node .claude/skills/lwc-figma-ds-tokens-import/import-figma.mjs
- *   3. node .claude/skills/lwc-figma-ds-tokens-import/sync-slds-globals.mjs
- *
- * Figma's value is written for every variable whose code syntax is (or means)
- * a shipped --slds-g-* hook — whether or not it differs from SLDS — so Figma is
- * the source of truth for all of them. Each line is labelled:
- *
- *   figma — cosmos X  Figma's value differs; X is what Cosmos ships
- *   figma = cosmos    Figma's value equals the Cosmos theme's
- *   figma = default   Figma's value equals SLDS's own default
- *
- * The hook written is the one Figma MEANS: font/scale/base exports
- * --slds-g-font-size-base, an SLDS alias, so --slds-g-font-scale-base is set;
- * a ramp step whose code syntax names another step is written to the step in
- * its name. Semantics alias ramp steps with var(), as Figma does.
- * Units: spacing, sizing, radius and type in rem; border widths in px.
- * Light values only (Figma's Default mode).
- *
- * What the importer could not place is in "Not imported" at the end, and in
- * the Figma tokens report for this import.
- * -------------------------------------------------------------------------- */
-
-/* @generated figma:start */
+/* @generated tokens:start */
 :root {
 
-    /* Spacing */
+    /* ==== Spacing =========================================================== */
     --slds-g-spacing-1: 0.25rem;                                        /* figma = default */
     --slds-g-spacing-2: 0.5rem;                                         /* figma = default */
     --slds-g-spacing-3: 0.75rem;                                        /* figma = default */
@@ -206,468 +77,6 @@
     --slds-g-spacing-10: 4rem;                                          /* figma = default */
     --slds-g-spacing-11: 4.5rem;                                        /* figma = default */
     --slds-g-spacing-12: 5rem;                                          /* figma = default */
-
-    /* Sizing */
-    --slds-g-sizing-1: 0.125rem;                                        /* figma = default */
-    --slds-g-sizing-2: 0.25rem;                                         /* figma = default */
-    --slds-g-sizing-3: 0.5rem;                                          /* figma = default */
-    --slds-g-sizing-4: 0.75rem;                                         /* figma = default */
-    --slds-g-sizing-5: 1rem;                                            /* figma = default */
-    --slds-g-sizing-6: 1.25rem;                                         /* figma = default */
-    --slds-g-sizing-7: 1.5rem;                                          /* figma = default */
-    --slds-g-sizing-8: 1.75rem;                                         /* figma = default */
-    --slds-g-sizing-9: 2rem;                                            /* figma = default */
-    --slds-g-sizing-10: 3rem;                                           /* figma = default */
-    --slds-g-sizing-11: 4rem;                                           /* figma = default */
-    --slds-g-sizing-12: 5rem;                                           /* figma = default */
-    --slds-g-sizing-13: 10rem;                                          /* figma = default */
-    --slds-g-sizing-14: 15rem;                                          /* figma = default */
-    --slds-g-sizing-15: 20rem;                                          /* figma = default */
-    --slds-g-sizing-16: 30rem;                                          /* figma = default */
-
-    /* Border widths */
-    --slds-g-sizing-border-1: 1px;                                      /* figma = default */
-    --slds-g-sizing-border-2: 1.5px;                                    /* figma — cosmos 0.125rem */
-    --slds-g-sizing-border-3: 2px;                                      /* figma — cosmos 0.1875rem */
-    --slds-g-sizing-border-4: 3px;                                      /* figma — cosmos 0.25rem */
-
-    /* Radius */
-    --slds-g-radius-border-1: 0.25rem;                                  /* figma = cosmos */
-    --slds-g-radius-border-2: 0.5rem;                                   /* figma = cosmos */
-    --slds-g-radius-border-3: 0.75rem;                                  /* figma = cosmos */
-    --slds-g-radius-border-4: 1.25rem;                                  /* figma = cosmos */
-    --slds-g-radius-border-circle: 9999px;                              /* figma — cosmos 100% */
-
-    /* Type */
-    --slds-g-font-scale-neg-2: 0.75rem;                                 /* figma — cosmos 0.625rem */
-    --slds-g-font-scale-neg-1: 0.875rem;                                /* figma — cosmos 0.75rem */
-    --slds-g-font-scale-base: 1rem;                                     /* figma — cosmos 0.8125rem */
-    --slds-g-font-scale-1: 1.125rem;                                    /* figma — cosmos 0.875rem */
-    --slds-g-font-scale-2: 1.25rem;                                     /* figma — cosmos 1rem */
-    --slds-g-font-scale-3: 1.5rem;                                      /* figma — cosmos 1.25rem */
-    --slds-g-font-scale-4: 2rem;                                        /* figma — cosmos 1.5rem */
-    --slds-g-font-scale-5: 2.25rem;                                     /* figma — cosmos 1.75rem */
-    --slds-g-font-scale-6: 2.5rem;                                      /* figma — cosmos 2rem */
-    --slds-g-font-family-base: 'Atkinson Hyperlegible Next Variable', 'Atkinson Hyperlegible Next', system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; /* figma — cosmos differs */
-    --slds-g-font-scale-7: 3rem;                                        /* figma — cosmos 2.5rem */
-    --slds-g-font-family-monospace: 'SF Mono', Consolas, Menlo, Monaco, Courier, monospace; /* figma — cosmos differs */
-    --slds-g-font-scale-8: 3.75rem;                                     /* figma — cosmos 3rem */
-    /* Font-weight */
-    --slds-g-font-weight-3: 300;                                        /* figma = default */
-    --slds-g-font-weight-4: 400;                                        /* figma = default */
-    --slds-g-font-weight-5: 500;                                        /* figma = default */
-    --slds-g-font-weight-6: 600;                                        /* figma = default */
-    --slds-g-font-weight-7: 700;                                        /* figma = default */
-
-    /* Neutral ramp */
-    --slds-g-color-neutral-base-100: #ffffff;                           /* figma = default */
-    --slds-g-color-neutral-base-95: #f0f0f0;                            /* figma — cosmos #f3f3f3 */
-    --slds-g-color-neutral-base-90: #e0e0e0;                            /* figma — cosmos #e5e5e5 */
-    --slds-g-color-neutral-base-80: #c2c2c2;                            /* figma — cosmos #c9c9c9 */
-    --slds-g-color-neutral-base-70: #a3a3a3;                            /* figma — cosmos #aeaeae */
-    --slds-g-color-neutral-base-65: #949494;                            /* figma — cosmos #a0a0a0 */
-    --slds-g-color-neutral-base-60: #858585;                            /* figma — cosmos #939393 */
-    --slds-g-color-neutral-base-55: #757575;                            /* figma — cosmos #848484 */
-    --slds-g-color-neutral-base-50: #666666;                            /* figma — cosmos #757575 */
-    --slds-g-color-neutral-base-45: #5c5c5c;                            /* figma — cosmos #696969 */
-    --slds-g-color-neutral-base-40: #525252;                            /* figma — cosmos #5c5c5c */
-    --slds-g-color-neutral-base-30: #3d3d3d;                            /* figma — cosmos #444444 */
-    --slds-g-color-neutral-base-20: #292929;                            /* figma — cosmos #2e2e2e */
-    --slds-g-color-neutral-base-15: #1f1f1f;                            /* figma — cosmos #242424 */
-    --slds-g-color-neutral-base-10: #141414;                            /* figma — cosmos #181818 */
-    --slds-g-color-neutral-base-0: #000000;                             /* figma = default */
-
-    /* Brand ramp */
-    --slds-g-color-brand-base-100: #ffffff;                             /* figma = default */
-    --slds-g-color-brand-base-95: #e6f2fa;                              /* figma — cosmos #edf4ff */
-    --slds-g-color-brand-base-90: #cce4f4;                              /* figma — cosmos #d6e6ff */
-    --slds-g-color-brand-base-80: #99cae9;                              /* figma — cosmos #a8cbff */
-    --slds-g-color-brand-base-70: #67afdf;                              /* figma — cosmos #7cb1fe */
-    --slds-g-color-brand-base-65: #4da2d9;                              /* figma — cosmos #5f9ffe */
-    --slds-g-color-brand-base-60: #3495d4;                              /* figma — cosmos #4992fe */
-    --slds-g-color-brand-base-55: #1a87ce;                              /* figma — cosmos #287efe */
-    --slds-g-color-brand-base-50: #017ac9;                              /* figma — cosmos #066afe */
-    --slds-g-color-brand-base-45: #066cb4;                              /* figma — cosmos #045dec */
-    --slds-g-color-brand-base-40: #0a5ea0;                              /* figma — cosmos #0250d9 */
-    --slds-g-color-brand-base-30: #134276;                              /* figma — cosmos #022ac0 */
-    --slds-g-color-brand-base-20: #0d2c4f;                              /* figma — cosmos #002775 */
-    --slds-g-color-brand-base-15: #0a213b;                              /* figma — cosmos #001e5b */
-    --slds-g-color-brand-base-10: #061627;                              /* figma — cosmos #001642 */
-
-    /* Error ramp */
-    --slds-g-color-error-base-100: #ffffff;                             /* figma = default */
-    --slds-g-color-error-base-95: #faebeb;                              /* figma — cosmos #fef0f3 */
-    --slds-g-color-error-base-90: #f6d7d6;                              /* figma — cosmos #fddde3 */
-    --slds-g-color-error-base-80: #ecafad;                              /* figma — cosmos #fdb6c5 */
-    --slds-g-color-error-base-70: #e38685;                              /* figma — cosmos #fe8aa7 */
-    --slds-g-color-error-base-65: #de7270;                              /* figma — cosmos #fe7298 */
-    --slds-g-color-error-base-60: #d95e5c;                              /* figma — cosmos #ff538a */
-    --slds-g-color-error-base-55: #d54a47;                              /* figma — cosmos #f42f7c */
-    --slds-g-color-error-base-50: #d03633;                              /* figma — cosmos #e3066a */
-    --slds-g-color-error-base-45: #bb312e;                              /* figma — cosmos #ce055f */
-    --slds-g-color-error-base-40: #a62b29;                              /* figma — cosmos #b60554 */
-    --slds-g-color-error-base-30: #7d201f;                              /* figma — cosmos #8a033e */
-    --slds-g-color-error-base-20: #531614;                              /* figma — cosmos #61022a */
-    --slds-g-color-error-base-15: #3e100f;                              /* figma — cosmos #4b0620 */
-    --slds-g-color-error-base-10: #2a0b0a;                              /* figma — cosmos #370114 */
-
-    /* Warning ramp */
-    --slds-g-color-warning-base-100: #ffffff;                           /* figma = default */
-    --slds-g-color-warning-base-95: #fff2e8;                            /* figma — cosmos #fbf3e0 */
-    --slds-g-color-warning-base-90: #fee5d0;                            /* figma — cosmos #f9e3b6 */
-    --slds-g-color-warning-base-80: #fdcca1;                            /* figma — cosmos #fcc003 */
-    --slds-g-color-warning-base-70: #fcb272;                            /* figma — cosmos #e4a201 */
-    --slds-g-color-warning-base-65: #fca55b;                            /* figma — cosmos #da9401 */
-    --slds-g-color-warning-base-60: #fb9943;                            /* figma — cosmos #ca8501 */
-    --slds-g-color-warning-base-55: #fb8c2c;                            /* figma — cosmos #ba7503 */
-    --slds-g-color-warning-base-50: #fa7f14;                            /* figma — cosmos #a96504 */
-    --slds-g-color-warning-base-45: #e17212;                            /* figma — cosmos #9a5803 */
-    --slds-g-color-warning-base-40: #c86610;                            /* figma — cosmos #8c4b02 */
-    --slds-g-color-warning-base-30: #964c0c;                            /* figma — cosmos #6f3400 */
-    --slds-g-color-warning-base-20: #643308;                            /* figma — cosmos #4f2100 */
-    --slds-g-color-warning-base-15: #4b2606;                            /* figma — cosmos #371e03 */
-    --slds-g-color-warning-base-10: #321904;                            /* figma — cosmos #281202 */
-
-    /* Success ramp */
-    --slds-g-color-success-base-100: #ffffff;                           /* figma = default */
-    --slds-g-color-success-base-95: #ebf3e8;                            /* figma — cosmos #def9f3 */
-    --slds-g-color-success-base-90: #d7e6d0;                            /* figma — cosmos #acf3e4 */
-    --slds-g-color-success-base-80: #afcda1;                            /* figma — cosmos #04e1cb */
-    --slds-g-color-success-base-70: #88b572;                            /* figma — cosmos #01c3b3 */
-    --slds-g-color-success-base-65: #74a85b;                            /* figma — cosmos #03b4a7 */
-    --slds-g-color-success-base-60: #609c43;                            /* figma — cosmos #06a59a */
-    --slds-g-color-success-base-55: #4c8f2c;                            /* figma — cosmos #09948b */
-    --slds-g-color-success-base-50: #388314;                            /* figma — cosmos #0b827c */
-    --slds-g-color-success-base-45: #327612;                            /* figma — cosmos #087570 */
-    --slds-g-color-success-base-40: #2d6910;                            /* figma — cosmos #056764 */
-    --slds-g-color-success-base-30: #224f0c;                            /* figma — cosmos #024d4c */
-    --slds-g-color-success-base-20: #163408;                            /* figma — cosmos #023434 */
-    --slds-g-color-success-base-15: #112706;                            /* figma — cosmos #072825 */
-    --slds-g-color-success-base-10: #0b1a04;                            /* figma — cosmos #071b12 */
-
-    /* Info ramp */
-    --slds-g-color-info-base-100: #ffffff;                              /* figma = default */
-    --slds-g-color-info-base-95: #e6f2fa;                               /* figma — cosmos #eef4ff */
-    --slds-g-color-info-base-90: #cce4f4;                               /* figma — cosmos #d8e6fe */
-    --slds-g-color-info-base-80: #99cae9;                               /* figma — cosmos #aacbff */
-    --slds-g-color-info-base-70: #67afdf;                               /* figma — cosmos #78b0fd */
-    --slds-g-color-info-base-65: #4da2d9;                               /* figma — cosmos #57a3fd */
-    --slds-g-color-info-base-60: #3495d4;                               /* figma — cosmos #1b96ff */
-    --slds-g-color-info-base-55: #1a87ce;                               /* figma — cosmos #0684ef */
-    --slds-g-color-info-base-50: #017ac9;                               /* figma — cosmos #0176d3 */
-    --slds-g-color-info-base-45: #016eb5;                               /* figma — cosmos #0469c1 */
-    --slds-g-color-info-base-40: #0162a1;                               /* figma — cosmos #0b5cab */
-    --slds-g-color-info-base-30: #014979;                               /* figma — cosmos #014486 */
-    --slds-g-color-info-base-20: #003150;                               /* figma — cosmos #032d60 */
-    --slds-g-color-info-base-15: #00253c;                               /* figma — cosmos #03234d */
-    --slds-g-color-info-base-10: #001828;                               /* figma — cosmos #001639 */
-
-    /* Palette: cloud-blue */
-    --slds-g-color-palette-cloud-blue-95: #eaf5fe;                      /* figma = default */
-    --slds-g-color-palette-cloud-blue-90: #cfe9fe;                      /* figma = default */
-    --slds-g-color-palette-cloud-blue-80: #90d0fe;                      /* figma = default */
-    --slds-g-color-palette-cloud-blue-70: #1ab9ff;                      /* figma = default */
-    --slds-g-color-palette-cloud-blue-65: #08abed;                      /* figma = default */
-    --slds-g-color-palette-cloud-blue-60: #0d9dda;                      /* figma = default */
-    --slds-g-color-palette-cloud-blue-50: #107cad;                      /* figma = default */
-    --slds-g-color-palette-cloud-blue-40: #05628a;                      /* figma = default */
-    --slds-g-color-palette-cloud-blue-30: #084968;                      /* figma = default */
-    --slds-g-color-palette-cloud-blue-20: #023248;                      /* figma = default */
-    --slds-g-color-palette-cloud-blue-15: #0a2636;                      /* figma = default */
-    --slds-g-color-palette-cloud-blue-10: #001a28;                      /* figma = default */
-
-    /* Palette: green — MSD teal under Salesforce's "green" name */
-    --slds-g-color-palette-green-95: #ebf9f8;                           /* figma — cosmos #ebf7e6 */
-    --slds-g-color-palette-green-90: #d7f2f1;                           /* figma — cosmos #cdefc4 */
-    --slds-g-color-palette-green-80: #aee6e3;                           /* figma — cosmos #91db8b */
-    --slds-g-color-palette-green-70: #86d9d6;                           /* figma — cosmos #45c65a */
-    --slds-g-color-palette-green-65: #72d3cf;                           /* figma — cosmos #41b658 */
-    --slds-g-color-palette-green-60: #5dcdc8;                           /* figma — cosmos #3ba755 */
-    --slds-g-color-palette-green-50: #35c0ba;                           /* figma — cosmos #2e844a */
-    --slds-g-color-palette-green-40: #2a9a95;                           /* figma — cosmos #396547 */
-    --slds-g-color-palette-green-30: #207370;                           /* figma — cosmos #194e31 */
-    --slds-g-color-palette-green-20: #154d4a;                           /* figma — cosmos #143b25 */
-    --slds-g-color-palette-green-15: #103a38;                           /* figma — cosmos #0c2912 */
-    --slds-g-color-palette-green-10: #0b2625;                           /* figma — cosmos #071b12 */
-
-    /* Palette: hot-orange — MSD salmon */
-    --slds-g-color-palette-hot-orange-95: #feefee;                      /* figma — cosmos #fef1ed */
-    --slds-g-color-palette-hot-orange-90: #fddede;                      /* figma — cosmos #ffded5 */
-    --slds-g-color-palette-hot-orange-80: #fcbebc;                      /* figma — cosmos #feb9a5 */
-    --slds-g-color-palette-hot-orange-70: #fa9d9b;                      /* figma — cosmos #ff906e */
-    --slds-g-color-palette-hot-orange-65: #f98d8a;                      /* figma — cosmos #ff784f */
-    --slds-g-color-palette-hot-orange-60: #f97d79;                      /* figma — cosmos #ff5d2d */
-    --slds-g-color-palette-hot-orange-50: #f75c58;                      /* figma — cosmos #d83a00 */
-    --slds-g-color-palette-hot-orange-40: #c64a46;                      /* figma — cosmos #aa3001 */
-    --slds-g-color-palette-hot-orange-30: #943735;                      /* figma — cosmos #7e2600 */
-    --slds-g-color-palette-hot-orange-20: #632523;                      /* figma — cosmos #4a2413 */
-    --slds-g-color-palette-hot-orange-15: #4a1c1a;                      /* figma — cosmos #421604 */
-    --slds-g-color-palette-hot-orange-10: #311212;                      /* figma — cosmos #281202 */
-
-    /* Palette: indigo */
-    --slds-g-color-palette-indigo-95: #f1f3fb;                          /* figma = default */
-    --slds-g-color-palette-indigo-90: #e0e5f8;                          /* figma = default */
-    --slds-g-color-palette-indigo-80: #bec7f6;                          /* figma = default */
-    --slds-g-color-palette-indigo-70: #9ea9f1;                          /* figma = default */
-    --slds-g-color-palette-indigo-65: #8e9bef;                          /* figma = default */
-    --slds-g-color-palette-indigo-60: #7f8ced;                          /* figma = default */
-    --slds-g-color-palette-indigo-50: #5867e8;                          /* figma = default */
-    --slds-g-color-palette-indigo-40: #3a49da;                          /* figma = default */
-    --slds-g-color-palette-indigo-30: #2f2cb7;                          /* figma = default */
-    --slds-g-color-palette-indigo-20: #270c92;                          /* figma = default */
-    --slds-g-color-palette-indigo-15: #1f0974;                          /* figma = default */
-    --slds-g-color-palette-indigo-10: #17094e;                          /* figma = default */
-
-    /* Palette: orange */
-    --slds-g-color-palette-orange-95: #fff1ea;                          /* figma = default */
-    --slds-g-color-palette-orange-90: #fedfd0;                          /* figma = default */
-    --slds-g-color-palette-orange-80: #ffba90;                          /* figma = default */
-    --slds-g-color-palette-orange-70: #fe9339;                          /* figma = default */
-    --slds-g-color-palette-orange-65: #f38303;                          /* figma = default */
-    --slds-g-color-palette-orange-60: #dd7a01;                          /* figma = default */
-    --slds-g-color-palette-orange-50: #a96404;                          /* figma = default */
-    --slds-g-color-palette-orange-40: #825101;                          /* figma = default */
-    --slds-g-color-palette-orange-30: #5f3e02;                          /* figma = default */
-    --slds-g-color-palette-orange-20: #3e2b02;                          /* figma = default */
-    --slds-g-color-palette-orange-15: #2e2204;                          /* figma = default */
-    --slds-g-color-palette-orange-10: #201600;                          /* figma = default */
-
-    /* Palette: purple */
-    --slds-g-color-palette-purple-95: #f6f2fb;                          /* figma = default */
-    --slds-g-color-palette-purple-90: #ece1f9;                          /* figma = default */
-    --slds-g-color-palette-purple-80: #d7bff2;                          /* figma = default */
-    --slds-g-color-palette-purple-70: #c29ef1;                          /* figma = default */
-    --slds-g-color-palette-purple-65: #b78def;                          /* figma = default */
-    --slds-g-color-palette-purple-60: #ad7bee;                          /* figma = default */
-    --slds-g-color-palette-purple-50: #9050e9;                          /* figma = default */
-    --slds-g-color-palette-purple-40: #7526e3;                          /* figma = default */
-    --slds-g-color-palette-purple-30: #5a1ba9;                          /* figma = default */
-    --slds-g-color-palette-purple-20: #401075;                          /* figma = default */
-    --slds-g-color-palette-purple-15: #300b60;                          /* figma = default */
-    --slds-g-color-palette-purple-10: #240643;                          /* figma = default */
-
-    /* Palette: red */
-    --slds-g-color-palette-red-95: #fef1ee;                             /* figma = default */
-    --slds-g-color-palette-red-90: #feded8;                             /* figma = default */
-    --slds-g-color-palette-red-80: #feb8ab;                             /* figma = default */
-    --slds-g-color-palette-red-70: #fe8f7d;                             /* figma = default */
-    --slds-g-color-palette-red-65: #fe7765;                             /* figma = default */
-    --slds-g-color-palette-red-60: #fe5c4c;                             /* figma = default */
-    --slds-g-color-palette-red-50: #ea001e;                             /* figma = default */
-    --slds-g-color-palette-red-40: #ba0517;                             /* figma = default */
-    --slds-g-color-palette-red-30: #8e030f;                             /* figma = default */
-    --slds-g-color-palette-red-20: #640103;                             /* figma = default */
-    --slds-g-color-palette-red-15: #4a0c04;                             /* figma = default */
-    --slds-g-color-palette-red-10: #300c01;                             /* figma = default */
-
-    /* Palette: violet */
-    --slds-g-color-palette-violet-95: #f9f0ff;                          /* figma = default */
-    --slds-g-color-palette-violet-90: #f2defe;                          /* figma = default */
-    --slds-g-color-palette-violet-80: #e5b9fe;                          /* figma = default */
-    --slds-g-color-palette-violet-70: #d892fe;                          /* figma = default */
-    --slds-g-color-palette-violet-65: #d17dfe;                          /* figma = default */
-    --slds-g-color-palette-violet-60: #cb65ff;                          /* figma = default */
-    --slds-g-color-palette-violet-50: #ba01ff;                          /* figma = default */
-    --slds-g-color-palette-violet-40: #9602c7;                          /* figma = default */
-    --slds-g-color-palette-violet-30: #730394;                          /* figma = default */
-    --slds-g-color-palette-violet-20: #580276;                          /* figma = default */
-    --slds-g-color-palette-violet-15: #3d0157;                          /* figma = default */
-    --slds-g-color-palette-violet-10: #2e0039;                          /* figma = default */
-
-    /* Semantic colours */
-    --slds-g-color-surface-1: var(--slds-g-color-neutral-base-100);     /* figma = default */
-    --slds-g-color-surface-2: var(--slds-g-color-neutral-base-95);      /* figma — cosmos #f3f3f3 */
-    --slds-g-color-surface-inverse-1: var(--slds-g-color-brand-base-20); /* figma — cosmos #032d60 */
-    --slds-g-color-surface-inverse-2: var(--slds-g-color-brand-base-15); /* figma — cosmos #03234d */
-    --slds-g-color-on-surface-1: var(--slds-g-color-neutral-base-40);   /* figma — cosmos #5c5c5c */
-    --slds-g-color-on-surface-2: var(--slds-g-color-neutral-base-20);   /* figma — cosmos #2e2e2e */
-    --slds-g-color-on-surface-3: var(--slds-g-color-brand-base-15);     /* figma — cosmos #03234d */
-    --slds-g-color-on-surface-inverse-1: var(--slds-g-color-neutral-base-100); /* figma = default */
-    --slds-g-color-on-surface-inverse-2: var(--slds-g-color-brand-base-80); /* figma — cosmos #a8cbff */
-    --slds-g-color-accent-1: var(--slds-g-color-brand-base-50);         /* figma — cosmos #066afe */
-    --slds-g-color-accent-2: var(--slds-g-color-brand-base-40);         /* figma — cosmos #0250d9 */
-    --slds-g-color-accent-3: var(--slds-g-color-brand-base-30);         /* figma — cosmos #022ac0 */
-    --slds-g-color-accent-container-1: var(--slds-g-color-brand-base-50); /* figma — cosmos #066afe */
-    --slds-g-color-accent-container-2: var(--slds-g-color-brand-base-40); /* figma — cosmos #0250d9 */
-    --slds-g-color-accent-container-3: var(--slds-g-color-brand-base-30); /* figma — cosmos #022ac0 */
-    --slds-g-color-on-accent-1: var(--slds-g-color-neutral-base-100);   /* figma = default */
-    --slds-g-color-on-accent-2: var(--slds-g-color-neutral-base-100);   /* figma = default */
-    --slds-g-color-on-accent-3: var(--slds-g-color-neutral-base-100);   /* figma = default */
-    --slds-g-color-border-accent-1: var(--slds-g-color-brand-base-50);  /* figma — cosmos #066afe */
-    --slds-g-color-border-accent-2: var(--slds-g-color-brand-base-40);  /* figma — cosmos #0250d9 */
-    --slds-g-color-border-accent-3: var(--slds-g-color-brand-base-30);  /* figma — cosmos #022ac0 */
-    --slds-g-color-surface-container-1: var(--slds-g-color-neutral-base-100); /* figma = default */
-    --slds-g-color-surface-container-2: var(--slds-g-color-neutral-base-95); /* figma — cosmos #f3f3f3 */
-    --slds-g-color-surface-container-3: var(--slds-g-color-neutral-base-90); /* figma — cosmos #e5e5e5 */
-    --slds-g-color-surface-container-inverse-1: var(--slds-g-color-brand-base-20); /* figma — cosmos #032d60 */
-    --slds-g-color-surface-container-inverse-2: var(--slds-g-color-brand-base-15); /* figma — cosmos #03234d */
-    --slds-g-color-border-1: var(--slds-g-color-neutral-base-80);       /* figma — cosmos #c9c9c9 */
-    --slds-g-color-border-2: var(--slds-g-color-neutral-base-60);       /* figma — cosmos #5c5c5c */
-    --slds-g-color-border-inverse-1: var(--slds-g-color-neutral-base-95); /* figma — cosmos #f3f3f3 */
-    --slds-g-color-border-inverse-2: var(--slds-g-color-brand-base-20); /* figma — cosmos #032d60 */
-    --slds-g-color-error-1: var(--slds-g-color-error-base-40);          /* figma — cosmos #b60554 */
-    --slds-g-color-error-container-1: var(--slds-g-color-error-base-90); /* figma — cosmos #fddde3 */
-    --slds-g-color-error-container-2: var(--slds-g-color-error-base-80); /* figma — cosmos #fdb6c5 */
-    --slds-g-color-on-error-1: var(--slds-g-color-error-base-30);       /* figma — cosmos #b60554 */
-    --slds-g-color-on-error-2: var(--slds-g-color-error-base-20);       /* figma — cosmos #8a033e */
-    --slds-g-color-border-error-1: var(--slds-g-color-error-base-40);   /* figma — cosmos #b60554 */
-    --slds-g-color-border-error-2: var(--slds-g-color-error-base-30);   /* figma — cosmos #8a033e */
-    --slds-g-color-warning-1: var(--slds-g-color-warning-base-40);      /* figma — cosmos #8c4b02 */
-    --slds-g-color-warning-container-1: var(--slds-g-color-warning-base-90); /* figma — cosmos #f9e3b6 */
-    --slds-g-color-on-warning-1: var(--slds-g-color-warning-base-30);   /* figma — cosmos #8c4b02 */
-    --slds-g-color-success-1: var(--slds-g-color-success-base-40);      /* figma — cosmos #056764 */
-    --slds-g-color-success-container-1: var(--slds-g-color-success-base-90); /* figma — cosmos #acf3e4 */
-    --slds-g-color-success-container-2: var(--slds-g-color-success-base-80); /* figma — cosmos #04e1cb */
-    --slds-g-color-on-success-1: var(--slds-g-color-success-base-30);   /* figma — cosmos #056764 */
-    --slds-g-color-on-success-2: var(--slds-g-color-success-base-20);   /* figma — cosmos #024d4c */
-    --slds-g-color-border-success-1: var(--slds-g-color-success-base-40); /* figma — cosmos #056764 */
-    --slds-g-color-border-success-2: var(--slds-g-color-success-base-20); /* figma — cosmos #024d4c */
-    --slds-g-color-info-1: var(--slds-g-color-info-base-40);            /* figma — cosmos #0b5cab */
-    --slds-g-color-info-container-1: var(--slds-g-color-info-base-90);  /* figma — cosmos #d8e6fe */
-    --slds-g-color-on-info-1: var(--slds-g-color-info-base-40);         /* figma — cosmos #0b5cab */
-    --slds-g-color-disabled-1: var(--slds-g-color-neutral-base-50);     /* figma — cosmos #757575 */
-    --slds-g-color-disabled-container-1: var(--slds-g-color-neutral-base-90); /* figma — cosmos #e5e5e5 */
-    --slds-g-color-disabled-container-2: var(--slds-g-color-neutral-base-80); /* figma — cosmos #c9c9c9 */
-    --slds-g-color-on-disabled-1: var(--slds-g-color-neutral-base-50);  /* figma — cosmos #757575 */
-    --slds-g-color-on-disabled-2: var(--slds-g-color-neutral-base-40);  /* figma — cosmos #757575 */
-    --slds-g-color-border-disabled-1: var(--slds-g-color-neutral-base-80); /* figma — cosmos #757575 */
-    --slds-g-color-border-warning-1: var(--slds-g-color-warning-base-40); /* figma — cosmos #ca8501 */
-}
-/* @generated figma:end */
-
-/* -----------------------------------------------------------------------------
- * C1a. Weight palette — a deliberate deviation from Figma (user, 2026-10-23)
- *
- * The site uses four weights: 300 Light, 400, 500, 700. Figma still defines
- * font/weight/6 "SemiBold" as 600, so C1 above carries 600; this block, being
- * declared after it, wins. A re-import regenerates C1 but leaves this alone.
- *
- *   --slds-g-font-weight-6  600 → 500   SLDS reads weight 6 for form labels,
- *                                       alerts and table headers (through its
- *                                       private --slds-s-* hooks) — those now
- *                                       render Medium, which is also what the
- *                                       form-element design asks of labels.
- *
- * Not reached: SLDS hard-codes 600 for navigation
- * (--slds-s-navigation-font-weight, private) — no public hook sets it.
- *
- * --slds-g-font-weight-3 (300, Light) is in the palette and stays as Figma
- * has it. Remove this block if Figma drops SemiBold to 500 itself.
- * -------------------------------------------------------------------------- */
-:root {
-    --slds-g-font-weight-6: var(--slds-g-font-weight-5);
-}
-
-/* -----------------------------------------------------------------------------
- * C2. Global hooks — elevation and focus (from Figma effect styles)
- *
- * These come from Figma EFFECT STYLES, which bind the shadow-colour variables
- * in section B. Elevation N matches --slds-g-shadow-N layer for layer (offsets
- * and blurs identical); only the colour differs, so these are SLDS's geometry
- * with MSD's tint:
- *
- *   Figma style                  SLDS hook
- *   Elevation/N - down ⬇         --slds-g-shadow-N  (block-end-N aliases it)
- *   Elevation/N - up ⬆           --slds-g-shadow-block-start-N
- *   Elevation/N - left ⬅         --slds-g-shadow-inline-start-N
- *   Elevation/N - right ⮕        --slds-g-shadow-inline-end-N
- *
- * Elevation/1 - right is a copy of Elevation/1 - left in Figma (both throw the
- * shadow left). inline-end-1 below is the mirror of left, as levels 2–4 are —
- * fix the style in Figma.
- *
- *   Focus/Outline        --slds-g-shadow-outline-focus-1   2px accent-1. SLDS
- *                        uses brand-base-15 (navy); Figma uses MSD blue.
- *   Focus/Outset         --slds-g-shadow-outset-focus-1
- *   Focus/Inset          --slds-g-shadow-inset-focus-1
- *   Focus/Inset-inverse  --slds-g-shadow-inset-inverse-focus-1
- *
- * The three non-outline focus rings bind semantic tokens in Figma
- * (on-surface-3, surface-container-1) where SLDS binds ramp steps; those
- * semantics come from C1.
- * -------------------------------------------------------------------------- */
-
-:root {
-    --slds-g-shadow-1: 0 0 2px 0 var(--sep-color-shadow-1), 0 2px 2px 0 var(--sep-color-shadow-1), 0 -1px 2px 0 var(--sep-color-shadow-1-edge);
-    --slds-g-shadow-2: 0 0 5px 0 var(--sep-color-shadow-2), 0 3px 3px 0 var(--sep-color-shadow-2), 0 -1px 2px 0 var(--sep-color-shadow-2-edge);
-    --slds-g-shadow-3: 0 0 7px 0 var(--sep-color-shadow-3), 0 5px 5px 0 var(--sep-color-shadow-3), 0 -1px 2px 0 var(--sep-color-shadow-3-edge);
-    --slds-g-shadow-4: 0 0 10px 0 var(--sep-color-shadow-4), 0 7px 7px 0 var(--sep-color-shadow-4), 0 -1px 3px 0 var(--sep-color-shadow-4-edge);
-
-    --slds-g-shadow-block-start-1: 0 0 2px 0 var(--sep-color-shadow-1), 0 -2px 2px 0 var(--sep-color-shadow-1), 0 1px 2px 0 var(--sep-color-shadow-1-edge);
-    --slds-g-shadow-block-start-2: 0 0 5px 0 var(--sep-color-shadow-2), 0 -3px 3px 0 var(--sep-color-shadow-2), 0 1px 2px 0 var(--sep-color-shadow-2-edge);
-    --slds-g-shadow-block-start-3: 0 0 7px 0 var(--sep-color-shadow-3), 0 -5px 5px 0 var(--sep-color-shadow-3), 0 1px 2px 0 var(--sep-color-shadow-3-edge);
-    --slds-g-shadow-block-start-4: 0 0 10px 0 var(--sep-color-shadow-4), 0 -7px 7px 0 var(--sep-color-shadow-4), 0 1px 3px 0 var(--sep-color-shadow-4-edge);
-
-    --slds-g-shadow-inline-start-1: 0 0 2px 0 var(--sep-color-shadow-1), -2px 0 2px 0 var(--sep-color-shadow-1), 1px 0 2px 0 var(--sep-color-shadow-1-edge);
-    --slds-g-shadow-inline-start-2: 0 0 5px 0 var(--sep-color-shadow-2), -3px 0 3px 0 var(--sep-color-shadow-2), 1px 0 2px 0 var(--sep-color-shadow-2-edge);
-    --slds-g-shadow-inline-start-3: 0 0 7px 0 var(--sep-color-shadow-3), -5px 0 5px 0 var(--sep-color-shadow-3), 1px 0 2px 0 var(--sep-color-shadow-3-edge);
-    --slds-g-shadow-inline-start-4: 0 0 10px 0 var(--sep-color-shadow-4), -7px 0 7px 0 var(--sep-color-shadow-4), 1px 0 3px 0 var(--sep-color-shadow-4-edge);
-
-    --slds-g-shadow-inline-end-1: 0 0 2px 0 var(--sep-color-shadow-1), 2px 0 2px 0 var(--sep-color-shadow-1), -1px 0 2px 0 var(--sep-color-shadow-1-edge);
-    --slds-g-shadow-inline-end-2: 0 0 5px 0 var(--sep-color-shadow-2), 3px 0 3px 0 var(--sep-color-shadow-2), -1px 0 2px 0 var(--sep-color-shadow-2-edge);
-    --slds-g-shadow-inline-end-3: 0 0 7px 0 var(--sep-color-shadow-3), 5px 0 5px 0 var(--sep-color-shadow-3), -1px 0 2px 0 var(--sep-color-shadow-3-edge);
-    --slds-g-shadow-inline-end-4: 0 0 10px 0 var(--sep-color-shadow-4), 7px 0 7px 0 var(--sep-color-shadow-4), -1px 0 3px 0 var(--sep-color-shadow-4-edge);
-
-    --slds-g-shadow-outline-focus-1: 0 0 0 2px var(--slds-g-color-accent-1);
-    --slds-g-shadow-outset-focus-1: 0 0 0 2px var(--slds-g-color-surface-container-1), 0 0 0 4px var(--slds-g-color-on-surface-3);
-    --slds-g-shadow-inset-focus-1: 0 0 0 2px var(--slds-g-color-on-surface-3) inset;
-    --slds-g-shadow-inset-inverse-focus-1: 0 0 0 2px var(--slds-g-color-on-surface-3) inset, 0 0 0 4px var(--slds-g-color-surface-container-1) inset;
-}
-
-/* -----------------------------------------------------------------------------
- * C3. Global hooks — every other SLDS global, from Cosmos or SLDS default
- *
- * The public --slds-g-* hooks Figma does not define, so the whole set is
- * visible in one file. Every line is labelled with where its value comes from:
- *
- *   cosmos — default X   Cosmos sets it; SLDS's base theme (Lightning Blue) has X
- *   default              SLDS's own value — Cosmos and Lightning Blue agree
- *
- * Everything defined above this block is NOT repeated here: the Figma
- * variables in C1 and the effect-style hooks in C2.
- *
- * GENERATED — do not hand-edit. Re-run after an SLDS upgrade:
- *   node .claude/skills/lwc-figma-ds-tokens-import/sync-slds-globals.mjs
- * Light values only: Cosmos's light-dark() pairs are written as their light
- * value, and its private --slds-r-* references as literals. References to
- * another --slds-g-* token stay as var(), so a Figma override still flows
- * through. Nothing here changes what Cosmos would render.
- *
- * Trade-off: declaring a token pins it. Without this block an SLDS upgrade
- * would move these values on its own; with it, they move only when this script
- * is re-run.
- * -------------------------------------------------------------------------- */
-
-/* @generated slds-globals:start */
-:root {
-
-    /* duration */
-    --slds-g-duration-immediately: 0.05s;                               /* default */
-    --slds-g-duration-instantly: 0s;                                    /* default */
-    --slds-g-duration-paused: 3.2s;                                     /* default */
-    --slds-g-duration-promptly: 0.2s;                                   /* default */
-    --slds-g-duration-quickly: 0.1s;                                    /* default */
-    --slds-g-duration-slowly: 0.4s;                                     /* default */
-    --slds-g-duration-toast-medium: 9.6s;                               /* default */
-    --slds-g-duration-toast-short: 4.8s;                                /* default */
-
-    /* ratio */
-    --slds-g-ratio-square: 1;                                           /* default */
-    --slds-g-ratio-landscape: 4/3;                                      /* default */
-    --slds-g-ratio-portrait: 3/4;                                       /* default */
-    --slds-g-ratio-wide: 16/9;                                          /* default */
-    --slds-g-ratio-ultrawide: 18/5;                                     /* default */
-
-    /* sizing */
-    --slds-g-sizing-base: 1rem;                                         /* default */
-    --slds-g-sizing-content-1: 20ch;                                    /* default */
-    --slds-g-sizing-content-2: 45ch;                                    /* default */
-    --slds-g-sizing-content-3: 60ch;                                    /* default */
-    --slds-g-sizing-heading-1: 20ch;                                    /* default */
-    --slds-g-sizing-heading-2: 25ch;                                    /* default */
-    --slds-g-sizing-heading-3: 35ch;                                    /* default */
-
-    /* spacing */
     --slds-g-spacing-var-1: var(--slds-g-spacing-1);                    /* default */
     --slds-g-spacing-var-2: var(--slds-g-spacing-2);                    /* default */
     --slds-g-spacing-var-3: var(--slds-g-spacing-3);                    /* default */
@@ -705,39 +114,66 @@
     --slds-g-spacing-var-inline-11: var(--slds-g-spacing-11);           /* default */
     --slds-g-spacing-var-inline-12: var(--slds-g-spacing-12);           /* default */
 
-    /* radius */
+    /* ==== Sizing ============================================================ */
+    --slds-g-sizing-1: 0.125rem;                                        /* figma = default */
+    --slds-g-sizing-2: 0.25rem;                                         /* figma = default */
+    --slds-g-sizing-3: 0.5rem;                                          /* figma = default */
+    --slds-g-sizing-4: 0.75rem;                                         /* figma = default */
+    --slds-g-sizing-5: 1rem;                                            /* figma = default */
+    --slds-g-sizing-6: 1.25rem;                                         /* figma = default */
+    --slds-g-sizing-7: 1.5rem;                                          /* figma = default */
+    --slds-g-sizing-8: 1.75rem;                                         /* figma = default */
+    --slds-g-sizing-9: 2rem;                                            /* figma = default */
+    --slds-g-sizing-10: 3rem;                                           /* figma = default */
+    --slds-g-sizing-11: 4rem;                                           /* figma = default */
+    --slds-g-sizing-12: 5rem;                                           /* figma = default */
+    --slds-g-sizing-13: 10rem;                                          /* figma = default */
+    --slds-g-sizing-14: 15rem;                                          /* figma = default */
+    --slds-g-sizing-15: 20rem;                                          /* figma = default */
+    --slds-g-sizing-16: 30rem;                                          /* figma = default */
+    --slds-g-sizing-base: 1rem;                                         /* default */
+    --slds-g-sizing-content-1: 20ch;                                    /* default */
+    --slds-g-sizing-content-2: 45ch;                                    /* default */
+    --slds-g-sizing-content-3: 60ch;                                    /* default */
+    --slds-g-sizing-heading-1: 20ch;                                    /* default */
+    --slds-g-sizing-heading-2: 25ch;                                    /* default */
+    --slds-g-sizing-heading-3: 35ch;                                    /* default */
+
+    /* Border widths
+       sizing-border-2 is 1.5px: Figma's value, though its label says 2px. Kept — the button
+       outline is drawn at 1.5px. /3 and /4 to confirm (report § 3.1). */
+    --slds-g-sizing-border-1: 1px;                                      /* figma = default */
+    --slds-g-sizing-border-2: 1.5px;                                    /* figma — cosmos 0.125rem */
+    --slds-g-sizing-border-3: 2px;                                      /* figma — cosmos 0.1875rem */
+    --slds-g-sizing-border-4: 3px;                                      /* figma — cosmos 0.25rem */
+
+    /* Radius */
+    --slds-g-radius-border-1: 0.25rem;                                  /* figma = cosmos */
+    --slds-g-radius-border-2: 0.5rem;                                   /* figma = cosmos */
+    --slds-g-radius-border-3: 0.75rem;                                  /* figma = cosmos */
+    --slds-g-radius-border-4: 1.25rem;                                  /* figma = cosmos */
+    --slds-g-radius-border-circle: 9999px;                              /* figma — cosmos 100% */
     --slds-g-radius-border-pill: 15rem;                                 /* default */
 
-    /* font-family */
+    /* ==== Type ============================================================== */
+
+    /* Font family */
+    --slds-g-font-family-base: 'Atkinson Hyperlegible Next Variable', 'Atkinson Hyperlegible Next', system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; /* figma — cosmos differs */
+    --slds-g-font-family-monospace: 'SF Mono', Consolas, Menlo, Monaco, Courier, monospace; /* figma — cosmos differs */
     --slds-g-font-family: var(--slds-g-font-family-base);               /* default */
 
-    /* font-weight */
-    --slds-g-font-weight-1: 100;                                        /* default */
-    --slds-g-font-weight-2: 200;                                        /* default */
-    --slds-g-font-weight-bold: bold;                                    /* default */
-
-    /* font-line */
-    --slds-g-font-line-height-1: 1;                                     /* default */
-    --slds-g-font-line-height-2: 1.25;                                  /* default */
-    --slds-g-font-line-height-3: 1.375;                                 /* default */
-    --slds-g-font-line-height-4: 1.5;                                   /* default */
-    --slds-g-font-line-height-5: 1.75;                                  /* default */
-    --slds-g-font-line-height-6: 2;                                     /* default */
-    --slds-g-font-line-height-base: 1.5;                                /* default */
-    --slds-g-font-line-height-var-base: var(--slds-g-font-line-height-base); /* default */
-    --slds-g-font-line-clamp: 3;                                        /* default */
-
-    /* font-lineheight */
-    --slds-g-font-lineheight-1: var(--slds-g-font-line-height-1);       /* default */
-    --slds-g-font-lineheight-2: var(--slds-g-font-line-height-2);       /* default */
-    --slds-g-font-lineheight-3: var(--slds-g-font-line-height-3);       /* default */
-    --slds-g-font-lineheight-4: var(--slds-g-font-line-height-4);       /* default */
-    --slds-g-font-lineheight-5: var(--slds-g-font-line-height-5);       /* default */
-    --slds-g-font-lineheight-6: var(--slds-g-font-line-height-6);       /* default */
-    --slds-g-font-lineheight-base: var(--slds-g-font-line-height-base); /* default */
-    --slds-g-font-lineheight-var-base: var(--slds-g-font-line-height-var-base); /* default */
-
-    /* font-scale */
+    /* Font scale */
+    --slds-g-font-scale-neg-2: 0.75rem;                                 /* figma — cosmos 0.625rem */
+    --slds-g-font-scale-neg-1: 0.875rem;                                /* figma — cosmos 0.75rem */
+    --slds-g-font-scale-base: 1rem;                                     /* figma — cosmos 0.8125rem */
+    --slds-g-font-scale-1: 1.125rem;                                    /* figma — cosmos 0.875rem */
+    --slds-g-font-scale-2: 1.25rem;                                     /* figma — cosmos 1rem */
+    --slds-g-font-scale-3: 1.5rem;                                      /* figma — cosmos 1.25rem */
+    --slds-g-font-scale-4: 2rem;                                        /* figma — cosmos 1.5rem */
+    --slds-g-font-scale-5: 2.25rem;                                     /* figma — cosmos 1.75rem */
+    --slds-g-font-scale-6: 2.5rem;                                      /* figma — cosmos 2rem */
+    --slds-g-font-scale-7: 3rem;                                        /* figma — cosmos 2.5rem */
+    --slds-g-font-scale-8: 3.75rem;                                     /* figma — cosmos 3rem */
     --slds-g-font-scale-9: var(--slds-g-font-scale-8);                  /* cosmos — default 2.625rem */
     --slds-g-font-scale-10: var(--slds-g-font-scale-8);                 /* cosmos — default 2.625rem */
     --slds-g-font-scale-ratio: 1.15;                                    /* default */
@@ -758,119 +194,465 @@
     --slds-g-font-scale-var-neg-2: var(--slds-g-font-scale-neg-2);      /* default */
     --slds-g-font-scale-var-neg-3: var(--slds-g-font-scale-var-neg-2);  /* default */
     --slds-g-font-scale-var-neg-4: var(--slds-g-font-scale-var-neg-3);  /* default */
-
-    /* font-size */
     --slds-g-font-size-base: var(--slds-g-font-scale-base);             /* default */
 
-    /* Palette: neutral — not in Figma */
-    --slds-g-color-palette-neutral-0: #000;                             /* default */
-    --slds-g-color-palette-neutral-10: #181818;                         /* default */
-    --slds-g-color-palette-neutral-15: #242424;                         /* default */
-    --slds-g-color-palette-neutral-20: #2e2e2e;                         /* default */
-    --slds-g-color-palette-neutral-30: #444;                            /* default */
-    --slds-g-color-palette-neutral-40: #5c5c5c;                         /* default */
-    --slds-g-color-palette-neutral-50: #757575;                         /* default */
-    --slds-g-color-palette-neutral-60: #939393;                         /* default */
-    --slds-g-color-palette-neutral-65: #a0a0a0;                         /* default */
-    --slds-g-color-palette-neutral-70: #aeaeae;                         /* default */
-    --slds-g-color-palette-neutral-80: #c9c9c9;                         /* default */
-    --slds-g-color-palette-neutral-90: #e5e5e5;                         /* default */
-    --slds-g-color-palette-neutral-95: #f3f3f3;                         /* default */
+    /* Font weight
+       Weight 6 is 500, not Figma's 600 (user, 2026-10-23): the site uses 300 / 400 / 500 / 700.
+       SLDS reads weight 6 for labels, alerts and table headers. Delete the override in
+       hand-tokens.mjs if Figma moves SemiBold to 500. */
+    --slds-g-font-weight-6: var(--slds-g-font-weight-5);                /* msd — figma 600 */
+    --slds-g-font-weight-3: 300;                                        /* figma = default */
+    --slds-g-font-weight-4: 400;                                        /* figma = default */
+    --slds-g-font-weight-5: 500;                                        /* figma = default */
+    --slds-g-font-weight-7: 700;                                        /* figma = default */
+    --slds-g-font-weight-1: 100;                                        /* default */
+    --slds-g-font-weight-2: 200;                                        /* default */
+    --slds-g-font-weight-bold: bold;                                    /* default */
+
+    /* Line height */
+    --slds-g-font-line-height-1: 1;                                     /* default */
+    --slds-g-font-line-height-2: 1.25;                                  /* default */
+    --slds-g-font-line-height-3: 1.375;                                 /* default */
+    --slds-g-font-line-height-4: 1.5;                                   /* default */
+    --slds-g-font-line-height-5: 1.75;                                  /* default */
+    --slds-g-font-line-height-6: 2;                                     /* default */
+    --slds-g-font-line-height-base: 1.5;                                /* default */
+    --slds-g-font-line-height-var-base: var(--slds-g-font-line-height-base); /* default */
+    --slds-g-font-lineheight-1: var(--slds-g-font-line-height-1);       /* default */
+    --slds-g-font-lineheight-2: var(--slds-g-font-line-height-2);       /* default */
+    --slds-g-font-lineheight-3: var(--slds-g-font-line-height-3);       /* default */
+    --slds-g-font-lineheight-4: var(--slds-g-font-line-height-4);       /* default */
+    --slds-g-font-lineheight-5: var(--slds-g-font-line-height-5);       /* default */
+    --slds-g-font-lineheight-6: var(--slds-g-font-line-height-6);       /* default */
+    --slds-g-font-lineheight-base: var(--slds-g-font-line-height-base); /* default */
+    --slds-g-font-lineheight-var-base: var(--slds-g-font-line-height-var-base); /* default */
+    --slds-g-font-line-clamp: 3;                                        /* default */
+
+    /* ==== Colour — ramps ==================================================== */
+
+    /* Neutral */
+    --slds-g-color-neutral-base-100: #ffffff;                           /* figma = default */
+    --slds-g-color-neutral-base-95: #f0f0f0;                            /* figma — cosmos #f3f3f3 */
+    --slds-g-color-neutral-base-90: #e0e0e0;                            /* figma — cosmos #e5e5e5 */
+    --slds-g-color-neutral-base-80: #c2c2c2;                            /* figma — cosmos #c9c9c9 */
+    --slds-g-color-neutral-base-70: #a3a3a3;                            /* figma — cosmos #aeaeae */
+    --slds-g-color-neutral-base-65: #949494;                            /* figma — cosmos #a0a0a0 */
+    --slds-g-color-neutral-base-60: #858585;                            /* figma — cosmos #939393 */
+    --slds-g-color-neutral-base-55: #757575;                            /* figma — cosmos #848484 */
+    --slds-g-color-neutral-base-50: #666666;                            /* figma — cosmos #757575 */
+    --slds-g-color-neutral-base-45: #5c5c5c;                            /* figma — cosmos #696969 */
+    --slds-g-color-neutral-base-40: #525252;                            /* figma — cosmos #5c5c5c */
+    --slds-g-color-neutral-base-30: #3d3d3d;                            /* figma — cosmos #444444 */
+    --slds-g-color-neutral-base-20: #292929;                            /* figma — cosmos #2e2e2e */
+    --slds-g-color-neutral-base-15: #1f1f1f;                            /* figma — cosmos #242424 */
+    --slds-g-color-neutral-base-10: #141414;                            /* figma — cosmos #181818 */
+    --slds-g-color-neutral-base-0: #000000;                             /* figma = default */
+
+    /* Brand */
+    --slds-g-color-brand-base-100: #ffffff;                             /* figma = default */
+    --slds-g-color-brand-base-95: #e6f2fa;                              /* figma — cosmos #edf4ff */
+    --slds-g-color-brand-base-90: #cce4f4;                              /* figma — cosmos #d6e6ff */
+    --slds-g-color-brand-base-80: #99cae9;                              /* figma — cosmos #a8cbff */
+    --slds-g-color-brand-base-70: #67afdf;                              /* figma — cosmos #7cb1fe */
+    --slds-g-color-brand-base-65: #4da2d9;                              /* figma — cosmos #5f9ffe */
+    --slds-g-color-brand-base-60: #3495d4;                              /* figma — cosmos #4992fe */
+    --slds-g-color-brand-base-55: #1a87ce;                              /* figma — cosmos #287efe */
+    --slds-g-color-brand-base-50: #017ac9;                              /* figma — cosmos #066afe */
+    --slds-g-color-brand-base-45: #066cb4;                              /* figma — cosmos #045dec */
+    --slds-g-color-brand-base-40: #0a5ea0;                              /* figma — cosmos #0250d9 */
+    --slds-g-color-brand-base-30: #134276;                              /* figma — cosmos #022ac0 */
+    --slds-g-color-brand-base-20: #0d2c4f;                              /* figma — cosmos #002775 */
+    --slds-g-color-brand-base-15: #0a213b;                              /* figma — cosmos #001e5b */
+    --slds-g-color-brand-base-10: #061627;                              /* figma — cosmos #001642 */
+
+    /* Error */
+    --slds-g-color-error-base-100: #ffffff;                             /* figma = default */
+    --slds-g-color-error-base-95: #faebeb;                              /* figma — cosmos #fef0f3 */
+    --slds-g-color-error-base-90: #f6d7d6;                              /* figma — cosmos #fddde3 */
+    --slds-g-color-error-base-80: #ecafad;                              /* figma — cosmos #fdb6c5 */
+    --slds-g-color-error-base-70: #e38685;                              /* figma — cosmos #fe8aa7 */
+    --slds-g-color-error-base-65: #de7270;                              /* figma — cosmos #fe7298 */
+    --slds-g-color-error-base-60: #d95e5c;                              /* figma — cosmos #ff538a */
+    --slds-g-color-error-base-55: #d54a47;                              /* figma — cosmos #f42f7c */
+    --slds-g-color-error-base-50: #d03633;                              /* figma — cosmos #e3066a */
+    --slds-g-color-error-base-45: #bb312e;                              /* figma — cosmos #ce055f */
+    --slds-g-color-error-base-40: #a62b29;                              /* figma — cosmos #b60554 */
+    --slds-g-color-error-base-30: #7d201f;                              /* figma — cosmos #8a033e */
+    --slds-g-color-error-base-20: #531614;                              /* figma — cosmos #61022a */
+    --slds-g-color-error-base-15: #3e100f;                              /* figma — cosmos #4b0620 */
+    --slds-g-color-error-base-10: #2a0b0a;                              /* figma — cosmos #370114 */
+
+    /* Warning */
+    --slds-g-color-warning-base-100: #ffffff;                           /* figma = default */
+    --slds-g-color-warning-base-95: #fff2e8;                            /* figma — cosmos #fbf3e0 */
+    --slds-g-color-warning-base-90: #fee5d0;                            /* figma — cosmos #f9e3b6 */
+    --slds-g-color-warning-base-80: #fdcca1;                            /* figma — cosmos #fcc003 */
+    --slds-g-color-warning-base-70: #fcb272;                            /* figma — cosmos #e4a201 */
+    --slds-g-color-warning-base-65: #fca55b;                            /* figma — cosmos #da9401 */
+    --slds-g-color-warning-base-60: #fb9943;                            /* figma — cosmos #ca8501 */
+    --slds-g-color-warning-base-55: #fb8c2c;                            /* figma — cosmos #ba7503 */
+    --slds-g-color-warning-base-50: #fa7f14;                            /* figma — cosmos #a96504 */
+    --slds-g-color-warning-base-45: #e17212;                            /* figma — cosmos #9a5803 */
+    --slds-g-color-warning-base-40: #c86610;                            /* figma — cosmos #8c4b02 */
+    --slds-g-color-warning-base-30: #964c0c;                            /* figma — cosmos #6f3400 */
+    --slds-g-color-warning-base-20: #643308;                            /* figma — cosmos #4f2100 */
+    --slds-g-color-warning-base-15: #4b2606;                            /* figma — cosmos #371e03 */
+    --slds-g-color-warning-base-10: #321904;                            /* figma — cosmos #281202 */
+
+    /* Success */
+    --slds-g-color-success-base-100: #ffffff;                           /* figma = default */
+    --slds-g-color-success-base-95: #ebf3e8;                            /* figma — cosmos #def9f3 */
+    --slds-g-color-success-base-90: #d7e6d0;                            /* figma — cosmos #acf3e4 */
+    --slds-g-color-success-base-80: #afcda1;                            /* figma — cosmos #04e1cb */
+    --slds-g-color-success-base-70: #88b572;                            /* figma — cosmos #01c3b3 */
+    --slds-g-color-success-base-65: #74a85b;                            /* figma — cosmos #03b4a7 */
+    --slds-g-color-success-base-60: #609c43;                            /* figma — cosmos #06a59a */
+    --slds-g-color-success-base-55: #4c8f2c;                            /* figma — cosmos #09948b */
+    --slds-g-color-success-base-50: #388314;                            /* figma — cosmos #0b827c */
+    --slds-g-color-success-base-45: #327612;                            /* figma — cosmos #087570 */
+    --slds-g-color-success-base-40: #2d6910;                            /* figma — cosmos #056764 */
+    --slds-g-color-success-base-30: #224f0c;                            /* figma — cosmos #024d4c */
+    --slds-g-color-success-base-20: #163408;                            /* figma — cosmos #023434 */
+    --slds-g-color-success-base-15: #112706;                            /* figma — cosmos #072825 */
+    --slds-g-color-success-base-10: #0b1a04;                            /* figma — cosmos #071b12 */
+
+    /* Info */
+    --slds-g-color-info-base-100: #ffffff;                              /* figma = default */
+    --slds-g-color-info-base-95: #e6f2fa;                               /* figma — cosmos #eef4ff */
+    --slds-g-color-info-base-90: #cce4f4;                               /* figma — cosmos #d8e6fe */
+    --slds-g-color-info-base-80: #99cae9;                               /* figma — cosmos #aacbff */
+    --slds-g-color-info-base-70: #67afdf;                               /* figma — cosmos #78b0fd */
+    --slds-g-color-info-base-65: #4da2d9;                               /* figma — cosmos #57a3fd */
+    --slds-g-color-info-base-60: #3495d4;                               /* figma — cosmos #1b96ff */
+    --slds-g-color-info-base-55: #1a87ce;                               /* figma — cosmos #0684ef */
+    --slds-g-color-info-base-50: #017ac9;                               /* figma — cosmos #0176d3 */
+    --slds-g-color-info-base-45: #016eb5;                               /* figma — cosmos #0469c1 */
+    --slds-g-color-info-base-40: #0162a1;                               /* figma — cosmos #0b5cab */
+    --slds-g-color-info-base-35: #044f98;                               /* cosmos — default #515151 */
+    --slds-g-color-info-base-30: #014979;                               /* figma — cosmos #014486 */
+    --slds-g-color-info-base-20: #003150;                               /* figma — cosmos #032d60 */
+    --slds-g-color-info-base-15: #00253c;                               /* figma — cosmos #03234d */
+    --slds-g-color-info-base-10: #001828;                               /* figma — cosmos #001639 */
+
+    /* ==== Colour — palettes ================================================= */
+
+    /* Cloud-blue */
+    --slds-g-color-palette-cloud-blue-95: #eaf5fe;                      /* figma = default */
+    --slds-g-color-palette-cloud-blue-90: #cfe9fe;                      /* figma = default */
+    --slds-g-color-palette-cloud-blue-80: #90d0fe;                      /* figma = default */
+    --slds-g-color-palette-cloud-blue-70: #1ab9ff;                      /* figma = default */
+    --slds-g-color-palette-cloud-blue-65: #08abed;                      /* figma = default */
+    --slds-g-color-palette-cloud-blue-60: #0d9dda;                      /* figma = default */
+    --slds-g-color-palette-cloud-blue-50: #107cad;                      /* figma = default */
+    --slds-g-color-palette-cloud-blue-40: #05628a;                      /* figma = default */
+    --slds-g-color-palette-cloud-blue-30: #084968;                      /* figma = default */
+    --slds-g-color-palette-cloud-blue-20: #023248;                      /* figma = default */
+    --slds-g-color-palette-cloud-blue-15: #0a2636;                      /* figma = default */
+    --slds-g-color-palette-cloud-blue-10: #001a28;                      /* figma = default */
+
+    /* Green — MSD teal under Salesforce's "green" name */
+    --slds-g-color-palette-green-95: #ebf9f8;                           /* figma — cosmos #ebf7e6 */
+    --slds-g-color-palette-green-90: #d7f2f1;                           /* figma — cosmos #cdefc4 */
+    --slds-g-color-palette-green-80: #aee6e3;                           /* figma — cosmos #91db8b */
+    --slds-g-color-palette-green-70: #86d9d6;                           /* figma — cosmos #45c65a */
+    --slds-g-color-palette-green-65: #72d3cf;                           /* figma — cosmos #41b658 */
+    --slds-g-color-palette-green-60: #5dcdc8;                           /* figma — cosmos #3ba755 */
+    --slds-g-color-palette-green-50: #35c0ba;                           /* figma — cosmos #2e844a */
+    --slds-g-color-palette-green-40: #2a9a95;                           /* figma — cosmos #396547 */
+    --slds-g-color-palette-green-30: #207370;                           /* figma — cosmos #194e31 */
+    --slds-g-color-palette-green-20: #154d4a;                           /* figma — cosmos #143b25 */
+    --slds-g-color-palette-green-15: #103a38;                           /* figma — cosmos #0c2912 */
+    --slds-g-color-palette-green-10: #0b2625;                           /* figma — cosmos #071b12 */
+
+    /* Hot-orange — MSD salmon */
+    --slds-g-color-palette-hot-orange-95: #feefee;                      /* figma — cosmos #fef1ed */
+    --slds-g-color-palette-hot-orange-90: #fddede;                      /* figma — cosmos #ffded5 */
+    --slds-g-color-palette-hot-orange-80: #fcbebc;                      /* figma — cosmos #feb9a5 */
+    --slds-g-color-palette-hot-orange-70: #fa9d9b;                      /* figma — cosmos #ff906e */
+    --slds-g-color-palette-hot-orange-65: #f98d8a;                      /* figma — cosmos #ff784f */
+    --slds-g-color-palette-hot-orange-60: #f97d79;                      /* figma — cosmos #ff5d2d */
+    --slds-g-color-palette-hot-orange-50: #f75c58;                      /* figma — cosmos #d83a00 */
+    --slds-g-color-palette-hot-orange-40: #c64a46;                      /* figma — cosmos #aa3001 */
+    --slds-g-color-palette-hot-orange-30: #943735;                      /* figma — cosmos #7e2600 */
+    --slds-g-color-palette-hot-orange-20: #632523;                      /* figma — cosmos #4a2413 */
+    --slds-g-color-palette-hot-orange-15: #4a1c1a;                      /* figma — cosmos #421604 */
+    --slds-g-color-palette-hot-orange-10: #311212;                      /* figma — cosmos #281202 */
+
+    /* Indigo */
+    --slds-g-color-palette-indigo-95: #f1f3fb;                          /* figma = default */
+    --slds-g-color-palette-indigo-90: #e0e5f8;                          /* figma = default */
+    --slds-g-color-palette-indigo-80: #bec7f6;                          /* figma = default */
+    --slds-g-color-palette-indigo-70: #9ea9f1;                          /* figma = default */
+    --slds-g-color-palette-indigo-65: #8e9bef;                          /* figma = default */
+    --slds-g-color-palette-indigo-60: #7f8ced;                          /* figma = default */
+    --slds-g-color-palette-indigo-50: #5867e8;                          /* figma = default */
+    --slds-g-color-palette-indigo-40: #3a49da;                          /* figma = default */
+    --slds-g-color-palette-indigo-30: #2f2cb7;                          /* figma = default */
+    --slds-g-color-palette-indigo-20: #270c92;                          /* figma = default */
+    --slds-g-color-palette-indigo-15: #1f0974;                          /* figma = default */
+    --slds-g-color-palette-indigo-10: #17094e;                          /* figma = default */
+
+    /* Orange */
+    --slds-g-color-palette-orange-95: #fff1ea;                          /* figma = default */
+    --slds-g-color-palette-orange-90: #fedfd0;                          /* figma = default */
+    --slds-g-color-palette-orange-80: #ffba90;                          /* figma = default */
+    --slds-g-color-palette-orange-70: #fe9339;                          /* figma = default */
+    --slds-g-color-palette-orange-65: #f38303;                          /* figma = default */
+    --slds-g-color-palette-orange-60: #dd7a01;                          /* figma = default */
+    --slds-g-color-palette-orange-50: #a96404;                          /* figma = default */
+    --slds-g-color-palette-orange-40: #825101;                          /* figma = default */
+    --slds-g-color-palette-orange-30: #5f3e02;                          /* figma = default */
+    --slds-g-color-palette-orange-20: #3e2b02;                          /* figma = default */
+    --slds-g-color-palette-orange-15: #2e2204;                          /* figma = default */
+    --slds-g-color-palette-orange-10: #201600;                          /* figma = default */
+
+    /* Purple */
+    --slds-g-color-palette-purple-95: #f6f2fb;                          /* figma = default */
+    --slds-g-color-palette-purple-90: #ece1f9;                          /* figma = default */
+    --slds-g-color-palette-purple-80: #d7bff2;                          /* figma = default */
+    --slds-g-color-palette-purple-70: #c29ef1;                          /* figma = default */
+    --slds-g-color-palette-purple-65: #b78def;                          /* figma = default */
+    --slds-g-color-palette-purple-60: #ad7bee;                          /* figma = default */
+    --slds-g-color-palette-purple-50: #9050e9;                          /* figma = default */
+    --slds-g-color-palette-purple-40: #7526e3;                          /* figma = default */
+    --slds-g-color-palette-purple-30: #5a1ba9;                          /* figma = default */
+    --slds-g-color-palette-purple-20: #401075;                          /* figma = default */
+    --slds-g-color-palette-purple-15: #300b60;                          /* figma = default */
+    --slds-g-color-palette-purple-10: #240643;                          /* figma = default */
+
+    /* Red */
+    --slds-g-color-palette-red-95: #fef1ee;                             /* figma = default */
+    --slds-g-color-palette-red-90: #feded8;                             /* figma = default */
+    --slds-g-color-palette-red-80: #feb8ab;                             /* figma = default */
+    --slds-g-color-palette-red-70: #fe8f7d;                             /* figma = default */
+    --slds-g-color-palette-red-65: #fe7765;                             /* figma = default */
+    --slds-g-color-palette-red-60: #fe5c4c;                             /* figma = default */
+    --slds-g-color-palette-red-50: #ea001e;                             /* figma = default */
+    --slds-g-color-palette-red-40: #ba0517;                             /* figma = default */
+    --slds-g-color-palette-red-30: #8e030f;                             /* figma = default */
+    --slds-g-color-palette-red-20: #640103;                             /* figma = default */
+    --slds-g-color-palette-red-15: #4a0c04;                             /* figma = default */
+    --slds-g-color-palette-red-10: #300c01;                             /* figma = default */
+
+    /* Violet */
+    --slds-g-color-palette-violet-95: #f9f0ff;                          /* figma = default */
+    --slds-g-color-palette-violet-90: #f2defe;                          /* figma = default */
+    --slds-g-color-palette-violet-80: #e5b9fe;                          /* figma = default */
+    --slds-g-color-palette-violet-70: #d892fe;                          /* figma = default */
+    --slds-g-color-palette-violet-65: #d17dfe;                          /* figma = default */
+    --slds-g-color-palette-violet-60: #cb65ff;                          /* figma = default */
+    --slds-g-color-palette-violet-50: #ba01ff;                          /* figma = default */
+    --slds-g-color-palette-violet-40: #9602c7;                          /* figma = default */
+    --slds-g-color-palette-violet-30: #730394;                          /* figma = default */
+    --slds-g-color-palette-violet-20: #580276;                          /* figma = default */
+    --slds-g-color-palette-violet-15: #3d0157;                          /* figma = default */
+    --slds-g-color-palette-violet-10: #2e0039;                          /* figma = default */
+
+    /* Neutral */
     --slds-g-color-palette-neutral-100: #fff;                           /* default */
+    --slds-g-color-palette-neutral-95: #f3f3f3;                         /* default */
+    --slds-g-color-palette-neutral-90: #e5e5e5;                         /* default */
+    --slds-g-color-palette-neutral-80: #c9c9c9;                         /* default */
+    --slds-g-color-palette-neutral-70: #aeaeae;                         /* default */
+    --slds-g-color-palette-neutral-65: #a0a0a0;                         /* default */
+    --slds-g-color-palette-neutral-60: #939393;                         /* default */
+    --slds-g-color-palette-neutral-50: #757575;                         /* default */
+    --slds-g-color-palette-neutral-40: #5c5c5c;                         /* default */
+    --slds-g-color-palette-neutral-30: #444;                            /* default */
+    --slds-g-color-palette-neutral-20: #2e2e2e;                         /* default */
+    --slds-g-color-palette-neutral-15: #242424;                         /* default */
+    --slds-g-color-palette-neutral-10: #181818;                         /* default */
+    --slds-g-color-palette-neutral-0: #000;                             /* default */
 
-    /* Palette: blue — not in Figma */
-    --slds-g-color-palette-blue-10: #001639;                            /* default */
-    --slds-g-color-palette-blue-15: #03234d;                            /* default */
-    --slds-g-color-palette-blue-20: #032d60;                            /* default */
-    --slds-g-color-palette-blue-30: #014486;                            /* default */
-    --slds-g-color-palette-blue-40: #0b5cab;                            /* default */
-    --slds-g-color-palette-blue-50: #0176d3;                            /* default */
-    --slds-g-color-palette-blue-60: #1b96ff;                            /* default */
-    --slds-g-color-palette-blue-65: #57a3fd;                            /* default */
-    --slds-g-color-palette-blue-70: #78b0fd;                            /* default */
-    --slds-g-color-palette-blue-80: #aacbff;                            /* default */
-    --slds-g-color-palette-blue-90: #d8e6fe;                            /* default */
+    /* Blue */
     --slds-g-color-palette-blue-95: #eef4ff;                            /* default */
+    --slds-g-color-palette-blue-90: #d8e6fe;                            /* default */
+    --slds-g-color-palette-blue-80: #aacbff;                            /* default */
+    --slds-g-color-palette-blue-70: #78b0fd;                            /* default */
+    --slds-g-color-palette-blue-65: #57a3fd;                            /* default */
+    --slds-g-color-palette-blue-60: #1b96ff;                            /* default */
+    --slds-g-color-palette-blue-50: #0176d3;                            /* default */
+    --slds-g-color-palette-blue-40: #0b5cab;                            /* default */
+    --slds-g-color-palette-blue-30: #014486;                            /* default */
+    --slds-g-color-palette-blue-20: #032d60;                            /* default */
+    --slds-g-color-palette-blue-15: #03234d;                            /* default */
+    --slds-g-color-palette-blue-10: #001639;                            /* default */
 
-    /* Palette: electric-blue — not in Figma */
-    --slds-g-color-palette-electric-blue-10: #001642;                   /* default */
-    --slds-g-color-palette-electric-blue-15: #001e5b;                   /* default */
-    --slds-g-color-palette-electric-blue-20: #002775;                   /* default */
-    --slds-g-color-palette-electric-blue-30: #022ac0;                   /* default */
-    --slds-g-color-palette-electric-blue-40: #0250d9;                   /* default */
-    --slds-g-color-palette-electric-blue-50: #066afe;                   /* default */
-    --slds-g-color-palette-electric-blue-60: #4992fe;                   /* default */
-    --slds-g-color-palette-electric-blue-65: #5f9ffe;                   /* default */
-    --slds-g-color-palette-electric-blue-70: #7cb1fe;                   /* default */
-    --slds-g-color-palette-electric-blue-80: #a8cbff;                   /* default */
-    --slds-g-color-palette-electric-blue-90: #d6e6ff;                   /* default */
+    /* Electric-blue */
     --slds-g-color-palette-electric-blue-95: #edf4ff;                   /* default */
+    --slds-g-color-palette-electric-blue-90: #d6e6ff;                   /* default */
+    --slds-g-color-palette-electric-blue-80: #a8cbff;                   /* default */
+    --slds-g-color-palette-electric-blue-70: #7cb1fe;                   /* default */
+    --slds-g-color-palette-electric-blue-65: #5f9ffe;                   /* default */
+    --slds-g-color-palette-electric-blue-60: #4992fe;                   /* default */
+    --slds-g-color-palette-electric-blue-50: #066afe;                   /* default */
+    --slds-g-color-palette-electric-blue-40: #0250d9;                   /* default */
+    --slds-g-color-palette-electric-blue-30: #022ac0;                   /* default */
+    --slds-g-color-palette-electric-blue-20: #002775;                   /* default */
+    --slds-g-color-palette-electric-blue-15: #001e5b;                   /* default */
+    --slds-g-color-palette-electric-blue-10: #001642;                   /* default */
 
-    /* Palette: pink — not in Figma */
-    --slds-g-color-palette-pink-10: #370114;                            /* default */
-    --slds-g-color-palette-pink-15: #4b0620;                            /* default */
-    --slds-g-color-palette-pink-20: #61022a;                            /* default */
-    --slds-g-color-palette-pink-30: #8a033e;                            /* default */
-    --slds-g-color-palette-pink-40: #b60554;                            /* default */
-    --slds-g-color-palette-pink-50: #e3066a;                            /* default */
-    --slds-g-color-palette-pink-60: #ff538a;                            /* default */
-    --slds-g-color-palette-pink-65: #fe7298;                            /* default */
-    --slds-g-color-palette-pink-70: #fe8aa7;                            /* default */
-    --slds-g-color-palette-pink-80: #fdb6c5;                            /* default */
-    --slds-g-color-palette-pink-90: #fddde3;                            /* default */
+    /* Pink */
     --slds-g-color-palette-pink-95: #fef0f3;                            /* default */
+    --slds-g-color-palette-pink-90: #fddde3;                            /* default */
+    --slds-g-color-palette-pink-80: #fdb6c5;                            /* default */
+    --slds-g-color-palette-pink-70: #fe8aa7;                            /* default */
+    --slds-g-color-palette-pink-65: #fe7298;                            /* default */
+    --slds-g-color-palette-pink-60: #ff538a;                            /* default */
+    --slds-g-color-palette-pink-50: #e3066a;                            /* default */
+    --slds-g-color-palette-pink-40: #b60554;                            /* default */
+    --slds-g-color-palette-pink-30: #8a033e;                            /* default */
+    --slds-g-color-palette-pink-20: #61022a;                            /* default */
+    --slds-g-color-palette-pink-15: #4b0620;                            /* default */
+    --slds-g-color-palette-pink-10: #370114;                            /* default */
 
-    /* Palette: teal — not in Figma */
-    --slds-g-color-palette-teal-10: #071b12;                            /* default */
-    --slds-g-color-palette-teal-15: #072825;                            /* default */
-    --slds-g-color-palette-teal-20: #023434;                            /* default */
-    --slds-g-color-palette-teal-30: #024d4c;                            /* default */
-    --slds-g-color-palette-teal-40: #056764;                            /* default */
-    --slds-g-color-palette-teal-50: #0b827c;                            /* default */
-    --slds-g-color-palette-teal-60: #06a59a;                            /* default */
-    --slds-g-color-palette-teal-65: #03b4a7;                            /* default */
-    --slds-g-color-palette-teal-70: #01c3b3;                            /* default */
-    --slds-g-color-palette-teal-80: #04e1cb;                            /* default */
-    --slds-g-color-palette-teal-90: #acf3e4;                            /* default */
+    /* Teal */
     --slds-g-color-palette-teal-95: #def9f3;                            /* default */
+    --slds-g-color-palette-teal-90: #acf3e4;                            /* default */
+    --slds-g-color-palette-teal-80: #04e1cb;                            /* default */
+    --slds-g-color-palette-teal-70: #01c3b3;                            /* default */
+    --slds-g-color-palette-teal-65: #03b4a7;                            /* default */
+    --slds-g-color-palette-teal-60: #06a59a;                            /* default */
+    --slds-g-color-palette-teal-50: #0b827c;                            /* default */
+    --slds-g-color-palette-teal-40: #056764;                            /* default */
+    --slds-g-color-palette-teal-30: #024d4c;                            /* default */
+    --slds-g-color-palette-teal-20: #023434;                            /* default */
+    --slds-g-color-palette-teal-15: #072825;                            /* default */
+    --slds-g-color-palette-teal-10: #071b12;                            /* default */
 
-    /* Palette: yellow — not in Figma */
-    --slds-g-color-palette-yellow-10: #281202;                          /* default */
-    --slds-g-color-palette-yellow-15: #371e03;                          /* default */
-    --slds-g-color-palette-yellow-20: #4f2100;                          /* default */
-    --slds-g-color-palette-yellow-30: #6f3400;                          /* default */
-    --slds-g-color-palette-yellow-40: #8c4b02;                          /* default */
-    --slds-g-color-palette-yellow-50: #a96504;                          /* default */
-    --slds-g-color-palette-yellow-60: #ca8501;                          /* default */
-    --slds-g-color-palette-yellow-65: #da9401;                          /* default */
-    --slds-g-color-palette-yellow-70: #e4a201;                          /* default */
-    --slds-g-color-palette-yellow-80: #fcc003;                          /* default */
-    --slds-g-color-palette-yellow-90: #f9e3b6;                          /* default */
+    /* Yellow */
     --slds-g-color-palette-yellow-95: #fbf3e0;                          /* default */
+    --slds-g-color-palette-yellow-90: #f9e3b6;                          /* default */
+    --slds-g-color-palette-yellow-80: #fcc003;                          /* default */
+    --slds-g-color-palette-yellow-70: #e4a201;                          /* default */
+    --slds-g-color-palette-yellow-65: #da9401;                          /* default */
+    --slds-g-color-palette-yellow-60: #ca8501;                          /* default */
+    --slds-g-color-palette-yellow-50: #a96504;                          /* default */
+    --slds-g-color-palette-yellow-40: #8c4b02;                          /* default */
+    --slds-g-color-palette-yellow-30: #6f3400;                          /* default */
+    --slds-g-color-palette-yellow-20: #4f2100;                          /* default */
+    --slds-g-color-palette-yellow-15: #371e03;                          /* default */
+    --slds-g-color-palette-yellow-10: #281202;                          /* default */
 
-    /* color-surface */
+    /* ==== Colour — semantic ================================================= */
+
+    /* Surface */
+    --slds-g-color-surface-1: var(--slds-g-color-neutral-base-100);     /* figma = default */
+    --slds-g-color-surface-2: var(--slds-g-color-neutral-base-95);      /* figma — cosmos #f3f3f3 */
+    --slds-g-color-surface-inverse-1: var(--slds-g-color-brand-base-20); /* figma — cosmos #032d60 */
+    --slds-g-color-surface-inverse-2: var(--slds-g-color-brand-base-15); /* figma — cosmos #03234d */
+    --slds-g-color-surface-container-1: var(--slds-g-color-neutral-base-100); /* figma = default */
+    --slds-g-color-surface-container-2: var(--slds-g-color-neutral-base-95); /* figma — cosmos #f3f3f3 */
+    --slds-g-color-surface-container-3: var(--slds-g-color-neutral-base-90); /* figma — cosmos #e5e5e5 */
+    --slds-g-color-surface-container-inverse-1: var(--slds-g-color-brand-base-20); /* figma — cosmos #032d60 */
+    --slds-g-color-surface-container-inverse-2: var(--slds-g-color-brand-base-15); /* figma — cosmos #03234d */
     --slds-g-color-surface-3: #f3f3f3;                                  /* cosmos — default #e5e5e5 */
 
-    /* color-border */
-    --slds-g-color-border-disabled-2: var(--slds-g-color-neutral-base-40); /* cosmos — default #aeaeae */
+    /* On surface */
+    --slds-g-color-on-surface-1: var(--slds-g-color-neutral-base-40);   /* figma — cosmos #5c5c5c */
+    --slds-g-color-on-surface-2: var(--slds-g-color-neutral-base-20);   /* figma — cosmos #2e2e2e */
+    --slds-g-color-on-surface-3: var(--slds-g-color-brand-base-15);     /* figma — cosmos #03234d */
+    --slds-g-color-on-surface-inverse-1: var(--slds-g-color-neutral-base-100); /* figma = default */
+    --slds-g-color-on-surface-inverse-2: var(--slds-g-color-brand-base-80); /* figma — cosmos #a8cbff */
 
-    /* color-accent */
+    /* Border */
+    --slds-g-color-border-1: var(--slds-g-color-neutral-base-80);       /* figma — cosmos #c9c9c9 */
+    --slds-g-color-border-2: var(--slds-g-color-neutral-base-60);       /* figma — cosmos #5c5c5c */
+    --slds-g-color-border-inverse-1: var(--slds-g-color-neutral-base-95); /* figma — cosmos #f3f3f3 */
+    --slds-g-color-border-inverse-2: var(--slds-g-color-brand-base-20); /* figma — cosmos #032d60 */
+
+    /* Accent */
+    --slds-g-color-accent-1: var(--slds-g-color-brand-base-50);         /* figma — cosmos #066afe */
+    --slds-g-color-accent-2: var(--slds-g-color-brand-base-40);         /* figma — cosmos #0250d9 */
+    --slds-g-color-accent-3: var(--slds-g-color-brand-base-30);         /* figma — cosmos #022ac0 */
+    --slds-g-color-accent-container-1: var(--slds-g-color-brand-base-50); /* figma — cosmos #066afe */
+    --slds-g-color-accent-container-2: var(--slds-g-color-brand-base-40); /* figma — cosmos #0250d9 */
+    --slds-g-color-accent-container-3: var(--slds-g-color-brand-base-30); /* figma — cosmos #022ac0 */
+    --slds-g-color-on-accent-1: var(--slds-g-color-neutral-base-100);   /* figma = default */
+    --slds-g-color-on-accent-2: var(--slds-g-color-neutral-base-100);   /* figma = default */
+    --slds-g-color-on-accent-3: var(--slds-g-color-neutral-base-100);   /* figma = default */
+    --slds-g-color-border-accent-1: var(--slds-g-color-brand-base-50);  /* figma — cosmos #066afe */
+    --slds-g-color-border-accent-2: var(--slds-g-color-brand-base-40);  /* figma — cosmos #0250d9 */
+    --slds-g-color-border-accent-3: var(--slds-g-color-brand-base-30);  /* figma — cosmos #022ac0 */
     --slds-g-color-accent-light-1: #edf4ff;                             /* cosmos — default var(--slds-g-color-brand-base-95) */
     --slds-g-color-accent-light-2: #d6e6ff;                             /* cosmos — default var(--slds-g-color-brand-base-90) */
     --slds-g-color-accent-dark-1: #002775;                              /* cosmos — default var(--slds-g-color-brand-base-20) */
     --slds-g-color-accent-dark-2: #001642;                              /* cosmos — default var(--slds-g-color-brand-base-10) */
 
-    /* color-info-base */
-    --slds-g-color-info-base-35: #044f98;                               /* cosmos — default #515151 */
+    /* Error */
+    --slds-g-color-error-1: var(--slds-g-color-error-base-40);          /* figma — cosmos #b60554 */
+    --slds-g-color-error-container-1: var(--slds-g-color-error-base-90); /* figma — cosmos #fddde3 */
+    --slds-g-color-error-container-2: var(--slds-g-color-error-base-80); /* figma — cosmos #fdb6c5 */
+    --slds-g-color-on-error-1: var(--slds-g-color-error-base-30);       /* figma — cosmos #b60554 */
+    --slds-g-color-on-error-2: var(--slds-g-color-error-base-20);       /* figma — cosmos #8a033e */
+    --slds-g-color-border-error-1: var(--slds-g-color-error-base-40);   /* figma — cosmos #b60554 */
+    --slds-g-color-border-error-2: var(--slds-g-color-error-base-30);   /* figma — cosmos #8a033e */
 
-    /* color-disabled */
+    /* Warning */
+    --slds-g-color-warning-1: var(--slds-g-color-warning-base-40);      /* figma — cosmos #8c4b02 */
+    --slds-g-color-warning-container-1: var(--slds-g-color-warning-base-90); /* figma — cosmos #f9e3b6 */
+    --slds-g-color-on-warning-1: var(--slds-g-color-warning-base-30);   /* figma — cosmos #8c4b02 */
+    --slds-g-color-border-warning-1: var(--slds-g-color-warning-base-40); /* figma — cosmos #ca8501 */
+
+    /* Success */
+    --slds-g-color-success-1: var(--slds-g-color-success-base-40);      /* figma — cosmos #056764 */
+    --slds-g-color-success-container-1: var(--slds-g-color-success-base-90); /* figma — cosmos #acf3e4 */
+    --slds-g-color-success-container-2: var(--slds-g-color-success-base-80); /* figma — cosmos #04e1cb */
+    --slds-g-color-on-success-1: var(--slds-g-color-success-base-30);   /* figma — cosmos #056764 */
+    --slds-g-color-on-success-2: var(--slds-g-color-success-base-20);   /* figma — cosmos #024d4c */
+    --slds-g-color-border-success-1: var(--slds-g-color-success-base-40); /* figma — cosmos #056764 */
+    --slds-g-color-border-success-2: var(--slds-g-color-success-base-20); /* figma — cosmos #024d4c */
+
+    /* Info */
+    --slds-g-color-info-1: var(--slds-g-color-info-base-40);            /* figma — cosmos #0b5cab */
+    --slds-g-color-info-container-1: var(--slds-g-color-info-base-90);  /* figma — cosmos #d8e6fe */
+    --slds-g-color-on-info-1: var(--slds-g-color-info-base-40);         /* figma — cosmos #0b5cab */
+
+    /* Disabled */
+    --slds-g-color-disabled-1: var(--slds-g-color-neutral-base-50);     /* figma — cosmos #757575 */
+    --slds-g-color-disabled-container-1: var(--slds-g-color-neutral-base-90); /* figma — cosmos #e5e5e5 */
+    --slds-g-color-disabled-container-2: var(--slds-g-color-neutral-base-80); /* figma — cosmos #c9c9c9 */
+    --slds-g-color-on-disabled-1: var(--slds-g-color-neutral-base-50);  /* figma — cosmos #757575 */
+    --slds-g-color-on-disabled-2: var(--slds-g-color-neutral-base-40);  /* figma — cosmos #757575 */
+    --slds-g-color-border-disabled-1: var(--slds-g-color-neutral-base-80); /* figma — cosmos #757575 */
+    --slds-g-color-border-disabled-2: var(--slds-g-color-neutral-base-40); /* cosmos — default #aeaeae */
     --slds-g-color-disabled-2: var(--slds-g-color-neutral-base-40);     /* cosmos — default #aeaeae */
 
-    /* shadow */
+    /* ==== Shadows =========================================================== */
+
+    /* Shadow colours
+       MSD navy (#162c45) where SLDS uses black. No SLDS name, so --sep-*. */
+    --sep-color-shadow-1: #162c4533;                                    /* figma — shadows/level 1/1+2 */
+    --sep-color-shadow-1-edge: #162c451a;                               /* figma — shadows/level 1/3 */
+    --sep-color-shadow-2: #162c4529;                                    /* figma — shadows/level 2/1+2 */
+    --sep-color-shadow-2-edge: #162c4517;                               /* figma — shadows/level 2/3 */
+    --sep-color-shadow-3: #162c4524;                                    /* figma — shadows/level 3/1+2 */
+    --sep-color-shadow-3-edge: #162c4514;                               /* figma — shadows/level 3/3 */
+    --sep-color-shadow-4: #162c451f;                                    /* figma — shadows/level 4/1+2 */
+    --sep-color-shadow-4-edge: #162c4512;                               /* figma — shadows/level 4/3 */
+
+    /* Elevation
+       Figma: Elevation/1 - right is a copy of /1 - left. inline-end-1 mirrors left, as levels
+       2–4 do — fix the style in Figma. */
+    --slds-g-shadow-1: 0 0 2px 0 var(--sep-color-shadow-1), 0 2px 2px 0 var(--sep-color-shadow-1), 0 -1px 2px 0 var(--sep-color-shadow-1-edge); /* figma style — Elevation/1 - down */
+    --slds-g-shadow-2: 0 0 5px 0 var(--sep-color-shadow-2), 0 3px 3px 0 var(--sep-color-shadow-2), 0 -1px 2px 0 var(--sep-color-shadow-2-edge); /* figma style — Elevation/2 - down */
+    --slds-g-shadow-3: 0 0 7px 0 var(--sep-color-shadow-3), 0 5px 5px 0 var(--sep-color-shadow-3), 0 -1px 2px 0 var(--sep-color-shadow-3-edge); /* figma style — Elevation/3 - down */
+    --slds-g-shadow-4: 0 0 10px 0 var(--sep-color-shadow-4), 0 7px 7px 0 var(--sep-color-shadow-4), 0 -1px 3px 0 var(--sep-color-shadow-4-edge); /* figma style — Elevation/4 - down */
+    --slds-g-shadow-block-start-1: 0 0 2px 0 var(--sep-color-shadow-1), 0 -2px 2px 0 var(--sep-color-shadow-1), 0 1px 2px 0 var(--sep-color-shadow-1-edge); /* figma style — Elevation/1 - up */
+    --slds-g-shadow-block-start-2: 0 0 5px 0 var(--sep-color-shadow-2), 0 -3px 3px 0 var(--sep-color-shadow-2), 0 1px 2px 0 var(--sep-color-shadow-2-edge); /* figma style — Elevation/2 - up */
+    --slds-g-shadow-block-start-3: 0 0 7px 0 var(--sep-color-shadow-3), 0 -5px 5px 0 var(--sep-color-shadow-3), 0 1px 2px 0 var(--sep-color-shadow-3-edge); /* figma style — Elevation/3 - up */
+    --slds-g-shadow-block-start-4: 0 0 10px 0 var(--sep-color-shadow-4), 0 -7px 7px 0 var(--sep-color-shadow-4), 0 1px 3px 0 var(--sep-color-shadow-4-edge); /* figma style — Elevation/4 - up */
+    --slds-g-shadow-inline-start-1: 0 0 2px 0 var(--sep-color-shadow-1), -2px 0 2px 0 var(--sep-color-shadow-1), 1px 0 2px 0 var(--sep-color-shadow-1-edge); /* figma style — Elevation/1 - left */
+    --slds-g-shadow-inline-start-2: 0 0 5px 0 var(--sep-color-shadow-2), -3px 0 3px 0 var(--sep-color-shadow-2), 1px 0 2px 0 var(--sep-color-shadow-2-edge); /* figma style — Elevation/2 - left */
+    --slds-g-shadow-inline-start-3: 0 0 7px 0 var(--sep-color-shadow-3), -5px 0 5px 0 var(--sep-color-shadow-3), 1px 0 2px 0 var(--sep-color-shadow-3-edge); /* figma style — Elevation/3 - left */
+    --slds-g-shadow-inline-start-4: 0 0 10px 0 var(--sep-color-shadow-4), -7px 0 7px 0 var(--sep-color-shadow-4), 1px 0 3px 0 var(--sep-color-shadow-4-edge); /* figma style — Elevation/4 - left */
+    --slds-g-shadow-inline-end-1: 0 0 2px 0 var(--sep-color-shadow-1), 2px 0 2px 0 var(--sep-color-shadow-1), -1px 0 2px 0 var(--sep-color-shadow-1-edge); /* figma style — Elevation/1 - right */
+    --slds-g-shadow-inline-end-2: 0 0 5px 0 var(--sep-color-shadow-2), 3px 0 3px 0 var(--sep-color-shadow-2), -1px 0 2px 0 var(--sep-color-shadow-2-edge); /* figma style — Elevation/2 - right */
+    --slds-g-shadow-inline-end-3: 0 0 7px 0 var(--sep-color-shadow-3), 5px 0 5px 0 var(--sep-color-shadow-3), -1px 0 2px 0 var(--sep-color-shadow-3-edge); /* figma style — Elevation/3 - right */
+    --slds-g-shadow-inline-end-4: 0 0 10px 0 var(--sep-color-shadow-4), 7px 0 7px 0 var(--sep-color-shadow-4), -1px 0 3px 0 var(--sep-color-shadow-4-edge); /* figma style — Elevation/4 - right */
     --slds-g-shadow-5: var(--slds-g-shadow-4);                          /* cosmos — default 0px 2px 5px 0px #00000027 */
     --slds-g-shadow-6: var(--slds-g-shadow-4);                          /* cosmos — default 0px 2px 5px 0px #00000027 */
     --slds-g-shadow-inverse-1: 0 0 3px #f3f3f3;                         /* default */
-    --slds-g-shadow-insetinverse-focus-1: var(--slds-g-shadow-inset-inverse-focus-1); /* cosmos — default differs */
     --slds-g-shadow-block-end-1: var(--slds-g-shadow-1);                /* cosmos — default 0px 2px 2px 0px #0000001a */
     --slds-g-shadow-block-end-2: var(--slds-g-shadow-2);                /* cosmos — default 0px 2px 3px 0px #00000027 */
     --slds-g-shadow-block-end-3: var(--slds-g-shadow-3);                /* cosmos — default 0px 2px 4px 0px #00000027 */
@@ -891,91 +673,43 @@
     --slds-g-shadow-inlineend-2: var(--slds-g-shadow-inline-end-2);     /* cosmos — default 2px 0px 3px 0px #00000027 */
     --slds-g-shadow-inlineend-3: var(--slds-g-shadow-inline-end-3);     /* cosmos — default 2px 0px 4px 0px #00000027 */
     --slds-g-shadow-inlineend-4: var(--slds-g-shadow-inline-end-4);     /* cosmos — default 2px 0px 4px 0px #00000027 */
+
+    /* Focus */
+    --slds-g-shadow-outline-focus-1: 0 0 0 2px var(--slds-g-color-accent-1); /* figma style — Focus/Outline */
+    --slds-g-shadow-outset-focus-1: 0 0 0 2px var(--slds-g-color-surface-container-1), 0 0 0 4px var(--slds-g-color-on-surface-3); /* figma style — Focus/Outset */
+    --slds-g-shadow-inset-focus-1: 0 0 0 2px var(--slds-g-color-on-surface-3) inset; /* figma style — Focus/Inset */
+    --slds-g-shadow-inset-inverse-focus-1: 0 0 0 2px var(--slds-g-color-on-surface-3) inset, 0 0 0 4px var(--slds-g-color-surface-container-1) inset; /* figma style — Focus/Inset-inverse */
+    --slds-g-shadow-insetinverse-focus-1: var(--slds-g-shadow-inset-inverse-focus-1); /* cosmos — default differs */
+
+    /* ==== Motion and ratio ================================================== */
+
+    /* Duration */
+    --slds-g-duration-immediately: 0.05s;                               /* default */
+    --slds-g-duration-instantly: 0s;                                    /* default */
+    --slds-g-duration-paused: 3.2s;                                     /* default */
+    --slds-g-duration-promptly: 0.2s;                                   /* default */
+    --slds-g-duration-quickly: 0.1s;                                    /* default */
+    --slds-g-duration-slowly: 0.4s;                                     /* default */
+    --slds-g-duration-toast-medium: 9.6s;                               /* default */
+    --slds-g-duration-toast-short: 4.8s;                                /* default */
+
+    /* Aspect ratio */
+    --slds-g-ratio-square: 1;                                           /* default */
+    --slds-g-ratio-landscape: 4/3;                                      /* default */
+    --slds-g-ratio-portrait: 3/4;                                       /* default */
+    --slds-g-ratio-wide: 16/9;                                          /* default */
+    --slds-g-ratio-ultrawide: 18/5;                                     /* default */
 }
-/* @generated slds-globals:end */
+/* @generated tokens:end */
 
-/* -----------------------------------------------------------------------------
- * D. Component hooks — listed, not declared
- *
- * Figma's "color/component hooks" group (14 variables, no code syntax) and the
- * button effect styles. A component hook is set on the component's tag in
- * site.css § Component skins, never here at :root (rules-skinning.md).
- *
- * lightning-button does NOT read --slds-c-button-destructive-* or -success-*.
- * Those exist only in the global sheet, for SLDS's light-DOM button markup.
- * Its destructive and success variants compute their colours inside the
- * shadow root from --slds-g-color-error-* / success-* — reached by re-pointing
- * those tokens on the variant's host (rung 5). Measured with
- * .claude/skills/lwc-component-review/hook-map.mjs; full detail in
- * _docs/component-review-button-2026-10-19.md.
- *
- *   Figma variable / style (light value)      What reaches it in lightning-button
- *   destructive-button-container-1  Pink 50   --slds-g-color-error-container-1 (+ border-error-1),
- *                                             scoped to [variant='destructive']
- *   destructive-button-container-2  Pink 40   --slds-g-color-error-container-2 (+ border-error-2)
- *   on-destructive-button-1 / -2  Neutral 100 --slds-g-color-on-error-1 (one value, all states)
- *   success-button-container-1 / -2  Teal 50 / 40
- *   on-success-button-1 / -2  Neutral 100     the same pattern with --slds-g-color-success-*
- *   destructive / success-button-bevel        Hover shadows — private hook only
- *   modal backdrop  Neutral 20                --slds-c-modalbase-backdrop-color-background
- *                                             (lightning-modal maps it onto --slds-c-backdrop-*)
- *   neutral-button-bevel  Neutral 20          Shadow/Buttons/Hover/Neutral and /Inverse.
- *                                             No public hover hook — see F.
- *   brand-button-bevel  Electric Blue 20      Bound by no style in the file.
- *   list item drag  #134276cc                 No hook found.
- * -------------------------------------------------------------------------- */
-
-/* -----------------------------------------------------------------------------
- * E. --dxp hooks — listed, none in the Figma file
- *
- * No Figma variable has a --dxp code syntax: the library is authored at the
- * SLDS global tier. On an Experience Cloud site, though, site-wide values are
- * entered in the Theme panel and published as --dxp hooks, and the
- * platform feeds those into --slds-g-* — so these are the imports that would
- * move to the Theme panel on lift:
- *
- *   Figma                          Theme panel / --dxp hook
- *   font/family/base               --dxp-g-root-font-family, --dxp-g-heading-font-family
- *   font/scale/6, 5, 4, 3, 2, 1    Heading 1–6: --dxp-s-text-heading-{extra-large ..
- *     40 36 32 24 20 18px          extra-extra-small}-font-size. site.css reads these.
- *   accent-container-1 / on-accent-1   --dxp-g-brand / --dxp-g-brand-contrast
- *   surface-1 / on-surface-2           Theme panel background and text colours
- *   error / success / warning -1       Theme panel status colours
- *
- * Only the heading and font-family names above are confirmed in this repo
- * (_docs/customisation-tiers.md). The colour hook names are the ones the LWR
- * guide's Theme panel uses but have not been checked here — confirm before
- * declaring any.
- * -------------------------------------------------------------------------- */
-
-/* -----------------------------------------------------------------------------
- * F. Private hooks — listed, none used
- *
- * --slds-r-color-{brand,error,warning,success,info}-N   Cosmos's raw "reference"
- *     ramps; Cosmos builds its colour globals from them. The tier is
- *     undocumented outside the shipped CSS, so nothing here sets or reads
- *     them — C3 writes their resolved values instead.
- * --slds-s-button-shadow, -shadow-hover, -brand-shadow-hover, -shadow-active
- *     The only hooks for Shadow/Buttons/Default, /Hover/Brand, /Hover/Neutral,
- *     /Hover/Inverse and /Active. Private per the SLDS Linter. Not declared.
- * Shadow/Inputs/Checked, /Active   No hook, public or private.
- *
- * -------------------------------------------------------------------------- */
-
-/* -----------------------------------------------------------------------------
- * Not imported — and why
- *
- *   font/family/mobile          same value as base, no code syntax
- *   Palette steps 35, 85, 5     18 variables across the six Salesforce palettes.
- *                               SLDS has no such steps; their code syntax names
- *                               the 40, 90 or 10 step instead (cloud-blue/85 has
- *                               none). Nothing in Figma aliases them
- *   green / hot-orange 100,     6 variables. Figma gave the two MSD palettes the
- *     55, 45                    base-ramp steps, but SLDS palettes run 10–95 with
- *                               no 45 or 55, so --slds-g-color-palette-green-100
- *                               etc. are not hooks. Nothing reads them
- *   _Style Guide/* text styles  Figma documentation styles (SF Pro, Courier)
- *   text-style line heights     hard-coded px per style, not variables. SLDS's
- *                               --slds-g-font-line-height-1..6 (1 to 2) exist,
- *                               but Figma's ratios (e.g. 16/18) land on none
- * -------------------------------------------------------------------------- */
+/* ==== Not in this file ======================================================
+ *   Component hooks (--slds-c-*)   one file per component in
+ *       src/assets/css/site/components/ (rules-skinning.md). How Figma's
+ *       "color/component hooks" reach lightning-button:
+ *       _docs/component-review-button-2026-10-19-b.md
+ *   --dxp-* hooks                  none in Figma; what would move to the
+ *       Experience Cloud Theme panel: _docs/customisation-tiers.md
+ *   Private hooks                  --slds-s-*, --slds-r-*, --_slds-*: never
+ *       set or read here
+ *   Figma variables not imported   25, and why: report § 3.3 and -b § 2
+ * ========================================================================== */
