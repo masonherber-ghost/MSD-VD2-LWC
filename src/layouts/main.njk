@@ -10,10 +10,19 @@
            Both halves are needed — with this off, the token still names the
            family and every browser silently falls back to its system font.
            Check what actually renders with
-           .claude/skills/component-from-design/check-fonts.mjs. #}
+           .claude/skills/component-from-design/check-fonts.mjs.
+
+           fonts.css is INLINED, not linked, so the preload is used. LWR rewrites
+           the asset URLs in this template — the preload's href and any url()
+           inside a <style> here — to the same registry URL (hashed in the build),
+           but it never rewrites a url() inside a linked stylesheet. Linked, the
+           preload and the @font-face asked for two different URLs and the font
+           downloaded twice (measured 2026-10-26). Comments are stripped on the
+           way in: LWR would try to resolve the url() examples they quote. #}
         <link rel="preload" as="font" type="font/woff2" crossorigin
               href="/public/assets/fonts/atkinson-hyperlegible-next-latin-wght-normal.woff2" />
-        <link rel="stylesheet" href="/public/assets/css/fonts.css" />
+        {% set fontFaces %}{% include "$rootDir/src/assets/css/fonts.css" %}{% endset %}
+        <style>{{ fontFaces | replace(r/\/\*[\s\S]*?\*\//g, "") | trim | safe }}</style>
         <link rel="stylesheet" href="/public/assets/css/design-tokens.css" />
         {# One bundle, GENERATED from src/assets/css/site/ by scripts/build-css.mjs
            (base, one file per component skin, utilities). Edit the sources,

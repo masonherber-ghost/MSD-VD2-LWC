@@ -252,8 +252,8 @@ separate and deliberately untouched.
 
 There is no heading-family token, so headings and body share one face.
 
-The `@font-face` declarations live in `src/assets/css/fonts.css`, loaded by `main.njk` before
-`design-tokens.css`, with the woff2 files vendored in `src/assets/fonts/` — not installed, so the
+The `@font-face` declarations live in `src/assets/css/fonts.css`, inlined into a `<style>` by
+`main.njk` before `design-tokens.css` (so the font preload is the download that gets used), with the woff2 files vendored in `src/assets/fonts/` — not installed, so the
 static build carries them with no npm dependency.
 
 **Their `url()`s must be absolute**, and so must every other `url()` we write. A relative one

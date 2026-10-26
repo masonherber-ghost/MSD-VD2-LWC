@@ -1,0 +1,555 @@
+[
+  {
+    "slug": "add",
+    "name": "Add",
+    "figmaNode": "87:834"
+  },
+  {
+    "slug": "alarm",
+    "name": "Alarm",
+    "figmaNode": "87:864"
+  },
+  {
+    "slug": "apply",
+    "name": "Apply",
+    "figmaNode": "3858:1065"
+  },
+  {
+    "slug": "apply-undo",
+    "name": "Apply Undo",
+    "figmaNode": "3898:618"
+  },
+  {
+    "slug": "arrow-down",
+    "name": "Arrow down",
+    "figmaNode": "87:881"
+  },
+  {
+    "slug": "arrow-left",
+    "name": "Arrow left",
+    "figmaNode": "87:884"
+  },
+  {
+    "slug": "arrow-right",
+    "name": "Arrow right",
+    "figmaNode": "87:885"
+  },
+  {
+    "slug": "arrow-up",
+    "name": "Arrow up",
+    "figmaNode": "87:882"
+  },
+  {
+    "slug": "arrow-bend-down-right",
+    "name": "Arrow-Bend-Down-Right",
+    "figmaNode": "2326:367"
+  },
+  {
+    "slug": "bell",
+    "name": "Bell",
+    "figmaNode": "87:865"
+  },
+  {
+    "slug": "bookmark",
+    "name": "Bookmark",
+    "figmaNode": "2310:216"
+  },
+  {
+    "slug": "bookmark-filled",
+    "name": "Bookmark Filled",
+    "figmaNode": "3580:1718"
+  },
+  {
+    "slug": "calendar",
+    "name": "Calendar",
+    "figmaNode": "87:850"
+  },
+  {
+    "slug": "calendar-blank",
+    "name": "Calendar blank",
+    "figmaNode": "87:849"
+  },
+  {
+    "slug": "camera",
+    "name": "Camera",
+    "figmaNode": "87:826"
+  },
+  {
+    "slug": "chat-bubble-1",
+    "name": "Chat bubble 1",
+    "figmaNode": "792:3306"
+  },
+  {
+    "slug": "chat-bubble-2",
+    "name": "Chat bubble 2",
+    "figmaNode": "792:3309"
+  },
+  {
+    "slug": "check",
+    "name": "Check",
+    "figmaNode": "87:835"
+  },
+  {
+    "slug": "chevron-down",
+    "name": "Chevron down",
+    "figmaNode": "87:877"
+  },
+  {
+    "slug": "chevron-down-small",
+    "name": "Chevron down small",
+    "figmaNode": "2306:199"
+  },
+  {
+    "slug": "chevron-left",
+    "name": "Chevron left",
+    "figmaNode": "87:880"
+  },
+  {
+    "slug": "chevron-right",
+    "name": "Chevron right",
+    "figmaNode": "87:878"
+  },
+  {
+    "slug": "chevron-up",
+    "name": "Chevron up",
+    "figmaNode": "87:876"
+  },
+  {
+    "slug": "chevron-up-small",
+    "name": "Chevron up small",
+    "figmaNode": "2306:206"
+  },
+  {
+    "slug": "circle-add",
+    "name": "Circle add",
+    "figmaNode": "87:853"
+  },
+  {
+    "slug": "circle-arrow-down",
+    "name": "Circle arrow down",
+    "figmaNode": "87:874"
+  },
+  {
+    "slug": "circle-arrow-left",
+    "name": "Circle arrow left",
+    "figmaNode": "87:873"
+  },
+  {
+    "slug": "circle-arrow-right",
+    "name": "Circle arrow right",
+    "figmaNode": "87:872",
+    "notes": [
+      "has a stroke (#333333) — dropped; the shape is filled like every other icon"
+    ]
+  },
+  {
+    "slug": "circle-arrow-up",
+    "name": "Circle arrow up",
+    "figmaNode": "87:871"
+  },
+  {
+    "slug": "circle-block",
+    "name": "Circle block",
+    "figmaNode": "87:852"
+  },
+  {
+    "slug": "circle-cancel",
+    "name": "Circle cancel",
+    "figmaNode": "87:854"
+  },
+  {
+    "slug": "circle-check",
+    "name": "Circle check",
+    "figmaNode": "87:856"
+  },
+  {
+    "slug": "circle-minus",
+    "name": "Circle minus",
+    "figmaNode": "87:855"
+  },
+  {
+    "slug": "clock",
+    "name": "Clock",
+    "figmaNode": "87:866"
+  },
+  {
+    "slug": "copy",
+    "name": "Copy",
+    "figmaNode": "1638:2535"
+  },
+  {
+    "slug": "deaf",
+    "name": "Deaf",
+    "figmaNode": "5500:6923"
+  },
+  {
+    "slug": "delete",
+    "name": "Delete",
+    "figmaNode": "87:832"
+  },
+  {
+    "slug": "download",
+    "name": "Download",
+    "figmaNode": "3902:610"
+  },
+  {
+    "slug": "earth",
+    "name": "Earth",
+    "figmaNode": "87:842"
+  },
+  {
+    "slug": "edit",
+    "name": "Edit",
+    "figmaNode": "87:868"
+  },
+  {
+    "slug": "employer",
+    "name": "Employer",
+    "figmaNode": "2329:429"
+  },
+  {
+    "slug": "external",
+    "name": "External",
+    "figmaNode": "87:879"
+  },
+  {
+    "slug": "external-small",
+    "name": "External small",
+    "figmaNode": "13000:9713"
+  },
+  {
+    "slug": "eye-closed",
+    "name": "Eye closed",
+    "figmaNode": "87:819"
+  },
+  {
+    "slug": "eye-open",
+    "name": "Eye open",
+    "figmaNode": "87:820"
+  },
+  {
+    "slug": "facebook",
+    "name": "Facebook",
+    "figmaNode": "2327:418"
+  },
+  {
+    "slug": "file-check",
+    "name": "File check",
+    "figmaNode": "13104:12530"
+  },
+  {
+    "slug": "file-user",
+    "name": "File user",
+    "figmaNode": "15205:12239"
+  },
+  {
+    "slug": "filter",
+    "name": "Filter",
+    "figmaNode": "87:858"
+  },
+  {
+    "slug": "flag",
+    "name": "Flag",
+    "figmaNode": "87:840"
+  },
+  {
+    "slug": "hapy-face",
+    "name": "Hapy face",
+    "figmaNode": "87:829"
+  },
+  {
+    "slug": "headset",
+    "name": "Headset",
+    "figmaNode": "87:821"
+  },
+  {
+    "slug": "heart",
+    "name": "Heart",
+    "figmaNode": "2645:2511"
+  },
+  {
+    "slug": "home",
+    "name": "Home",
+    "figmaNode": "87:837"
+  },
+  {
+    "slug": "info",
+    "name": "Info",
+    "figmaNode": "87:862"
+  },
+  {
+    "slug": "information-desk",
+    "name": "Information Desk",
+    "figmaNode": "2327:407"
+  },
+  {
+    "slug": "job-number",
+    "name": "Job Number",
+    "figmaNode": "3932:1206"
+  },
+  {
+    "slug": "load-more",
+    "name": "Load more",
+    "figmaNode": "2646:2533"
+  },
+  {
+    "slug": "loading",
+    "name": "Loading",
+    "figmaNode": "2175:158"
+  },
+  {
+    "slug": "logout",
+    "name": "Logout",
+    "figmaNode": "87:836"
+  },
+  {
+    "slug": "mail",
+    "name": "Mail",
+    "figmaNode": "87:848"
+  },
+  {
+    "slug": "map",
+    "name": "Map",
+    "figmaNode": "87:844"
+  },
+  {
+    "slug": "match-low",
+    "name": "Match low",
+    "figmaNode": "3184:2410"
+  },
+  {
+    "slug": "match-none",
+    "name": "Match none",
+    "figmaNode": "3184:2408"
+  },
+  {
+    "slug": "match-partial",
+    "name": "Match partial",
+    "figmaNode": "3184:2411"
+  },
+  {
+    "slug": "menu",
+    "name": "Menu",
+    "figmaNode": "87:838"
+  },
+  {
+    "slug": "menu-large",
+    "name": "Menu Large",
+    "figmaNode": "2269:66"
+  },
+  {
+    "slug": "mobile",
+    "name": "Mobile",
+    "figmaNode": "87:846"
+  },
+  {
+    "slug": "money",
+    "name": "Money",
+    "figmaNode": "87:867"
+  },
+  {
+    "slug": "navigation",
+    "name": "Navigation",
+    "figmaNode": "87:843"
+  },
+  {
+    "slug": "padlock-closed",
+    "name": "Padlock closed",
+    "figmaNode": "87:817"
+  },
+  {
+    "slug": "padlock-open",
+    "name": "Padlock open",
+    "figmaNode": "87:816"
+  },
+  {
+    "slug": "paperclip",
+    "name": "Paperclip",
+    "figmaNode": "87:822"
+  },
+  {
+    "slug": "pause",
+    "name": "Pause",
+    "figmaNode": "87:823"
+  },
+  {
+    "slug": "pencil",
+    "name": "Pencil",
+    "figmaNode": "87:869"
+  },
+  {
+    "slug": "photo",
+    "name": "Photo",
+    "figmaNode": "87:827"
+  },
+  {
+    "slug": "pigbank",
+    "name": "Pigbank",
+    "figmaNode": "87:883"
+  },
+  {
+    "slug": "pin",
+    "name": "Pin",
+    "figmaNode": "87:841"
+  },
+  {
+    "slug": "play",
+    "name": "Play",
+    "figmaNode": "87:824"
+  },
+  {
+    "slug": "question-circle",
+    "name": "Question circle",
+    "figmaNode": "3159:2680"
+  },
+  {
+    "slug": "realme",
+    "name": "Realme",
+    "figmaNode": "3336:3266"
+  },
+  {
+    "slug": "rotate",
+    "name": "Rotate",
+    "figmaNode": "87:851"
+  },
+  {
+    "slug": "sad-face",
+    "name": "Sad face",
+    "figmaNode": "87:831"
+  },
+  {
+    "slug": "search",
+    "name": "Search",
+    "figmaNode": "87:818"
+  },
+  {
+    "slug": "settings",
+    "name": "Settings",
+    "figmaNode": "87:875"
+  },
+  {
+    "slug": "share",
+    "name": "Share",
+    "figmaNode": "1535:2563"
+  },
+  {
+    "slug": "slider",
+    "name": "Slider",
+    "figmaNode": "87:828"
+  },
+  {
+    "slug": "sort-down",
+    "name": "Sort down",
+    "figmaNode": "87:860"
+  },
+  {
+    "slug": "sort-up",
+    "name": "Sort up",
+    "figmaNode": "87:859"
+  },
+  {
+    "slug": "star",
+    "name": "Star",
+    "figmaNode": "87:863"
+  },
+  {
+    "slug": "star-filled",
+    "name": "Star Filled",
+    "figmaNode": "3865:1072"
+  },
+  {
+    "slug": "straight-face",
+    "name": "Straight face",
+    "figmaNode": "87:830"
+  },
+  {
+    "slug": "subtract",
+    "name": "Subtract",
+    "figmaNode": "87:833"
+  },
+  {
+    "slug": "target",
+    "name": "Target",
+    "figmaNode": "87:839"
+  },
+  {
+    "slug": "telephone",
+    "name": "Telephone",
+    "figmaNode": "87:847"
+  },
+  {
+    "slug": "text-file",
+    "name": "Text file",
+    "figmaNode": "87:857"
+  },
+  {
+    "slug": "user",
+    "name": "User",
+    "figmaNode": "87:845"
+  },
+  {
+    "slug": "verical-arrows",
+    "name": "Verical arrows",
+    "figmaNode": "87:870"
+  },
+  {
+    "slug": "warning-circle",
+    "name": "Warning circle",
+    "figmaNode": "1158:392"
+  },
+  {
+    "slug": "webcam",
+    "name": "Webcam",
+    "figmaNode": "87:825"
+  },
+  {
+    "slug": "waiting",
+    "name": "Waiting",
+    "figmaNode": "15656:4426"
+  },
+  {
+    "slug": "file-person",
+    "name": "File + Person",
+    "figmaNode": "15656:4428"
+  },
+  {
+    "slug": "check-person",
+    "name": "Check + Person",
+    "figmaNode": "15656:4432"
+  },
+  {
+    "slug": "tick-circle-filled",
+    "name": "Tick circle filled",
+    "figmaNode": "3184:2409"
+  },
+  {
+    "slug": "apply-circle-filled",
+    "name": "Apply circle filled",
+    "figmaNode": "15684:1939"
+  },
+  {
+    "slug": "waiting-circle-filled",
+    "name": "Waiting circle filled",
+    "figmaNode": "15684:1956"
+  },
+  {
+    "slug": "add-circle-filled",
+    "name": "Add circle filled",
+    "figmaNode": "15684:1963"
+  },
+  {
+    "slug": "check-2-circle-filled",
+    "name": "Check 2 circle filled",
+    "figmaNode": "15684:1970"
+  },
+  {
+    "slug": "pause-circle-filled",
+    "name": "Pause circle filled",
+    "figmaNode": "15684:1977"
+  },
+  {
+    "slug": "apply-circle-outlined",
+    "name": "Apply circle outlined",
+    "figmaNode": "15750:10760"
+  }
+]

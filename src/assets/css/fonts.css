@@ -23,19 +23,18 @@
  * descriptor is dropped and every face is treated as 400 only. The site's
  * weight palette (300 / 400 / 500 / 700) is set in `design-tokens.css`.
  *
- * The `url()`s are ABSOLUTE, and must stay that way.
+ * THIS FILE IS INLINED, NOT LINKED. `main.njk` includes it into a <style> in the
+ * page head, comments stripped. That is what lets LWR rewrite the `url()`s below
+ * to the same registry URL it gives the font preload — hashed and immutable in
+ * the build. Linked, LWR left them alone, the preload and the @font-face named
+ * two different URLs, and the font downloaded twice (measured 2026-10-26).
  *
- * A relative `../fonts/` passes `npm run dev` and then breaks the static build,
- * which is the trap `rules-architecture.md` describes: in dev every asset is
- * served under one `/1/asset/s/latest/` prefix, so `../fonts/` resolves; in the
- * build LWR gives each asset its own immutable hash directory, so fonts.css
- * lands alone in its own and `../fonts/` points at nothing. LWR does not
- * rewrite `url()` inside a stylesheet, so it cannot fix this for us.
- *
- * /public/assets/fonts/ is the path the `assetsDir` mapping serves under both,
- * and the files are emitted there in `site/` as well. Cost: the font files miss
- * out on immutable-hash caching. `font-display: swap` plus the preload in
- * `main.njk` covers the difference.
+ * So: never an opening brace followed by a second brace, a percent sign or a hash,
+ * anywhere in here — not even in a comment. Nunjucks reads this file as a template
+ * and fails the build on them (it did, 2026-10-26). And the
+ * `url()`s stay ABSOLUTE, `/public/assets/fonts/…` — the path the `assetsDir`
+ * mapping serves, and the one LWR's asset registry resolves. See
+ * `rules-architecture.md` § *`url()` inside a stylesheet must be absolute*.
  *
  * Licensed OFL-1.1 — see `src/assets/fonts/LICENSE`.
  * ============================================================================= */

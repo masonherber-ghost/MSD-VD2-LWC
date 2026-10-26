@@ -1,0 +1,103 @@
+<template lwc:render-mode="light">
+    <div id="icon-browser">
+        <p id="icon-browser-intro" class="slds-text-body_regular slds-m-bottom_x-small">
+            The SEP icon set, from <a href={figmaUrl} target="_blank" rel="noopener">Figma</a>.
+            Every <code>lightning-*</code> icon on the site draws from it, not from Salesforce's
+            libraries. Markup keeps Salesforce names — <code>icon-name="utility:search"</code> —
+            and <code>src/icons/icon-map.json</code> decides which SEP icon each one draws.
+            Any icon is also reachable by its own <code>utility:sep_…</code> name, which exists
+            only in this project.
+        </p>
+        <p id="icon-browser-summary" class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+            {summary}
+        </p>
+
+        <lightning-input
+            id="icon-browser-filter"
+            type="search"
+            label="Filter icons"
+            variant="label-hidden"
+            placeholder="Filter by icon name or Salesforce name, e.g. chevron or utility:close..."
+            value={query}
+            onchange={handleSearch}
+            class="slds-m-bottom_medium"
+        ></lightning-input>
+
+        <!-- Each tile asks for its icon through lightning-icon, so this grid
+             renders through the same library every screen does. -->
+        <lightning-layout id="icon-browser-grid" multiple-rows pull-to-boundary="small" vertical-align="stretch">
+            <template for:each={icons} for:item="icon">
+                <lightning-layout-item
+                    key={icon.slug}
+                    size="6"
+                    medium-device-size="3"
+                    large-device-size="2"
+                    padding="around-small"
+                    class="icon-browser__item"
+                >
+                    <div class="slds-box slds-box_x-small slds-theme_default slds-text-align_center icon-browser__tile">
+                        <lightning-icon icon-name={icon.iconName} size="small" alternative-text={icon.name}></lightning-icon>
+                        <p class="slds-text-body_regular slds-m-top_x-small">
+                            <a lwc:if={icon.figmaUrl} href={icon.figmaUrl} target="_blank" rel="noopener">{icon.name}</a>
+                            <template lwc:else>{icon.name}</template>
+                        </p>
+                        <!-- Split after each underscore with <wbr>, so a long name wraps
+                             at a word and still copies as one name. -->
+                        <p class="slds-text-body_small slds-text-color_weak"><code><template for:each={icon.nameParts} for:item="part"><span key={part.key}>{part.text}<wbr></span></template></code></p>
+                        <p lwc:if={icon.hasDrawnFor} class="slds-text-body_small slds-m-top_xx-small">
+                            Drawn for <code>{icon.drawnForLabel}</code>
+                        </p>
+                        <p lwc:if={icon.hasNotes} class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                            {icon.notesLabel}
+                        </p>
+                    </div>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+        <p lwc:if={noMatches} id="icon-browser-empty" class="slds-text-body_small slds-text-color_weak">
+            No icon matches that filter.
+        </p>
+
+        <h2 id="icon-browser-placeholder-heading" class="slds-m-top_large slds-m-bottom_xx-small">
+            Drawing the placeholder
+        </h2>
+        <div class="slds-media slds-media_center slds-m-bottom_small">
+            <div class="slds-media__figure">
+                <lightning-icon id="icon-browser-placeholder" icon-name="standard:default" size="small" alternative-text="Placeholder"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+                <p class="slds-text-body_small slds-text-color_weak">
+                    Any name with no SEP icon draws this dotted square, so a missing icon reads as
+                    unfinished rather than vanishing. Every <code>standard:*</code> name draws it by
+                    decision — the set has no coloured object tiles, so the tile keeps its Salesforce
+                    colour around the placeholder. An unmapped <code>utility:*</code> name also logs a
+                    console warning. Map one in <code>src/icons/icon-map.json</code>, then
+                    <code>npm run icons</code>.
+                </p>
+            </div>
+        </div>
+
+        <template lwc:if={hasOurs}>
+            <h3 class="slds-text-title_caps slds-m-bottom_xx-small">In our code</h3>
+            <lightning-datatable
+                id="icon-browser-ours-table"
+                key-field="name"
+                data={oursRows}
+                columns={placeholderColumns}
+                hide-checkbox-column
+                class="slds-m-bottom_medium"
+            ></lightning-datatable>
+        </template>
+
+        <template lwc:if={hasBase}>
+            <h3 class="slds-text-title_caps slds-m-bottom_xx-small">Inside Salesforce's components</h3>
+            <lightning-datatable
+                id="icon-browser-base-table"
+                key-field="name"
+                data={baseRows}
+                columns={placeholderColumns}
+                hide-checkbox-column
+            ></lightning-datatable>
+        </template>
+    </div>
+</template>

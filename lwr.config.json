@@ -5,6 +5,50 @@
                 "dir": "$rootDir/src/modules"
             },
             {
+                "name": "sep/icons",
+                "path": "$rootDir/src/icons/sepIcons/sepIcons.js"
+            },
+            {
+                "name": "lightning/iconSvgTemplatesUtility",
+                "path": "$rootDir/src/icons/sepIcons/category.js"
+            },
+            {
+                "name": "lightning/iconSvgTemplatesUtilityRtl",
+                "path": "$rootDir/src/icons/sepIcons/category.js"
+            },
+            {
+                "name": "lightning/iconSvgTemplatesStandard",
+                "path": "$rootDir/src/icons/sepIcons/category.js"
+            },
+            {
+                "name": "lightning/iconSvgTemplatesStandardRtl",
+                "path": "$rootDir/src/icons/sepIcons/category.js"
+            },
+            {
+                "name": "lightning/iconSvgTemplatesAction",
+                "path": "$rootDir/src/icons/sepIcons/category.js"
+            },
+            {
+                "name": "lightning/iconSvgTemplatesActionRtl",
+                "path": "$rootDir/src/icons/sepIcons/category.js"
+            },
+            {
+                "name": "lightning/iconSvgTemplatesDoctype",
+                "path": "$rootDir/src/icons/sepIcons/category.js"
+            },
+            {
+                "name": "lightning/iconSvgTemplatesDoctypeRtl",
+                "path": "$rootDir/src/icons/sepIcons/category.js"
+            },
+            {
+                "name": "lightning/iconSvgTemplatesCustom",
+                "path": "$rootDir/src/icons/sepIcons/category.js"
+            },
+            {
+                "name": "lightning/iconSvgTemplatesCustomRtl",
+                "path": "$rootDir/src/icons/sepIcons/category.js"
+            },
+            {
                 "npm": "lightning-base-components"
             },
             {

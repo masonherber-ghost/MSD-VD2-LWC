@@ -1,0 +1,19 @@
+/* Equal-height tiles that never outgrow their column — SLDS has a utility for neither.
+ *
+ * `vertical-align="stretch"` on the layout makes every item in a row as tall as the
+ * tallest; making the item a flex container lets the box grow into it (a box at
+ * `height: 100%` cannot: its parent's height is not definite).
+ *
+ * At phone width one Salesforce name ("utility:chevrondown,") is wider than a
+ * two-column tile. `min-width: 0` stops it widening the tile, and `anywhere` breaks
+ * such a name only as a last resort — `utility:sep_…` names already break after an
+ * underscore through `<wbr>` in the markup. */
+.icon-browser__item {
+    display: flex;
+}
+
+.icon-browser__tile {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
